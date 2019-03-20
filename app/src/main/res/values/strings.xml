@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">TeaBar</string>
+
+    <string name="language_auto">自动</string>
+    <string name="language_traditional">繁體</string>
+    <string name="dialog_title">Please Select Color</string>
+    <string name="dialog_positive">确定</string>
+    <string name="dialog_negative">取消</string>
+    <string name="facebook_app_id">630899240681105</string>
+
+<!--login-->
+    <string name="login_tv_login">登录</string>
+    <string name="login_tv_regist">注册</string>
+    <string name="login_tv_welcom">你好！欢迎来到LIFY</string>
+    <string name="login_et_user">手机号或邮箱</string>
+    <string name="login_tv_forget">忘记密码</string>
+    <string name="login_et_pass">密码</string>
+    <string name="login_tv_clause1">通过登录你同意Lify的</string>
+    <string name="login_tv_clause2">《隐私政策和条款》</string>
+
+
+<!--register-->
+    <string name="regist_tv_welcom">现在创建您的LIFY账号</string>
+    <string name="regist_et_nick">昵称</string>
+    <string name="login_et_code">验证码</string>
+    <string name="login_bt_getcode">获取验证码</string>
+    <string name="login_bt_regist">注册</string>
+
+<!--encourage-->
+    <string name="encourage_bt_in">进入</string>
+</resources>

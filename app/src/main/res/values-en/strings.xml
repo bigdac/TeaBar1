@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">MultiLanguages</string>
+    <string name="language_auto">自动</string>
+    <string name="language_traditional">繁體</string>
+    <string name="dialog_title">Please Select Color</string>
+    <string name="dialog_positive">确定</string>
+    <string name="dialog_negative">取消</string>
+    <string name="facebook_app_id">630899240681105</string>
+
+    <string name="login_tv_login">Login</string>
+    <string name="login_tv_regist">Regist</string>
+    <string name="login_tv_welcom">Hello! Welcome to LIFY</string>
+    <string name="login_et_user">Phone number or email address</string>
+    <string name="login_tv_forget">Forget Password</string>
+     <string name="login_et_pass">Password</string>
+    <string name="login_tv_clause1">By logging in you agree to Lify terms</string>
+    <string name="login_tv_clause2">《Privacy policy and terms》</string>
+
+
+    <!--register-->
+    <string name="regist_tv_welcom">现在创建您的LIFY账号</string>
+    <string name="regist_et_nick">昵称</string>
+    <string name="login_et_code">验证码</string>
+    <string name="login_bt_getcode">获取验证码</string>
+    <string name="login_bt_regist">注册</string>
+
+    <!--encourage-->
+    <string name="encourage_bt_in">IN</string>
+</resources>
