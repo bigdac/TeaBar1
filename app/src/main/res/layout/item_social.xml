@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/rl_social_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/iv_social_pic"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@mipmap/loign_user"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_centerVertical="true"
+        />
+        <TextView
+            android:id="@+id/tv_social_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/login_black"
+            android:text="Mr liu"
+            android:textSize="18sp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/iv_social_pic"
+            android:layout_marginLeft="8dp"
+
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2小时前"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="29dp"
+            android:textColor="@color/social_gray"
+            android:textSize="12sp"
+            />
+    </RelativeLayout>
+        <TextView
+            android:id="@+id/tv_social_text"
+            android:layout_below="@+id/rl_social_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginRight="70dp"
+            android:layout_marginLeft="70dp"
+            android:text="这套促进睡眠套餐的茶，确实不错啊！这两天睡的很安静。"
+            android:textColor="@color/social_gray"
+            android:textSize="13sp"
+            />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_pic"
+        android:layout_below="@+id/tv_social_text"
+        android:layout_alignLeft="@+id/tv_social_text"
+        android:layout_alignRight="@+id/tv_social_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+</RelativeLayout>

@@ -66,4 +66,8 @@
     <string name="equ_wash_2">酿造次数</string>
     <string name="equ_wash_3">保存设置</string>
     <string name="equ_wash_4">次</string>
+
+    <!--social-->
+    <string name="social_circle_title">圈子</string>
+    <string name="social_circle_message">消息</string>
 </resources>

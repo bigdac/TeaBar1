@@ -66,4 +66,8 @@
     <string name="equ_wash_3">Save settings</string>
     <string name="equ_wash_4">Number</string>
 
+
+    <!--social-->
+    <string name="social_circle_title">Circle</string>
+    <string name="social_circle_message">Message</string>
 </resources>

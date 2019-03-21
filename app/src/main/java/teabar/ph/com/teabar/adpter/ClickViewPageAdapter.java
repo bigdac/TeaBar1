@@ -45,7 +45,7 @@ public class ClickViewPageAdapter extends FragmentPagerAdapter {
                 tv.setText("茶饮");
                 break;
             case 1:
-                iv.setImageDrawable(context.getResources().getDrawable(R.drawable.rb_memu_icon2));
+                 iv.setImageDrawable(context.getResources().getDrawable(R.drawable.rb_memu_icon2));
                 tv.setText("设备");
                 break;
             case 2:

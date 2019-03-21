@@ -12,7 +12,7 @@ android {
         release {
             keyAlias 'key0'
             keyPassword '123456'
-            storeFile file('D:/android2/teabar/teabar.jks')
+            storeFile file('F:/project/TeaBar/teabar.jks')
             storePassword '123456'
         }
     }
@@ -75,4 +75,6 @@ dependencies {
     implementation 'cn.jiguang.sdk:jmessage:2.8.1'  // 此处以JMessage 2.8.1 版本为例。
     implementation 'cn.jiguang.sdk:jcore:1.2.6'  // 此处以JCore 1.2.6 版本为例。
     implementation 'com.github.Jay-Goo:RangeSeekBar:v2.0.4'
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-16'
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-16'
 }

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="login_black">#101010</color>
+    <color name="social_gray">#bbbbbb</color>
     <color name="login_gray">#555555</color>
     <color name="white">#FFFFFF</color>
 </resources>
