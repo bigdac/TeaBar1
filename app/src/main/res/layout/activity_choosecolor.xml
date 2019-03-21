@@ -1,44 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/space"
+    android:background="@color/white"
+
     >
-
-
+    <TextView
+        android:id="@+id/tv_main_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
     <ImageView
-        android:id="@+id/img_hue"
-        android:layout_width="@dimen/hue_alpha_width"
-        android:layout_height="236dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="@dimen/space"
-        android:layout_toRightOf="@+id/color_plate"
-        android:scaleType="fitXY"
-        android:src="@drawable/hue_list"
-
+        android:id="@+id/iv_equ_fh"
+        android:layout_below="@+id/tv_main_1"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="centerInside"
+        android:src="@mipmap/login_back"
+        />
+    <TextView
+        android:id="@+id/tv_sbxq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/equ_light_light"
+        android:layout_below="@+id/iv_equ_fh"
+        android:layout_marginLeft="17dp"
+        android:textSize="30sp"
+        android:textColor="@color/login_black"
         />
 
-    <!--<ImageView-->
-        <!--android:id="@+id/img_alpha_bottom"-->
-        <!--android:layout_width="@dimen/hue_alpha_width"-->
-        <!--android:layout_height="@dimen/hsv_height"-->
-        <!--android:layout_marginLeft="@dimen/space"-->
-        <!--android:layout_toRightOf="@+id/color_plate"-->
-        <!--android:scaleType="fitXY"-->
-        <!--android:src="@drawable/alpha_bottom_drawable"-->
-        <!--/>-->
+    <TextView
+        android:layout_below="@+id/tv_sbxq"
+        android:id="@+id/tv_title1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/equ_light_lightset"
+        android:layout_marginTop="29dp"
+        android:layout_marginLeft="17dp"
+        android:textColor="#999999"
+        android:textSize="18sp"
+        />
+    <RelativeLayout
+        android:id="@+id/container"
+        android:layout_below="@+id/tv_title1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        >
 
-//颜色透明度
-    <!--<View-->
-        <!--android:id="@+id/view_overlay"-->
-        <!--android:layout_width="@dimen/hue_alpha_width"-->
-        <!--android:layout_height="@dimen/hsv_height"-->
-        <!--android:layout_marginLeft="@dimen/space"-->
-        <!--android:layout_toRightOf="@+id/color_plate"-->
-      <!---->
-        <!--/>-->
+
+
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -47,32 +62,29 @@
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         >
 
-     <!--   <View
-            android:layout_width="@dimen/show_width"
-            android:layout_height="@dimen/show_height"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_toLeftOf="@+id/color_arrow"
-            android:background="@drawable/alpha_bottom_drawable"
-            />-->
+
 
     </RelativeLayout>
+        <ImageView
+            android:id="@+id/img_hue"
+            android:layout_width="@dimen/hue_alpha_width"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@+id/color_plate"
+            android:layout_alignBottom="@+id/color_plate"
+            android:layout_marginLeft="@dimen/space"
+            android:layout_toRightOf="@+id/color_plate"
+            android:scaleType="fitXY"
+            android:src="@drawable/hue_list"
 
+            />
     <ImageView
         android:id="@+id/hue_cursor"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:scaleType="matrix"
-        android:layout_toRightOf="@+id/img_hue"
-        android:src="@drawable/cursor"/>
-<!--透明颜色选择图片-->
-    <!--<ImageView-->
-        <!--android:id="@+id/alpha_Cursor"-->
-        <!--android:layout_width="15dp"-->
-        <!--android:layout_height="15dp"-->
-        <!--android:scaleType="matrix"-->
-        <!--android:src="@drawable/cursor"-->
-        <!--android:visibility="gone"-->
-        <!--/>-->
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/color_plate"
+        android:layout_marginLeft="15dp"
+        android:src="@mipmap/light_choose"/>
+
 
 
     <teabar.ph.com.teabar.view.ColorPlateView
@@ -90,12 +102,18 @@
         android:src="@drawable/img_plate_cursor"/>
     <Button
         android:id="@+id/tv_color"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="26dp"
+        android:layout_marginRight="26dp"
+        android:textSize="14sp"
         android:layout_alignParentBottom="true"
-        android:text="颜色是"
-        android:layout_marginBottom="20dp"
+        android:text="@string/equ_dia_esure"
+        android:textColor="@color/white"
+        android:background="@drawable/login_button"
+        android:layout_marginBottom="34dp"
         />
+
+    </RelativeLayout>
 
 </RelativeLayout>

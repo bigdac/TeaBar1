@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.ButterKnife;
+
 
 public abstract class BaseFragment extends Fragment implements View.OnClickListener {
     private boolean isDebug;
@@ -21,6 +23,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         super.onCreate(savedInstanceState);
         isDebug = MyApplication.isDebug;
         APP_NAME = MyApplication.APP_NAME;
+
     }
 
     @Override

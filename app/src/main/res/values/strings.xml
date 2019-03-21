@@ -28,4 +28,42 @@
 
 <!--encourage-->
     <string name="encourage_bt_in">进入</string>
+
+<!--equipment-->
+    <string name="equ_xq_title">设备详情</string>
+    <string name="equ_xq_name">设备名称</string>
+    <string name="equ_xq_inform">通知</string>
+    <string name="equ_xq_state">状态</string>
+    <string name="equ_xq_light">灯光设置</string>
+    <string name="equ_xq_day">清洗周期</string>
+    <string name="equ_xq_delt">删除</string>
+
+    <string name="equ_dia_del">取消</string>
+    <string name="equ_dia_esure">确定</string>
+    <string name="equ_xq_deltitle">删除设备</string>
+    <string name="equ_xq_tistitle">是否删除该设备</string>
+<!--inform-->
+    <string name="equ_xq_informs">启用或禁用通知</string>
+    <string name="equ_xq_finish">冲泡完成</string>
+    <string name="equ_xq_yrfinish">预热完成时</string>
+    <string name="equ_xq_water">水量不足时</string>
+    <string name="equ_xq_full">胶囊废盒已满时</string>
+    <string name="equ_xq_wash">清洗周期已到时</string>
+
+<!--light-->
+    <string name="equ_light_light">光的颜色</string>
+    <string name="equ_light_mode">模式</string>
+    <string name="equ_light_cz">重置为默认</string>
+    <string name="equ_light_lightset">灯光颜色设置</string>
+
+    <!--mode-->
+    <string name="equ_mode_1">呼吸</string>
+    <string name="equ_mode_2">随机</string>
+    <string name="equ_mode_3">常在</string>
+
+    <!--wash-->
+    <string name="equ_wash_1">根据使用次数来清洗设备</string>
+    <string name="equ_wash_2">酿造次数</string>
+    <string name="equ_wash_3">保存设置</string>
+    <string name="equ_wash_4">次</string>
 </resources>

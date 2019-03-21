@@ -8,6 +8,6 @@
     <dimen name="show_width">60dp</dimen>
     <dimen name="show_height">30dp</dimen>
     <dimen name="space">20dp</dimen>
-    <dimen name="hue_alpha_width">20dp</dimen>
+    <dimen name="hue_alpha_width">25dp</dimen>
 
 </resources>

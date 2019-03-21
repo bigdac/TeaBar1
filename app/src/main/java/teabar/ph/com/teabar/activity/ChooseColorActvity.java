@@ -16,12 +16,16 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import butterknife.BindView;
+import butterknife.OnClick;
+import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.base.BaseActivity;
+import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.view.ColorPickerDialog;
 import teabar.ph.com.teabar.view.ColorPlateView;
 import teabar.ph.com.teabar.view.OnActivityColorPickerListener;
@@ -29,6 +33,9 @@ import teabar.ph.com.teabar.view.OnActivityColorPickerListener;
 
 
 public class ChooseColorActvity extends BaseActivity {
+    MyApplication application;
+    @BindView(R.id.tv_main_1)
+    TextView tv_main_1;
     @BindView(R.id.img_hue)
     ImageView img_hue;
     @BindView(R.id.color_plate)
@@ -53,12 +60,21 @@ public class ChooseColorActvity extends BaseActivity {
 
     @Override
     public int bindLayout() {
+        setSteepStatusBar(true);
         return R.layout.activity_choosecolor;
     }
 
     @Override
     public void initView(View view) {
         color_plate.setHue(getColorHue());
+        if (application == null) {
+            application = (MyApplication) getApplication();
+        }
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                ScreenUtils.getStatusBarHeight());
+        tv_main_1.setLayoutParams(params);
+        application.addActivity(this);
        int defauleColor = getResources().getColor(R.color.colorPrimary);
         defauleColor = defauleColor | 0xff000000;
         Color.colorToHSV(defauleColor,mCurrentHSV);
@@ -85,6 +101,18 @@ public class ChooseColorActvity extends BaseActivity {
 
     }
 
+    @OnClick({R.id.iv_equ_fh,R.id.tv_color})
+    public void onClick(View view){
+        switch (view.getId()){
+            case R.id.iv_equ_fh:
+                finish();
+                break;
+
+            case R.id.tv_color:
+                finish();
+                break;
+        }
+    }
 
     /**
      * 设置色彩
@@ -158,7 +186,7 @@ public class ChooseColorActvity extends BaseActivity {
                     float y = event.getY();
                     if (y < 0.f) y = 0.f;
                     if (y > img_hue.getMeasuredHeight()) y = img_hue.getMeasuredHeight() - 0.001f;
-                    float colorHue = 360.f - 360.f / img_hue.getMeasuredHeight() * y;
+                    float colorHue = 360.f - 360.f / img_hue.getMeasuredHeight() * y-1f;
                     if (colorHue == 360.f) colorHue = 0.f;
                     setColorHue(colorHue);
                     color_plate.setHue(colorHue);
@@ -191,7 +219,7 @@ public class ChooseColorActvity extends BaseActivity {
                     setColorSat(1.f / color_plate.getMeasuredWidth() * x);//颜色深浅
                     setColorVal(1.f - (1.f / color_plate.getMeasuredHeight() * y));//颜色明暗
                     movePlateCursor();
-                    tv_color.setBackgroundColor(getColor());
+//                    tv_color.setBackgroundColor(getColor());
                     Log.e("DDDDDDDDDDDDDDDDDDDZ", "onTouch: -->"+getColor() );
                     if (mListener!=null){
                         mListener.onColorChange(ChooseColorActvity.this,getColor());

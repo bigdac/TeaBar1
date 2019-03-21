@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">MultiLanguages</string>
     <string name="language_auto">自动</string>
     <string name="language_traditional">繁體</string>
@@ -26,4 +26,44 @@
 
     <!--encourage-->
     <string name="encourage_bt_in">IN</string>
+
+    <!--equipment-->
+    <string name="equ_xq_title">Equipment Details</string>
+    <string name="equ_xq_name">Equipment Name</string>
+    <string name="equ_xq_inform">Notification</string>
+    <string name="equ_xq_state">Status</string>
+    <string name="equ_xq_light">Light Setting</string>
+    <string name="equ_xq_day">Cleaning Period</string>
+    <string name="equ_xq_delt">Delete</string>
+
+    <string name="equ_dia_del">Cancel</string>
+    <string name="equ_dia_esure">Ensure</string>
+    <string name="equ_xq_deltitle">Remove equipment</string>
+    <string name="equ_xq_tistitle">Whether to delete the equipment</string>
+
+    <!--inform-->
+    <string name="equ_xq_informs">Enable or disable notifications</string>
+    <string name="equ_xq_finish">Brewing complete</string>
+    <string name="equ_xq_yrfinish">Preheat</string>
+    <string name="equ_xq_water">Under water</string>
+    <string name="equ_xq_full">The capsule waste box is full</string>
+    <string name="equ_xq_wash">The cleaning cycle is over</string>
+
+    <!--light-->
+    <string name="equ_light_light">The color of the light</string>
+    <string name="equ_light_mode">Mode</string>
+    <string name="equ_light_cz">Reset</string>
+    <string name="equ_light_lightset">Light color Settings</string>
+
+    <!--mode-->
+    <string name="equ_mode_1">Breathe</string>
+    <string name="equ_mode_2">Random</string>
+    <string name="equ_mode_3">Often</string>
+
+    <!--wash-->
+    <string name="equ_wash_1">Clean equipment according to frequency of use</string>
+    <string name="equ_wash_2">Brewing times</string>
+    <string name="equ_wash_3">Save settings</string>
+    <string name="equ_wash_4">Number</string>
+
 </resources>
