@@ -12,10 +12,7 @@ import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.base.BaseFragment;
 
 public class FriendFragment extends BaseFragment {
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
-    SocialFragment friendFragment;
-    Unbinder unbinder;
+
     @Override
     public int bindLayout() {
         return R.layout.fragment_friend;
@@ -24,10 +21,7 @@ public class FriendFragment extends BaseFragment {
 
     @Override
     public void initView(View view) {
-        unbinder = ButterKnife.bind(getActivity());
-        fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        friendFragment=new SocialFragment();
+
     }
 
     @Override
@@ -44,7 +38,6 @@ public class FriendFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (unbinder!=null)
-            unbinder.unbind();
+
     }
 }

@@ -2,6 +2,7 @@ package teabar.ph.com.teabar.adpter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import teabar.ph.com.teabar.R;
@@ -19,12 +21,17 @@ public class SocialAdapter extends RecyclerView.Adapter<SocialAdapter.MyViewHold
     private List<String> mData;
     private Context context;
     private OnItemClickListener onItemClickListener;
-
+    PictureAdapter pictureAdapter;
 
     private boolean isShare=false;
     public SocialAdapter(Context context , List<String> list ) {
         this.context = context;
         this.mData = list;
+        List<String> list1 = new ArrayList<>();
+        for (int i = 0;i<2;i++){
+            list1.add(i+"");
+        }
+       pictureAdapter = new PictureAdapter(context,list1);
 
     }
 
@@ -33,7 +40,7 @@ public class SocialAdapter extends RecyclerView.Adapter<SocialAdapter.MyViewHold
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-       MyViewHolder holder = new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_equmentinform,parent,false));
+       MyViewHolder holder = new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_social,parent,false));
         return holder;
     }
 
@@ -43,45 +50,23 @@ public class SocialAdapter extends RecyclerView.Adapter<SocialAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
-
-        switch (position){
-            case 0:
-                holder.tv_equ_name.setText(R.string.equ_xq_finish);
-                break;
-            case 1:
-                holder.tv_equ_name.setText(R.string.equ_xq_yrfinish);
-
-                break;
-            case 2:
-                holder.tv_equ_name.setText(R.string.equ_xq_water);
-
-                break;
-            case 3:
-                holder.tv_equ_name.setText(R.string.equ_xq_full);
-
-
-                break;
-            case 4:
-                holder.tv_equ_name.setText(R.string.equ_xq_wash);
-
-                break;
-
-        }
+        holder.rv_pic.setLayoutManager(new GridLayoutManager(context,2));
+        holder.rv_pic.setAdapter(pictureAdapter);
         final boolean isOpen[] ={true};
         if (!isOpen[0]){
-            holder.iv_equ_choose.setImageResource(R.mipmap.equ_close);
+            holder.iv_social_no.setImageResource(R.mipmap.social_no);
         }else {
-            holder.iv_equ_choose.setImageResource(R.mipmap.equ_open);
+            holder.iv_social_no.setImageResource(R.mipmap.social_yes);
 
         }
-        holder.iv_equ_choose.setOnClickListener(new View.OnClickListener() {
+        holder.iv_social_no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (isOpen[0]){
-                    holder.iv_equ_choose.setImageResource(R.mipmap.equ_close);
+                    holder.iv_social_no.setImageResource(R.mipmap.social_no);
                     isOpen[0]=false;
                 }else {
-                    holder.iv_equ_choose.setImageResource(R.mipmap.equ_open);
+                    holder.iv_social_no.setImageResource(R.mipmap.social_yes);
                     isOpen[0]=true;
                 }
             }
@@ -125,14 +110,19 @@ public class SocialAdapter extends RecyclerView.Adapter<SocialAdapter.MyViewHold
 
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView  tv_equ_name  ;
-        ImageView iv_equ_choose;
-        RelativeLayout rl_equitem;
+        TextView  tv_social_name,tv_social_time ,tv_social_text ,tv_social_num;
+        ImageView iv_social_pic,iv_social_talk,iv_social_no;
+        RecyclerView rv_pic;
         public MyViewHolder(View itemView) {
             super(itemView);
-            iv_equ_choose = (ImageView) itemView.findViewById(R.id.iv_equ_choose);
-            tv_equ_name= (TextView)itemView.findViewById(R.id.tv_equ_name);
-
+            iv_social_pic = (ImageView) itemView.findViewById(R.id.iv_social_pic);
+            iv_social_talk = (ImageView) itemView.findViewById(R.id.iv_social_talk);
+            iv_social_no = (ImageView) itemView.findViewById(R.id.iv_social_no);
+            tv_social_name= (TextView)itemView.findViewById(R.id.tv_social_name);
+            tv_social_time= (TextView)itemView.findViewById(R.id.tv_social_time);
+            tv_social_text= (TextView)itemView.findViewById(R.id.tv_social_text);
+            tv_social_num= (TextView)itemView.findViewById(R.id.tv_social_num);
+            rv_pic = itemView.findViewById(R.id.rv_pic);
         }
     }
 

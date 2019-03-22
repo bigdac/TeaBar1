@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp">
+    <ImageView
+        android:id="@+id/iv_talk_pic"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="12dp"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/loign_user"
+        />
+    <TextView
+        android:id="@+id/tv_talk_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mr.liu"
+        android:layout_toRightOf="@+id/iv_talk_pic"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="5dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="有没有新茶上市？"
+        android:layout_alignLeft="@+id/tv_talk_name"
+
+        />
+
+</RelativeLayout>

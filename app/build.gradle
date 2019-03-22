@@ -12,7 +12,7 @@ android {
         release {
             keyAlias 'key0'
             keyPassword '123456'
-            storeFile file('F:/project/TeaBar/teabar.jks')
+            storeFile file('D:/android2/teabar/teabar.jks')
             storePassword '123456'
         }
     }
@@ -43,9 +43,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
-        debug {
-            signingConfig signingConfigs.release
-        }
+//        debug {
+//            signingConfig signingConfigs.release
+//        }
     }
     productFlavors {
     }

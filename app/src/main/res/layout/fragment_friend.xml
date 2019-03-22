@@ -1,35 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/li_social"
     >
-    <RelativeLayout
-        android:id="@+id/rl_social_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp">
-        <TextView
-            android:id="@+id/tv_login_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/social_circle_title"
-            android:textSize="20sp"
-            android:textColor="#bbbbbb"
-            android:layout_marginLeft="20dp"
-            android:layout_centerVertical="true"
-            />
-        <TextView
-            android:id="@+id/tv_login_regist"
-            android:layout_toRightOf="@+id/tv_login_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/social_circle_message"
-            android:textSize="30sp"
-            android:textColor="@color/login_black"
-            android:layout_marginLeft="20dp"
-            android:layout_centerVertical="true"
-            />
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    </RelativeLayout>
-</LinearLayout>
+    </android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>

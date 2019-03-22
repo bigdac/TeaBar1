@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
     <RelativeLayout
         android:id="@+id/rl_social_title"
         android:layout_width="match_parent"
@@ -28,6 +28,7 @@
 
             />
         <TextView
+            android:id="@+id/tv_social_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2小时前"
@@ -58,6 +59,36 @@
         android:layout_alignRight="@+id/tv_social_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-
+    <ImageView
+        android:id="@+id/iv_social_talk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/social_talk"
+        android:layout_below="@+id/rv_pic"
+        android:layout_alignLeft="@+id/rv_pic"
+        android:layout_marginTop="15dp"
+        />
+    <ImageView
+        android:id="@+id/iv_social_no"
+        android:layout_width="30dp"
+        android:layout_height="20dp"
+        android:src="@mipmap/social_no"
+        android:layout_below="@+id/rv_pic"
+        android:layout_toRightOf="@+id/iv_social_talk"
+        android:layout_marginLeft="83dp"
+        android:layout_marginTop="15dp"
+        />
+    <TextView
+        android:id="@+id/tv_social_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rv_pic"
+        android:text="23"
+        android:layout_toRightOf="@+id/iv_social_no"
+        android:layout_marginLeft="13dp"
+        android:layout_marginTop="15dp"
+        android:textSize="14sp"
+        android:textColor="@color/social_gray"
+        />
 
 </RelativeLayout>
