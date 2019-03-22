@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    >
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="60dp">
     <ImageView
@@ -20,11 +28,27 @@
         android:layout_marginTop="5dp"
         />
     <TextView
+        android:id="@+id/tv_talk_time"
+        android:layout_alignTop="@+id/tv_talk_name"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3-11 11:20"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="5dp"
+        />
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_below="@+id/tv_talk_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="有没有新茶上市？"
         android:layout_alignLeft="@+id/tv_talk_name"
-
+        android:layout_marginTop="5dp"
+        android:textSize="14dp"
+        android:textColor="@color/social_gray"
         />
 
 </RelativeLayout>
+</LinearLayout>

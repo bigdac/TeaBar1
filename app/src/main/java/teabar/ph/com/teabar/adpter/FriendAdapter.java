@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -33,6 +35,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyviewHold
     @Override
     public void onBindViewHolder(@NonNull final MyviewHolder myviewHolder, int position) {
 
+
     }
 
     @Override
@@ -41,8 +44,14 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyviewHold
     }
 
     class MyviewHolder extends RecyclerView.ViewHolder{
+        ImageView iv_talk_pic;
+        TextView tv_talk_name,tv_talk_time,tv_message;
         public MyviewHolder(View itemView){
             super(itemView);
+            ImageView iv_talk_pic = itemView.findViewById(R.id.iv_talk_pic);
+            TextView tv_talk_name = itemView.findViewById(R.id.tv_talk_name);
+            TextView tv_talk_time = itemView.findViewById(R.id.tv_talk_time);
+            TextView tv_message = itemView.findViewById(R.id.tv_message);
         }
     }
 }
