@@ -52,7 +52,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activity.PowerpicActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -67,6 +67,7 @@
         <activity android:name=".activity.EqupmentLightActivity" />
         <activity android:name=".activity.ChooseColorActvity" />
         <activity android:name=".activity.EqupmentWashActivity" />
+        <!--<activity android:name=".activity.PowerpicActivity" />-->
         <!--<activity android:name=".activity.MainActivity" />-->
     </application>
 

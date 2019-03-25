@@ -12,7 +12,7 @@ android {
         release {
             keyAlias 'key0'
             keyPassword '123456'
-            storeFile file('D:/android2/teabar/teabar.jks')
+            storeFile file('F:/project/TeaBar/teabar.jks')
             storePassword '123456'
         }
     }
@@ -77,4 +77,5 @@ dependencies {
     implementation 'com.github.Jay-Goo:RangeSeekBar:v2.0.4'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-16'
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-16'
+    implementation 'com.github.czl0325:zlpolygonview:1.0.2'
 }

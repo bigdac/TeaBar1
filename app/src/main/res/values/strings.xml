@@ -70,4 +70,10 @@
     <!--social-->
     <string name="social_circle_title">圈子</string>
     <string name="social_circle_message">消息</string>
+
+    <!--power-->
+    <string name="my_power_title">能量指标图</string>
+    <string name="my_power_day">日</string>
+    <string name="my_power_week">周</string>
+    <string name="my_power_month">月</string>
 </resources>

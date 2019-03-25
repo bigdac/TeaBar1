@@ -7,4 +7,6 @@
     <color name="social_gray">#bbbbbb</color>
     <color name="login_gray">#555555</color>
     <color name="white">#FFFFFF</color>
+    <color name="pink1">#FF638D</color>
+    <color name="pink2">#93FF638D</color>
 </resources>

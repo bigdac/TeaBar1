@@ -70,4 +70,10 @@
     <!--social-->
     <string name="social_circle_title">Circle</string>
     <string name="social_circle_message">Message</string>
+
+    <!--power-->
+    <string name="my_power_title">Energy index diagram</string>
+    <string name="my_power_day">Day</string>
+    <string name="my_power_week">Week</string>
+    <string name="my_power_month">Month</string>
 </resources>

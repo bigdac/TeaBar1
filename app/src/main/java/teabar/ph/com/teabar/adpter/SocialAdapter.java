@@ -35,7 +35,7 @@ public class SocialAdapter extends RecyclerView.Adapter<SocialAdapter.MyViewHold
 
     }
 
-    
+
 
     @NonNull
     @Override
