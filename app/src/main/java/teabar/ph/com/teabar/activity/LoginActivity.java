@@ -98,11 +98,12 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
         if (application == null) {
             application = (MyApplication) getApplication();
         }
+        application.addActivity(this);
         preferences = getSharedPreferences("my", MODE_PRIVATE);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 ScreenUtils.getStatusBarHeight());
         tv_main_1.setLayoutParams(params);
-        application.addActivity(this);
+
         et_login_user.setText(preferences.getString("phone", ""));
         et_login_pasw.setText(preferences.getString("password", ""));
         progressDialog = new ProgressDialog(this);

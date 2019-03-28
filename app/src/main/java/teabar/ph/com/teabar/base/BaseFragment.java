@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 public abstract class BaseFragment extends Fragment implements View.OnClickListener {
@@ -17,6 +18,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     private String APP_NAME;
     protected final String TAG = this.getClass().getSimpleName();
     private View mContextView = null;
+    private Unbinder unbinder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mContextView = inflater.inflate(bindLayout(), container, false);
+        unbinder =  ButterKnife.bind(this,mContextView);
         initView(mContextView);
         doBusiness(getActivity());
         return mContextView;
@@ -95,6 +98,11 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         return true;
     }
 
-
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (unbinder!=null){
+            unbinder.unbind();
+        }
+    }
 }

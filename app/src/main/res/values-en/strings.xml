@@ -41,6 +41,14 @@
     <string name="equ_xq_deltitle">Remove equipment</string>
     <string name="equ_xq_tistitle">Whether to delete the equipment</string>
 
+    <string name="equ_xq_online">Online</string>
+    <string name="equ_xq_outline">Outline</string>
+
+    <string name="equ_xq_waterf">Enough water</string>
+    <string name="equ_xq_waters">Water shortage</string>
+    <string name="equ_xq_ishot">Heating</string>
+    <string name="equ_xq_nohot">No preheating</string>
+
     <!--inform-->
     <string name="equ_xq_informs">Enable or disable notifications</string>
     <string name="equ_xq_finish">Brewing complete</string>
@@ -76,4 +84,40 @@
     <string name="my_power_day">Day</string>
     <string name="my_power_week">Week</string>
     <string name="my_power_month">Month</string>
+
+    <!--homepage-->
+    <string name="main_home_page">Home Page</string>
+    <string name="main_home_hello">Hello</string>
+    <string name="my_power_know">Health knowledge</string>
+    <string name="main_home_title">Please fill in the questionnaire in order to recommend a suitable individual tea drinking plan for you.</string>
+    <string name="my_power_tea1">Herbal series</string>
+    <string name="my_power_tea2">Fruit series</string>
+    <string name="my_power_tea3">The function of tea</string>
+    <string name="my_power_tea4">Personal plan</string>
+
+    <!--mypage-->
+    <string name="my_health">My healthy energy index</string>
+    <string name="my_plan">My personal plan</string>
+    <string name="my_issue">Release</string>
+    <string name="my_ask">My questionnaire records</string>
+    <string name="my_setting">Setting</string>
+    <string name="my_today">Today goal</string>
+    <string name="my_teanum">Tea drinkers</string>
+    <string name="my_plannum">Plan</string>
+    <string name="my_friendnum">Friends</string>
+    <string name="my_drink">Beverages</string>
+
+    <!--myplan-->
+    <string name="plan_title">My personal plan</string>
+    <string name="plan_tz">Plan to inform</string>
+    <string name="plan_time">Reminder time</string>
+
+    <!--setting-->
+    <string name="set_name">ID</string>
+    <string name="set_pass">Change password </string>
+    <string name="set_mess">Message reminding</string>
+    <string name="set_person">User feedback</string>
+    <string name="set_update">Version updating</string>
+    <string name="set_clean">Wipe cache</string>
+    <string name="set_now">Current version:</string>
 </resources>

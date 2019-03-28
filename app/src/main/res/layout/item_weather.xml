@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="171dp"
+        android:background="#8941A8FF"
+        >
+        
+
+        <TextView
+            android:id="@+id/tv_mail_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="周二"
+            android:textColor="@color/white"
+            android:layout_below="@+id/iv_mail_pic"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="8dp"
+            android:textSize="16sp"
+            />
+        <Button
+            android:layout_width="96dp"
+            android:layout_height="36dp"
+            android:background="@drawable/weather_button"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="16dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:text="冲泡"
+            />
+        
+    </RelativeLayout>
+
+
+</LinearLayout>

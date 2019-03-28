@@ -52,7 +52,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.PowerpicActivity">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -67,8 +67,18 @@
         <activity android:name=".activity.EqupmentLightActivity" />
         <activity android:name=".activity.ChooseColorActvity" />
         <activity android:name=".activity.EqupmentWashActivity" />
-        <!--<activity android:name=".activity.PowerpicActivity" />-->
-        <!--<activity android:name=".activity.MainActivity" />-->
+        <activity android:name=".activity.PowerpicActivity" />
+        <activity android:name=".activity.MyPlanActivity" />
+        <activity android:name=".activity.PlanInformActivity" />
+        <activity android:name=".activity.MyIssueActivity" />
+        <activity android:name=".activity.MyQuestionActivity" />
+        <activity android:name=".activity.SettingActivity" />
+        <activity android:name=".activity.ChangePassActivity" />
+        <activity android:name=".activity.FeedbackActivity" />
+        <activity
+            android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ImagePickerThemeFullScreen" />
     </application>
 
 </manifest>

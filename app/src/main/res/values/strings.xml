@@ -42,6 +42,13 @@
     <string name="equ_dia_esure">确定</string>
     <string name="equ_xq_deltitle">删除设备</string>
     <string name="equ_xq_tistitle">是否删除该设备</string>
+
+    <string name="equ_xq_online">在线</string>
+    <string name="equ_xq_outline">离线</string>
+    <string name="equ_xq_waterf">水量充足</string>
+    <string name="equ_xq_waters">水量不足</string>
+    <string name="equ_xq_ishot">正在加热</string>
+    <string name="equ_xq_nohot">未预热</string>
 <!--inform-->
     <string name="equ_xq_informs">启用或禁用通知</string>
     <string name="equ_xq_finish">冲泡完成</string>
@@ -76,4 +83,40 @@
     <string name="my_power_day">日</string>
     <string name="my_power_week">周</string>
     <string name="my_power_month">月</string>
+
+    <!--homepage-->
+    <string name="main_home_page">首页</string>
+    <string name="main_home_hello">您好!</string>
+    <string name="my_power_know">健康知识</string>
+    <string name="main_home_title">为了更好地为您推荐适合的个人茶饮计划，请您填写问卷单。</string>
+    <string name="my_power_tea1">草本系列</string>
+    <string name="my_power_tea2">水果系列</string>
+    <string name="my_power_tea3">功能茶</string>
+    <string name="my_power_tea4">个人计划</string>
+
+    <!--mypage-->
+    <string name="my_health">我的健康能量指标</string>
+    <string name="my_plan">我的个人计划</string>
+    <string name="my_issue">我的发布</string>
+    <string name="my_ask">我的问卷记录</string>
+    <string name="my_setting">设置</string>
+    <string name="my_today">今日目标</string>
+    <string name="my_teanum">茶饮量</string>
+    <string name="my_plannum">计划</string>
+    <string name="my_friendnum">好友量</string>
+    <string name="my_drink">饮料</string>
+
+    <!--myplan-->
+    <string name="plan_title">我的个人计划</string>
+    <string name="plan_tz">计划通知</string>
+    <string name="plan_time">提醒时间</string>
+
+    <!--setting-->
+    <string name="set_name">账号</string>
+    <string name="set_pass">更改密码</string>
+    <string name="set_mess">消息提醒</string>
+    <string name="set_person">用户反馈</string>
+    <string name="set_update">版本更新</string>
+    <string name="set_clean">清除缓存</string>
+    <string name="set_now">当前版本：</string>
 </resources>

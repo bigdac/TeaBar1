@@ -1,6 +1,7 @@
 package teabar.ph.com.teabar.activity;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.view.Gravity;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import me.jessyan.autosize.utils.ScreenUtils;
@@ -34,7 +36,7 @@ public class MainActivity extends BaseActivity {
     TextView tv_main_1;
     List<String> mainMemu = new ArrayList<>();
     List<BaseFragment> fragmentList = new ArrayList<>();
-    MainFragment mainFragment;
+//    MainFragment mainFragment;
     MyApplication application;
     @Override
     public void initParms(Bundle parms) {
@@ -76,10 +78,10 @@ public class MainActivity extends BaseActivity {
         mainMemu.add("社区");
         mainMemu.add("商城");
         mainMemu.add("我的");
-        mainFragment=new MainFragment();
+        final MainFragment mainFragment=new MainFragment();
         EqumentFragment equmentFragment=new EqumentFragment();
         SocialFragment socialFragment=new SocialFragment();
-        MailFragment mailFragment = new MailFragment();
+        final MailFragment mailFragment = new MailFragment();
         MyselfFragment myselfFragment = new MyselfFragment();
         fragmentList.add(mainFragment);
         fragmentList.add(equmentFragment);
@@ -93,16 +95,24 @@ public class MainActivity extends BaseActivity {
             TabLayout.Tab tab = main_tabLayout.getTabAt(i);
             //注意！！！这里就是添加我们自定义的布局
             tab.setCustomView(tabAdapter.getCustomView(i));
+
             //这里是初始化时，默认item0被选中，setSelected（true）是为了给图片和文字设置选中效果，代码在文章最后贴出
 //                ((ImageView) tab.getCustomView().findViewById(R.id.tab_iv)).setSelected(true);
 //                ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(Color.parseColor("#33c62b"));
         }
 
-
         main_tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-//              选择时候调用
+                switch (tab.getPosition()) {
+                    case 4:
+                        tv_main_1.setVisibility(View.GONE);
+                        break;
+                        default:
+                            tv_main_1.setVisibility(View.VISIBLE);
+                            break;
+
+                }
             }
 
             @Override

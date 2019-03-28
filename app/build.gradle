@@ -12,7 +12,7 @@ android {
         release {
             keyAlias 'key0'
             keyPassword '123456'
-            storeFile file('F:/project/TeaBar/teabar.jks')
+            storeFile file('D:/android2/teabar/teabar.jks')
             storePassword '123456'
         }
     }
@@ -72,10 +72,16 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
     implementation 'com.facebook.android:facebook-share:[4,5)'
-    implementation 'cn.jiguang.sdk:jmessage:2.8.1'  // 此处以JMessage 2.8.1 版本为例。
-    implementation 'cn.jiguang.sdk:jcore:1.2.6'  // 此处以JCore 1.2.6 版本为例。
+    implementation 'cn.jiguang.sdk:jmessage:2.8.1'
+    // 此处以JMessage 2.8.1 版本为例。
+    implementation 'cn.jiguang.sdk:jcore:1.2.6'
+    // 此处以JCore 1.2.6 版本为例。
     implementation 'com.github.Jay-Goo:RangeSeekBar:v2.0.4'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-16'
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-16'
     implementation 'com.github.czl0325:zlpolygonview:1.0.2'
+    implementation 'org.jetbrains:annotations-java5:15.0'
+    implementation 'com.contrarywind:Android-PickerView:4.1.6'
+    implementation 'com.lzy.widget:imagepicker:0.5.4'
+
 }

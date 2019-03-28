@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
+    >
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@mipmap/mu" />
+        
+
+        <TextView
+            android:id="@+id/tv_plan_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="问卷一"
+            android:textColor="@color/login_black"
+            android:textSize="20sp"
+            android:layout_marginTop="21dp"
+            android:layout_marginLeft="35dp"
+            />
+        <TextView
+            android:id="@+id/tv_tea_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2019-3-18"
+            android:textColor="@color/social_gray"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="35dp"
+            android:textSize="14sp"
+            />
+        <TextView
+            android:id="@+id/tv_ques_fs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="88"
+            android:textSize="40sp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/login_black"
+            android:layout_toLeftOf="@+id/tv_ques_s"
+            android:layout_marginRight="10dp"
+            />
+        <TextView
+            android:id="@+id/tv_ques_s"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="分"
+            android:textSize="16sp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/login_black"
+            android:layout_marginRight="20dp"
+            />
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>
