@@ -119,4 +119,37 @@
     <string name="set_update">版本更新</string>
     <string name="set_clean">清除缓存</string>
     <string name="set_now">当前版本：</string>
+
+    <!--drink-->
+    <string name="drink_unit">杯</string>
+    <string name="drink_units">单位（杯）</string>
+    <string name="drink_set">设置目标</string>
+    <string name="drink_reminder">未达标提醒</string>
+    <string name="drink_num">饮用量</string>
+    <string name="drink_cup1">杯体积</string>
+    <string name="drink_cup2">小杯</string>
+    <string name="drink_cup3">大杯</string>
+    <string name="drink_size1">约200ml</string>
+    <string name="drink_size2">约300ml</string>
+    <string name="drink_save">保存设置</string>
+
+    <!--personal center-->
+    <string name="personal_center">个人中心</string>
+    <string name="personal_pic">头像</string>
+    <string name="personal_nick">昵称</string>
+    <string name="personal_id">ID号</string>
+    <string name="personal_mess">基本信息设置</string>
+
+    <!--person set-->
+    <string name="personal_set_man">男</string>
+    <string name="personal_set_women">女</string>
+    <string name="personal_set_baby">是否怀孕</string>
+    <string name="personal_set_yes">是</string>
+    <string name="personal_set_no">否</string>
+    <string name="personal_set_old">年龄</string>
+    <string name="personal_set_tall">身高</string>
+    <string name="personal_set_weight">体重</string>
+    <string name="personal_set_place">地区</string>
+    <string name="personal_set_mystyle">我的身体状况</string>
+
 </resources>

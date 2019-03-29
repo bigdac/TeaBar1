@@ -120,4 +120,37 @@
     <string name="set_update">Version updating</string>
     <string name="set_clean">Wipe cache</string>
     <string name="set_now">Current version:</string>
+
+    <!--drink-->
+    <string name="drink_unit">Cup</string>
+    <string name="drink_units">Unit (cup)</string>
+    <string name="drink_set">Set a goal</string>
+    <string name="drink_reminder">Reminder of failure</string>
+    <string name="drink_num">Drinking</string>
+    <string name="drink_cup1">A cup of volume</string>
+    <string name="drink_cup2">Noggin</string>
+    <string name="drink_cup3">Jorum</string>
+    <string name="drink_size1">About 200 ml</string>
+    <string name="drink_size2">About 300 ml</string>
+    <string name="drink_save">Save settings</string>
+
+    <!--personal center-->
+    <string name="personal_center">Personal center</string>
+    <string name="personal_pic">Head portrait</string>
+    <string name="personal_nick">Nickname</string>
+    <string name="personal_id">ID</string>
+    <string name="personal_mess">Basic information Settings</string>
+
+
+    <!--person set-->
+    <string name="personal_set_man">Male</string>
+    <string name="personal_set_women">Female</string>
+    <string name="personal_set_baby">Whether pregnant</string>
+    <string name="personal_set_yes">Yes</string>
+    <string name="personal_set_no">No</string>
+    <string name="personal_set_old">Age</string>
+    <string name="personal_set_tall">Height</string>
+    <string name="personal_set_weight">Weight</string>
+    <string name="personal_set_place">Region</string>
+    <string name="personal_set_mystyle">My physical condition</string>
 </resources>

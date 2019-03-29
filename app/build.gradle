@@ -16,6 +16,10 @@ android {
             storePassword '123456'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/proguard/androidx-annotations.pro'
+
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "teabar.ph.com.teabar"
@@ -83,5 +87,6 @@ dependencies {
     implementation 'org.jetbrains:annotations-java5:15.0'
     implementation 'com.contrarywind:Android-PickerView:4.1.6'
     implementation 'com.lzy.widget:imagepicker:0.5.4'
-
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'com.qmuiteam:qmui:1.2.0'
 }

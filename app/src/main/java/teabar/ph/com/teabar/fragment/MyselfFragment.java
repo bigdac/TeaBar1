@@ -6,9 +6,11 @@ import android.view.View;
 
 import butterknife.OnClick;
 import teabar.ph.com.teabar.R;
+import teabar.ph.com.teabar.activity.DrinkNumActivity;
 import teabar.ph.com.teabar.activity.MyIssueActivity;
 import teabar.ph.com.teabar.activity.MyPlanActivity;
 import teabar.ph.com.teabar.activity.MyQuestionActivity;
+import teabar.ph.com.teabar.activity.PersonnalActivity;
 import teabar.ph.com.teabar.activity.PowerpicActivity;
 import teabar.ph.com.teabar.activity.SettingActivity;
 import teabar.ph.com.teabar.base.BaseFragment;
@@ -38,7 +40,7 @@ public class MyselfFragment extends BaseFragment {
     public void widgetClick(View v) {
 
     }
-    @OnClick({R.id.rl_my_jk,R.id.rl_my_jh,R.id.rl_my_fb,R.id.rl_my_ask,R.id.rl_my_sz})
+    @OnClick({R.id.rl_my_jk,R.id.rl_my_jh,R.id.rl_my_fb,R.id.rl_my_ask,R.id.rl_my_sz,R.id.vp_progress,R.id.iv_may_bj})
     public void onClick(View view){
         switch (view.getId()){
             case R.id.rl_my_jk:
@@ -55,6 +57,14 @@ public class MyselfFragment extends BaseFragment {
                 break;
             case R.id.rl_my_sz:
                 startActivity(new Intent(getActivity(),SettingActivity.class));
+                break;
+
+            case R.id.vp_progress:
+                startActivity(new Intent(getActivity(),DrinkNumActivity.class));
+                break;
+
+            case R.id.iv_may_bj:
+                startActivity(new Intent(getActivity(),PersonnalActivity.class));
                 break;
         }
     }
