@@ -33,7 +33,8 @@ public class MyApplication extends Application {
     private List<Activity> activities;
     private List<Fragment> fragments;
     private static Context mContext;
-
+    public static Map<Long, Boolean> isAtMe = new HashMap<>();
+    public static Map<Long, Boolean> isAtall = new HashMap<>();
 
     public static Context getContext(){
         return mContext;

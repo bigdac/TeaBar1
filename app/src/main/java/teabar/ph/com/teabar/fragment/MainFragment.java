@@ -1,7 +1,13 @@
 package teabar.ph.com.teabar.fragment;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,12 +15,21 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.OnClick;
 import teabar.ph.com.teabar.R;
+import teabar.ph.com.teabar.activity.MakeActivity;
+import teabar.ph.com.teabar.activity.QusetionActivity;
+import teabar.ph.com.teabar.activity.SearchActivity;
+import teabar.ph.com.teabar.adpter.BaseRecyclerAdapter;
+import teabar.ph.com.teabar.adpter.BaseViewHolder;
 import teabar.ph.com.teabar.adpter.MyViewPagerAdapter;
 import teabar.ph.com.teabar.adpter.RecyclerViewAdapter;
 import teabar.ph.com.teabar.adpter.TabAdapter;
@@ -22,6 +37,8 @@ import teabar.ph.com.teabar.adpter.WetherAdapter;
 import teabar.ph.com.teabar.base.BaseFragment;
 import teabar.ph.com.teabar.base.TabItemBean;
 import teabar.ph.com.teabar.util.DisplayUtil;
+import teabar.ph.com.teabar.util.ToastUtil;
+import teabar.ph.com.teabar.util.zxing.android.CaptureActivity;
 import teabar.ph.com.teabar.view.MyLayoutManager;
 import teabar.ph.com.teabar.view.MyRecyclerView;
 import teabar.ph.com.teabar.view.MyScrollView;
@@ -55,7 +72,8 @@ public class MainFragment extends BaseFragment  {
     private List<String> twoDataList;
     LinearLayout li_main_title ;
     boolean isOpen = false;
-
+    ImageView iv_main_search,iv_main_ask;
+    private static final int REQUEST_CODE_SCAN = 0x0000;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +91,26 @@ public class MainFragment extends BaseFragment  {
 
         scrollView =view. findViewById(R.id.scrollView);
         view_pager =view. findViewById(R.id.view_pager);
+        iv_main_search = view.findViewById(R.id.iv_main_search);
+        iv_main_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                startActivity(new Intent(getActivity(),SearchActivity.class));
+                //动态权限申请
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, 1);
+                } else {
+                    goScan();
+                }
+            }
+        });
+        iv_main_ask = view.findViewById(R.id.iv_main_ask);
+        iv_main_ask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(),QusetionActivity.class));
+            }
+        });
         view_pager_weather = view.findViewById(R.id.view_pager_weather);
         li_main_title = view.findViewById(R.id.li_main_title);
         li_main_title.setOnClickListener(new View.OnClickListener() {
@@ -141,12 +179,17 @@ public class MainFragment extends BaseFragment  {
         views = new ArrayList<>();
         for (int i = 0; i < mTabItemBeanArrayList.size(); i++) {
             View view1 = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_tealist, null);
-
             recycler_view = view1.findViewById(R.id.rv_tealist);
             recyclerViewAdapter = new RecyclerViewAdapter(getActivity(), R.layout.item_mailpic, i % 2 == 0 ? oneDataList : twoDataList);
             final MyLayoutManager layoutManager=new MyLayoutManager(getActivity(),2);
             recycler_view.setLayoutManager(layoutManager);
             recycler_view.setAdapter(recyclerViewAdapter);
+            recyclerViewAdapter.setItemListener(new BaseRecyclerAdapter.ItemListener() {
+                @Override
+                public void onItemClick(BaseViewHolder holder, int position) {
+                    startActivity(new Intent(getActivity(),MakeActivity.class));
+                }
+            });
             views.add(view1);
             recyclerViewList.add(recycler_view);
             recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -383,6 +426,65 @@ public class MainFragment extends BaseFragment  {
         }
     }
 
+//    @OnClick({R.id.iv_main_search})
+//    public void onClick(View view){
+//        switch (view.getId()){
+//            case R.id.iv_main_search:
+//
+//                //动态权限申请
+//                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+//                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, 1);
+//                } else {
+//                    goScan();
+//                }
+//                break;
+//        }
+//    }
 
+    /**
+     * 跳转到扫码界面扫码
+     */
+    private void goScan(){
+        Intent intent = new Intent(getActivity(), CaptureActivity.class);
+        startActivityForResult(intent, REQUEST_CODE_SCAN);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    goScan();
+                } else {
+                    Toast.makeText(getActivity(), "你拒绝了权限申请，可能无法打开相机扫码哟！", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+        }
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // 扫描二维码/条码回传
+//        if (requestCode == REQUEST_CODE_SCAN && resultCode == RESULT_OK) {
+//            if (data != null) {
+                //返回的文本内容
+//                String content = data.getStringExtra(DECODED_CONTENT_KEY);
+                //返回的BitMap图像
+//                Bitmap bitmap = data.getParcelableExtra(DECODED_BITMAP_KEY);
+//                if (content.contains("P99")){
+//                    String IMEI= content.substring(content.indexOf(":")+1);
+//
+////                ToastUtil.showShort(this,content);
+//                }else {
+                    ToastUtil.showShort(getActivity(),"请扫描正确的二维码");
+//                }
+
+
+//            }
+//        }
+    }
 
 }

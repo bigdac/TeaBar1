@@ -20,4 +20,19 @@
         <item>6</item>
     </string-array>
 
+    <string-array name="markArray2">
+        <item>0</item>
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+    </string-array>
+
+    <string-array name="markArray3">
+        <item>45</item>
+        <item>55</item>
+        <item>65</item>
+        <item>75</item>
+        <item>85</item>
+    </string-array>
 </resources>

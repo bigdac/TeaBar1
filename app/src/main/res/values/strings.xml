@@ -77,7 +77,13 @@
     <!--social-->
     <string name="social_circle_title">圈子</string>
     <string name="social_circle_message">消息</string>
-
+    <string name="social_inform_title">通知</string>
+    <string name="social_inform_add">请求添加你为好友</string>
+    <string name="social_inform_esure">接受</string>
+    <string name="social_friend_list">好友列表</string>
+    <string name="social_friend_add">添加好友</string>
+    <string name="social_friend_search">搜索昵称或ID号</string>
+    <string name="social_friend_add1">添加</string>
     <!--power-->
     <string name="my_power_title">能量指标图</string>
     <string name="my_power_day">日</string>
@@ -132,7 +138,8 @@
     <string name="drink_size1">约200ml</string>
     <string name="drink_size2">约300ml</string>
     <string name="drink_save">保存设置</string>
-
+    <string name="drink_method">冲泡列表</string>
+    <string name="drink_makemethod">冲泡方法</string>
     <!--personal center-->
     <string name="personal_center">个人中心</string>
     <string name="personal_pic">头像</string>
@@ -152,4 +159,20 @@
     <string name="personal_set_place">地区</string>
     <string name="personal_set_mystyle">我的身体状况</string>
 
-</resources>
+    <!--search-->
+    <string name="search_title">搜索</string>
+    <string name="search_taste">口味</string>
+    <string name="search_function">功能</string>
+    <string name="search_aim">目标</string>
+    <string name="search_history">历史记录</string>
+
+    <!--question-->
+    <string name="question_title">20道问卷题</string>
+    <string name="question_style">我的身体状况</string>
+    <string name="question_score">你的身体分数</string>
+    <string name="question_plan">推荐计划</string>
+
+    <!--talk-->
+    <string name="somebody_at_me">[有人@我]</string>
+
+    </resources>

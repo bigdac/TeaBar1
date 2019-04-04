@@ -17,4 +17,10 @@
     <color name="tab_text_selected_top">#FE4D76</color>
     <color name="main_title1">#D7D7D7</color>
     <color name="blue">#33b5e5</color>
+    <color name="line_normal">#2DD0CF</color>
+    <color name="main_theme_color">#0195ff</color>
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="result_view">#b0000000</color>
+    <color name="possible_result_points">#c0ffff00</color>
+    <color name="viewfinder_laser">#ffcc0000</color>
 </resources>

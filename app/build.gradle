@@ -41,6 +41,11 @@ android {
         ]
 
     }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -89,4 +94,6 @@ dependencies {
     implementation 'com.lzy.widget:imagepicker:0.5.4'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.qmuiteam:qmui:1.2.0'
+    implementation 'org.greenrobot:eventbus:3.0.0'
+
 }

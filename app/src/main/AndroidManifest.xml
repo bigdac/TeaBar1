@@ -83,6 +83,18 @@
         <activity android:name=".activity.SetDrinkActivity" />
         <activity android:name=".activity.PersonnalActivity" />
         <activity android:name=".activity.PersonSetActivity" />
+        <activity android:name=".activity.SearchActivity" />
+        <activity android:name=".activity.QusetionActivity" />
+        <activity android:name=".activity.ScoreActivity" />
+        <activity android:name=".activity.AnswerPlanActivity" />
+        <activity android:name=".activity.MakeActivity" />
+        <activity android:name=".activity.BuyPlanActivity" />
+        <activity android:name=".activity.MethodActivity" />
+        <activity android:name=".activity.AddMethodActivity" />
+        <activity android:name=".activity.SocialInformActivity" />
+        <activity android:name=".activity.FriendListActivity" />
+        <activity android:name=".activity.AddFriendActivity" />
+        <activity android:name=".util.zxing.android.CaptureActivity" />
     </application>
 
 </manifest>

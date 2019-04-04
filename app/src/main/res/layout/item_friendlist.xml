@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    >
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+    <ImageView
+        android:id="@+id/iv_talk_pic"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="12dp"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/my_pic"
+        />
+    <TextView
+        android:id="@+id/tv_talk_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mr.  Liu"
+        android:layout_toRightOf="@+id/iv_talk_pic"
+        android:layout_marginLeft="15dp"
+        android:layout_centerVertical="true"
+        android:textColor="@color/login_black"
+        android:textSize="18sp"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FFF1F1F1"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/tv_talk_name"
+        android:layout_marginRight="17dp"
+        />
+
+
+
+</RelativeLayout>
+</LinearLayout>

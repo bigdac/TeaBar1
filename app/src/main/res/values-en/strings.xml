@@ -78,7 +78,13 @@
     <!--social-->
     <string name="social_circle_title">Circle</string>
     <string name="social_circle_message">Message</string>
-
+    <string name="social_inform_title">Inform</string>
+    <string name="social_inform_add">Request to add you as a friend</string>
+    <string name="social_inform_esure">Accept</string>
+    <string name="social_friend_list">Friend list</string>
+    <string name="social_friend_add">Add friends</string>
+    <string name="social_friend_search">Search nickname or ID number</string>
+    <string name="social_friend_add1">Add</string>
     <!--power-->
     <string name="my_power_title">Energy index diagram</string>
     <string name="my_power_day">Day</string>
@@ -133,6 +139,8 @@
     <string name="drink_size1">About 200 ml</string>
     <string name="drink_size2">About 300 ml</string>
     <string name="drink_save">Save settings</string>
+    <string name="drink_method">Brew list</string>
+    <string name="drink_makemethod">Brewing method</string>
 
     <!--personal center-->
     <string name="personal_center">Personal center</string>
@@ -153,4 +161,21 @@
     <string name="personal_set_weight">Weight</string>
     <string name="personal_set_place">Region</string>
     <string name="personal_set_mystyle">My physical condition</string>
+
+
+    <!--search-->
+    <string name="search_title">Search</string>
+    <string name="search_taste">Taste</string>
+    <string name="search_function">Function</string>
+    <string name="search_aim">Aim</string>
+    <string name="search_history">History</string>
+
+    <!--question-->
+    <string name="question_title">20 Questions</string>
+    <string name="question_style">My physical condition</string>
+    <string name="question_score">Your body score</string>
+    <string name="question_plan">Referral program</string>
+
+    <!--talk-->
+    <string name="somebody_at_me">[有人@我]</string>
 </resources>
