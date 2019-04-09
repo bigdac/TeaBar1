@@ -95,5 +95,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.qmuiteam:qmui:1.2.0'
     implementation 'org.greenrobot:eventbus:3.0.0'
-
+    implementation 'pub.devrel:easypermissions:0.2.1'
+    implementation 'com.mikhaellopez:circularprogressbar:1.1.1'
+    implementation 'com.malinskiy:superrecyclerview:1.1.4'
 }

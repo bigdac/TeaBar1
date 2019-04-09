@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.TransformationMethod;
@@ -34,6 +35,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -71,8 +73,8 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
     @BindView(R.id.login_iv_seepassw)
     ImageView login_iv_seepassw;
     SharedPreferences preferences;
-    boolean isHideFirst=false;
-    String phone;
+    boolean isHideFirst=true;
+    String user;
     String password;
 //    LoginButton loginButton;
     Button loginButton;
@@ -81,6 +83,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
     //    private SignInButton sign_in_button;
     private Button sign_in_button;
     private static int RC_SIGN_IN=10001;
+    QMUITipDialog tipDialog;
     @Override
     public void initParms(Bundle parms) {
 
@@ -104,10 +107,8 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                 ScreenUtils.getStatusBarHeight());
         tv_main_1.setLayoutParams(params);
 
-        et_login_user.setText(preferences.getString("phone", ""));
+        et_login_user.setText(preferences.getString("user", ""));
         et_login_pasw.setText(preferences.getString("password", ""));
-        progressDialog = new ProgressDialog(this);
-
         callbackManager = CallbackManager.Factory.create();
         //自定义fb按钮，在你代码的正确地方
         loginButton = (Button) findViewById(R.id.login_button);
@@ -119,40 +120,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                                 Arrays.asList("public_profile", "user_friends","email"));
             }
         });
-      /*  loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email");
-        loginButton.setBackgroundResource(R.drawable.login_face);
-        loginButton.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-        loginButton.setCompoundDrawablePadding(0);
-        loginButton.setPadding(0, 40, 0, 40);
-        loginButton.setText("FaceBook",TextView.BufferType.SPANNABLE);
-        // If using in a fragment
-//        loginButton.setFragment(LoginActivity.this);
 
-        // Callback registration
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                // App code
-                Log.i("AlexFB", "facebook登录成功");
-                if (loginResult == null) return;
-                Log.i("AlexFB", "token是" + loginResult.getAccessToken());
-                for (String s : loginResult.getRecentlyGrantedPermissions()) {
-                    Log.i("AlexFB", "被授予的权限是::" + s);
-                }
-                getFacebookUserBasicInfo();//获取用户邮箱，姓名，头像等基本信息
-            }
-
-            @Override
-            public void onCancel() {
-                // App code
-            }
-
-            @Override
-            public void onError(FacebookException exception) {
-                // App code
-            }
-        });*/
         //用户自定义fb按钮的做法
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             //为了响应登录结果，您需要使用 LoginButton 注册回调.
@@ -270,34 +238,39 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
 
 
     }
-    @OnClick({R.id.bt_login_ensure, R.id.sign_in_button ,R.id.login_iv_seepassw ,R.id.tv_login_regist})
+    @OnClick({R.id.bt_login_ensure, R.id.sign_in_button ,R.id.login_iv_seepassw ,R.id.tv_login_regist,R.id.tv_login_forget})
     public void onClick(View view){
         switch (view.getId()) {
+            case R.id.tv_login_forget:
+                startActivity(ForgetActivity.class );
+                break;
+
             case R.id.bt_login_ensure:
-                 phone = et_login_user.getText().toString().trim();
+                 user = et_login_user.getText().toString().trim();
                  password = et_login_pasw.getText().toString().trim();
-//                if (TextUtils.isEmpty(phone)) {
-//                    toast("账号码不能为空");
-//                    break;
-//                }/* else if (!Mobile.isMobile(phone)) {
-//                    toast( "手机号码不合法");
-//                    break;
-//                }*/
-//                if (TextUtils.isEmpty(password)) {
-//                    ToastUtil.showShort(this, "请输入密码");
-//                    break;
-//                }
-               /* boolean isConn = NetWorkUtil.isConnected(MyApplication.getContext());
+                if (TextUtils.isEmpty(user)) {
+                    toast("账号码不能为空");
+                    break;
+                }
+                if (TextUtils.isEmpty(password)) {
+                    ToastUtil.showShort(this, "请输入密码");
+                    break;
+                }
+                boolean isConn = NetWorkUtil.isConnected(MyApplication.getContext());
                 if (isConn){
-                    showProgressDialog("正在登录，请稍后...");
+                    showProgressDialog();
                     Map<String, Object> params = new HashMap<>();
-                    params.put("phone", "13101665957");
-                    params.put("password", "123456");
+                    if (user.contains("@")){
+                        params.put("email", user);
+                    }else {
+                        params.put("phone", user);
+                    }
+                    params.put("password", password);
                     new LoginAsynTask().execute(params);
                 }else {
                     ToastUtil.showShort(this, "无网络可用，请检查网络");
-                }*/
-                startActivity(MainActivity.class);
+                }
+
                 break;
             case R.id.sign_in_button:
                 Log.i("robin","点击了登录按钮");
@@ -436,61 +409,54 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
     }
 
 
-    private ProgressDialog progressDialog;
     //显示dialog
-    public void showProgressDialog(String message) {
+    public void showProgressDialog() {
 
-        progressDialog.setMessage(message);
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-
+        tipDialog = new QMUITipDialog.Builder(this)
+                .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
+                .setTipWord("正在登录，请稍后")
+                .create();
+        tipDialog.show();
     }
 
 
 
-    String returnMsg;
+    String returnMsg1,returnMsg2;
     class LoginAsynTask extends AsyncTask<Map<String,Object>,Void,String> {
 
         @Override
         protected String doInBackground(Map<String, Object>... maps) {
             String code = "";
             Map<String, Object> prarms = maps[0];
-            String result =   HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/app/user/login",prarms);
+            String result =   HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/api/login",prarms);
 
             Log.e("back", "--->" + result);
             if (!ToastUtil.isEmpty(result)) {
+                if (!"4000".equals(result)){
                 try {
                     JSONObject jsonObject = new JSONObject(result);
-                    code = jsonObject.getString("returnCode");
-                    returnMsg=jsonObject.getString("returnMsg");
-//                    JSONObject returnData = jsonObject.getJSONObject("returnData");
-                    if ("100".equals(code)) {
-                        JSONObject returnData = jsonObject.getJSONObject("returnData");
-                        int sellerId = returnData.getInt("sellerId");
-                        int sellerRole = returnData.getInt("sellerRole");
-                        int sellerFlag = returnData.getInt("sellerFlag");
-                        String sellerCoName = returnData.getString("sellerCoName");
-                        String sellerName = returnData.getString("sellerName");
-                        String sellerPhone = returnData.getString("sellerPhone");
-                        String sellerPassword = returnData.getString("sellerPassword");
-                        String sellerManagePassword = returnData.getString("sellerManagePassword");
+                    code = jsonObject.getString("state");
+                    returnMsg1=jsonObject.getString("message1");
+                    if ("200".equals(code)) {
+                        JSONObject returnData = jsonObject.getJSONObject("data");
+                        long userId = returnData.getLong("userId");
+                        String userName = returnData.getString("userName");
+                        String token = returnData.getString("token");
+                        int type = returnData.getInt("type");
                         SharedPreferences.Editor editor = preferences.edit();
-                        editor.putString("phone",phone);
+                        editor.putString("user",user);
                         editor.putString("password",password);
-                        editor.putInt("sellerId", sellerId);
-                        editor.putInt("sellerRole", sellerRole);
-                        editor.putInt("sellerFlag", sellerFlag);
-                        editor.putString("sellerCoName", sellerCoName);
-                        editor.putString("sellerName", sellerName);
-                        editor.putString("sellerPhone", sellerPhone);
-                        editor.putString("sellerPassword", sellerPassword);
-                        editor.putString("sellerManagePassword", sellerManagePassword);
+                        editor.putLong("userId", userId);
+                        editor.putString("token",token);
+                        editor.putString("userName",userName);
+                        editor.putInt("type",type);
                         editor.commit();
-
-
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+            }else {
+                    code="4000";
                 }
             }
             return code;
@@ -502,17 +468,19 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
 
             switch (s) {
 
-                case "100":
-                    if (progressDialog != null && progressDialog.isShowing())
-                        progressDialog.dismiss();
+                case "200":
+                    tipDialog.dismiss();
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     toast( "登录成功");
 
                     break;
+                case "4000":
+                    tipDialog.dismiss();
+                    toast( "连接超时，请重试");
+                    break;
                 default:
-                    if (progressDialog != null && progressDialog.isShowing())
-                        progressDialog.dismiss();
-                    toast( returnMsg);
+                    tipDialog.dismiss();
+                    toast( returnMsg1);
                     break;
 
             }

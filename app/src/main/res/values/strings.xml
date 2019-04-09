@@ -15,6 +15,7 @@
     <string name="login_et_user">手机号或邮箱</string>
     <string name="login_tv_forget">忘记密码</string>
     <string name="login_et_pass">密码</string>
+    <string name="login_et_pass1">确认密码</string>
     <string name="login_tv_clause1">通过登录你同意Lify的</string>
     <string name="login_tv_clause2">《隐私政策和条款》</string>
 

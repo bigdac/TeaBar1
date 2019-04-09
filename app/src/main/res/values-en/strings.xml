@@ -13,6 +13,7 @@
     <string name="login_et_user">Phone number or email address</string>
     <string name="login_tv_forget">Forget Password</string>
      <string name="login_et_pass">Password</string>
+    <string name="login_et_pass1">Confirm Password</string>
     <string name="login_tv_clause1">By logging in you agree to Lify terms</string>
     <string name="login_tv_clause2">《Privacy policy and terms》</string>
 

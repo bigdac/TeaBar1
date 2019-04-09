@@ -16,6 +16,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -37,7 +39,8 @@ import teabar.ph.com.teabar.base.MyApplication;
 
 public class HttpUtils {
 
-    public static String ipAddress="http://47.98.131.11:8094";
+//    public static String ipAddress="http://47.98.131.11:8094";
+public static String ipAddress="http://192.168.1.24:8081";
     public static String Address="http://192.168.1.27:8094";
     public static String getInputStream(InputStream is) {
         String result = null;
@@ -215,27 +218,35 @@ public class HttpUtils {
 
 
             String s=jsonObject.toJSONString();
-            Log.i("ss",s);
+                Log.i("ss",s);
             RequestBody requestBody = RequestBody.create(MediaType.parse(CONTENT_TYPE), jsonObject.toJSONString());
-//            SharedPreferences my=MyApplication.getContext().getSharedPreferences("my", Context.MODE_PRIVATE);
-//            String token = my.getString("token", "token");
-
+            Log.e("DDDDDDDDDDDDD", "postOkHpptRequest: --》"+requestBody.contentType().toString());
+            SharedPreferences my=MyApplication.getContext().getSharedPreferences("my", Context.MODE_PRIVATE);
+            String token = my.getString("token", "token");
             Request request = new Request.Builder()
                     .addHeader("client","android-xr")
-//                    .addHeader("authorization",token)
+                    .addHeader("token",token)
                     .url(url)
                     .post(requestBody)
                     .build();
 
+//            OkHttpClient okHttpClient = new OkHttpClient.Builder()
+//                    .readTimeout(TimeOut, TimeUnit.SECONDS)
+//                    .connectTimeout(TimeOut, TimeUnit.SECONDS)
+//                    .writeTimeout(TimeOut, TimeUnit.SECONDS)
+//                    .build() ;
             OkHttpClient okHttpClient = new OkHttpClient();
             Response response = okHttpClient.newCall(request).execute();
-
             if (response.isSuccessful()) {
                 result = response.body().string();
             }
 
         }catch (Exception e){
             e.printStackTrace();
+            if (e instanceof SocketTimeoutException) {
+                //判断超时异常
+                return "4000";
+            }
         }
         return result;
     }

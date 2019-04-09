@@ -52,7 +52,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activity.MainActivity1">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -61,7 +61,7 @@
         </activity>
         <activity android:name=".activity.RegisterActivity" />
 
-        <activity android:name=".activity.LoginActivity" />
+        <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.EquipmentDetailsActivity" />
         <activity android:name=".activity.EqupmentInformActivity" />
         <activity android:name=".activity.EqupmentLightActivity" />
@@ -95,6 +95,9 @@
         <activity android:name=".activity.FriendListActivity" />
         <activity android:name=".activity.AddFriendActivity" />
         <activity android:name=".util.zxing.android.CaptureActivity" />
+        <activity android:name=".activity.ImagePagerActivity" />
+        <activity android:name=".activity.YWActivity" />
+        <activity android:name=".activity.ForgetActivity" />
     </application>
 
 </manifest>

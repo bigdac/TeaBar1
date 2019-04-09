@@ -10,4 +10,8 @@
     <dimen name="space">20dp</dimen>
     <dimen name="hue_alpha_width">25dp</dimen>
 
+    <dimen name="gudieview_width">6dp</dimen>
+    <dimen name="gudieview_heigh">6dp</dimen>
+
+
 </resources>
