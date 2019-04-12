@@ -115,7 +115,7 @@ public class CommentListView extends LinearLayout {
         View convertView = layoutInflater.inflate(R.layout.item_comment, null, false);
 
         TextView commentTv = (TextView) convertView.findViewById(R.id.commentTv);
-        final CircleMovementMethod circleMovementMethod = new CircleMovementMethod(itemSelectorColor, itemSelectorColor);
+//        final CircleMovementMethod circleMovementMethod = new CircleMovementMethod(itemSelectorColor, itemSelectorColor);
 
         final CommentItem bean = mDatas.get(position);
         String name = bean.getUser().getName();
@@ -139,7 +139,7 @@ public class CommentListView extends LinearLayout {
         builder.append(UrlUtils.formatUrlString(contentBodyStr));
         commentTv.setText(builder);
 
-        commentTv.setMovementMethod(circleMovementMethod);
+      /*  commentTv.setMovementMethod(circleMovementMethod);
         commentTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,7 +161,7 @@ public class CommentListView extends LinearLayout {
                 }
                 return false;
             }
-        });
+        });*/
 
         return convertView;
     }
@@ -172,7 +172,7 @@ public class CommentListView extends LinearLayout {
         subjectSpanText.setSpan(new SpannableClickable(itemColor){
                                     @Override
                                     public void onClick(View widget) {
-                                        Toast.makeText(MyApplication.getContext(), textStr + " &id = " + id, Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(MyApplication.getContext(), textStr + " &id = " + id, Toast.LENGTH_SHORT).show();
                                     }
                                 }, 0, subjectSpanText.length(),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

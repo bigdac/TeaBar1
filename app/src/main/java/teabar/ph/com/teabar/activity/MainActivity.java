@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -46,6 +47,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public int bindLayout() {
         setSteepStatusBar(true);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         return R.layout.activity_main;
     }
 
@@ -60,8 +62,10 @@ public class MainActivity extends BaseActivity {
             application = (MyApplication) getApplication();
         }
         application.addActivity(this);
+
         initView();
     }
+
 
     @Override
     public void doBusiness(Context mContext) {

@@ -7,9 +7,7 @@ import java.util.List;
 
 public class CircleItem extends BaseBean{
 
-	public final static String TYPE_URL = "1";
-	public final static String TYPE_IMG = "2";
-	public final static String TYPE_VIDEO = "3";
+
 
 	/**
 	 * 
@@ -23,14 +21,75 @@ public class CircleItem extends BaseBean{
 	private String linkImg;
 	private String linkTitle;
 	private List<PhotoInfo> photos;
-	private List<FavortItem> favorters;
 	private List<CommentItem> comments;
 	private User user;
 	private String videoUrl;
 	private String videoImgUrl;
+	private boolean isOpen;
+	private int commentNum;
+	private int thumbsUp;
+	private int clickNum;
+	private long clickTime1;
+	private long clickTime2;
+
+	public long getClickTime1() {
+		return clickTime1;
+	}
+
+	public void setClickTime1(long clickTime1) {
+		this.clickTime1 = clickTime1;
+	}
+
+	public long getClickTime2() {
+		return clickTime2;
+	}
+
+	public void setClickTime2(long clickTime2) {
+		this.clickTime2 = clickTime2;
+	}
+
+	public int getIsFlag() {
+		return isFlag;
+	}
+
+	public void setIsFlag(int isFlag) {
+		this.isFlag = isFlag;
+	}
+
+	private int isFlag;
+	public int getClickNum() {
+		return clickNum;
+	}
+
+	public void setClickNum(int clickNum) {
+		this.clickNum = clickNum;
+	}
+
+	public int getThumbsUp() {
+		return thumbsUp;
+	}
+
+	public void setThumbsUp(int thumbsUp) {
+		this.thumbsUp = thumbsUp;
+	}
+
+	public int getCommentNum() {
+		return commentNum;
+	}
+
+	public void setCommentNum(int commentNum) {
+		this.commentNum = commentNum;
+	}
+
+	public boolean isOpen() {
+		return isOpen;
+	}
+
+	public void setOpen(boolean open) {
+		isOpen = open;
+	}
 
 	private boolean isExpand;
-	
 	public String getId() {
 		return id;
 	}
@@ -55,12 +114,7 @@ public class CircleItem extends BaseBean{
 	public void setType(String type) {
 		this.type = type;
 	}
-	public List<FavortItem> getFavorters() {
-		return favorters;
-	}
-	public void setFavorters(List<FavortItem> favorters) {
-		this.favorters = favorters;
-	}
+
 	public List<CommentItem> getComments() {
 		return comments;
 	}
@@ -116,13 +170,7 @@ public class CircleItem extends BaseBean{
 		return this.isExpand;
 	}
 
-	public boolean hasFavort(){
-		if(favorters!=null && favorters.size()>0){
-			return true;
-		}
-		return false;
-	}
-	
+
 	public boolean hasComment(){
 		if(comments!=null && comments.size()>0){
 			return true;
@@ -130,16 +178,5 @@ public class CircleItem extends BaseBean{
 		return false;
 	}
 	
-	public String getCurUserFavortId(String curUserId){
-		String favortid = "";
-		if(!TextUtils.isEmpty(curUserId) && hasFavort()){
-			for(FavortItem item : favorters){
-				if(curUserId.equals(item.getUser().getId())){
-					favortid = item.getId();
-					return favortid;
-				}
-			}
-		}
-		return favortid;
-	}
+
 }

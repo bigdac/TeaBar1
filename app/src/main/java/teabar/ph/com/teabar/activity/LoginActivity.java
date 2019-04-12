@@ -1,7 +1,7 @@
 package teabar.ph.com.teabar.activity;
 
 
-import android.app.ProgressDialog;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -39,6 +39,8 @@ import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -115,6 +117,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showProgressDialog();
                 LoginManager.getInstance()
                         .logInWithReadPermissions(LoginActivity.this,
                                 Arrays.asList("public_profile", "user_friends","email"));
@@ -138,7 +141,13 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                                     String  lastname = object.optString("last_name");
                                     Log.e("log", "LoginActivity - email----" + email);
                                     Log.e("log", "LoginActivity - getLoginInfo::---" + object.toString());
-
+                                    try {
+                                        String id = object.getString("id");
+                                        String name = object.getString("name");
+                                        getFacebookUserImage(id,name);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
 //                                    AccessToken accessToken = loginResult.getAccessToken();
 //                                    fbuserId = accessToken.getUserId();
 //                                    String token = accessToken.getToken();
@@ -190,30 +199,21 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
 
     }
 
-    private void getFacebookUserBasicInfo() {
-        FacebookHelper.getUserFacebookBasicInfo(new FacebookHelper.FacebookUserInfoCallback() {
-            @Override
-            public void onCompleted(FacebookHelper.FaceBookUserInfo userInfo) {
-                Log.i("Alex", "获取到的facebook用户信息是:::" + userInfo);
-                tv_bj1.setText(""+userInfo.id+"......"+userInfo.userName+"....."+userInfo.email);
-                getFacebookUserImage(userInfo.id);//获取用户头像
-            }
 
-            @Override
-            public void onFailed(String reason) {
-                Log.i("AlexFB", "获取facebook用户信息失败::" + reason);
-                FacebookHelper.signOut();
-            }
-        });
-    }
 
-    private void getFacebookUserImage(String facebookUserId) {
+    private void getFacebookUserImage(final String facebookUserId, final String name) {
         FacebookHelper.getFacebookUserPictureAsync(facebookUserId, new FacebookHelper.FacebookUserImageCallback() {
             @Override
             public void onCompleted(String imageUrl) {
                 //成功获取到了头像之后
                 Log.i("Alex", "用户高清头像的下载url是" + imageUrl);
-                tv_bj1.setText(""+imageUrl );
+                Map<String,Object> params = new HashMap<>();
+                params.put("userId", facebookUserId);
+                params.put("photoUrl",imageUrl);
+                params.put("userName",name);
+                params.put("type1",2);//facebook 2 google 3
+                new ThirdLoginAsynTask().execute(params);
+                FacebookHelper.signOut();//如果获取失败了，别忘了将整个登录结果回滚
             }
 
             @Override
@@ -341,7 +341,14 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                 Log.i("robin", "用户头像是:" + acct.getPhotoUrl());
                 Log.i("robin", "用户Id是:" + acct.getId());//之后就可以更新UI了
                 Log.i("robin", "用户IdToken是:" + acct.getIdToken());
-                tv_bj1.setText("用户名是:" + acct.getDisplayName()+"\n用户email是:" + acct.getEmail()+"\n用户头像是:" + acct.getPhotoUrl()+ "\n用户Id是:" + acct.getId()+"\n用户IdToken是:" + acct.getIdToken());
+//                tv_bj1.setText("用户名是:" + acct.getDisplayName()+"\n用户email是:" + acct.getEmail()+"\n用户头像是:" + acct.getPhotoUrl()+ "\n用户Id是:" + acct.getId()+"\n用户IdToken是:" + acct.getIdToken());
+            Map<String ,Object> params = new HashMap<>();
+            params.put("userId",acct.getId());
+            params.put("photoUrl",acct.getPhotoUrl());
+            params.put("userName",acct.getDisplayName());
+            params.put("type1",3);//facebook 2 google 3
+                showProgressDialog();
+            new ThirdLoginAsynTask().execute(params);
             }
         }else{
             tv_bj1.setText("登录失败");
@@ -456,6 +463,72 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                     e.printStackTrace();
                 }
             }else {
+                    code="4000";
+                }
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            switch (s) {
+
+                case "200":
+                    tipDialog.dismiss();
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    toast( "登录成功");
+
+                    break;
+                case "4000":
+                    tipDialog.dismiss();
+                    toast( "连接超时，请重试");
+                    break;
+                default:
+                    tipDialog.dismiss();
+                    toast( returnMsg1);
+                    break;
+
+            }
+        }
+    }
+
+    class ThirdLoginAsynTask extends AsyncTask<Map<String,Object>,Void,String> {
+
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+            String code = "";
+            Map<String, Object> prarms = maps[0];
+            String result =   HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/api/otherLogin",prarms);
+
+            Log.e("back", "--->" + result);
+            if (!ToastUtil.isEmpty(result)) {
+                if (!"4000".equals(result)){
+                    try {
+                        JSONObject jsonObject = new JSONObject(result);
+                        code = jsonObject.getString("state");
+                        returnMsg1=jsonObject.getString("message1");
+                        if ("200".equals(code)) {
+                            JSONObject returnData = jsonObject.getJSONObject("data");
+                            long userId = returnData.getLong("userId");
+                            String userName = returnData.getString("userName");
+                            String token = returnData.getString("token");
+                            int type = returnData.getInt("type");
+                            String photoUrl = returnData.getString("photoUrl");
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString("user",user);
+                            editor.putString("password",password);
+                            editor.putLong("userId", userId);
+                            editor.putString("token",token);
+                            editor.putString("userName",userName);
+                            editor.putInt("type",type);
+                            editor.commit();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }else {
                     code="4000";
                 }
             }

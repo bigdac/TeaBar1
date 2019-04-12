@@ -32,9 +32,9 @@ public class MultiImageView extends LinearLayout {
 	/** 长度 单位为Pixel **/
 	private int pxOneMaxWandH;  // 单张图最大允许宽高
 	private int pxMoreWandH = 0;// 多张图的宽高
-	private int pxImagePadding = DensityUtil.dp2px(  3);// 图片间的间距
+	private int pxImagePadding = DensityUtil.dp2px(  10);// 图片间的间距
 
-	private int MAX_PER_ROW_COUNT = 3;// 每行显示最大数
+	private int MAX_PER_ROW_COUNT = 2;// 每行显示最大数
 
 	private LayoutParams onePicPara;
 	private LayoutParams morePara, moreParaColumnFirst;
@@ -60,8 +60,8 @@ public class MultiImageView extends LinearLayout {
 		imagesList = lists;
 		
 		if(MAX_WIDTH > 0){
-			pxMoreWandH = (MAX_WIDTH - pxImagePadding*2 )/3; //解决右侧图片和内容对不齐问题
-			pxOneMaxWandH = MAX_WIDTH * 2 / 3;
+			pxMoreWandH = (MAX_WIDTH - pxImagePadding*2 )/2; //解决右侧图片和内容对不齐问题
+			pxOneMaxWandH = MAX_WIDTH /** 2 / 3*/;
 			initImageLayoutParams();
 		}
 
@@ -144,7 +144,7 @@ public class MultiImageView extends LinearLayout {
 			if(allCount == 4){
 				MAX_PER_ROW_COUNT = 2;
 			}else{
-				MAX_PER_ROW_COUNT = 3;
+				MAX_PER_ROW_COUNT = 2;
 			}
 			int rowCount = allCount / MAX_PER_ROW_COUNT
 					+ (allCount % MAX_PER_ROW_COUNT > 0 ? 1 : 0);// 行数
@@ -210,7 +210,7 @@ public class MultiImageView extends LinearLayout {
 		imageView.setId(photoInfo.url.hashCode());
 		imageView.setOnClickListener(new ImageOnClickListener(position));
 		imageView.setBackgroundColor(getResources().getColor(R.color.im_font_color_text_hint));
-		Glide.with(getContext()).load(photoInfo.url).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
+		Glide.with(getContext()).load( photoInfo.url).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
 
 		return imageView;
 	}

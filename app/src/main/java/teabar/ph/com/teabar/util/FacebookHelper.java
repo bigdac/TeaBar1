@@ -203,7 +203,7 @@ public class FacebookHelper {
                 try {
                     JSONObject dataJsonObject = responseJsonObject.getJSONObject("data");
                     avatarUrl = dataJsonObject.getString("url");
-                    avatarUrl = URLEncoder.encode(avatarUrl, "UTF-8");
+//                    avatarUrl = URLEncoder.encode(avatarUrl, "UTF-8");
                     Log.i("AlexFB", "用户头像获取完毕 avatarUrl:" + avatarUrl);
                 } catch (Exception e) {
                     callback.onFailed("获取用户facebook头像失败4"+e.getStackTrace().toString());

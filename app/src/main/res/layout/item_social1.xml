@@ -99,18 +99,7 @@
                 android:textColor="@color/im_font_color_text_hint"
                 android:textSize="12sp" />-->
 
-            <TextView
-                android:id="@+id/deleteBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dip"
-                android:paddingLeft="3dp"
-                android:paddingRight="3dp"
-                android:text="删除"
-                android:textSize="12sp"
-                android:textColor="@color/color_8290AF"
-                android:background="@drawable/im_selector_social_dig_name_bg"
-                android:visibility="gone"/>
+
 
         </LinearLayout>
 
@@ -130,8 +119,19 @@
         android:layout_height="wrap_content"
         android:src="@mipmap/social_talk"
         android:layout_centerVertical="true"
-
+        android:layout_marginLeft="10dp"
         />
+        <TextView
+            android:id="@+id/tv_social_talk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="23"
+            android:layout_toRightOf="@+id/snsBtn"
+            android:layout_marginLeft="13dp"
+            android:textSize="14sp"
+            android:textColor="@color/social_gray"
+            />
     <ImageView
         android:id="@+id/iv_social_no"
         android:layout_width="wrap_content"
@@ -139,7 +139,7 @@
         android:src="@mipmap/social_no"
          android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/iv_social_talk"
-        android:layout_marginLeft="83dp"
+        android:layout_marginLeft="93dp"
 
         />
     <TextView
@@ -164,31 +164,15 @@
         android:paddingTop="12dip"
         android:paddingRight="12dip"
         android:paddingBottom="8dip"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         android:layout_below="@+id/rl_social_talk"
         android:background="@drawable/im_distribute_comm_bg"
         android:orientation="vertical" >
 
-        <teabar.ph.com.teabar.widgets.PraiseListView
-            android:id="@+id/praiseListView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:lineSpacingMultiplier="1.1"
-            android:textSize="14sp"
-            android:textColor="@color/praise_item"
-            app:item_color="@color/praise_item"
-            />
 
-        <View
-            android:id="@+id/lin_dig"
-            android:layout_width="match_parent"
-            android:layout_height="1dip"
-            android:background="@color/im_line_color"
-            android:layout_marginTop="5dip"
-            android:layout_marginBottom="5dip"
-            />
+
+
         <teabar.ph.com.teabar.widgets.CommentListView
             android:id="@+id/commentList"
             android:layout_width="fill_parent"

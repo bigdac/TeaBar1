@@ -77,6 +77,7 @@ public class DrinkNumActivity extends BaseActivity {
 
     }
     private void initView() {
+
         mBarChart = findViewById(R.id.bar_chart);
         for (int i = 1; i <= 24; i++) {
             xValuesDay.add(i+"");

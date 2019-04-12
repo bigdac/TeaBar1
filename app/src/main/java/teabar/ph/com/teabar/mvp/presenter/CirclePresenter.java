@@ -32,7 +32,7 @@ public class CirclePresenter implements CircleContract.Presenter{
 
         List<CircleItem> datas = DatasUtil.createCircleDatas();
         if(view!=null){
-            view.update2loadData(loadType, datas);
+//            view.update2loadData(loadType, datas);
         }
 	}
 
@@ -72,31 +72,13 @@ public class CirclePresenter implements CircleContract.Presenter{
 				FavortItem item = DatasUtil.createCurUserFavortItem();
                 if(view !=null ){
                     view.update2AddFavorite(circlePosition, item);
+
                 }
 
 			}
 		});
 	}
-	/**
-	 * 
-	* @Title: deleteFavort 
-	* @Description: 取消点赞 
-	* @param @param circlePosition
-	* @param @param favortId     
-	* @return void    返回类型 
-	* @throws
-	 */
-	public void deleteFavort(final int circlePosition, final String favortId){
-		circleModel.deleteFavort(new IDataRequestListener() {
 
-			@Override
-			public void loadSuccess(Object object) {
-                if(view !=null ){
-                    view.update2DeleteFavort(circlePosition, favortId);
-                }
-			}
-		});
-	}
 	
 	/**
 	 * 

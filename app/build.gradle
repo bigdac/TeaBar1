@@ -55,6 +55,9 @@ android {
 //        debug {
 //            signingConfig signingConfigs.release
 //        }
+        debug {
+            signingConfig signingConfigs.release
+        }
     }
     productFlavors {
     }
@@ -91,7 +94,8 @@ dependencies {
     implementation 'com.github.czl0325:zlpolygonview:1.0.2'
     implementation 'org.jetbrains:annotations-java5:15.0'
     implementation 'com.contrarywind:Android-PickerView:4.1.6'
-    implementation 'com.lzy.widget:imagepicker:0.5.4'
+//    implementation 'com.lzy.widget:imagepicker:0.5.4'
+     api 'com.cysion:ImagePicker:1.0.6'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.qmuiteam:qmui:1.2.0'
     implementation 'org.greenrobot:eventbus:3.0.0'

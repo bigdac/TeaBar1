@@ -52,7 +52,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.MainActivity1">
+        <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -75,10 +75,10 @@
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.ChangePassActivity" />
         <activity android:name=".activity.FeedbackActivity" />
-        <activity
-            android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/ImagePickerThemeFullScreen" />
+        <!--<activity-->
+            <!--android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:theme="@style/ImagePickerThemeFullScreen" />-->
         <activity android:name=".activity.DrinkNumActivity" />
         <activity android:name=".activity.SetDrinkActivity" />
         <activity android:name=".activity.PersonnalActivity" />
@@ -95,9 +95,12 @@
         <activity android:name=".activity.FriendListActivity" />
         <activity android:name=".activity.AddFriendActivity" />
         <activity android:name=".util.zxing.android.CaptureActivity" />
-        <activity android:name=".activity.ImagePagerActivity" />
+        <activity android:name=".activity.ImagePagerActivity"
+            android:theme="@style/QMUI.Compat.NoActionBar"
+            />
         <activity android:name=".activity.YWActivity" />
         <activity android:name=".activity.ForgetActivity" />
+        <activity android:name=".activity.AddSocialActivity" />
     </application>
 
 </manifest>

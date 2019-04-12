@@ -228,7 +228,6 @@ public class MainFragment extends BaseFragment  {
                     return;
                 }
                 setFragmentDisplay(position);//独立出来，用于OnResume的时候初始化展现相应的Fragment
-
                 savdCheckedIndex = position;
                 mCurrentIndex = position;
             }
@@ -293,8 +292,8 @@ public class MainFragment extends BaseFragment  {
         Log.e(TAG, "onStop: -->" );
         if (mWetherAdapter!=null)
             mWetherAdapter=null;
-        if (mTabAdapter!=null)
-            mTabAdapter=null;
+//        if (mTabAdapter!=null)
+//            mTabAdapter=null;
         recyclerViewAdapter=null;
         recyclerViewList.clear();
         recyclerViewAdapter2=null;

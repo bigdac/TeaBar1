@@ -39,7 +39,7 @@ import teabar.ph.com.teabar.base.MyApplication;
 
 public class HttpUtils {
 
-//    public static String ipAddress="http://47.98.131.11:8094";
+//    public static String ipAddress="http://168v7u7115.iask.in:32054";
 public static String ipAddress="http://192.168.1.24:8081";
     public static String Address="http://192.168.1.27:8094";
     public static String getInputStream(InputStream is) {
@@ -431,7 +431,7 @@ public static String ipAddress="http://192.168.1.24:8081";
         SharedPreferences my=MyApplication.getContext().getSharedPreferences("my", Context.MODE_PRIVATE);
 //            SharedPreferences userSettings= ge6getSharedPreferences("my", 0);
         String token =my.getString("token","");
-       MediaType MEDIA_TYPE_FILE = MediaType.parse("image/jpg");
+       MediaType MEDIA_TYPE_FILE = MediaType.parse("image/png");
         try {
             //入参-字符串
 
@@ -443,14 +443,15 @@ public static String ipAddress="http://192.168.1.24:8081";
             }
 
             //入参-文件
+
             for (Map.Entry entry : fileMap.entrySet()) {
                 File file = (File) entry.getValue();
                 RequestBody fileBody = RequestBody.create(MEDIA_TYPE_FILE, file);
                 String fileName = file.getName();
-                requestBody.addFormDataPart("files", fileName, fileBody);
+                requestBody.addFormDataPart( entry.getKey().toString(), entry.getKey().toString(),fileBody);
             }
             Request request = new Request.Builder()
-                    .addHeader("authorization",token)
+                    .addHeader("token",token)
                     .url(url)
                     .post(requestBody.build())
                     .build();
@@ -496,7 +497,7 @@ public static String ipAddress="http://192.168.1.24:8081";
                 requestBody.addFormDataPart("files", name, fileBody);
             }
             Request request = new Request.Builder()
-                    .addHeader("authorization",token)
+                    .addHeader("token",token)
                     .url(url)
                     .post(requestBody.build())
                     .build();

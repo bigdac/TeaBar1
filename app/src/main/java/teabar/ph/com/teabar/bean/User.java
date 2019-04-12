@@ -4,7 +4,7 @@ package teabar.ph.com.teabar.bean;
 * @ClassName: User 
 * @Description: TODO(这里用一句话描述这个类的作用) 
 * @author yiw
-* @date 2015-12-28 下午3:45:04 
+* @date
 *
  */
 public class User {
@@ -15,6 +15,9 @@ public class User {
 		this.id = id;
 		this.name = name;
 		this.headUrl = headUrl;
+	}
+	public User(){
+
 	}
 	public String getId() {
 		return id;

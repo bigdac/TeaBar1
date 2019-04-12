@@ -27,19 +27,18 @@ public abstract class CircleViewHolder extends RecyclerView.ViewHolder implement
 
     public int viewType;
 
-    public ImageView headIv;
+    public ImageView headIv,iv_social_no;
     public TextView nameTv;
-    public TextView urlTipTv;
+    public TextView urlTipTv,tv_social_num,tv_social_talk;
     /** 动态的内容 */
     public ExpandTextView contentTv;
     public TextView timeTv;
-    public TextView deleteBtn;
-    public ImageView snsBtn;
-    /** 点赞列表*/
-    public PraiseListView praiseListView;
 
-    public LinearLayout digCommentBody;
-    public View digLine;
+    public ImageView snsBtn;
+
+
+    public LinearLayout digCommentBody;//
+
 
     /** 评论列表 */
     public CommentListView commentList;
@@ -56,14 +55,16 @@ public abstract class CircleViewHolder extends RecyclerView.ViewHolder implement
 
         headIv = (ImageView) itemView.findViewById(R.id.headIv);
         nameTv = (TextView) itemView.findViewById(R.id.nameTv);
-        digLine = itemView.findViewById(R.id.lin_dig);
+
+        iv_social_no = itemView.findViewById(R.id.iv_social_no);
 
         contentTv = (ExpandTextView) itemView.findViewById(R.id.contentTv);
         urlTipTv = (TextView) itemView.findViewById(R.id.urlTipTv);
         timeTv = (TextView) itemView.findViewById(R.id.timeTv);
-        deleteBtn = (TextView) itemView.findViewById(R.id.deleteBtn);
+
         snsBtn = (ImageView) itemView.findViewById(R.id.snsBtn);
-        praiseListView = (PraiseListView) itemView.findViewById(R.id.praiseListView);
+        tv_social_num = itemView.findViewById(R.id.tv_social_num);
+        tv_social_talk = itemView.findViewById(R.id.tv_social_talk);
 
         digCommentBody = (LinearLayout) itemView.findViewById(R.id.digCommentBody);
         commentList = (CommentListView)itemView.findViewById(R.id.commentList);

@@ -29,6 +29,16 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             layout="@layout/layout_editview"/>
+        <ImageView
+            android:id="@+id/iv_main_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/equ_add"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="23dp"
+            />
 
         <com.mikhaellopez.circularprogressbar.CircularProgressBar
             xmlns:app="http://schemas.android.com/apk/res-auto"

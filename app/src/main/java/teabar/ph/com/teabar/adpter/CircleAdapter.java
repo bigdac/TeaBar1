@@ -3,6 +3,7 @@ package teabar.ph.com.teabar.adpter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,19 +29,15 @@ import teabar.ph.com.teabar.bean.ActionItem;
 import teabar.ph.com.teabar.bean.CircleItem;
 import teabar.ph.com.teabar.bean.CommentConfig;
 import teabar.ph.com.teabar.bean.CommentItem;
-import teabar.ph.com.teabar.bean.FavortItem;
 import teabar.ph.com.teabar.bean.PhotoInfo;
 import teabar.ph.com.teabar.mvp.presenter.CirclePresenter;
 import teabar.ph.com.teabar.util.DatasUtil;
 import teabar.ph.com.teabar.util.GlideCircleTransform;
 import teabar.ph.com.teabar.util.UrlUtils;
 import teabar.ph.com.teabar.widgets.CircleVideoView;
-import teabar.ph.com.teabar.widgets.CommentListView;
 import teabar.ph.com.teabar.widgets.ExpandTextView;
 import teabar.ph.com.teabar.widgets.MultiImageView;
-import teabar.ph.com.teabar.widgets.PraiseListView;
-import teabar.ph.com.teabar.widgets.SnsPopupWindow;
-import teabar.ph.com.teabar.widgets.dialog.CommentDialog;
+
 
 /**
  * Created by yiwei on 16/5/17.
@@ -56,9 +53,10 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
     public static final int HEADVIEW_SIZE = 1;
 
     int curPlayIndex=-1;
-
-    private CirclePresenter presenter;
+    public boolean isOpen =false;
+    private CirclePresenter  presenter;
     private Context context;
+    private  OnItemClickListener onItemClickListener;
     public void setCirclePresenter(CirclePresenter presenter){
         this.presenter = presenter;
     }
@@ -72,16 +70,8 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
         if(position == 0){
             return TYPE_HEAD;
         }
-
         int itemType = 0;
-        CircleItem item = (CircleItem) datas.get(position-1);
-        if (CircleItem.TYPE_URL.equals(item.getType())) {
-            itemType = CircleViewHolder.TYPE_URL;
-        } else if (CircleItem.TYPE_IMG.equals(item.getType())) {
-            itemType = CircleViewHolder.TYPE_IMAGE;
-        } else if(CircleItem.TYPE_VIDEO.equals(item.getType())){
-            itemType = CircleViewHolder.TYPE_VIDEO;
-        }
+         itemType = CircleViewHolder.TYPE_IMAGE;
         return itemType;
     }
 
@@ -121,16 +111,25 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
             String headImg = circleItem.getUser().getHeadUrl();
             final String content = circleItem.getContent();
             String createTime = circleItem.getCreateTime();
-            final List<FavortItem> favortDatas = circleItem.getFavorters();
+            final boolean isOpen[] ={circleItem.isOpen()};
             final List<CommentItem> commentsDatas = circleItem.getComments();
-            boolean hasFavort = circleItem.hasFavort();
+            final int  ThumbsUp[]= {circleItem.getThumbsUp()};
+            int  CommentNum = circleItem.getCommentNum();
             boolean hasComment = circleItem.hasComment();
 
             Glide.with(context).load(headImg).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.color.bg_no_photo).transform(new GlideCircleTransform(context)).into(holder.headIv);
 
             holder.nameTv.setText(name);
             holder.timeTv.setText(createTime);
+            holder.tv_social_num.setText(ThumbsUp[0]+"");
+            holder.tv_social_talk.setText(CommentNum+"");
 
+            if (!isOpen[0]){
+                holder.iv_social_no.setImageResource(R.mipmap.social_no);
+            }else {
+                holder.iv_social_no.setImageResource(R.mipmap.social_yes);
+
+            }
             if(!TextUtils.isEmpty(content)){
                 holder.contentTv.setExpand(circleItem.isExpand());
                 holder.contentTv.setExpandStatusListener(new ExpandTextView.ExpandStatusListener() {
@@ -144,94 +143,59 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
             }
             holder.contentTv.setVisibility(TextUtils.isEmpty(content) ? View.GONE : View.VISIBLE);
 
-            if(DatasUtil.curUser.getId().equals(circleItem.getUser().getId())){
-                holder.deleteBtn.setVisibility(View.VISIBLE);
-            }else{
-                holder.deleteBtn.setVisibility(View.GONE);
-            }
-            holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
+
+            holder.iv_social_no.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //删除
-                    if(presenter!=null){
-                        presenter.deleteCircle(circleId);
-                    }
-                }
-            });
-            if(hasFavort || hasComment){
-                if(hasFavort){//处理点赞列表  隐藏掉  
-                    holder.praiseListView.setOnItemClickListener(new PraiseListView.OnItemClickListener() {
-                        @Override
-                        public void onClick(int position) {
-                            String userName = favortDatas.get(position).getUser().getName();
-                            String userId = favortDatas.get(position).getUser().getId();
-                            Toast.makeText(MyApplication.getContext(), userName + " &id = " + userId, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    holder.praiseListView.setDatas(favortDatas);
-                    holder.praiseListView.setVisibility(View.GONE);
-                }else{
-                    holder.praiseListView.setVisibility(View.GONE);
-                }
+                    onItemClickListener.onItemClick(v, position);
 
-                if(hasComment){//处理评论列表
-                    holder.commentList.setOnItemClickListener(new CommentListView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(int commentPosition) {
-                            CommentItem commentItem = commentsDatas.get(commentPosition);
-                            if(DatasUtil.curUser.getId().equals(commentItem.getUser().getId())){//复制或者删除自己的评论
-
-                                CommentDialog dialog = new CommentDialog(context, presenter, commentItem, circlePosition);
-                                dialog.show();
-                            }else{//回复别人的评论
-                                if(presenter != null){
-                                    CommentConfig config = new CommentConfig();
-                                    config.circlePosition = circlePosition;
-                                    config.commentPosition = commentPosition;
-                                    config.commentType = CommentConfig.Type.REPLY;
-                                    config.replyUser = commentItem.getUser();
-                                    presenter.showEditTextBody(config);
+                            if (isOpen[0]){
+                                holder.iv_social_no.setImageResource(R.mipmap.social_no);
+                                isOpen[0]=false;
+                                if (ThumbsUp[0]==0){
+                                    holder.tv_social_num.setText(ThumbsUp[0]+"");
+                                }else {
+                                    holder.tv_social_num.setText(ThumbsUp[0]-1+"");
+                                    ThumbsUp[0] = ThumbsUp[0]-1;
                                 }
+                                Log.e("DDDD", "onClick: -->"+circleItem.isOpen() );
+                                circleItem.setOpen(false);
+                                datas.set(position,circleItem);
+                            }else {
+                                holder.iv_social_no.setImageResource(R.mipmap.social_yes);
+                                isOpen[0]=true;
+                                circleItem.setOpen(true);
+                                holder.tv_social_num.setText(ThumbsUp[0]+1+"");
+                                ThumbsUp[0] = ThumbsUp[0]+1;
+                                Log.e("DDDD", "onClick: -->"+circleItem.isOpen() );
+                                datas.set(position,circleItem);
                             }
                         }
-                    });
-                    holder.commentList.setOnItemLongClickListener(new CommentListView.OnItemLongClickListener() {
-                        @Override
-                        public void onItemLongClick(int commentPosition) {
-                            //长按进行复制或者删除
-                            CommentItem commentItem = commentsDatas.get(commentPosition);
-                            CommentDialog dialog = new CommentDialog(context, presenter, commentItem, circlePosition);
-                            dialog.show();
-                        }
-                    });
+
+
+
+            });
+
+
+                if(hasComment){//处理评论列表
                     holder.commentList.setDatas(commentsDatas);
                     holder.commentList.setVisibility(View.VISIBLE);
-
+//                    holder.digCommentBody.setVisibility(View.VISIBLE);
                 }else {
                     holder.commentList.setVisibility(View.GONE);
+//                    holder.digCommentBody.setVisibility(View.INVISIBLE);
                 }
-                holder.digCommentBody.setVisibility(View.VISIBLE);
-            }else{
-                holder.digCommentBody.setVisibility(View.GONE);
-            }
-
-            holder.digLine.setVisibility(hasFavort && hasComment ? View.VISIBLE : View.GONE);
-
-            final SnsPopupWindow snsPopupWindow = holder.snsPopupWindow;
-            //判断是否已点赞
-            String curUserFavortId = circleItem.getCurUserFavortId(DatasUtil.curUser.getId());
-            if(!TextUtils.isEmpty(curUserFavortId)){
-                snsPopupWindow.getmActionItems().get(0).mTitle = "取消";
-            }else{
-                snsPopupWindow.getmActionItems().get(0).mTitle = "赞";
-            }
-            snsPopupWindow.update();
-            snsPopupWindow.setmItemClickListener(new PopupItemClickListener(circlePosition, circleItem, curUserFavortId));
             holder.snsBtn.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
                     //弹出popupwindow
-                    snsPopupWindow.showPopupWindow(view);
+//                    snsPopupWindow.showPopupWindow(view);
+                    if(presenter != null){
+                        CommentConfig config = new CommentConfig();
+                        config.circlePosition = circlePosition;
+                        config.commentType = CommentConfig.Type.PUBLIC;
+                        presenter.showEditTextBody(config);
+                    }
                 }
             });
 
@@ -264,7 +228,7 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
                                     for(PhotoInfo photoInfo : photos){
                                         photoUrls.add(photoInfo.url);
                                     }
-                                    ImagePagerActivity.startImagePagerActivity(((MainActivity1) context), photoUrls, position, imageSize);
+                                    ImagePagerActivity.startImagePagerActivity(( context), photoUrls, position, imageSize);
 
 
                                 }
@@ -294,7 +258,14 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
             }
         }
     }
+    public void SetOnItemClick( OnItemClickListener onItemClickListener){
+        this.onItemClickListener = onItemClickListener ;
+    }
 
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+
+    }
     @Override
     public int getItemCount() {
         return datas.size()+1;//有head需要加1
@@ -304,6 +275,9 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
     public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
         super.onViewAttachedToWindow(holder);
     }
+    public List<CircleItem> getDates1(){
+        return datas;
+    }
 
     public class HeaderViewHolder extends RecyclerView.ViewHolder{
 
@@ -312,45 +286,6 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
         }
     }
 
-    private class PopupItemClickListener implements SnsPopupWindow.OnItemClickListener{
-        private String mFavorId;
-        //动态在列表中的位置
-        private int mCirclePosition;
-        private long mLasttime = 0;
-        private CircleItem mCircleItem;
 
-        public PopupItemClickListener(int circlePosition, CircleItem circleItem, String favorId){
-            this.mFavorId = favorId;
-            this.mCirclePosition = circlePosition;
-            this.mCircleItem = circleItem;
-        }
 
-        @Override
-        public void onItemClick(ActionItem actionitem, int position) {
-            switch (position) {
-                case 0://点赞、取消点赞
-                    if(System.currentTimeMillis()-mLasttime<700)//防止快速点击操作
-                        return;
-                    mLasttime = System.currentTimeMillis();
-                    if(presenter != null){
-                        if ("赞".equals(actionitem.mTitle.toString())) {
-                            presenter.addFavort(mCirclePosition);
-                        } else {//取消点赞
-                            presenter.deleteFavort(mCirclePosition, mFavorId);
-                        }
-                    }
-                    break;
-                case 1://发布评论
-                    if(presenter != null){
-                        CommentConfig config = new CommentConfig();
-                        config.circlePosition = mCirclePosition;
-                        config.commentType = CommentConfig.Type.PUBLIC;
-                        presenter.showEditTextBody(config);
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
 }

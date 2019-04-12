@@ -1,7 +1,7 @@
 package teabar.ph.com.teabar.bean;
 
 /**
- * Created by yiwei on 16/3/2.
+ *
  */
 public class CommentConfig {
     public static enum Type{

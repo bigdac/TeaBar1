@@ -290,25 +290,12 @@ public class MainActivity1 extends YWActivity implements CircleContract.View, Ea
 	public void update2AddFavorite(int circlePosition, FavortItem addItem) {
 		if(addItem != null){
             CircleItem item = (CircleItem) circleAdapter.getDatas().get(circlePosition);
-            item.getFavorters().add(addItem);
+//            item.getFavorters().add(addItem);
 			circleAdapter.notifyDataSetChanged();
             //circleAdapter.notifyItemChanged(circlePosition+1);
 		}
 	}
 
-	@Override
-	public void update2DeleteFavort(int circlePosition, String favortId) {
-        CircleItem item = (CircleItem) circleAdapter.getDatas().get(circlePosition);
-		List<FavortItem> items = item.getFavorters();
-		for(int i=0; i<items.size(); i++){
-			if(favortId.equals(items.get(i).getId())){
-				items.remove(i);
-				circleAdapter.notifyDataSetChanged();
-                //circleAdapter.notifyItemChanged(circlePosition+1);
-				return;
-			}
-		}
-	}
 
 	@Override
 	public void update2AddComment(int circlePosition, CommentItem addItem) {

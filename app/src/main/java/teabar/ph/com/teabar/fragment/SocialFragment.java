@@ -41,7 +41,7 @@ public class SocialFragment extends BaseFragment {
 
    TextView tv_login_regist,tv_login_login;
 
-    FriendCircleFragment friendCircleFragment;
+    FriendCircleFragment1 friendCircleFragment;
     FriendFragment friendFragment;
     RelativeLayout rl_social_inform;
     ImageView iv_social_friend;
@@ -58,7 +58,7 @@ public class SocialFragment extends BaseFragment {
         FragmentTransaction fragmentTransaction;
         fragmentManager = getActivity().getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        friendCircleFragment=new FriendCircleFragment();
+        friendCircleFragment=new FriendCircleFragment1();
         friendFragment = new FriendFragment();
         fragmentTransaction.replace(R.id.li_social,friendCircleFragment ).commit();
         tv_login_regist = view.findViewById(R.id.tv_login_regist);
