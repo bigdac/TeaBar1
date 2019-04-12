@@ -1,6 +1,7 @@
 package teabar.ph.com.teabar.activity;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -22,13 +23,14 @@ import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.BaseFragment;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.fragment.EqumentFragment;
+import teabar.ph.com.teabar.fragment.FriendCircleFragment1;
 import teabar.ph.com.teabar.fragment.MailFragment;
 import teabar.ph.com.teabar.fragment.MainFragment;
 import teabar.ph.com.teabar.fragment.MyselfFragment;
 import teabar.ph.com.teabar.fragment.SocialFragment;
 import teabar.ph.com.teabar.view.NoSrcollViewPage;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements FriendCircleFragment1.hidenShowView {
     @BindView(R.id.main_viewPage)
     NoSrcollViewPage main_viewPage;
     @BindView(R.id.main_tabLayout)
@@ -39,6 +41,7 @@ public class MainActivity extends BaseActivity {
     List<BaseFragment> fragmentList = new ArrayList<>();
 //    MainFragment mainFragment;
     MyApplication application;
+    public static float scale = 0 ;
     @Override
     public void initParms(Bundle parms) {
 
@@ -47,7 +50,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public int bindLayout() {
         setSteepStatusBar(true);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
         return R.layout.activity_main;
     }
 
@@ -57,7 +60,7 @@ public class MainActivity extends BaseActivity {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 ScreenUtils.getStatusBarHeight());
         tv_main_1.setLayoutParams(params);
-
+        scale = getApplicationContext().getResources().getDisplayMetrics().density;
         if (application == null) {
             application = (MyApplication) getApplication();
         }
@@ -65,6 +68,8 @@ public class MainActivity extends BaseActivity {
 
         initView();
     }
+
+
 
 
     @Override
@@ -129,5 +134,16 @@ public class MainActivity extends BaseActivity {
 
             }
         });
+    }
+
+    @Override
+    public void hiden(boolean b) {
+
+        if (b){
+            main_tabLayout.setVisibility(View.GONE);
+        }else {
+            main_tabLayout.setVisibility(View.VISIBLE);
+        }
+
     }
 }

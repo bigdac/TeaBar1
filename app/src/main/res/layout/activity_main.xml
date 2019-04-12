@@ -7,6 +7,8 @@
     tools:context=".activity.MainActivity"
     android:id="@+id/li_main"
     android:orientation="vertical"
+    android:windowSoftInputMode="adjustResize|stateHidden"
+    android:fitsSystemWindows="true"
     >
     <TextView
         android:id="@+id/tv_main_1"

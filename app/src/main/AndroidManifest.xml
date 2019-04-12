@@ -60,8 +60,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.RegisterActivity" />
+        <!--<activity android:name=".activity.LoginActivity" />-->
+        <activity android:name=".activity.MainActivity"
 
-        <activity android:name=".activity.MainActivity" />
+            />
         <activity android:name=".activity.EquipmentDetailsActivity" />
         <activity android:name=".activity.EqupmentInformActivity" />
         <activity android:name=".activity.EqupmentLightActivity" />
@@ -75,10 +77,10 @@
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.ChangePassActivity" />
         <activity android:name=".activity.FeedbackActivity" />
-        <!--<activity-->
-            <!--android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:theme="@style/ImagePickerThemeFullScreen" />-->
+        <activity
+            android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ImagePickerThemeFullScreen" />
         <activity android:name=".activity.DrinkNumActivity" />
         <activity android:name=".activity.SetDrinkActivity" />
         <activity android:name=".activity.PersonnalActivity" />

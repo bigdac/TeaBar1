@@ -11,7 +11,7 @@
         android:text="15"
         android:textColor="@color/white"
         android:textSize="48sp"
-        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="151dp"
         />
     <TextView
@@ -21,13 +21,16 @@
         android:text="2019年3月"
         android:textColor="@color/white"
         android:textSize="16sp"
-        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
         android:layout_below="@+id/encourage_tv_day"
         />
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_encourage"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="每一个朝阳都是新的开始"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:textColor="@color/white"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/encourage_tv_year"

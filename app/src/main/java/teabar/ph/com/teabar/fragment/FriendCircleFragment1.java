@@ -18,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -51,6 +52,7 @@ import teabar.ph.com.teabar.bean.User;
 import teabar.ph.com.teabar.mvp.contract.CircleContract;
 import teabar.ph.com.teabar.mvp.presenter.CirclePresenter;
 import teabar.ph.com.teabar.util.CommonUtils;
+import teabar.ph.com.teabar.util.DisplayUtil;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.widgets.CommentListView;
@@ -85,14 +87,17 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
     long id ;
     int currentPage = 1;
     int  Type = 0;
+    Context context;
     @Override
     public int bindLayout() {
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         return R.layout.activity_main1;
     }
 
     @Override
     public void initView(View view) {
         presenter = new CirclePresenter( this);
+        context= getActivity();
         preferences = getActivity().getSharedPreferences("my",Context.MODE_PRIVATE);
         id = preferences.getLong("userId",0);
         tipDialog = new QMUITipDialog.Builder(getActivity())
@@ -268,6 +273,7 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
             }
         });
         edittextbody = (LinearLayout) view.findViewById(R.id.editTextBodyLl);
+        bodyLayout = (RelativeLayout) view.findViewById(R.id.bodyLayout);
         editText = (EditText) view.findViewById(R.id.circleEt);
         sendIv = (ImageView) view.findViewById(R.id.sendIv);
         sendIv.setOnClickListener(new View.OnClickListener() {
@@ -291,7 +297,7 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
             }
         });
 
-        setViewTreeObserver(view);
+        setViewTreeObserver();
     }
 
 
@@ -568,26 +574,26 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
     }
 
 
-    private void setViewTreeObserver(View view) {
-        bodyLayout = (RelativeLayout) view.findViewById(R.id.bodyLayout);
+
+
+    private void setViewTreeObserver() {
+
         final ViewTreeObserver swipeRefreshLayoutVTO = bodyLayout.getViewTreeObserver();
         swipeRefreshLayoutVTO.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
+
                 Rect r = new Rect();
                 bodyLayout.getWindowVisibleDisplayFrame(r);
-                int statusBarH =  ScreenUtils.getStatusBarHeight();//状态栏高度
+                int statusBarH =  getStatusBarHeight();//状态栏高度
+//                int hingth=(int)(50 * MainActivity.scale + 0.5f);
                 int screenH = bodyLayout.getRootView().getHeight();
-//                int screenH = DisplayUtil.getScreenHeight(getActivity());
                 if(r.top != statusBarH ){
                     //在这个demo中r.top代表的是状态栏高度，在沉浸式状态栏时r.top＝0，通过getStatusBarHeight获取状态栏高度
                     r.top = statusBarH;
                 }
                 int keyboardH = screenH - (r.bottom - r.top);
-                Log.d(TAG, "screenH＝ "+ screenH +" &keyboardH = "
-                        + keyboardH + "&currentKeyboardH"+currentKeyboardH+
-
-                        " &r.bottom=" + r.bottom + " &top=" + r.top + " &statusBarH=" + statusBarH);
+                Log.d(TAG, "screenH＝ "+ screenH +" &keyboardH = " + keyboardH + " &r.bottom=" + r.bottom + " &top=" + r.top + " &statusBarH=" + statusBarH);
 
                 if(keyboardH == currentKeyboardH){//有变化时才处理，否则会陷入死循环
                     return;
@@ -597,20 +603,31 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
                 screenHeight = screenH;//应用屏幕的高度
                 editTextBodyHeight = edittextbody.getHeight();
 
-                if(keyboardH< 150 ){//说明是隐藏键盘的情况
+                if(keyboardH<150){//说明是隐藏键盘的情况
                     updateEditTextBodyVisible(View.GONE, null);
                     return;
                 }
                 //偏移listview
                 if(layoutManager!=null && commentConfig != null){
-                    layoutManager.scrollToPositionWithOffset(commentConfig.circlePosition + CircleAdapter.HEADVIEW_SIZE, getListviewOffset(commentConfig));
+//                    layoutManager.scrollToPositionWithOffset(commentConfig.circlePosition + CircleAdapter.HEADVIEW_SIZE, getListviewOffset(commentConfig));
+                    layoutManager.scrollToPosition(commentConfig.circlePosition +CircleAdapter.HEADVIEW_SIZE );
+
                 }
             }
         });
     }
-
-
-
+    /**
+     * 获取状态栏高度
+     * @return
+     */
+    private int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
 
     @Override
     public void update2DeleteCircle(String circleId) {
@@ -687,15 +704,30 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
 
         if(View.VISIBLE==visibility){
             editText.requestFocus();
+            if (hidenShowView!=null){
+                hidenShowView.hiden(true);
+            }
             //弹出键盘
             CommonUtils.showSoftInput( editText.getContext(),  editText);
 
         }else if(View.GONE==visibility){
+            if (hidenShowView!=null){
+                hidenShowView.hiden(false);
+            }
             //隐藏键盘
             CommonUtils.hideSoftInput( editText.getContext(),  editText);
         }
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        hidenShowView= (hidenShowView) getActivity();
+    }
+    hidenShowView hidenShowView;
+     public  interface hidenShowView{
+        void hiden(boolean b);
+     }
     @Override
     public void update2loadData(int loadType, List<CircleItem> datas) {
         if (loadType == TYPE_PULLREFRESH){
@@ -747,7 +779,7 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
             return 0;
         //这里如果你的listview上面还有其它占高度的控件，则需要减去该控件高度，listview的headview除外。
         //int listviewOffset = mScreenHeight - mSelectCircleItemH - mCurrentKeyboardH - mEditTextBodyHeight;
-        int listviewOffset = screenHeight - selectCircleItemH - currentKeyboardH - editTextBodyHeight;
+        int listviewOffset = screenHeight - selectCircleItemH - currentKeyboardH - editTextBodyHeight-(int) (50 * MainActivity.scale + 0.5f);
         if(commentConfig.commentType == CommentConfig.Type.REPLY){
             //回复评论的情况
             listviewOffset = listviewOffset + selectCommentItemOffset;
@@ -762,7 +794,7 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
 
         int firstPosition = layoutManager.findFirstVisibleItemPosition();
         //只能返回当前可见区域（列表可滚动）的子项
-        View selectCircleItem = layoutManager.getChildAt(commentConfig.circlePosition + CircleAdapter.HEADVIEW_SIZE - firstPosition);
+        View selectCircleItem = layoutManager.getChildAt(commentConfig.circlePosition /*+ CircleAdapter.HEADVIEW_SIZE */- firstPosition);
 
         if(selectCircleItem != null){
             selectCircleItemH = selectCircleItem.getHeight();

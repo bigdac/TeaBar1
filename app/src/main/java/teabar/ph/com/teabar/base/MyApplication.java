@@ -3,6 +3,7 @@ package teabar.ph.com.teabar.base;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
@@ -20,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 import cn.jpush.im.android.api.JMessageClient;
 import okhttp3.OkHttpClient;
+import teabar.ph.com.teabar.util.language.LocalManageUtil;
 
 
 /**
@@ -52,7 +54,7 @@ public class MyApplication extends Application {
         FacebookSdk.sdkInitialize(getApplicationContext());
         JMessageClient.setDebugMode(true);
         JMessageClient.init(getApplicationContext());
-
+        LocalManageUtil.setApplicationLanguage(this);
 //        SMSSDK.initSDK(this,"257a640199764","125aced6309709d59520e466e078ba15");
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
@@ -165,7 +167,19 @@ public class MyApplication extends Application {
         }
     }
 
+    @Override
+    protected void attachBaseContext(Context base) {
+        //保存系统选择语言
+        LocalManageUtil.saveSystemCurrentLanguage(base);
+        super.attachBaseContext(LocalManageUtil.setLocal(base));
+    }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //保存系统选择语言
+        LocalManageUtil.onConfigurationChanged(getApplicationContext());
+    }
 
 
 }

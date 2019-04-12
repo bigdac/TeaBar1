@@ -101,6 +101,7 @@ public class AddFriendActivity extends BaseActivity {
                 if (!TextUtils.isEmpty(searchUserName)) {
                     LoadDialog.show(this);
 
+
                 }
                 break;
 
