@@ -41,8 +41,8 @@ public class EqumentFragment extends BaseFragment {
             equpments.add(equpment);
         }
         equpmentAdapter = new EqupmentAdapter(getActivity(),equpments);
-        rv_equment.setLayoutManager( new LinearLayoutManager(getActivity()));
-        rv_equment.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        rv_equment.setLayoutManager( new GridLayoutManager(getActivity(),2));
+//        rv_equment.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
         rv_equment.setAdapter(equpmentAdapter);
         equpmentAdapter.SetOnItemClick(new EqupmentAdapter.OnItemClickListener() {
             @Override

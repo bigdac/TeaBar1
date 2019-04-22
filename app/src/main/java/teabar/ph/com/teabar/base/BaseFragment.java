@@ -1,31 +1,48 @@
 package teabar.ph.com.teabar.base;
 
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+
+import java.io.File;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.event.LoginStateChangeEvent;
+import cn.jpush.im.android.api.model.UserInfo;
+import cn.jpush.im.api.BasicCallback;
+import teabar.ph.com.teabar.R;
+import teabar.ph.com.teabar.activity.LoginActivity;
+import teabar.ph.com.teabar.activity.MainActivity;
+import teabar.ph.com.teabar.util.SharePreferenceManager;
+import teabar.ph.com.teabar.util.chat.DialogCreator;
 
 
 public abstract class BaseFragment extends Fragment implements View.OnClickListener {
     private boolean isDebug;
+    private Dialog dialog;
     private String APP_NAME;
     protected final String TAG = this.getClass().getSimpleName();
     private View mContextView = null;
     private Unbinder unbinder;
-
+    private Context mContext;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         isDebug = MyApplication.isDebug;
         APP_NAME = MyApplication.APP_NAME;
-
+        //订阅接收消息,子类只要重写onEvent就能收到消息
+        JMessageClient.registerEventReceiver(this);
+        mContext = this.getActivity();
     }
 
     @Override
@@ -37,6 +54,26 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         doBusiness(getActivity());
         return mContextView;
     }
+
+
+    public void onEventMainThread(LoginStateChangeEvent event) {
+        final LoginStateChangeEvent.Reason reason = event.getReason();
+        UserInfo myInfo = event.getMyInfo();
+        if (myInfo != null) {
+            String path;
+            File avatar = myInfo.getAvatarFile();
+            if (avatar != null && avatar.exists()) {
+                path = avatar.getAbsolutePath();
+            } else {
+
+            }
+            SharePreferenceManager.setCachedUsername(myInfo.getUserName());
+//            SharePreferenceManager.setCachedAvatarPath(path);
+            JMessageClient.logout();
+        }
+
+    }
+
 
     /**
      * [绑定布局]

@@ -2,10 +2,6 @@ package teabar.ph.com.teabar.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.TypedValue;
@@ -13,40 +9,33 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
+import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.model.Conversation;
 import teabar.ph.com.teabar.R;
+import teabar.ph.com.teabar.activity.AddSocialActivity;
 import teabar.ph.com.teabar.activity.FriendListActivity;
 import teabar.ph.com.teabar.activity.SocialInformActivity;
-import teabar.ph.com.teabar.adpter.ClickViewPageAdapter;
 import teabar.ph.com.teabar.base.BaseFragment;
-import teabar.ph.com.teabar.base.MyApplication;
-import teabar.ph.com.teabar.util.NetWorkUtil;
-import teabar.ph.com.teabar.util.ThreadUtil;
-import teabar.ph.com.teabar.util.ToastUtil;
-import teabar.ph.com.teabar.util.Utils;
-import teabar.ph.com.teabar.view.NoSrcollViewPage;
+
+
 
 public class SocialFragment extends BaseFragment {
 
-   TextView tv_login_regist,tv_login_login;
-
+    TextView tv_login_regist,tv_login_login;
     FriendCircleFragment1 friendCircleFragment;
     FriendFragment friendFragment;
     RelativeLayout rl_social_inform;
     ImageView iv_social_friend;
     @BindView(R.id.tv_social_mes)
     TextView tv_social_mes;
+    @BindView(R.id.tv_hasmess)
+    TextView tv_hasmess;
+    ImageView iv_main_add;
+    private List<Conversation> mDatas = new ArrayList<Conversation>();
+
     @Override
     public int bindLayout() {
         return R.layout.fragment_social;
@@ -54,6 +43,13 @@ public class SocialFragment extends BaseFragment {
 
     @Override
     public void initView(View view) {
+        iv_main_add =view.findViewById(R.id.iv_main_add);
+        iv_main_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(),AddSocialActivity.class));
+            }
+        });
         FragmentManager fragmentManager;
         FragmentTransaction fragmentTransaction;
         fragmentManager = getActivity().getSupportFragmentManager();
@@ -67,7 +63,8 @@ public class SocialFragment extends BaseFragment {
         iv_social_friend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(),FriendListActivity.class));
+                Intent intent = new Intent(getActivity(),FriendListActivity.class);
+                startActivityForResult(intent,1000);
             }
         });
 
@@ -75,6 +72,8 @@ public class SocialFragment extends BaseFragment {
         rl_social_inform.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                tv_social_mes.setVisibility(View.INVISIBLE);
+                tv_hasmess.setVisibility(View.INVISIBLE);
                 startActivity(new Intent(getActivity(),SocialInformActivity.class));
             }
         });
@@ -92,6 +91,8 @@ public class SocialFragment extends BaseFragment {
                 fragmentTransaction.replace(R.id.li_social,friendFragment ).commit();
                 rl_social_inform.setVisibility(View.VISIBLE);
                 iv_social_friend.setVisibility(View.VISIBLE);
+                tv_hasmess.setVisibility(View.INVISIBLE);
+                iv_main_add.setVisibility(View.INVISIBLE);
 
             }
         });
@@ -109,27 +110,33 @@ public class SocialFragment extends BaseFragment {
                 fragmentTransaction.replace(R.id.li_social,friendCircleFragment ).commit();
                 rl_social_inform.setVisibility(View.INVISIBLE);
                 iv_social_friend.setVisibility(View.INVISIBLE);
+                iv_main_add.setVisibility(View.VISIBLE);
 
             }
         });
-    }
-
-    public void ChangMsg(final int count){
-        ThreadUtil.runInUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (tv_social_mes != null) {
-                    if (count > 0) {
-                        tv_social_mes.setVisibility(View.VISIBLE);
-
-                    } else {
-                        tv_social_mes.setVisibility(View.GONE);
-                    }
-                }
-            }
-        });
+        mDatas = JMessageClient.getConversationList();
+        if (mDatas != null && mDatas.size() > 0) {
+            tv_hasmess.setVisibility(View.VISIBLE);
+        }
 
     }
+
+
+
+
+        public void Refrashfriend(){
+            FragmentManager fragmentManager;
+            FragmentTransaction fragmentTransaction;
+            FriendFragment friendFragment = new FriendFragment();
+            fragmentManager = getActivity().getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.li_social,friendFragment ).commit();
+        }
+    public void RefrashView(){
+        tv_social_mes.setVisibility(View.VISIBLE);
+        tv_hasmess.setVisibility(View.VISIBLE);
+    }
+
     @Override
     public void doBusiness(Context mContext) {
 
@@ -140,10 +147,19 @@ public class SocialFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-
     }
 }

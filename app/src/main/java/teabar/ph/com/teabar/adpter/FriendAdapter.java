@@ -52,9 +52,9 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyviewHold
 
     private List<String> mData;
     private Context context;
-    private EqupmentInformAdapter.OnItemClickListener onItemClickListener;
+    private  OnItemClickListener onItemClickListener;
     private List<Conversation> mDatas;
-    private Activity mContext;
+
     private Map<String, String> mDraftMap = new HashMap<>();
     private UIHandler mUIHandler = new UIHandler(this);
     private static final int REFRESH_CONVERSATION_LIST = 0x3003;
@@ -73,6 +73,13 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyviewHold
 
     }
 
+    public List<Conversation> getmDate (){
+        return mDatas;
+    }
+    public void RemovemDate (Conversation conversation){
+        mData.remove(conversation);
+        notifyDataSetChanged();
+    }
     /**
      * 收到消息后将会话置顶
      *
@@ -169,15 +176,30 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyviewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MyviewHolder myviewHolder, int position) {
+    public void onBindViewHolder(@NonNull final MyviewHolder myviewHolder, final int position) {
+
+        myviewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onItemClickListener.onItemClick(view,position);
+            }
+        });
+        myviewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                onItemClickListener.onLongItemClick(view,position);
+                return false;
+            }
+        });
         final Conversation convItem = mDatas.get(position);
+
         String draft = mDraftMap.get(convItem.getId());
 
         //如果会话草稿为空,显示最后一条消息
         if (TextUtils.isEmpty(draft)) {
             Message lastMsg = convItem.getLatestMessage();
             if (lastMsg != null) {
-                TimeFormat timeFormat = new TimeFormat(mContext, lastMsg.getCreateTime());
+                TimeFormat timeFormat = new TimeFormat(context, lastMsg.getCreateTime());
 //                //会话界面时间
                 myviewHolder. datetime.setText(timeFormat.getTime());
                 String contentStr;
@@ -254,7 +276,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyviewHold
                     myviewHolder.  content.setText(builder);
                 } else if (mArray.get(position) && MyApplication.isAtMe.get(gid) != null && MyApplication.isAtMe.get(gid)) {
                     //有人@我 文字提示
-                    contentStr = mContext.getString(R.string.somebody_at_me) + contentStr;
+                    contentStr = context.getString(R.string.somebody_at_me) + contentStr;
                     SpannableStringBuilder builder = new SpannableStringBuilder(contentStr);
                     builder.setSpan(new ForegroundColorSpan(Color.RED), 0, 6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     myviewHolder.  content.setText(builder);
@@ -297,7 +319,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyviewHold
                                         !((UserInfo) lastMsg.getTargetInfo()).getUserName().equals(JMessageClient.getMyInfo().getUserName())) {
                                     contentStr = "[未读]" + contentStr;
                                     SpannableStringBuilder builder = new SpannableStringBuilder(contentStr);
-                                    builder.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.line_normal)),
+                                    builder.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.line_normal)),
                                             0, 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                                     myviewHolder.    content.setText(builder);
                                 } else {
@@ -314,7 +336,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyviewHold
                     myviewHolder.   datetime.setText("");
                     myviewHolder.    content.setText("");
                 } else {
-                    TimeFormat timeFormat = new TimeFormat(mContext, convItem.getLastMsgDate());
+                    TimeFormat timeFormat = new TimeFormat(context, convItem.getLastMsgDate());
                     myviewHolder.   datetime.setText(timeFormat.getTime());
                     myviewHolder.   content.setText("");
                 }
@@ -446,6 +468,13 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyviewHold
         return false;
     }
 
+    public   interface  OnItemClickListener {
+        void onItemClick(View view, int position);
+        void onLongItemClick(View view , int position);
+    }
+    public void SetOnItemClick( OnItemClickListener onItemClickListener){
+        this.onItemClickListener = onItemClickListener ;
+    }
     public boolean includeAtAllMsg(Conversation conv) {
         if (mAtAllConv.size() > 0) {
             Iterator<Map.Entry<Conversation, Integer>> iterator = mAtAllConv.entrySet().iterator();
@@ -499,7 +528,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyviewHold
     List<Conversation> topConv = new ArrayList<>();
     List<Conversation> forCurrent = new ArrayList<>();
     //取消会话置顶
-    public void setCancelConvTop(Conversation conversation) {
+        public void setCancelConvTop(Conversation conversation) {
         forCurrent.clear();
         topConv.clear();
         int i = 0;

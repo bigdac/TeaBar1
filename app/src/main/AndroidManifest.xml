@@ -61,9 +61,7 @@
         </activity>
         <activity android:name=".activity.RegisterActivity" />
         <!--<activity android:name=".activity.LoginActivity" />-->
-        <activity android:name=".activity.MainActivity"
-
-            />
+        <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.EquipmentDetailsActivity" />
         <activity android:name=".activity.EqupmentInformActivity" />
         <activity android:name=".activity.EqupmentLightActivity" />
@@ -103,6 +101,9 @@
         <activity android:name=".activity.YWActivity" />
         <activity android:name=".activity.ForgetActivity" />
         <activity android:name=".activity.AddSocialActivity" />
+        <activity android:name=".activity.AddFriendActivity1" />
+        <activity android:name=".activity.ChatActivity" />
+        <activity android:name=".activity.GuideActivity" />
     </application>
 
 </manifest>

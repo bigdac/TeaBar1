@@ -8,6 +8,8 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 
+import teabar.ph.com.teabar.R;
+
 public class PlanProgressBar extends View {
 
     private Paint paint;// 画笔
@@ -46,7 +48,7 @@ public class PlanProgressBar extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        paint.setColor(Color.parseColor("#FC4D74"));// 设置画笔颜色
+        paint.setColor(getResources().getColor(R.color.nomal_green));// 设置画笔颜色
         paint1.setColor(Color.parseColor("#3DBBBBBB"));
 
 //        if (progress==100){

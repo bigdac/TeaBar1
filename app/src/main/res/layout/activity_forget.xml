@@ -17,6 +17,7 @@
         android:src="@mipmap/login_back"
         android:scaleType="centerInside"
         android:layout_below="@+id/tv_main_1"
+        android:layout_marginTop="5dp"
         />
     <TextView
         android:id="@+id/tv_forget_title"
@@ -72,8 +73,8 @@
         android:id="@+id/bt_register_code"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:background="#FD4D75"
-        android:textColor="@color/white"
+        android:background="#f1fbf7"
+        android:textColor="#28db9f"
         android:text="@string/login_bt_getcode"
         android:layout_alignTop="@+id/et_regist_code"
         android:layout_alignRight="@+id/et_regist_code"
@@ -127,15 +128,16 @@
         />
     <Button
         android:id="@+id/bt_regist_ensure"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="70dp"
+        android:layout_below="@+id/et_regist_pasw2"
+        android:layout_marginTop="70dp"
         android:layout_marginRight="26dp"
         android:layout_marginLeft="26dp"
-        android:background="@drawable/login_button"
+        android:background="@mipmap/login_button"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
         android:textColor="@color/white"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:text="@string/login_bt_regist"
         />
 </RelativeLayout>

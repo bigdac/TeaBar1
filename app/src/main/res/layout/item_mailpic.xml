@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="10dp"
+
     >
     <RelativeLayout
         android:id="@+id/rl_mail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="170dp"
+        android:layout_height="215dp">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/teacard"
+            android:scaleType="fitXY"
+            />
         
         <TextView
             android:id="@+id/iv_mail_pic"
-            android:layout_width="166dp"
-            android:layout_height="134dp"
-            android:background="@color/colorAccent"/>
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_marginTop="15dp"
+            android:layout_centerHorizontal="true"
+            android:background="@color/social_gray"/>
         <TextView
             android:id="@+id/tv_mail_name"
             android:layout_width="wrap_content"
@@ -23,7 +32,7 @@
             android:textColor="#333333"
             android:layout_below="@+id/iv_mail_pic"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="18dp"
             android:textSize="16sp"
             />
         <TextView
@@ -34,7 +43,8 @@
             android:textColor="@color/social_gray"
             android:layout_below="@+id/tv_mail_name"
             android:layout_alignLeft="@+id/tv_mail_name"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="3dp"
+            android:textSize="14sp"
             />
         
     </RelativeLayout>

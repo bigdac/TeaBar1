@@ -2,9 +2,10 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <!-- 搜索结果分类列表背景 -->
-    <corners  android:radius="10dp"/>
+    <corners  android:radius="75dp"
+        />
 
-    <solid  android:color="#7CFC4D74"/>
+    <solid android:color="#FFFD4D75"/>
 
 
 </shape>

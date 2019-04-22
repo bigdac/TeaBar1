@@ -15,7 +15,7 @@
         android:layout_below="@+id/tv_main_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="6dp">
         <TextView
             android:id="@+id/tv_regist_login"
             android:layout_width="wrap_content"
@@ -37,16 +37,32 @@
             android:layout_marginLeft="20dp"
             android:layout_centerVertical="true"
             />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/logo"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            />
 
     </RelativeLayout>
+    <ImageView
+        android:id="@+id/iv_login_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/login_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/rl_regist_title"
+        android:layout_marginTop="40dp"
+        />
     <TextView
         android:id="@+id/tv_regist_welcom"
-        android:layout_below="@+id/rl_regist_title"
+        android:layout_below="@+id/iv_login_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/login_tv_welcom"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="40dp"
         android:textColor="@color/login_black"
         android:textSize="18sp"
         />
@@ -114,8 +130,8 @@
         android:id="@+id/bt_register_code"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:background="#FD4D75"
-        android:textColor="@color/white"
+        android:background="#f1fbf7"
+        android:textColor="#28db9f"
         android:text="@string/login_bt_getcode"
         android:layout_alignTop="@+id/et_regist_code"
         android:layout_alignRight="@+id/et_regist_code"
@@ -146,15 +162,16 @@
         />
     <Button
         android:id="@+id/bt_regist_ensure"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="70dp"
+        android:layout_below="@+id/et_regist_pasw"
+        android:layout_marginTop="50dp"
         android:layout_marginRight="26dp"
         android:layout_marginLeft="26dp"
-        android:background="@drawable/login_button"
+        android:background="@mipmap/login_button"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
         android:textColor="@color/white"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:text="@string/login_bt_regist"
         />
 </RelativeLayout>

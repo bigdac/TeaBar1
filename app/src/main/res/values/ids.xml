@@ -38,6 +38,11 @@
   <!--<item type="id" name="split">false</item>-->
   <!--<item name="change_scene" type="id">换景</item>-->
   <!--<item name="decorat" type="id">装饰</item>-->
+  <item type="id" name="id_autolayout" />
+  <item type="id" name="id_toolbar_left" />
+  <item type="id" name="id_toolbar_right" />
+  <item type="id" name="id_tag_pageset" />
+
 
 
   <item name="pager_image1" type="id" />

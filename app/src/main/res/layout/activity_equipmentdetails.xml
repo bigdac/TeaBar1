@@ -39,7 +39,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:scaleType="centerInside"
-        android:src="@mipmap/loign_dian1"
+        android:src="@mipmap/equ_choose"
         android:layout_below="@+id/rv_equmentxq"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="23dp"
@@ -56,14 +56,6 @@
         android:layout_marginLeft="12dp"
         android:textSize="18sp"
         />
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/equ_yy"
-        android:layout_below="@+id/iv_equxq_xz"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="42dp"
-        android:layout_marginRight="20dp"
-        />
+
 
 </RelativeLayout>

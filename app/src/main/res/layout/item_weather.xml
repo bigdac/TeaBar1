@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="171dp"
-        android:background="#8941A8FF"
+        android:background="@mipmap/main_weather"
         >
         
 

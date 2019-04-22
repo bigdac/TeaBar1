@@ -9,14 +9,34 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 
 
+import com.ph.teabar.database.dao.DaoImp.FriendInforImpl;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.io.File;
 
 import butterknife.ButterKnife;
+import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.callback.GetUserInfoCallback;
+import cn.jpush.im.android.api.event.ContactNotifyEvent;
+import cn.jpush.im.android.api.event.LoginStateChangeEvent;
+import cn.jpush.im.android.api.model.UserInfo;
+import cn.jpush.im.api.BasicCallback;
+import teabar.ph.com.teabar.R;
+import teabar.ph.com.teabar.activity.LoginActivity;
+import teabar.ph.com.teabar.activity.MainActivity;
+import teabar.ph.com.teabar.bean.FirstEvent;
+import teabar.ph.com.teabar.fragment.FriendFragment;
+import teabar.ph.com.teabar.pojo.FriendInfor;
 import teabar.ph.com.teabar.util.LogUtil;
+import teabar.ph.com.teabar.util.SharePreferenceManager;
 import teabar.ph.com.teabar.util.SharedPreferencesHelper;
 import teabar.ph.com.teabar.util.ToastUtil;
 
@@ -33,6 +53,7 @@ public abstract class BaseActivity extends FragmentActivity implements
     /** 是否输出日志信息 **/
     private boolean isDebug;
     private String APP_NAME;
+    FriendInforImpl friendInforDao;
     protected final String TAG = this.getClass().getSimpleName();
 
     @Override
@@ -59,16 +80,44 @@ public abstract class BaseActivity extends FragmentActivity implements
             }
             setContentView(mContextView);
             ButterKnife.bind(this);
+            JMessageClient.registerEventReceiver(this);
             if (!isAllowScreenRoate) {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             } else {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             }
             initView(mContextView);
+            friendInforDao= new FriendInforImpl(getApplicationContext());
             doBusiness(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (null != this.getCurrentFocus()) {
+            InputMethodManager mInputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            return mInputMethodManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.onTouchEvent(event);
+    }
+
+    public void onEventMainThread(LoginStateChangeEvent event) {
+        final LoginStateChangeEvent.Reason reason = event.getReason();
+        UserInfo myInfo = event.getMyInfo();
+        if (myInfo != null) {
+            String path;
+            File avatar = myInfo.getAvatarFile();
+            if (avatar != null && avatar.exists()) {
+                path = avatar.getAbsolutePath();
+            } else {
+//                path = FileHelper.getUserAvatarPath(myInfo.getUserName());
+            }
+            SharePreferenceManager.setCachedUsername(myInfo.getUserName());
+//            SharePreferenceManager.setCachedAvatarPath(path);
+            JMessageClient.logout();
+        }
+
     }
 
     /**
@@ -86,11 +135,67 @@ public abstract class BaseActivity extends FragmentActivity implements
         }
     }
 
+
+    String userNickname;
+    //接收到好友事件
+    public void onEvent(final ContactNotifyEvent event) {
+        final String reason = event.getReason();
+        final String username = event.getFromUsername();
+        final String appKey = event.getfromUserAppKey();
+        JMessageClient.getUserInfo(username, appKey, new GetUserInfoCallback() {
+            @Override
+            public void gotResult(int status, String desc, UserInfo userInfo) {
+                if (status == 0) {
+                    userNickname = userInfo.getNickname();
+                    //对方接收了你的好友请求
+                    if (event.getType() == ContactNotifyEvent.Type.invite_accepted) {
+                        FriendInfor friend = new FriendInfor();
+                        friend.setUseName(userNickname);
+                        friend.setId(Long.valueOf(username));
+                        friend.setAppKey(appKey);
+                        friend.setAddNum(0);
+                        friendInforDao.insert(friend);
+
+                        //拒绝好友请求
+                    } else if (event.getType() == ContactNotifyEvent.Type.invite_declined) {
+
+
+                    } else if (event.getType() == ContactNotifyEvent.Type.invite_received) {
+                        //如果同一个人申请多次,则只会出现一次;当点击进验证消息界面后,同一个人再次申请则可以收到
+                        FriendInfor friendInfor = friendInforDao.findById(Long.valueOf(username));
+                        if (friendInfor == null) {
+                            FriendInfor friend = new FriendInfor();
+                            friend.setUseName(userNickname);
+                            friend.setAppKey(appKey);
+                            friend.setId(Long.valueOf(username));
+                            friend.setAddNum(0);
+                            friendInforDao.insert(friend);
+                        }else {
+                            friendInfor.setAddNum(0);
+                            friendInforDao.update(friendInfor);
+                        }
+
+                    } else if (event.getType() == ContactNotifyEvent.Type.contact_deleted) {
+                        FriendInfor friendInfor = friendInforDao.findById(Long.valueOf(userInfo.getUserName()));
+                        if (friendInfor!=null){
+                            friendInforDao.delete(friendInfor);
+                        }
+                        JMessageClient.deleteSingleConversation(userInfo.getUserName(), userInfo.getAppKey());
+
+                    }
+                }
+            }
+        });
+
+    }
+
+
+
     /**
-     * [初始化Bundle参数]
-     *
-     * @param parms
-     */
+         * [初始化Bundle参数]
+         *
+         * @param parms
+         */
     public abstract void initParms(Bundle parms);
 
     /**
@@ -189,6 +294,8 @@ public abstract class BaseActivity extends FragmentActivity implements
 
     @Override
     protected void onDestroy() {
+        //注销消息接收
+        JMessageClient.unRegisterEventReceiver(this);
         super.onDestroy();
         LogUtil.e(TAG + "--->onDestroy()");
     }

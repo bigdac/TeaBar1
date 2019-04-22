@@ -27,7 +27,7 @@
         android:layout_alignTop="@+id/iv_plan_fh"
         android:layout_alignParentRight="true"
         android:layout_marginRight="13dp"
-        android:textColor="#FC4D74"
+        android:textColor="@color/nomal_green"
         android:textSize="16sp"
         />
     <TextView

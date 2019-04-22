@@ -5,6 +5,7 @@ package teabar.ph.com.teabar.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -35,34 +36,44 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.ph.teabar.database.dao.DaoImp.UserEntryImpl;
+import com.ph.teabar.database.dao.UserEntryDao;
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.greenrobot.greendao.annotation.Id;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.model.UserInfo;
+import cn.jpush.im.api.BasicCallback;
+import me.jessyan.autosize.AutoSizeCompat;
 import me.jessyan.autosize.utils.ScreenUtils;
 import okhttp3.Call;
 import okhttp3.Request;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
+import teabar.ph.com.teabar.pojo.UserEntry;
 import teabar.ph.com.teabar.util.FacebookHelper;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.NetWorkUtil;
+import teabar.ph.com.teabar.util.SharePreferenceManager;
 import teabar.ph.com.teabar.util.ToastUtil;
 
 
 public class LoginActivity extends BaseActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
+        GoogleApiClient.OnConnectionFailedListener, View.OnClickListener  {
     MyApplication application;
     @BindView(R.id.et_login_user)
     EditText et_login_user;
@@ -79,13 +90,14 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
     String user;
     String password;
 //    LoginButton loginButton;
-    Button loginButton;
+    ImageView loginButton;
     CallbackManager callbackManager;
     private GoogleApiClient mGoogleApiClient;
     //    private SignInButton sign_in_button;
-    private Button sign_in_button;
+    private ImageView sign_in_button;
     private static int RC_SIGN_IN=10001;
     QMUITipDialog tipDialog;
+    UserEntryImpl userEntryDao;
     @Override
     public void initParms(Bundle parms) {
 
@@ -95,6 +107,15 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
     public int bindLayout() {
         setSteepStatusBar(true);
         return R.layout.activity_login;
+    }
+
+    @Override
+    public Resources getResources() {
+        //需要升级到 v1.1.2 及以上版本才能使用 AutoSizeCompat
+//        AutoSizeCompat.autoConvertDensityOfGlobal((super.getResources()));//如果没有自定义需求用这个方法
+        AutoSizeCompat.autoConvertDensity((super.getResources()), 667, false);//如果有自定义需求就用这个方法
+        return super.getResources();
+
     }
 
     @Override
@@ -108,12 +129,12 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 ScreenUtils.getStatusBarHeight());
         tv_main_1.setLayoutParams(params);
-
+        userEntryDao = new UserEntryImpl(getApplicationContext());
         et_login_user.setText(preferences.getString("user", ""));
         et_login_pasw.setText(preferences.getString("password", ""));
         callbackManager = CallbackManager.Factory.create();
         //自定义fb按钮，在你代码的正确地方
-        loginButton = (Button) findViewById(R.id.login_button);
+        loginButton = (ImageView) findViewById(R.id.login_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -446,7 +467,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                     returnMsg1=jsonObject.getString("message1");
                     if ("200".equals(code)) {
                         JSONObject returnData = jsonObject.getJSONObject("data");
-                        long userId = returnData.getLong("userId");
+                       userId = returnData.getLong("userId");
                         String userName = returnData.getString("userName");
                         String token = returnData.getString("token");
                         int type = returnData.getInt("type");
@@ -477,8 +498,9 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
 
                 case "200":
                     tipDialog.dismiss();
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    toast( "登录成功");
+//                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    LoginJM();
+//                    toast( "登录成功");
 
                     break;
                 case "4000":
@@ -493,7 +515,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
             }
         }
     }
-
+    long userId;
     class ThirdLoginAsynTask extends AsyncTask<Map<String,Object>,Void,String> {
 
         @Override
@@ -511,7 +533,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                         returnMsg1=jsonObject.getString("message1");
                         if ("200".equals(code)) {
                             JSONObject returnData = jsonObject.getJSONObject("data");
-                            long userId = returnData.getLong("userId");
+                             userId = returnData.getLong("userId");
                             String userName = returnData.getString("userName");
                             String token = returnData.getString("token");
                             int type = returnData.getInt("type");
@@ -543,7 +565,8 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
 
                 case "200":
                     tipDialog.dismiss();
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+//                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    LoginJM();
                     toast( "登录成功");
 
                     break;
@@ -558,5 +581,39 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
 
             }
         }
+    }
+
+
+    public void LoginJM(){
+        JMessageClient.login(userId+"", "123456", new BasicCallback() {
+            @Override
+            public void gotResult(int responseCode, String responseMessage) {
+
+                if (responseCode == 0) {
+                    SharePreferenceManager.setCachedPsw(password);
+                    UserInfo myInfo = JMessageClient.getMyInfo();
+                    File avatarFile = myInfo.getAvatarFile();
+                    //登陆成功,如果用户有头像就把头像存起来,没有就设置null
+                    if (avatarFile != null) {
+                        SharePreferenceManager.setCachedAvatarPath(avatarFile.getAbsolutePath());
+                    } else {
+                        SharePreferenceManager.setCachedAvatarPath(null);
+                    }
+                    String username = myInfo.getUserName();
+                    String appKey = myInfo.getAppKey();
+
+                    UserEntry user = userEntryDao.findById(userId);
+                    if (null == user) {
+                        user = new UserEntry(userId,username, appKey);
+                        userEntryDao.insert(user);
+                    }
+                   startActivity( MainActivity.class);
+                   toast(  "登陆成功");
+
+                } else {
+                    toast(  "登陆失败" + responseMessage);
+                }
+            }
+        });
     }
 }

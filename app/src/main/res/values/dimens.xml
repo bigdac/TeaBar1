@@ -9,9 +9,11 @@
     <dimen name="show_height">30dp</dimen>
     <dimen name="space">20dp</dimen>
     <dimen name="hue_alpha_width">25dp</dimen>
-
+    <dimen name="bar_tool_btn_width">56dp</dimen>
+    <dimen name="item_head_icon_size">40dp</dimen>
+    <dimen name="chat_head_icon_size">40dp</dimen>
     <dimen name="gudieview_width">6dp</dimen>
     <dimen name="gudieview_heigh">6dp</dimen>
-
+    <dimen name="title_bar_height">48.5dp</dimen>
 
 </resources>

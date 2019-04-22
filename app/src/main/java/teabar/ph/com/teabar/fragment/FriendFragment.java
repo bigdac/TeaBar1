@@ -1,6 +1,8 @@
 package teabar.ph.com.teabar.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,11 +18,17 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,9 +38,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.jmessage.support.qiniu.android.dns.NetworkReceiver;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.callback.GetAvatarBitmapCallback;
 import cn.jpush.im.android.api.enums.ConversationType;
+import cn.jpush.im.android.api.event.ContactNotifyEvent;
 import cn.jpush.im.android.api.event.ConversationRefreshEvent;
 import cn.jpush.im.android.api.event.MessageEvent;
 import cn.jpush.im.android.api.event.MessageReceiptStatusChangeEvent;
@@ -43,14 +53,18 @@ import cn.jpush.im.android.api.model.GroupInfo;
 import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.android.api.model.UserInfo;
 import teabar.ph.com.teabar.R;
+import teabar.ph.com.teabar.activity.ChatActivity;
 import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.adpter.FriendAdapter;
 import teabar.ph.com.teabar.base.BaseFragment;
 import teabar.ph.com.teabar.base.MyApplication;
+import teabar.ph.com.teabar.bean.FirstEvent;
 import teabar.ph.com.teabar.pojo.Event;
+import teabar.ph.com.teabar.util.LogUtil;
 import teabar.ph.com.teabar.util.SortConvList;
 import teabar.ph.com.teabar.util.SortTopConvList;
 import teabar.ph.com.teabar.util.ToastUtil;
+import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 
 public class FriendFragment extends BaseFragment {
 
@@ -62,14 +76,14 @@ public class FriendFragment extends BaseFragment {
     List<Conversation> topConv = new ArrayList<>();
     List<Conversation> forCurrent = new ArrayList<>();
     List<Conversation> delFeedBack = new ArrayList<>();
-    private HandlerThread mThread;
-    private BackgroundHandler mBackgroundHandler;
+
     private NetworkReceiver mReceiver;
     private static final int REFRESH_CONVERSATION_LIST = 0x3000;
     private static final int DISMISS_REFRESH_HEADER = 0x3001;
     private static final int ROAM_COMPLETED = 0x3002;
     private Activity mContext;
-    private ImageView mess;
+
+    public static boolean isRunning = false;
     @Override
     public int bindLayout() {
         return R.layout.fragment_friend;
@@ -78,11 +92,11 @@ public class FriendFragment extends BaseFragment {
 
     @Override
     public void initView(View view) {
+        isRunning=true;
         mContext = this.getActivity();
         rv_friend = view.findViewById(R.id.rv_friend);
-        mThread = new HandlerThread("SocialFragment");
-        mThread.start();
-        mBackgroundHandler = new BackgroundHandler(mThread.getLooper());
+        JMessageClient.registerEventReceiver(this);
+        EventBus.getDefault().register(this);
         initConvListAdapter();
         initReceiver();
 
@@ -94,7 +108,7 @@ public class FriendFragment extends BaseFragment {
             tv_talk_no.setVisibility(View.VISIBLE);
         }
     }
-    private void initConvListAdapter() {
+    public void initConvListAdapter() {
         forCurrent.clear();
         topConv.clear();
         delFeedBack.clear();
@@ -130,8 +144,80 @@ public class FriendFragment extends BaseFragment {
         friendAdapter = new FriendAdapter(getActivity(),mDatas,FriendFragment.this);
         rv_friend.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv_friend.setAdapter(friendAdapter);
+        friendAdapter.SetOnItemClick(new FriendAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity(),ChatActivity.class);
+                intent.putExtra("targetId",  friendAdapter.getmDate().get(position).getTargetId());
+                intent.putExtra("targetAppKey",friendAdapter.getmDate().get(position).getTargetAppKey());
+                friendAdapter.getmDate().get(position).setUnReadMessageCnt(0);
+                friendAdapter.notifyDataSetChanged();
+                startActivity(intent);
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+                customDialog1(position);
+            }
+        });
 
     }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        isRunning=true;
+
+
+    }
+
+    Dialog dialog;
+    private void customDialog1(final int position ) {
+        dialog  = new Dialog(getActivity(), R.style.MyDialog);
+        View view = View.inflate(getActivity(), R.layout.dialog_del, null);
+        TextView tv_dialog_qx = (TextView) view.findViewById(R.id.tv_dia_qx);
+        TextView tv_dialog_qd = (TextView) view.findViewById(R.id.tv_dia_qd);
+        TextView tv_dia_title = view.findViewById(R.id.tv_dia_title);
+        TextView et_dia_name = view.findViewById(R.id.et_dia_name);
+        tv_dia_title.setText("删除对话");
+        et_dia_name.setText("是否删除对话");
+        dialog.setContentView(view);
+        //使得点击对话框外部不消失对话框
+        dialog.setCanceledOnTouchOutside(false);
+        //设置对话框的大小
+        view.setMinimumHeight((int) (ScreenSizeUtils.getInstance(getActivity()).getScreenHeight() * 0.23f));
+        Window dialogWindow = dialog.getWindow();
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.width = (int) (ScreenSizeUtils.getInstance(getActivity()).getScreenWidth() * 0.75f);
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.gravity = Gravity.CENTER;
+        dialogWindow.setAttributes(lp);
+        tv_dialog_qx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+
+        });
+        tv_dialog_qd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Conversation conversation = friendAdapter.getmDate().get(position);
+                UserInfo userInfo = (UserInfo) conversation.getTargetInfo();
+                JMessageClient.deleteSingleConversation(userInfo.getUserName(), userInfo.getAppKey());
+                mDatas.remove(conversation);
+                friendAdapter.notifyDataSetChanged();
+                dialog.dismiss();
+
+            }
+        });
+        dialog.show();
+
+    }
+
+
     @Override
     public void doBusiness(Context mContext) {
 
@@ -142,53 +228,27 @@ public class FriendFragment extends BaseFragment {
 
     }
 
-    /**
-     * 收到消息
-     */
-    public void onEvent(MessageEvent event) {
 
-        ((SocialFragment)(FriendFragment.this.getParentFragment())).ChangMsg(JMessageClient.getAllUnReadMsgCount());
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
         Message msg = event.getMessage();
-        if (msg.getTargetType() == ConversationType.group) {
-            long groupId = ((GroupInfo) msg.getTargetInfo()).getGroupID();
-            Conversation conv = JMessageClient.getGroupConversation(groupId);
-            if (conv != null  ) {
-                if (msg.isAtMe()) {
-                    MyApplication.isAtMe.put(groupId, true);
-                   friendAdapter.putAtConv(conv, msg.getId());
-                }
-                if (msg.isAtAll()) {
-                    MyApplication.isAtall.put(groupId, true);
-                   friendAdapter.putAtAllConv(conv, msg.getId());
-                }
-                mBackgroundHandler.sendMessage(mBackgroundHandler.obtainMessage(REFRESH_CONVERSATION_LIST,
-                        conv));
-            }
-        } else {
-            final UserInfo userInfo = (UserInfo) msg.getTargetInfo();
-            String targetId = userInfo.getUserName();
-            Conversation conv = JMessageClient.getSingleConversation(targetId, userInfo.getAppKey());
-            if (conv != null  ) {
-                mContext.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (TextUtils.isEmpty(userInfo.getAvatar())) {
-                            userInfo.getAvatarBitmap(new GetAvatarBitmapCallback() {
-                                @Override
-                                public void gotResult(int responseCode, String responseMessage, Bitmap avatarBitmap) {
-                                    if (responseCode == 0) {
-                                        friendAdapter.notifyDataSetChanged();
-                                    }
-                                }
-                            });
-                        }
-                    }
-                });
-                mBackgroundHandler.sendMessage(mBackgroundHandler.obtainMessage(REFRESH_CONVERSATION_LIST, conv));
-            }
+        final UserInfo userInfo = (UserInfo) msg.getTargetInfo();
+        String targetId = userInfo.getUserName();
+        Conversation conv = JMessageClient.getSingleConversation(targetId, userInfo.getAppKey());
+        if (conv != null  ) {
+            friendAdapter.setToTop(conv);
+            friendAdapter.notifyDataSetChanged();
         }
+
     }
 
+
+    public void onEventMainThread(FirstEvent event) {
+        if ("FirstEvent".equals(event.getMsg())){
+            initConvListAdapter();
+        }
+
+    }
 
     /**
      * 接收离线消息
@@ -198,7 +258,11 @@ public class FriendFragment extends BaseFragment {
     public void onEvent(OfflineMessageEvent event) {
         Conversation conv = event.getConversation();
         if (!conv.getTargetId().equals("feedback_Android")) {
-            mBackgroundHandler.sendMessage(mBackgroundHandler.obtainMessage(REFRESH_CONVERSATION_LIST, conv));
+            android.os.Message message = new android.os.Message();
+            message.obj =conv;
+            message.what=REFRESH_CONVERSATION_LIST;
+            mHandler.sendMessage(message);
+
         }
     }
 
@@ -207,7 +271,11 @@ public class FriendFragment extends BaseFragment {
      */
     public void onEvent(MessageRetractEvent event) {
         Conversation conversation = event.getConversation();
-        mBackgroundHandler.sendMessage(mBackgroundHandler.obtainMessage(REFRESH_CONVERSATION_LIST, conversation));
+        android.os.Message message = new android.os.Message();
+        message.obj =conversation;
+        message.what=REFRESH_CONVERSATION_LIST;
+        mHandler.sendMessage(message);
+
     }
 
     /**
@@ -225,10 +293,18 @@ public class FriendFragment extends BaseFragment {
     public void onEvent(ConversationRefreshEvent event) {
         Conversation conv = event.getConversation();
         if (!conv.getTargetId().equals("feedback_Android")) {
-            mBackgroundHandler.sendMessage(mBackgroundHandler.obtainMessage(REFRESH_CONVERSATION_LIST, conv));
+            android.os.Message message = new android.os.Message();
+            message.obj =conv;
+            message.what=REFRESH_CONVERSATION_LIST;
+            mHandler.sendMessage(message);
+
             //多端在线未读数改变时刷新
             if (event.getReason().equals(ConversationRefreshEvent.Reason.UNREAD_CNT_UPDATED)) {
-                mBackgroundHandler.sendMessage(mBackgroundHandler.obtainMessage(REFRESH_CONVERSATION_LIST, conv));
+                android.os.Message message1 = new android.os.Message();
+                message.obj =conv;
+                message.what=REFRESH_CONVERSATION_LIST;
+                mHandler.sendMessage(message1);
+
             }
         }
     }
@@ -256,18 +332,15 @@ public class FriendFragment extends BaseFragment {
         }
     }
 
-    private class BackgroundHandler extends Handler {
-        public BackgroundHandler(Looper looper) {
-            super(looper);
-        }
-
+    @SuppressLint("HandlerLeak")
+    Handler mHandler = new Handler(){
         @Override
         public void handleMessage(android.os.Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case REFRESH_CONVERSATION_LIST:
                     Conversation conv = (Conversation) msg.obj;
-                        friendAdapter.setToTop(conv);
+                    friendAdapter.setToTop(conv);
                     break;
                 case DISMISS_REFRESH_HEADER:
 //                    mContext.runOnUiThread(new Runnable() {
@@ -283,7 +356,9 @@ public class FriendFragment extends BaseFragment {
                     break;
             }
         }
-    }
+    };
+
+
     public void onEventMainThread(Event event) {
         switch (event.getType()) {
             case createConversation:
@@ -316,16 +391,20 @@ public class FriendFragment extends BaseFragment {
         }
     }
 
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        isRunning=false;
+
+    }
+
     @Override
     public void onDestroy() {
-        EventBus.getDefault().unregister(this);
-        if (mReceiver!=null)
-        mContext.unregisterReceiver(mReceiver);
-        if (mBackgroundHandler!=null)
-        mBackgroundHandler.removeCallbacksAndMessages(null);
-        if (mThread!=null)
-        mThread.getLooper().quit();
         super.onDestroy();
-
+        if (mReceiver!=null)
+            mContext.unregisterReceiver(mReceiver);
+        EventBus.getDefault().unregister(this);
     }
 }

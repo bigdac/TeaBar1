@@ -11,15 +11,16 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import cn.jpush.im.android.api.model.UserInfo;
 import teabar.ph.com.teabar.R;
 
 public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.MyviewHolder> {
 
-    private List<String> mData;
+    private List<UserInfo> mData;
     private Context context;
-    private EqupmentInformAdapter.OnItemClickListener onItemClickListener;
+    private   OnItemClickListener onItemClickListener;
 
-    public FriendListAdapter(Context context , List<String> list ) {
+    public FriendListAdapter(Context context , List<UserInfo> list ) {
         this.context = context;
         this.mData = list;
 
@@ -33,11 +34,36 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MyviewHolder myviewHolder, int position) {
-
-
+    public void onBindViewHolder(@NonNull final MyviewHolder myviewHolder, final int position) {
+            myviewHolder.tv_talk_name.setText(mData.get(position).getNickname());
+            myviewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onItemClickListener.onItemClick(view,position);
+                }
+            });
+            myviewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    onItemClickListener.onLongItemClick(view,position);
+                    return false;
+                }
+            });
+    }
+    public void setmData(List list){
+        this.mData = list;
+    }
+    public  List<UserInfo>  getmData(){
+        return mData;
     }
 
+    public   interface  OnItemClickListener {
+        void onItemClick(View view, int position);
+        void onLongItemClick(View view, int position);
+    }
+    public void SetOnItemClick( OnItemClickListener onItemClickListener){
+        this.onItemClickListener = onItemClickListener ;
+    }
     @Override
     public int getItemCount() {
         return mData.size();
@@ -45,10 +71,10 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
 
     class MyviewHolder extends RecyclerView.ViewHolder{
         ImageView iv_talk_pic;
-        TextView tv_talk_name,tv_talk_time,tv_message;
+        TextView tv_talk_name ;
         public MyviewHolder(View itemView){
             super(itemView);
-
+            tv_talk_name = itemView.findViewById(R.id.tv_talk_name);
         }
     }
 }

@@ -38,6 +38,7 @@
         android:textSize="18sp"
         />
  <Button
+     android:id="@+id/bt_addFriend"
      android:layout_width="80dp"
      android:layout_height="35dp"
      android:text="@string/social_inform_esure"

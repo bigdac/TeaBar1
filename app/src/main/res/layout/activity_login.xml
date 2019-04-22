@@ -15,7 +15,8 @@
         android:layout_below="@+id/tv_main_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="6dp"
+       >
     <TextView
         android:id="@+id/tv_login_login"
         android:layout_width="wrap_content"
@@ -37,17 +38,33 @@
             android:layout_marginLeft="20dp"
             android:layout_centerVertical="true"
             />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/logo"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            />
 
     </RelativeLayout>
+    <ImageView
+        android:id="@+id/iv_login_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/login_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/rl_login_title"
+        android:layout_marginTop="40dp"
+        />
 
     <TextView
         android:id="@+id/tv_login_welcom"
-        android:layout_below="@+id/rl_login_title"
+        android:layout_below="@+id/iv_login_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/login_tv_welcom"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="40dp"
         android:textColor="@color/login_black"
         android:textSize="18sp"
         />
@@ -114,12 +131,13 @@
     <Button
         android:id="@+id/bt_login_ensure"
         android:layout_below="@+id/tv_login_forget"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="30dp"
         android:layout_marginRight="26dp"
         android:layout_marginLeft="26dp"
-        android:background="@drawable/login_button"
+        android:background="@mipmap/login_button"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
         android:textColor="@color/white"
         android:textSize="14sp"
         android:text="@string/login_tv_login"
@@ -139,30 +157,63 @@
         android:layout_below="@+id/bt_login_ensure"
         android:layout_marginTop="23dp"
         android:layout_marginBottom="30dp" />-->
-    <Button
-        android:id="@+id/login_button"
-        android:layout_width="120dp"
-        android:layout_height="40dp"
-        android:background="@drawable/login_face"
-        android:text="FaceBook"
-        android:textColor="@color/white"
-        android:layout_marginLeft="26dp"
+
+    <RelativeLayout
+        android:id="@+id/rl_login_third"
         android:layout_below="@+id/bt_login_ensure"
-        android:layout_marginTop="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/bt_login_ensure"
+        android:layout_alignLeft="@+id/bt_login_ensure"
+        android:layout_marginTop="20dp"
+        >
+        <View
+            android:layout_width="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/tv_third_login"
+            android:layout_marginRight="20dp"
+            android:layout_height="0.6dp"
+            android:background="@color/social_gray"
+            />
+        <TextView
+            android:id="@+id/tv_third_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="第三方登录"
+            android:textColor="#bbbbbb"
+            android:textSize="15sp"
+            android:layout_centerInParent="true"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tv_third_login"
+            android:layout_marginLeft="20dp"
+            android:layout_height="0.6dp"
+            android:background="@color/social_gray"
+            />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/facebook"
+        android:layout_marginLeft="100dp"
+        android:layout_below="@+id/rl_login_third"
+        android:layout_marginTop="20dp"
        />
 
-    <Button
+    <ImageView
         android:id="@+id/sign_in_button"
-        android:layout_width="120dp"
-        android:layout_height="40dp"
-        android:layout_below="@+id/bt_login_ensure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="40dp"
-        android:layout_marginRight="26dp"
-        android:background="@drawable/login_google"
-        android:text="Google"
-        android:textColor="@color/white"
-        android:textSize="14sp" />
+        android:layout_marginRight="100dp"
+        android:layout_alignTop="@+id/login_button"
+        android:src="@mipmap/google"
+        />
     <LinearLayout
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="30dp"

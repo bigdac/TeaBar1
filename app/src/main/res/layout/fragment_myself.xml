@@ -83,7 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="30"
-                android:textColor="#FC4D74"
+                android:textColor="@color/nomal_green"
                 android:textSize="20sp"
                android:layout_centerHorizontal="true"
                 />
@@ -94,7 +94,7 @@
                 android:text="茶饮量"
                 android:layout_marginTop="6dp"
                 android:textSize="12sp"
-                android:textColor="#FC4D74"
+                android:textColor="@color/nomal_green"
                 android:layout_centerHorizontal="true"
                 />
 
@@ -103,7 +103,7 @@
             android:layout_width="1dp"
             android:layout_height="30dp"
             android:layout_gravity="center"
-            android:background="#FC4D74"
+            android:background="@color/nomal_green"
             />
         <RelativeLayout
             android:layout_width="0dp"
@@ -115,7 +115,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="5"
-                android:textColor="#FC4D74"
+                android:textColor="@color/nomal_green"
                 android:textSize="20sp"
                 android:layout_centerHorizontal="true"
                 />
@@ -126,7 +126,7 @@
                 android:text="计划"
                 android:layout_marginTop="6dp"
                 android:textSize="12sp"
-                android:textColor="#FC4D74"
+                android:textColor="@color/nomal_green"
                 android:layout_centerHorizontal="true"
                 />
 
@@ -135,7 +135,7 @@
             android:layout_width="1dp"
             android:layout_height="30dp"
             android:layout_gravity="center"
-            android:background="#FC4D74"
+            android:background="@color/nomal_green"
             />
         <RelativeLayout
             android:layout_width="0dp"
@@ -147,7 +147,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="50"
-                android:textColor="#FC4D74"
+                android:textColor="@color/nomal_green"
                 android:textSize="20sp"
                 android:layout_centerHorizontal="true"
                 />
@@ -158,7 +158,7 @@
                 android:text="好友量"
                 android:layout_marginTop="6dp"
                 android:textSize="12sp"
-                android:textColor="#FC4D74"
+                android:textColor="@color/nomal_green"
                 android:layout_centerHorizontal="true"
                 />
 
@@ -204,6 +204,7 @@
             android:layout_below="@+id/iv_my_today"
             android:layout_marginTop="20dp"
             />
+
         <ImageView
             android:id="@+id/iv_my_drink"
             android:layout_width="match_parent"
@@ -240,39 +241,7 @@
         android:orientation="vertical"
         android:paddingBottom="10dp"
         >
-         <RelativeLayout
-             android:id="@+id/rl_my_jk"
-             android:layout_width="match_parent"
-             android:layout_marginTop="10dp"
-             android:layout_height="50dp">
-             <ImageView
-                 android:id="@+id/iv_my_jk"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:src="@mipmap/my_jk"
-                 android:layout_centerVertical="true"
-                 android:layout_marginLeft="15dp"
-                 />
-             <TextView
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:textColor="@color/login_black"
-                 android:text="@string/my_health"
-                 android:layout_toRightOf="@+id/iv_my_jk"
-                 android:layout_centerVertical="true"
-                 android:layout_marginLeft="15dp"
-                 android:textSize="14sp"
-                 />
-             <ImageView
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:src="@mipmap/my_xz"
-                 android:layout_alignParentRight="true"
-                 android:layout_centerVertical="true"
-                 android:layout_marginRight="10dp"
-                 />
 
-         </RelativeLayout>
 
 
         <RelativeLayout
@@ -348,7 +317,7 @@
                 android:id="@+id/iv_my_ask"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/main_ask"
+                android:src="@mipmap/my_wj"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
                 />
@@ -390,7 +359,7 @@
             android:id="@+id/iv_my_sz"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/my_sz"
+            android:src="@mipmap/my_set"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
             />

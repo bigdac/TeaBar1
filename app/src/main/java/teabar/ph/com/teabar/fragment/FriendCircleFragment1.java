@@ -180,14 +180,6 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
     @SuppressLint({ "ClickableViewAccessibility", "InlinedApi" })
     private void initView1(View view) {
 
-        ImageView iv_main_add =view.findViewById(R.id.iv_main_add);
-        iv_main_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            startActivity(new Intent(getActivity(),AddSocialActivity.class));
-            }
-        });
-
         recyclerView = (SuperRecyclerView)view. findViewById(R.id.recyclerView);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -585,7 +577,7 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
 
                 Rect r = new Rect();
                 bodyLayout.getWindowVisibleDisplayFrame(r);
-                int statusBarH =  getStatusBarHeight();//状态栏高度
+                int statusBarH = ScreenUtils.getStatusBarHeight() ;//状态栏高度
 //                int hingth=(int)(50 * MainActivity.scale + 0.5f);
                 int screenH = bodyLayout.getRootView().getHeight();
                 if(r.top != statusBarH ){

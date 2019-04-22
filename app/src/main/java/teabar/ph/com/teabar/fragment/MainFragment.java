@@ -72,7 +72,7 @@ public class MainFragment extends BaseFragment  {
     private List<String> twoDataList;
     LinearLayout li_main_title ;
     boolean isOpen = false;
-    ImageView iv_main_search,iv_main_ask;
+    ImageView iv_main_search,iv_main_ask,iv_main_sm;
     private static final int REQUEST_CODE_SCAN = 0x0000;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,11 +91,11 @@ public class MainFragment extends BaseFragment  {
 
         scrollView =view. findViewById(R.id.scrollView);
         view_pager =view. findViewById(R.id.view_pager);
-        iv_main_search = view.findViewById(R.id.iv_main_search);
-        iv_main_search.setOnClickListener(new View.OnClickListener() {
+        iv_main_sm = view.findViewById(R.id.iv_main_sm);
+        iv_main_sm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                startActivity(new Intent(getActivity(),SearchActivity.class));
+
                 //动态权限申请
                 if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, 1);
@@ -111,6 +111,15 @@ public class MainFragment extends BaseFragment  {
                 startActivity(new Intent(getActivity(),QusetionActivity.class));
             }
         });
+
+        iv_main_search = view.findViewById(R.id.iv_main_search);
+        iv_main_search .setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(),SearchActivity.class));
+            }
+        });
+
         view_pager_weather = view.findViewById(R.id.view_pager_weather);
         li_main_title = view.findViewById(R.id.li_main_title);
         li_main_title.setOnClickListener(new View.OnClickListener() {
@@ -158,7 +167,6 @@ public class MainFragment extends BaseFragment  {
         mTabItemBeanArrayList.add(new TabItemBean("草本系列"," "));
         mTabItemBeanArrayList.add(new TabItemBean("水果系列"," "));
         mTabItemBeanArrayList.add(new TabItemBean("功能茶"," "));
-        mTabItemBeanArrayList.add(new TabItemBean("个人计划"," "));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
         tv_tab.setLayoutManager(linearLayoutManager);
         //设置适配器

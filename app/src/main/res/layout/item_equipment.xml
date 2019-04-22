@@ -1,43 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:background="@color/white"
-    android:layout_height="67dp">
-<ImageView
-    android:id="@+id/iv_equ"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:src="@mipmap/equ_online"
-    android:layout_centerVertical="true"
-    android:layout_marginLeft="14dp"
-    />
+    android:layout_width="178dp"
+    android:layout_height="197dp">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/teacard" />
+    <ImageView
+        android:id="@+id/iv_equ_choose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/equ_choose"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="7dp"
+        android:layout_marginRight="11dp"
+        />
+    <RelativeLayout
+        android:id="@+id/rl_equ_light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        >
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/light_button"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/equ_light"
+            android:layout_centerInParent="true"
+            />
+
+    </RelativeLayout>
     <TextView
         android:id="@+id/tv_equ_name"
+        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="lify-家"
-        android:textColor="#333333"
-        android:layout_centerVertical="true"
-        android:textSize="18sp"
-        android:layout_toRightOf="@+id/iv_equ"
-        android:layout_marginLeft="20dp"
+        android:text="lify—家"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/rl_equ_light"
+
         />
+
     <ImageView
         android:id="@+id/iv_equ_open"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="centerInside"
         android:src="@mipmap/equ_open"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"
-        android:layout_centerVertical="true"
-        />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#f5f5f5"
+        android:layout_marginRight="17dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/tv_equ_name"
-        android:layout_alignRight="@+id/iv_equ_open"
+        android:layout_marginBottom="10dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="在线"
+        android:textSize="14sp"
+        android:layout_marginLeft="17dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="26dp"
+        android:textColor="@color/nomal_green"
         />
 
 </RelativeLayout>

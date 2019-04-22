@@ -40,12 +40,9 @@ public class MyselfFragment extends BaseFragment {
     public void widgetClick(View v) {
 
     }
-    @OnClick({R.id.rl_my_jk,R.id.rl_my_jh,R.id.rl_my_fb,R.id.rl_my_ask,R.id.rl_my_sz,R.id.vp_progress,R.id.iv_may_bj})
+    @OnClick({R.id.rl_my_jh,R.id.rl_my_fb,R.id.rl_my_ask,R.id.rl_my_sz,R.id.vp_progress,R.id.iv_may_bj})
     public void onClick(View view){
         switch (view.getId()){
-            case R.id.rl_my_jk:
-                startActivity(new Intent(getActivity(),PowerpicActivity.class));
-                break;
             case R.id.rl_my_jh:
                 startActivity(new Intent(getActivity(),MyPlanActivity.class));
                 break;

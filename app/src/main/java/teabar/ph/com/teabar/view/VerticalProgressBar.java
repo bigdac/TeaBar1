@@ -3,9 +3,12 @@ package teabar.ph.com.teabar.view;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Shader;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 public class VerticalProgressBar extends View {
@@ -34,6 +37,7 @@ public class VerticalProgressBar extends View {
 
     private void init() {
         paint = new Paint();
+
         paint1 = new Paint();
     }
 
@@ -46,9 +50,11 @@ public class VerticalProgressBar extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        paint.setColor(Color.parseColor("#FC4D74"));// 设置画笔颜色
-        paint1.setColor(Color.parseColor("#3DBBBBBB"));
 
+        paint1.setColor(Color.parseColor("#3DBBBBBB"));
+        LinearGradient  backGradient = new LinearGradient(0, 0, (width-progress / 100f * width)/2, height, new int[]{Color.parseColor("#c2a6fa"),Color.parseColor("#8394fb")}, null, Shader.TileMode.CLAMP);
+
+        paint.setShader(backGradient);
 //        if (progress==100){
 //            canvas.drawRoundRect(0, 0, width - progress / 100f * width, height,30,30,
 //                    paint);// 画矩形
@@ -103,7 +109,7 @@ public class VerticalProgressBar extends View {
 
     /** 设置progressbar进度 */
     public void setProgress(int progress) {
-        this.progress = progress;
+        this.progress =100- progress;
         postInvalidate();
     }
 }

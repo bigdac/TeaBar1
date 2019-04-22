@@ -1,39 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <TextView
         android:id="@+id/tv_main_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
-    <RelativeLayout
-        android:id="@+id/rl_talk_title"
+    <ImageView
+        android:id="@+id/iv_power_fh"
         android:layout_below="@+id/tv_main_1"
-        android:layout_width="match_parent"
-        android:background="@color/white"
-        android:layout_height="55dp">
-        <ImageView
-            android:id="@+id/iv_power_fh"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:scaleType="centerInside"
-            android:src="@mipmap/login_back"
-            android:layout_centerVertical="true"
-            />
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="centerInside"
+        android:src="@mipmap/login_back"
+        />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mr.Liu"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/iv_power_fh"
-            android:textColor="@color/login_black"
-            android:textSize="30sp"
 
-            />
-    </RelativeLayout>
 
 
 </RelativeLayout>

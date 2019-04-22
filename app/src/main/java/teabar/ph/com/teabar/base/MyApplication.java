@@ -20,7 +20,10 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.model.Message;
+import cn.jpush.im.android.api.model.UserInfo;
 import okhttp3.OkHttpClient;
+import teabar.ph.com.teabar.service.NotificationClickEventReceiver;
 import teabar.ph.com.teabar.util.language.LocalManageUtil;
 
 
@@ -37,7 +40,11 @@ public class MyApplication extends Application {
     private static Context mContext;
     public static Map<Long, Boolean> isAtMe = new HashMap<>();
     public static Map<Long, Boolean> isAtall = new HashMap<>();
-
+    public static List<String> forAddFriend = new ArrayList<>();
+    public static List<Message> forwardMsg = new ArrayList<>();
+    public static List<UserInfo> alreadyRead = new ArrayList<>();
+    public static List<UserInfo> unRead = new ArrayList<>();
+    public static List<Message> ids = new ArrayList<>();
     public static Context getContext(){
         return mContext;
 
@@ -56,6 +63,10 @@ public class MyApplication extends Application {
         JMessageClient.init(getApplicationContext());
         LocalManageUtil.setApplicationLanguage(this);
 //        SMSSDK.initSDK(this,"257a640199764","125aced6309709d59520e466e078ba15");
+        //设置Notification的模式
+        JMessageClient.setNotificationFlag(JMessageClient.FLAG_NOTIFY_WITH_SOUND | JMessageClient.FLAG_NOTIFY_WITH_LED | JMessageClient.FLAG_NOTIFY_WITH_VIBRATE);
+        //注册Notification点击的接收器
+        new NotificationClickEventReceiver(getApplicationContext());
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {

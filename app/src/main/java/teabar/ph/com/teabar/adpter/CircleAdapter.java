@@ -123,6 +123,11 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
             holder.timeTv.setText(createTime);
             holder.tv_social_num.setText(ThumbsUp[0]+"");
             holder.tv_social_talk.setText(CommentNum+"");
+            if (CommentNum==0){
+                holder.allMess.setVisibility(View.INVISIBLE);
+            }else {
+                holder.allMess.setVisibility(View.VISIBLE);
+            }
 
             if (!isOpen[0]){
                 holder.iv_social_no.setImageResource(R.mipmap.social_no);
