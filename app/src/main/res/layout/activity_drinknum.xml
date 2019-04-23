@@ -19,7 +19,7 @@
         android:layout_alignTop="@+id/iv_power_fh"
         android:layout_marginRight="20dp"
         android:layout_marginTop="15dp"
-        android:textColor="#FC4D74"
+        android:textColor="@color/nomal_green"
         android:textSize="16dp"
         />
     <ImageView
@@ -92,6 +92,7 @@
         android:layout_width="160dp"
         android:layout_height="44dp"
         android:orientation="horizontal"
+        android:background="@drawable/power_button_all"
         >
         <TextView
             android:id="@+id/tv_power_day"
@@ -100,7 +101,7 @@
             android:layout_height="match_parent"
             android:text="@string/my_power_day"
             android:gravity="center"
-            android:textColor="@color/white"
+            android:textColor="@color/login_black"
             android:textSize="18sp"
             android:background="@drawable/power_button_left"
             />
@@ -111,9 +112,9 @@
             android:layout_height="match_parent"
             android:text="@string/my_power_week"
             android:gravity="center"
-            android:textColor="@color/white"
+            android:textColor="@color/login_black"
             android:textSize="18sp"
-            android:background="#93FF638D"
+            android:background="@color/white"
             />
         <TextView
             android:id="@+id/tv_power_month"
@@ -122,7 +123,7 @@
             android:layout_height="match_parent"
             android:text="@string/my_power_month"
             android:gravity="center"
-            android:textColor="@color/white"
+            android:textColor="@color/login_black"
             android:textSize="18sp"
             android:background="@drawable/power_button_right1"
             />

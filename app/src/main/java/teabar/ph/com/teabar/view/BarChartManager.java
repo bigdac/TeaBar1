@@ -37,6 +37,8 @@ public class BarChartManager {
      * 初始化LineChart
      */
     private void initLineChart(int num) {
+
+
         //背景颜色
         mBarChart.setBackgroundColor(Color.WHITE);
         //网格
@@ -113,7 +115,10 @@ public class BarChartManager {
         // 每一个BarDataSet代表一类柱状图
 
         BarDataSet barDataSet = new BarDataSet(entries, label);
-        barDataSet.setColor(color);
+        int color1[] ={Color.parseColor("#8D9DFC"),Color.parseColor("#C3A6FA")};
+//        barDataSet.setColor(color1);
+
+        barDataSet.setGradientColor(Color.parseColor("#8D9DFC"),Color.parseColor("#C3A6FA"));
         barDataSet.setValueTextSize(9f);
         barDataSet.setFormLineWidth(1f);
         barDataSet.setFormSize(15.f);

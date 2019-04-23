@@ -30,7 +30,7 @@ import android.widget.Toast;
 
 import com.lzy.imagepicker.bean.ImageItem;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
-import com.sj.emoji.EmojiBean;
+//import com.sj.emoji.EmojiBean;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -372,9 +372,9 @@ public class ChatActivity extends BaseActivity implements FuncLayout.OnFuncKeyBo
                     }
                 } else {
                     String content = null;
-                    if (o instanceof EmojiBean) {
+                  /*  if (o instanceof EmojiBean) {
                         content = ((EmojiBean) o).emoji;
-                    } else if (o instanceof EmoticonEntity) {
+                    } else */if (o instanceof EmoticonEntity) {
                         content = ((EmoticonEntity) o).getContent();
                     }
 

@@ -111,7 +111,7 @@ public class DrinkNumActivity extends BaseActivity {
         switch (view.getId()){
             case R.id.tv_power_day:
                 tv_power_day.setBackground(getResources().getDrawable(R.drawable.power_button_left));
-                tv_power_week.setBackgroundColor(getResources().getColor(R.color.pink2));
+                tv_power_week.setBackgroundColor(getResources().getColor(R.color.white));
                 tv_power_month.setBackground(getResources().getDrawable(R.drawable.power_button_right1));
                 mBarChart.setScaleMinima(1.0f, 1.0f);
                 mBarChart.getViewPortHandler().refresh(new Matrix(), mBarChart, true);
@@ -120,7 +120,7 @@ public class DrinkNumActivity extends BaseActivity {
                 break;
             case R.id.tv_power_week:
                 tv_power_day.setBackground(getResources().getDrawable(R.drawable.power_button_left1));
-                tv_power_week.setBackgroundColor(getResources().getColor(R.color.pink1));
+                tv_power_week.setBackgroundColor(getResources().getColor(R.color.nomal_green));
                 tv_power_month.setBackground(getResources().getDrawable(R.drawable.power_button_right1));
                 mBarChart.setScaleMinima(1.0f, 1.0f);
                 mBarChart.getViewPortHandler().refresh(new Matrix(), mBarChart, true);
@@ -128,7 +128,7 @@ public class DrinkNumActivity extends BaseActivity {
                 break;
             case R.id.tv_power_month:
                 tv_power_day.setBackground(getResources().getDrawable(R.drawable.power_button_left1));
-                tv_power_week.setBackgroundColor(getResources().getColor(R.color.pink2));
+                tv_power_week.setBackgroundColor(getResources().getColor(R.color.white));
                 tv_power_month.setBackground(getResources().getDrawable(R.drawable.power_button_right));
                 mBarChart.setScaleMinima(1.0f, 1.0f);
                 mBarChart.getViewPortHandler().refresh(new Matrix(), mBarChart, true);
