@@ -52,7 +52,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.LoginActivity">
+        <activity android:name=".activity.DrinkNumActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -79,7 +79,7 @@
             android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ImagePickerThemeFullScreen" />
-        <activity android:name=".activity.DrinkNumActivity" />
+        <!--<activity android:name=".activity.DrinkNumActivity" />-->
         <activity android:name=".activity.SetDrinkActivity" />
         <activity android:name=".activity.PersonnalActivity" />
         <activity android:name=".activity.PersonSetActivity" />
