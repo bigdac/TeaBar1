@@ -45,6 +45,7 @@ public class BarChartManager {
         mBarChart.setDrawGridBackground(false);
         //背景阴影
         mBarChart.setDrawBarShadow(false);
+        
         mBarChart.setHighlightFullBarEnabled(false);
 
         //显示边界
