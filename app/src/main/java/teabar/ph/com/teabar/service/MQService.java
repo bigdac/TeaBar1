@@ -12,6 +12,8 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
+
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -29,6 +31,12 @@ import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import teabar.ph.com.teabar.activity.MainActivity;
+import teabar.ph.com.teabar.activity.MakeActivity;
+import teabar.ph.com.teabar.fragment.EqumentFragment;
+import teabar.ph.com.teabar.fragment.MainFragment2;
+import teabar.ph.com.teabar.pojo.Equpment;
 
 public class MQService extends Service {
 
@@ -50,23 +58,14 @@ public class MQService extends Service {
     private MqttConnectOptions options;
     String clientId = "";
     LocalBinder binder = new LocalBinder();
-    /***
-     * 头码
-     */
-    private int headCode = 0X90;
-
-    /***
-     * 商业模块00：忽略；11：按水流量租
-     凭；22：按时间租赁；33：
-     按售水量售水型；FF：常规
-     机型
-     */
-    private int[] bussinessmodule = {0X00, 0X11, 0X22, 0X33, 0XFF};
+    int headCode = 0x32;
+   EquipmentImpl equipmentDao;
 
 
     @Override
     public void onCreate() {
         super.onCreate();
+        equipmentDao = new EquipmentImpl(this);
         Log.i("MQService", "-->onCreate");
         init();
 
@@ -143,89 +142,133 @@ public class MQService extends Service {
         }
     }
 
-    public void getDate(String mac, int funCode) {
-        try {
-            JSONObject jsonObject = new JSONObject();
-            JSONArray jsonArray = new JSONArray();
-            int headCode = 0x55;
-            int checkCode = (headCode + funCode) % 256;
-            int endCode = 0x88;
-            jsonArray.put(0, headCode);
-            jsonArray.put(1, funCode);
-            jsonArray.put(2, checkCode);
-            jsonArray.put(3, endCode);
-            jsonObject.put("WPurifier", jsonArray);
-            String topicName = "p99/wPurifier1/" + mac + "/set";
-            String payLoad = jsonObject.toString();
-            publish(topicName, 1, payLoad);
-            Log.e("getData", "getDate: -->");
-            Log.e("FFFDDDD", "getDate:获取数据 " + mac);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
-     * 功能码为
-     * 0x11:基本功能查询
-     * 0x23:基础设置
-     * 0x31:周一定时设置查询
-     * 0x32:周二定时设置查询
-     * 0x33:周三定时设置查询
-     * 0x34:周四定时设置查询
-     * 0x35:周五定时设置查询
-     * 0x36:周六定时设置查询
-     * 0x37:周七定时设置查询
-     *
-     * @param mac
-     * @param funCode
+     * 发送查询机器
+     * @param
      */
-    public void getData(String mac, int funCode) {
-        try {
-            int headCode = 0x55;
+    public void sendFindEqu( String mac) {
 
+
+        try {
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
-            jsonArray.put(0, headCode);
-            jsonArray.put(1, funCode);
-            int sum = 0;
-            for (int i = 0; i < 2; i++) {
-                sum += jsonArray.getInt(i);
-            }
-            int checkCode = sum % 256;
-            jsonArray.put(2, checkCode);
-            int endCode = 0x88;
-            jsonArray.put(3, endCode);
-            jsonObject.put("WPurifier", jsonArray);
-            String topicName = "p99/wPurifier1/" + mac + "/set";
-            String payLoad = jsonObject.toString();
+            int ctrlCode = 0x01;
+            int length = 0;
+            int checkCode = (headCode + ctrlCode+length ) % 256;
+            jsonArray.put(0,headCode);
+            jsonArray.put(1,ctrlCode);
+            jsonArray.put(2,length);
+            jsonArray.put(3,checkCode);
+            jsonObject.put("Coffee",jsonArray);
+            List <Equpment> equpments = equipmentDao.findAll();
+            String topicName = "coffee/"+mac+"/status/set";
+            String payLoad =jsonObject.toString();
             boolean success = publish(topicName, 1, payLoad);
+            Log.e("GGGGGTTTTTT", "open: --------------->"+ success );
             if (!success)
-                publish(topicName, 1, payLoad);
+                success = publish(topicName, 1, payLoad);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+
     /**
-     * 发送基本功能
+     * 发送开关机命令
+     *1、type:0、1、2、3 。
+     * 0: 开机
+     * 1: 关机
+     * 2：休眠
+     * 3：待机
+     * @param
+     */
+    public void sendOpenEqu(int type ,String mac) {
+
+
+        try {
+            JSONObject jsonObject = new JSONObject();
+            JSONArray jsonArray = new JSONArray();
+            int ctrlCode = 0x04;
+            int length = 1;
+            int checkCode = (headCode + ctrlCode+length+type) % 256;
+            jsonArray.put(0,headCode);
+            jsonArray.put(1,ctrlCode);
+            jsonArray.put(2,length);
+            jsonArray.put(3,type);
+            jsonArray.put(4,checkCode);
+            jsonObject.put("Coffee",jsonArray);
+
+            String topicName = "coffee/"+mac+"/operate/set";
+            String payLoad =jsonObject.toString();
+            boolean success = publish(topicName, 1, payLoad);
+            Log.e("GGGGGTTTTTT", "open: --------------->"+type+">>>>>>"+mac+"...."+success );
+            if (!success)
+                success = publish(topicName, 1, payLoad);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 发送z制作命令
+     *
      *
      * @param
      */
-    public void sendData() {
+    public void sendMakeMess(int size,int time,int temp, String mac) {
+
+        try {
+            JSONObject jsonObject = new JSONObject();
+            JSONArray jsonArray = new JSONArray();
+            int ctrlCode = 0x02;
+            int length = 4;
+            int checkCode = (headCode + ctrlCode+length+time+temp+size) % 256;
+            int height = size/256;
+            int low = size%256;
+            jsonArray.put(0,headCode);
+            jsonArray.put(1,ctrlCode);
+            jsonArray.put(2,length);
+            jsonArray.put(3,height);
+            jsonArray.put(4,low);
+            jsonArray.put(5,time);
+            jsonArray.put(6,temp);
+            jsonArray.put(7,checkCode);
+            jsonObject.put("Coffee",jsonArray);
+
+            String topicName = "coffee/"+mac+"/operate/set";
+            String payLoad =jsonObject.toString();
+            boolean success = publish(topicName, 1, payLoad);
+            Log.e("GGGGGTTTTTT", "open: --------------->"  +success );
+            if (!success)
+                success = publish(topicName, 1, payLoad);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * 发送停止冲泡功能
+     *
+     * @param
+     */
+    public void sendStop(String mac) {
 
 
         try {
+            JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
-
-            int sum = 0;
-            for (int i = 0; i < 23; i++) {
-                sum += jsonArray.getInt(i);
-            }
-
-            String topicName = "p99/wPurifier1/set";
-            String payLoad = ""/*jsonObject.toString()*/;
+            int ctrlCode = 0x03;
+            int length = 0;
+            int checkCode = (headCode + ctrlCode+length ) % 256;
+            jsonArray.put(0,headCode);
+            jsonArray.put(1,ctrlCode);
+            jsonArray.put(2,length);
+            jsonArray.put(3,checkCode);
+            jsonObject.put("Coffee",jsonArray);
+            String topicName = "coffee/"+mac+"/operate/set";
+            String payLoad =jsonObject.toString();
             boolean success = publish(topicName, 1, payLoad);
+            Log.e("GGGGGTTTTTT", "open: --------------->"  +success );
             if (!success)
                 success = publish(topicName, 1, payLoad);
         } catch (Exception e) {
@@ -244,43 +287,61 @@ public class MQService extends Service {
             String message = strings[1];/**收到的消息*/
             Log.i("topicName", "-->:" + topicName);
             String macAddress = null;
-            if (topicName.startsWith("p99/wPurifier1")) {
-                macAddress = topicName.substring(15, topicName.lastIndexOf("/"));
+            if (topicName.startsWith("coffee")) {
+                String[] aa = topicName.split("/");
+                if (aa.length>2){
+                    macAddress = aa[1];
+                }
             }
             JSONArray messageJsonArray = null;
             JSONObject messageJsonObject = null;
-//            Equipment equipment = null;
-
-//            equipment=new Equipment();
+            Equpment equipment = equipmentDao.findDeviceByMacAddress2(macAddress);
             try {
                 if (!TextUtils.isEmpty(message) && message.startsWith("{") && message.endsWith("}")) {
                     messageJsonObject = new JSONObject(message);
                 }
-                if (messageJsonObject != null && messageJsonObject.has("WPurifier")) {
-                    messageJsonArray = messageJsonObject.getJSONArray("WPurifier");
+                if (messageJsonObject != null && messageJsonObject.has("Coffee")) {
+                    messageJsonArray = messageJsonObject.getJSONArray("Coffee");
                 }
-
-                int funCode = -1;
-                int week = -1;
-
                 if (topicName.contains("transfer")){
-                    if (   messageJsonArray != null && messageJsonArray.getInt(2) == 0x11) {
+                    if ( messageJsonArray != null && messageJsonArray.getInt(1) == 0xA1) {
                         Log.e("hasData", "getDate: -->");
+                        if (equipment!=null){
+                        boolean isFirst = equipment.getIsFirst()  ;//是否是默认设备
 
+                        int mStage;//机器状态
+                        String lightColor;//灯光颜色
+                        String washTime;//清洗周期
+                        String errorCode;
 
+                        errorCode = messageJsonArray.getString(3);
+                        mStage = messageJsonArray.getInt(4);
+                        lightColor = messageJsonArray.getString(5)+"/"+messageJsonArray.getString(6)+"/"+messageJsonArray.getString(7);
 
+                        equipment.setErrorCode(errorCode);
+                        equipment.setMStage(mStage);
+                        equipment.setLightColor(lightColor);
 
-
+                        equipment.setMacAdress(macAddress);
+                        if (isFirst){
+                            if (MainActivity.isRunning){
+                                Intent mqttIntent = new Intent("MainActivity");
+                                mqttIntent.putExtra("msg", macAddress);
+                                mqttIntent.putExtra("msg1", equipment);
+                                sendBroadcast(mqttIntent);
+                            }
+                        }
+                    }
                     }
                 }
 
-
-              /*  if (MainActivity.isRunning) {
-                    Intent mqttIntent = new Intent("MainActivity");
+                if (EqumentFragment.isRunning) {
+                    Intent mqttIntent = new Intent("EqumentFragment");
                     mqttIntent.putExtra("msg", macAddress);
                     mqttIntent.putExtra("msg1", equipment);
                     sendBroadcast(mqttIntent);
-                }  */
+                }
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -291,15 +352,22 @@ public class MQService extends Service {
 
     public List<String> getTopicNames() {
         List<String> list = new ArrayList<>();
-        String onlineTopicName = "";
-        String offlineTopicName = "";
+        List<Equpment> equpments = equipmentDao.findAll();
 
+        for (Equpment equpment : equpments){
+            String macAddress = equpment.getMacAdress();
+            String onlineTopicName = "";
+            String offlineTopicName = "";
+            onlineTopicName = "coffee/" + macAddress + "/status/transfer";
+            offlineTopicName = "coffee/" + macAddress + "/lwt";
+            String s3 = "coffee/" + macAddress + "/operate/transfer";
+            String s4 = "coffee/" + macAddress + "/extra/transfer";
+            list.add(onlineTopicName);
+            list.add(offlineTopicName);
+            list.add(s3);
+            list.add(s4);
+        }
 
-//        String macAddress="1234567890";
-//        onlineTopicName = "p99/wPurifier1/" + macAddress + "/transfer";
-//        offlineTopicName = "p99/wPurifier1/" + macAddress + "/lwt";
-//        list.add(onlineTopicName);
-//        list.add(offlineTopicName);
         return list;
     }
 

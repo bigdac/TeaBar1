@@ -26,6 +26,18 @@ public class EqupmentDao extends AbstractDao<Equpment, Long> {
     public static class Properties {
         public final static Property EqupmentId = new Property(0, long.class, "equpmentId", true, "_id");
         public final static Property Name = new Property(1, String.class, "name", false, "NAME");
+        public final static Property IsFirst = new Property(2, boolean.class, "isFirst", false, "IS_FIRST");
+        public final static Property MacAdress = new Property(3, String.class, "macAdress", false, "MAC_ADRESS");
+        public final static Property MStage = new Property(4, int.class, "mStage", false, "M_STAGE");
+        public final static Property LightColor = new Property(5, String.class, "lightColor", false, "LIGHT_COLOR");
+        public final static Property WashTime = new Property(6, String.class, "washTime", false, "WASH_TIME");
+        public final static Property HasWater = new Property(7, String.class, "hasWater", false, "HAS_WATER");
+        public final static Property Inform_isFinish = new Property(8, boolean.class, "inform_isFinish", false, "INFORM_IS_FINISH");
+        public final static Property Inform_isHot = new Property(9, boolean.class, "inform_isHot", false, "INFORM_IS_HOT");
+        public final static Property Inform_noWater = new Property(10, boolean.class, "inform_noWater", false, "INFORM_NO_WATER");
+        public final static Property Inform_isFull = new Property(11, boolean.class, "inform_isFull", false, "INFORM_IS_FULL");
+        public final static Property Inform_isWashing = new Property(12, boolean.class, "inform_isWashing", false, "INFORM_IS_WASHING");
+        public final static Property ErrorCode = new Property(13, String.class, "errorCode", false, "ERROR_CODE");
     }
 
 
@@ -42,7 +54,19 @@ public class EqupmentDao extends AbstractDao<Equpment, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"EQUPMENT\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY NOT NULL ," + // 0: equpmentId
-                "\"NAME\" TEXT);"); // 1: name
+                "\"NAME\" TEXT," + // 1: name
+                "\"IS_FIRST\" INTEGER NOT NULL ," + // 2: isFirst
+                "\"MAC_ADRESS\" TEXT," + // 3: macAdress
+                "\"M_STAGE\" INTEGER NOT NULL ," + // 4: mStage
+                "\"LIGHT_COLOR\" TEXT," + // 5: lightColor
+                "\"WASH_TIME\" TEXT," + // 6: washTime
+                "\"HAS_WATER\" TEXT," + // 7: hasWater
+                "\"INFORM_IS_FINISH\" INTEGER NOT NULL ," + // 8: inform_isFinish
+                "\"INFORM_IS_HOT\" INTEGER NOT NULL ," + // 9: inform_isHot
+                "\"INFORM_NO_WATER\" INTEGER NOT NULL ," + // 10: inform_noWater
+                "\"INFORM_IS_FULL\" INTEGER NOT NULL ," + // 11: inform_isFull
+                "\"INFORM_IS_WASHING\" INTEGER NOT NULL ," + // 12: inform_isWashing
+                "\"ERROR_CODE\" TEXT);"); // 13: errorCode
     }
 
     /** Drops the underlying database table. */
@@ -60,6 +84,38 @@ public class EqupmentDao extends AbstractDao<Equpment, Long> {
         if (name != null) {
             stmt.bindString(2, name);
         }
+        stmt.bindLong(3, entity.getIsFirst() ? 1L: 0L);
+ 
+        String macAdress = entity.getMacAdress();
+        if (macAdress != null) {
+            stmt.bindString(4, macAdress);
+        }
+        stmt.bindLong(5, entity.getMStage());
+ 
+        String lightColor = entity.getLightColor();
+        if (lightColor != null) {
+            stmt.bindString(6, lightColor);
+        }
+ 
+        String washTime = entity.getWashTime();
+        if (washTime != null) {
+            stmt.bindString(7, washTime);
+        }
+ 
+        String hasWater = entity.getHasWater();
+        if (hasWater != null) {
+            stmt.bindString(8, hasWater);
+        }
+        stmt.bindLong(9, entity.getInform_isFinish() ? 1L: 0L);
+        stmt.bindLong(10, entity.getInform_isHot() ? 1L: 0L);
+        stmt.bindLong(11, entity.getInform_noWater() ? 1L: 0L);
+        stmt.bindLong(12, entity.getInform_isFull() ? 1L: 0L);
+        stmt.bindLong(13, entity.getInform_isWashing() ? 1L: 0L);
+ 
+        String errorCode = entity.getErrorCode();
+        if (errorCode != null) {
+            stmt.bindString(14, errorCode);
+        }
     }
 
     @Override
@@ -70,6 +126,38 @@ public class EqupmentDao extends AbstractDao<Equpment, Long> {
         String name = entity.getName();
         if (name != null) {
             stmt.bindString(2, name);
+        }
+        stmt.bindLong(3, entity.getIsFirst() ? 1L: 0L);
+ 
+        String macAdress = entity.getMacAdress();
+        if (macAdress != null) {
+            stmt.bindString(4, macAdress);
+        }
+        stmt.bindLong(5, entity.getMStage());
+ 
+        String lightColor = entity.getLightColor();
+        if (lightColor != null) {
+            stmt.bindString(6, lightColor);
+        }
+ 
+        String washTime = entity.getWashTime();
+        if (washTime != null) {
+            stmt.bindString(7, washTime);
+        }
+ 
+        String hasWater = entity.getHasWater();
+        if (hasWater != null) {
+            stmt.bindString(8, hasWater);
+        }
+        stmt.bindLong(9, entity.getInform_isFinish() ? 1L: 0L);
+        stmt.bindLong(10, entity.getInform_isHot() ? 1L: 0L);
+        stmt.bindLong(11, entity.getInform_noWater() ? 1L: 0L);
+        stmt.bindLong(12, entity.getInform_isFull() ? 1L: 0L);
+        stmt.bindLong(13, entity.getInform_isWashing() ? 1L: 0L);
+ 
+        String errorCode = entity.getErrorCode();
+        if (errorCode != null) {
+            stmt.bindString(14, errorCode);
         }
     }
 
@@ -82,7 +170,19 @@ public class EqupmentDao extends AbstractDao<Equpment, Long> {
     public Equpment readEntity(Cursor cursor, int offset) {
         Equpment entity = new Equpment( //
             cursor.getLong(offset + 0), // equpmentId
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1) // name
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // name
+            cursor.getShort(offset + 2) != 0, // isFirst
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // macAdress
+            cursor.getInt(offset + 4), // mStage
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // lightColor
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // washTime
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // hasWater
+            cursor.getShort(offset + 8) != 0, // inform_isFinish
+            cursor.getShort(offset + 9) != 0, // inform_isHot
+            cursor.getShort(offset + 10) != 0, // inform_noWater
+            cursor.getShort(offset + 11) != 0, // inform_isFull
+            cursor.getShort(offset + 12) != 0, // inform_isWashing
+            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13) // errorCode
         );
         return entity;
     }
@@ -91,6 +191,18 @@ public class EqupmentDao extends AbstractDao<Equpment, Long> {
     public void readEntity(Cursor cursor, Equpment entity, int offset) {
         entity.setEqupmentId(cursor.getLong(offset + 0));
         entity.setName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setIsFirst(cursor.getShort(offset + 2) != 0);
+        entity.setMacAdress(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setMStage(cursor.getInt(offset + 4));
+        entity.setLightColor(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setWashTime(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setHasWater(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setInform_isFinish(cursor.getShort(offset + 8) != 0);
+        entity.setInform_isHot(cursor.getShort(offset + 9) != 0);
+        entity.setInform_noWater(cursor.getShort(offset + 10) != 0);
+        entity.setInform_isFull(cursor.getShort(offset + 11) != 0);
+        entity.setInform_isWashing(cursor.getShort(offset + 12) != 0);
+        entity.setErrorCode(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
      }
     
     @Override

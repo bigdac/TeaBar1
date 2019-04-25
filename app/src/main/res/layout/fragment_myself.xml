@@ -341,8 +341,72 @@
                 />
 
         </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rl_my_like"
+            android:layout_width="match_parent"
+            android:paddingBottom="10dp"
+            android:layout_height="50dp">
+            <ImageView
+                android:id="@+id/iv_my_like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/my_like"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/login_black"
+                android:text="@string/my_like"
+                android:layout_toRightOf="@+id/iv_my_like"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:textSize="14sp"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/my_xz"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                />
 
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rl_my_nearest"
+            android:layout_width="match_parent"
+            android:paddingBottom="10dp"
+            android:layout_height="50dp">
+            <ImageView
+                android:id="@+id/iv_my_nearest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/my_nearest"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/login_black"
+                android:text="@string/my_now"
+                android:layout_toRightOf="@+id/iv_my_nearest"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:textSize="14sp"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/my_xz"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                />
 
+        </RelativeLayout>
 
     </LinearLayout>
     <RelativeLayout

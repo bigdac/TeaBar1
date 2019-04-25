@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv_question_logo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@mipmap/logo"
+        android:layout_marginTop="280dp"
+        android:layout_marginLeft="18dp"
+        />
+    <TextView
+        android:layout_below="@+id/iv_question_logo"
+        android:id="@+id/tv_question1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="嗨！欢迎来到LIfy，"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="18dp"
+        android:textColor="@color/login_black"
+        />
+    <TextView
+        android:id="@+id/tv_question2"
+        android:layout_below="@+id/tv_question1"
+        android:layout_marginTop="13dp"
+        android:layout_marginLeft="18dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="让我们帮你养成健康的生活习惯吧！"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="好的"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tv_question2"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/brew_button"
+        android:textColor="@color/nomal_green"
+        android:layout_marginTop="50dp"
+        />
+
+</RelativeLayout>

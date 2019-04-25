@@ -38,7 +38,7 @@
                             android:src="@mipmap/main_online"
                             />
                         <TextView
-                            android:id="@+id/tv_main_water"
+                            android:id="@+id/tv_main_online"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/equ_xq_online"
@@ -60,7 +60,7 @@
                             android:src="@mipmap/main_water"
                             />
                         <TextView
-                            android:id="@+id/tv_main_online"
+                            android:id="@+id/tv_main_water"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/equ_xq_waterf"
@@ -234,6 +234,7 @@
 
 
                 <LinearLayout
+                    android:id="@+id/li_main_plan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -241,15 +242,17 @@
 
                     <ImageView
                         android:id="@+id/iv_main_logo1"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
                         android:src="@mipmap/logo"
+                        android:layout_marginLeft="13dp"
                         />
                     <TextView
                         android:id="@+id/tv_tea_name"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
-                        android:text="个人计划"
+                        android:text="@string/my_healthplan"
                         android:textColor="#333333"
                         android:textSize="18sp"
                         android:layout_toRightOf="@+id/iv_main_logo1"
@@ -263,7 +266,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-
+                    android:paddingBottom="20dp"
                     />
 
             </LinearLayout>

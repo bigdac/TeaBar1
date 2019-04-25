@@ -132,7 +132,7 @@ public class PlanInformActivity extends BaseActivity {
                 .setSubmitColor(Color.WHITE)
                 .setCancelColor(Color.WHITE)*/
                 /*.animGravity(Gravity.RIGHT)// default is center*/
-                .setTextColorCenter(Color.parseColor("#FC4D74"))//设置选中项的颜色
+                .setTextColorCenter(Color.parseColor("#00dfad"))//设置选中项的颜色
                 .setTitleBgColor(Color.WHITE)
                 .setOutSideCancelable(false)//点击屏幕，点在控件外部范围时，是否取消显示
                 .setDate(selectedDate)

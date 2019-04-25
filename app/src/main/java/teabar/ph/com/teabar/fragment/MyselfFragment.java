@@ -7,9 +7,11 @@ import android.view.View;
 import butterknife.OnClick;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.DrinkNumActivity;
+import teabar.ph.com.teabar.activity.FavoriteActivity;
 import teabar.ph.com.teabar.activity.MyIssueActivity;
 import teabar.ph.com.teabar.activity.MyPlanActivity;
 import teabar.ph.com.teabar.activity.MyQuestionActivity;
+import teabar.ph.com.teabar.activity.NearestActivity;
 import teabar.ph.com.teabar.activity.PersonnalActivity;
 import teabar.ph.com.teabar.activity.PowerpicActivity;
 import teabar.ph.com.teabar.activity.SettingActivity;
@@ -40,7 +42,7 @@ public class MyselfFragment extends BaseFragment {
     public void widgetClick(View v) {
 
     }
-    @OnClick({R.id.rl_my_jh,R.id.rl_my_fb,R.id.rl_my_ask,R.id.rl_my_sz,R.id.vp_progress,R.id.iv_may_bj})
+    @OnClick({R.id.rl_my_jh,R.id.rl_my_fb,R.id.rl_my_ask,R.id.rl_my_sz,R.id.vp_progress,R.id.iv_may_bj,R.id.rl_my_like,R.id.rl_my_nearest})
     public void onClick(View view){
         switch (view.getId()){
             case R.id.rl_my_jh:
@@ -62,6 +64,14 @@ public class MyselfFragment extends BaseFragment {
 
             case R.id.iv_may_bj:
                 startActivity(new Intent(getActivity(),PersonnalActivity.class));
+                break;
+
+            case R.id.rl_my_nearest:
+                startActivity(new Intent(getActivity(),NearestActivity.class));
+                break;
+
+            case R.id.rl_my_like:
+                startActivity(new Intent(getActivity(),FavoriteActivity.class));
                 break;
         }
     }

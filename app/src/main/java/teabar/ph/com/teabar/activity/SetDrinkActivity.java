@@ -2,6 +2,7 @@ package teabar.ph.com.teabar.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import me.jessyan.autosize.AutoSizeCompat;
 import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.base.BaseActivity;
@@ -46,10 +48,6 @@ public class SetDrinkActivity extends BaseActivity {
     TextView tv_drink_num1;
     @BindView(R.id.iv_drink_open)
     ImageView iv_drink_open;
-    @BindView(R.id.iv_drink_scup)
-    ImageView iv_drink_scup;
-    @BindView(R.id.iv_drink_bcup)
-    ImageView iv_drink_bcup;
     @BindView(R.id.tv_drink_time)
     TextView tv_drink_time;
     MyApplication application;
@@ -103,6 +101,14 @@ public class SetDrinkActivity extends BaseActivity {
 
     }
 
+    @Override
+    public Resources getResources() {
+        //需要升级到 v1.1.2 及以上版本才能使用 AutoSizeCompat
+//        AutoSizeCompat.autoConvertDensityOfGlobal((super.getResources()));//如果没有自定义需求用这个方法
+        AutoSizeCompat.autoConvertDensity((super.getResources()), 667, false);//如果有自定义需求就用这个方法
+        return super.getResources();
+
+    }
 
     @Override
     public void doBusiness(Context mContext) {
@@ -114,7 +120,7 @@ public class SetDrinkActivity extends BaseActivity {
 
     }
 
-    @OnClick({ R.id.iv_power_fh ,R.id.rl_drin_remind,R.id.rl_drink_smal,R.id.rl_drink_big,R.id.tv_drink_time})
+    @OnClick({ R.id.iv_power_fh ,R.id.rl_drin_remind, R.id.tv_drink_time})
     public void onClick(View view){
         switch (view.getId()){
 
@@ -131,15 +137,6 @@ public class SetDrinkActivity extends BaseActivity {
                     iv_drink_open.setImageResource(R.mipmap.equ_open);
                     isOpen=true;
                 }
-                break;
-            case R.id.rl_drink_smal:
-                iv_drink_scup.setImageResource(R.mipmap.cup_s1);
-                iv_drink_bcup.setImageResource(R.mipmap.cup_b2);
-                break;
-
-            case R.id.rl_drink_big:
-                iv_drink_scup.setImageResource(R.mipmap.cup_s2);
-                iv_drink_bcup.setImageResource(R.mipmap.cup_b1);
                 break;
 
             case R.id.tv_drink_time:
@@ -191,7 +188,7 @@ public class SetDrinkActivity extends BaseActivity {
                 .setSubmitColor(Color.WHITE)
                 .setCancelColor(Color.WHITE)*/
                 /*.animGravity(Gravity.RIGHT)// default is center*/
-                .setTextColorCenter(Color.parseColor("#FC4D74"))//设置选中项的颜色
+                .setTextColorCenter(Color.parseColor("#00dfad"))//设置选中项的颜色
                 .setTitleBgColor(Color.WHITE)
                 .setOutSideCancelable(false)//点击屏幕，点在控件外部范围时，是否取消显示
                 .setDate(selectedDate)
@@ -219,7 +216,6 @@ public class SetDrinkActivity extends BaseActivity {
                 })
                 .setContentTextSize(18)
                 .setDividerColor(Color.TRANSPARENT)//设置分割线的颜色
-
                 .setType(new boolean[]{ false, false, false,true, true, false})
                 .setLabel("","","","", "","")
                 .setLineSpacingMultiplier(1.2f)

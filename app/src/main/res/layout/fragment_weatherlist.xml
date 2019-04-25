@@ -5,7 +5,7 @@
     android:background="@color/white"
     android:orientation="vertical"
     >
-    <teabar.ph.com.teabar.view.MyRecyclerView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_weatherlist"
         android:overScrollMode="never"
         android:layout_width="match_parent"

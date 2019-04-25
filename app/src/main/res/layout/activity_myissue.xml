@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -17,32 +18,31 @@
         android:scaleType="centerInside"
         android:src="@mipmap/login_back"
         />
-    <ImageView
-        android:layout_below="@+id/tv_main_1"
+
+
+    <com.malinskiy.superrecyclerview.SuperRecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_below="@+id/iv_plan_fh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:mainLayoutId="@layout/layout_recyclerview_verticalscroll"
+        app:layout_moreProgress="@layout/view_more_progress"
+        app:recyclerClipToPadding="true"
+        app:scrollbarStyle="outsideOverlay" />
+
+
+
+    <com.mikhaellopez.circularprogressbar.CircularProgressBar
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/video_progress"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginRight="17dp"
-        android:src="@mipmap/my_pic"
-        android:layout_alignParentRight="true"
-
-        />
-
-    <TextView
-        android:id="@+id/tv_power"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/my_issue"
-        android:layout_below="@+id/iv_plan_fh"
-        android:layout_marginLeft="17dp"
-        android:textSize="30sp"
-        android:textColor="@color/login_black"
-        />
-   <android.support.v7.widget.RecyclerView
-       android:id="@+id/rv_myissue"
-       android:layout_below="@+id/tv_power"
-       android:layout_marginTop="10dp"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"/>
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        app:cpb_background_progressbar_color="@color/white"
+        app:cpb_background_progressbar_width="3dp"
+        app:cpb_progressbar_color="@color/colorAccent"
+        app:cpb_progressbar_width="3dp" />
 
 
 </RelativeLayout>

@@ -49,7 +49,7 @@
     <string name="equ_xq_waters">Water shortage</string>
     <string name="equ_xq_ishot">Heating</string>
     <string name="equ_xq_nohot">No preheating</string>
-
+    <string name="equ_xq_cp">Brew</string>
     <!--inform-->
     <string name="equ_xq_informs">Enable or disable notifications</string>
     <string name="equ_xq_finish">Brewing complete</string>
@@ -103,6 +103,7 @@
     <string name="my_power_tea4">Personal plan</string>
 
     <!--mypage-->
+    <string name="my_healthplan">Health plan</string>
     <string name="my_health">My healthy energy index</string>
     <string name="my_plan">My personal plan</string>
     <string name="my_issue">Release</string>
@@ -113,7 +114,8 @@
     <string name="my_plannum">Plan</string>
     <string name="my_friendnum">Friends</string>
     <string name="my_drink">Beverages</string>
-
+    <string name="my_like">My Favorite</string>
+    <string name="my_now">Nearest</string>
     <!--myplan-->
     <string name="plan_title">My personal plan</string>
     <string name="plan_tz">Plan to inform</string>
@@ -132,8 +134,8 @@
     <string name="drink_unit">Cup</string>
     <string name="drink_units">Unit (cup)</string>
     <string name="drink_set">Set a goal</string>
-    <string name="drink_reminder">Reminder of failure</string>
-    <string name="drink_num">Drinking</string>
+    <string name="drink_reminder">Reminder time</string>
+    <string name="drink_num">Number of brewing</string>
     <string name="drink_cup1">A cup of volume</string>
     <string name="drink_cup2">Noggin</string>
     <string name="drink_cup3">Jorum</string>

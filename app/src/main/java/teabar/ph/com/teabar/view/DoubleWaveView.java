@@ -13,6 +13,8 @@ import android.graphics.Rect;
 import android.graphics.Region;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
 
 import teabar.ph.com.teabar.R;
 
@@ -69,10 +71,10 @@ public class DoubleWaveView extends View {
         mWavePaint2.setColor(Color.parseColor("#6DF0FF"));
         mDrawFilter = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
 
-
         circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         circlePaint.setColor(Color.WHITE);
         circlePaint.setDither(true);
+
     }
 
     @Override
@@ -157,4 +159,7 @@ public class DoubleWaveView extends View {
     public void setProHeight(int i){
         proHeight=1-(0.1+((double) i)/100*0.8);
     }
+
+
+
 }

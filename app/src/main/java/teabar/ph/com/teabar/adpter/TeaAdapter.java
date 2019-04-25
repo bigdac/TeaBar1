@@ -1,6 +1,7 @@
 package teabar.ph.com.teabar.adpter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import teabar.ph.com.teabar.R;
+import teabar.ph.com.teabar.activity.MakeActivity;
 
 public class TeaAdapter extends RecyclerView.Adapter<TeaAdapter.MyViewHolder> {
 
@@ -31,7 +33,12 @@ public class TeaAdapter extends RecyclerView.Adapter<TeaAdapter.MyViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
-
+        myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mContext.startActivity(new Intent(mContext,MakeActivity.class));
+            }
+        });
     }
 
     @Override

@@ -59,12 +59,45 @@
             android:layout_height="45dp"
             android:background="@null"
             android:layout_toRightOf="@+id/iv_search_pic"
+            android:layout_toLeftOf="@+id/iv_search_del"
             android:layout_marginLeft="15dp"
             android:hint="口味、症状、目标"
             android:textColor="@color/social_gray"
             android:textSize="14sp"
             />
+        <TextView
+            android:id="@+id/tv_search_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_title"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:textSize="16sp"
+            android:textColor="@color/login_black"
+            />
+        <ImageView
+            android:id="@+id/iv_search_del"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/search_del"
+            android:layout_toLeftOf="@+id/tv_search_search"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:visibility="gone"
+            />
     </RelativeLayout>
+    <ImageView
+        android:id="@+id/iv_history_del"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@mipmap/history_del"
+        android:layout_alignTop="@+id/li_search_old"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:scaleType="centerInside"
+        android:layout_marginTop="5dp"
+        />
     <LinearLayout
         android:id="@+id/li_search_old"
         android:layout_below="@+id/rl_search_search"
@@ -82,6 +115,7 @@
             android:textColor="#333333"
             android:layout_marginTop="20dp"
             />
+
         <teabar.ph.com.teabar.view.FlowTagView
             android:id="@+id/fv_history"
             android:layout_marginTop="12dp"

@@ -24,6 +24,7 @@
             android:textSize="16sp"
             />
         <Button
+            android:id="@+id/bt_make"
             android:layout_width="96dp"
             android:layout_height="36dp"
             android:background="@drawable/weather_button"

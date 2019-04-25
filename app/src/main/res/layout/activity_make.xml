@@ -109,27 +109,14 @@
         android:layout_marginTop="5dp"
         android:layout_marginLeft="15dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:orientation="horizontal"
+        android:gravity="center"
         >
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/make_tea"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="40s"
-            android:textColor="@color/social_gray"
-            android:textSize="14sp"
-            android:layout_marginLeft="10dp"
-            />
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:src="@mipmap/make_wd"
-            android:layout_marginLeft="46dp"
             />
         <TextView
             android:layout_width="wrap_content"
@@ -137,21 +124,35 @@
             android:text="80℃"
             android:textColor="@color/social_gray"
             android:textSize="14sp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="5dp"
             />
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/make_small"
+            android:src="@mipmap/make_tea"
             android:layout_marginLeft="46dp"
             />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="小"
+            android:text="300ml"
             android:textColor="@color/social_gray"
             android:textSize="14sp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="5dp"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/make_time"
+            android:layout_marginLeft="46dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="30S"
+            android:textColor="@color/social_gray"
+            android:textSize="14sp"
+            android:layout_marginLeft="5dp"
             />
 
     </LinearLayout>
@@ -167,14 +168,26 @@
     <Button
         android:id="@+id/bt_make_make"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:text="开始冲泡"
         android:textColor="@color/white"
-        android:background="@drawable/login_button"
+        android:background="@mipmap/login_button"
         android:layout_below="@+id/iv_make_choose"
+        android:paddingBottom="10dp"
         android:layout_marginTop="50dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         />
-
+    <Button
+        android:id="@+id/bt_make_buy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="去购买"
+        android:textColor="@color/login_black"
+        android:background="@drawable/answer_button1"
+        android:layout_below="@+id/bt_make_make"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        />
 </RelativeLayout>

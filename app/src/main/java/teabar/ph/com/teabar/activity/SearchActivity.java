@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,6 +23,7 @@ import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.adpter.EvaluateAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
+import teabar.ph.com.teabar.util.chat.adpter.TextWatcherAdapter;
 import teabar.ph.com.teabar.view.FlowTagView;
 
 public class SearchActivity extends BaseActivity {
@@ -36,6 +40,12 @@ public class SearchActivity extends BaseActivity {
     FlowTagView fv_aim;
     @BindView(R.id.li_search_old)
     LinearLayout li_search_old;
+    @BindView(R.id.et_search_search)
+    EditText et_search_search;
+    @BindView(R.id.iv_search_del)
+    ImageView iv_search_del;
+    @BindView(R.id.iv_history_del)
+    ImageView iv_history_del;
     //标签类相关
     private EvaluateAdapter adapter_his, adapter_teste,adapter_function,adapter_aim;
     List<String> list=new ArrayList<>();
@@ -60,6 +70,35 @@ public class SearchActivity extends BaseActivity {
                 ScreenUtils.getStatusBarHeight());
         tv_main_1.setLayoutParams(params);
         application.addActivity(this);
+        et_search_search.addTextChangedListener(new TextWatcherAdapter() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                super.beforeTextChanged(s, start, count, after);
+
+                    iv_search_del.setVisibility(View.VISIBLE);
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                super.afterTextChanged(s);
+                if (et_search_search.length()==0){
+                    iv_search_del.setVisibility(View.GONE);
+                }
+            }
+        });
+        iv_search_del.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                et_search_search.setText("");
+            }
+        });
+        iv_history_del.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapter_his.setItems(new ArrayList<String>());
+            }
+            });
         initView();
     }
 
@@ -82,7 +121,6 @@ public class SearchActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        getHistory();
     }
     @OnClick({R.id.iv_power_fh})
     public void onClick(View view){
@@ -104,7 +142,7 @@ public class SearchActivity extends BaseActivity {
                 String e = adapter_teste.getItem(position).toString();
 //                Intent intent = new Intent( this, ShopSearchResultActivity.class);
 //                intent.putExtra("goodsName", e);
-                setHistory(e);
+//                setHistory(e);
 //                startActivity(intent);
             }
         });

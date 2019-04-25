@@ -21,7 +21,8 @@
                 android:src="@mipmap/main_online"
                 />
             <TextView
-                android:id="@+id/tv_main_water"
+
+                android:id="@+id/tv_main_online"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/equ_xq_online"
@@ -43,7 +44,7 @@
                 android:src="@mipmap/main_water"
                 />
             <TextView
-                android:id="@+id/tv_main_online"
+                android:id="@+id/tv_main_water"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/equ_xq_waterf"
@@ -89,6 +90,7 @@
         android:textSize="30sp"
         />
     <ImageView
+        android:id="@+id/iv_equ_add"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@mipmap/equ_add1"

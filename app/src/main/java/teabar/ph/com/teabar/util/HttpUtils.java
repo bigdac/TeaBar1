@@ -40,7 +40,8 @@ import teabar.ph.com.teabar.base.MyApplication;
 public class HttpUtils {
 
 //    public static String ipAddress="http://168v7u7115.iask.in:32054";
-public static String ipAddress="http://192.168.1.24:8081";
+//public static String ipAddress="http://192.168.1.24:8081";
+    public static String ipAddress="http://47.98.131.11:8081";
     public static String Address="http://192.168.1.27:8094";
     public static String getInputStream(InputStream is) {
         String result = null;

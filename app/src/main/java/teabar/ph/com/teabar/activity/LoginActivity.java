@@ -36,6 +36,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
 import com.ph.teabar.database.dao.DaoImp.UserEntryImpl;
 import com.ph.teabar.database.dao.UserEntryDao;
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
@@ -64,7 +65,9 @@ import okhttp3.Request;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
+import teabar.ph.com.teabar.pojo.Equpment;
 import teabar.ph.com.teabar.pojo.UserEntry;
+import teabar.ph.com.teabar.service.MQService;
 import teabar.ph.com.teabar.util.FacebookHelper;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.NetWorkUtil;
@@ -98,6 +101,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
     private static int RC_SIGN_IN=10001;
     QMUITipDialog tipDialog;
     UserEntryImpl userEntryDao;
+    EquipmentImpl equipmentDao;
     @Override
     public void initParms(Bundle parms) {
 
@@ -130,6 +134,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                 ScreenUtils.getStatusBarHeight());
         tv_main_1.setLayoutParams(params);
         userEntryDao = new UserEntryImpl(getApplicationContext());
+        equipmentDao = new EquipmentImpl(getApplicationContext());
         et_login_user.setText(preferences.getString("user", ""));
         et_login_pasw.setText(preferences.getString("password", ""));
         callbackManager = CallbackManager.Factory.create();
@@ -497,18 +502,22 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
             switch (s) {
 
                 case "200":
-                    tipDialog.dismiss();
+
 //                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     LoginJM();
 //                    toast( "登录成功");
 
                     break;
                 case "4000":
-                    tipDialog.dismiss();
+                    if (tipDialog!=null&&tipDialog.isShowing()){
+                        tipDialog.dismiss();
+                    }
                     toast( "连接超时，请重试");
                     break;
                 default:
-                    tipDialog.dismiss();
+                    if (tipDialog!=null&&tipDialog.isShowing()){
+                        tipDialog.dismiss();
+                    }
                     toast( returnMsg1);
                     break;
 
@@ -564,18 +573,22 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
             switch (s) {
 
                 case "200":
-                    tipDialog.dismiss();
+
 //                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     LoginJM();
                     toast( "登录成功");
 
                     break;
                 case "4000":
-                    tipDialog.dismiss();
+                    if (tipDialog!=null&&tipDialog.isShowing()){
+                        tipDialog.dismiss();
+                    }
                     toast( "连接超时，请重试");
                     break;
                 default:
-                    tipDialog.dismiss();
+                    if (tipDialog!=null&&tipDialog.isShowing()){
+                        tipDialog.dismiss();
+                    }
                     toast( returnMsg1);
                     break;
 
@@ -607,8 +620,10 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                         user = new UserEntry(userId,username, appKey);
                         userEntryDao.insert(user);
                     }
-                   startActivity( MainActivity.class);
-                   toast(  "登陆成功");
+
+                    Map<String,Object> params = new HashMap<>();
+                    params.put("userId",userId);
+                    new FindDeviceAsynTask().execute(params);
 
                 } else {
                     toast(  "登陆失败" + responseMessage);
@@ -616,4 +631,87 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
             }
         });
     }
+
+
+    class FindDeviceAsynTask extends AsyncTask<Map<String,Object>,Void,String> {
+
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+            String code = "";
+            Map<String, Object> prarms = maps[0];
+            String result =   HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/app/showUserDevice",prarms);
+
+            Log.e("back", "--->" + result);
+           if (!ToastUtil.isEmpty(result)) {
+                if (!"4000".equals(result)){
+                    try {
+                        JSONObject jsonObject = new JSONObject(result);
+                        code = jsonObject.getString("state");
+                        returnMsg1=jsonObject.getString("message1");
+                        if ("200".equals(code)) {
+                            equipmentDao.deleteAll();
+                            JSONArray returnData = jsonObject.getJSONArray("data");
+                            if (returnData.length()>0){
+                                for ( int i =0;i<returnData.length();i++){
+                                    JSONObject jsonObject1 = returnData.getJSONObject(i);
+                                    Equpment equpment = new Equpment();
+                                    equpment.setMacAdress(jsonObject1.getString("mac"));
+                                    equpment.setEqupmentId(jsonObject1.getLong("id"));
+                                    equpment.setName(jsonObject1.getString("deviceName"));
+                                    int flag = jsonObject1.getInt("flag");
+                                    if (flag==1){
+                                        equpment.setIsFirst(true);
+
+                                    }else {
+                                        equpment.setIsFirst(false);
+                                    }
+                                    equipmentDao.insert(equpment);
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    code="4000";
+                }
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            switch (s) {
+
+                case "200":
+                    if (tipDialog!=null&&tipDialog.isShowing()){
+                        tipDialog.dismiss();
+                    }
+//                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    Intent intent = new Intent(LoginActivity.this, MQService.class);
+                    startService(intent);// 启动服务
+                    startActivity( MainActivity.class);
+                    toast( "登录成功");
+
+                    break;
+                case "4000":
+                    if (tipDialog!=null&&tipDialog.isShowing()){
+                        tipDialog.dismiss();
+                    }
+                    toast( "连接超时，请重试");
+                    break;
+                default:
+                    if (tipDialog!=null&&tipDialog.isShowing()){
+                        tipDialog.dismiss();
+                    }
+                    toast( returnMsg1);
+                    break;
+
+            }
+        }
+    }
+
+
 }

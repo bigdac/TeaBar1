@@ -47,7 +47,7 @@
             android:text="88"
             android:textSize="40sp"
             android:layout_centerVertical="true"
-            android:textColor="@color/login_black"
+            android:textColor="@color/nomal_green"
             android:layout_toLeftOf="@+id/tv_ques_s"
             android:layout_marginRight="10dp"
             />
@@ -59,7 +59,7 @@
             android:textSize="16sp"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:textColor="@color/login_black"
+            android:textColor="@color/social_gray"
             android:layout_marginRight="20dp"
             />
 

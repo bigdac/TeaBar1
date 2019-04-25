@@ -13,7 +13,7 @@
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:textSize="12sp"
-       android:textColor="#FFFC4D74"
+       android:textColor="#666666"
        android:layout_centerHorizontal="true"
        android:background="@drawable/search_button"
        android:paddingTop="7dp"
@@ -21,6 +21,6 @@
        android:paddingLeft="20dp"
        android:singleLine="true"
        android:paddingRight="20dp"
-       android:text="手冰冷"/>
+       android:text="水果口味"/>
 
 </RelativeLayout>

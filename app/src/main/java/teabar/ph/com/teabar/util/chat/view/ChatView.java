@@ -85,12 +85,12 @@ public class ChatView extends RelativeLayout {
     }
 
     public void setGroupIcon() {
-        mRightBtn.setImageResource(R.drawable.jmui_group_chat_detail);
+
     }
 
     public void setListeners(ChatActivity listeners) {
         mReturnButton.setOnClickListener(listeners);
-        mRightBtn.setOnClickListener(listeners);
+
         mAtMeBtn.setOnClickListener(listeners);
     }
 

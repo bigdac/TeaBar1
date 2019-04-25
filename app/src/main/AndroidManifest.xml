@@ -52,13 +52,17 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.DrinkNumActivity">
+        <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service
+            android:name=".service.MQService"
+            android:enabled="true"
+            android:exported="true" />
         <activity android:name=".activity.RegisterActivity" />
         <!--<activity android:name=".activity.LoginActivity" />-->
         <activity android:name=".activity.MainActivity" />
@@ -79,7 +83,7 @@
             android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ImagePickerThemeFullScreen" />
-        <!--<activity android:name=".activity.DrinkNumActivity" />-->
+        <activity android:name=".activity.DrinkNumActivity" />
         <activity android:name=".activity.SetDrinkActivity" />
         <activity android:name=".activity.PersonnalActivity" />
         <activity android:name=".activity.PersonSetActivity" />
@@ -104,6 +108,9 @@
         <activity android:name=".activity.AddFriendActivity1" />
         <activity android:name=".activity.ChatActivity" />
         <activity android:name=".activity.GuideActivity" />
+        <activity android:name=".activity.NearestActivity" />
+        <activity android:name=".activity.FavoriteActivity" />
+        <activity android:name=".activity.device.AddDeviceActivity" />
     </application>
 
 </manifest>

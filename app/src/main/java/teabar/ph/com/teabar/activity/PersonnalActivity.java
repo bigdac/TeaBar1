@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -13,6 +14,7 @@ import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -46,7 +48,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -56,6 +60,7 @@ import teabar.ph.com.teabar.adpter.ImagePickerAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.util.BitmapCompressUtils;
+import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.view.GlideImageLoader;
 import teabar.ph.com.teabar.view.SelectDialog;
@@ -69,9 +74,9 @@ public class PersonnalActivity extends BaseActivity  {
     ImageView iv_power_fh;
     @BindView(R.id.iv_person_pic)
     ImageView iv_person_pic;
-
+    SharedPreferences preferences;
     MyApplication application;
-
+    long id;
 
     @Override
     public void initParms(Bundle parms) {
@@ -94,7 +99,8 @@ public class PersonnalActivity extends BaseActivity  {
             application = (MyApplication) getApplication();
         }
         application.addActivity(this);
-
+        preferences = getSharedPreferences("my",MODE_PRIVATE);
+        id = preferences.getLong("userId",0);
     }
 
     @Override
@@ -112,6 +118,9 @@ public class PersonnalActivity extends BaseActivity  {
         switch (view.getId()){
 
             case R.id.iv_power_fh:
+                if (popupWindow!=null&&popupWindow.isShowing()){
+                    popupWindow.dismiss();
+                }
                 finish();
                 break;
 
@@ -408,10 +417,64 @@ public class PersonnalActivity extends BaseActivity  {
 
                     Glide.with(PersonnalActivity.this).load(file2).transform(new GlideCircleTransform(getApplicationContext())).into(iv_person_pic);
                 }
+                Map<String,Object> params = new HashMap<>();
+                params.put("userId",id);
+                Map<String,Object> params1 = new HashMap<>();
+                params1.put("photo",file2);
+                new LoadUserInfo().execute(params,params1);
                 break;
         }
     }
 
+
+    class LoadUserInfo extends AsyncTask<Map<String,Object>,Void,String> {
+
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+            String code = "";
+            Map<String,Object> param1 = maps[0];
+            Map<String,Object> param2 = maps[1];
+            String result = HttpUtils.upFileAndDesc(HttpUtils.ipAddress+"/api/changePhoto",  param1,param2);
+            if (!TextUtils.isEmpty(result)) {
+                try {
+                    if (!"4000".equals(result)){
+
+                    }
+                    else {
+                        code="4000";
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            return code;
+        }
+
+
+        @Override
+        protected void onPostExecute(String code) {
+            super.onPostExecute(code);
+            switch (code) {
+                case "200":
+                    toast(  "上传成功");
+                    String image=preferences.getString("image","");
+                    if (!TextUtils.isEmpty(image)){
+                        File file=new File(image);
+                        if (file.exists()){
+                            file.delete();
+                        }
+                    }
+//                    preferences.edit().putString("image",file2.getPath()).commit();
+
+                    break;
+                default:
+                   toast( "上传失败");
+                    break;
+            }
+
+        }
+
+    }
     public class GlideCircleTransform extends BitmapTransformation {
         public GlideCircleTransform(Context context) {
             super(context);

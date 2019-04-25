@@ -102,6 +102,9 @@
             android:text="@string/my_power_day"
             android:gravity="center"
             android:textColor="@color/login_black"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_marginLeft="1dp"
             android:textSize="18sp"
             android:background="@drawable/power_button_left"
             />
@@ -115,6 +118,8 @@
             android:textColor="@color/login_black"
             android:textSize="18sp"
             android:background="@color/white"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
             />
         <TextView
             android:id="@+id/tv_power_month"
@@ -125,6 +130,9 @@
             android:gravity="center"
             android:textColor="@color/login_black"
             android:textSize="18sp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_marginRight="1dp"
             android:background="@drawable/power_button_right1"
             />
     </LinearLayout>

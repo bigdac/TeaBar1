@@ -20,7 +20,7 @@ public class EvaluateAdapter extends BaseAdapter {
     private List<String> list;
     private int layout;
 
-    public EvaluateAdapter(Context context, int layout) {
+    public  EvaluateAdapter(Context context, int layout) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.list =  new ArrayList<String>();

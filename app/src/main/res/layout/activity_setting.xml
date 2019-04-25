@@ -236,4 +236,18 @@
             android:layout_marginRight="24dp"
             />
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/bt_set_exsit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="退出登录"
+        android:background="@mipmap/login_button"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="70dp"
+        android:textColor="@color/white"
+        android:paddingBottom="12dp"
+        android:textSize="17sp"
+        />
 </RelativeLayout>

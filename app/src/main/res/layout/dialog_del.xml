@@ -63,7 +63,7 @@
             android:layout_weight="1"
             android:text="@string/equ_dia_esure"
             android:textSize="17sp"
-            android:textColor="#FD4D75"
+            android:textColor="@color/nomal_green"
             android:gravity="center"
             />
 

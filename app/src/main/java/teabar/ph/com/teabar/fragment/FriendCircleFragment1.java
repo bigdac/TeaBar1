@@ -320,7 +320,7 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
      */
     public static String stampToDate(String s){
         String res;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd  HH:mm");
         long lt = new Long(s);
         Date date = new Date(lt);
         res = simpleDateFormat.format(date);
@@ -607,18 +607,6 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
                 }
             }
         });
-    }
-    /**
-     * 获取状态栏高度
-     * @return
-     */
-    private int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
     }
 
     @Override

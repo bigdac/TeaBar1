@@ -22,7 +22,7 @@
             android:layout_marginLeft="17dp"
             android:padding="8dp"
             android:text="取消"
-            android:textColor="@color/social_gray"
+            android:textColor="@color/login_black"
             android:textSize="16sp"
            />
 
@@ -35,7 +35,7 @@
             android:layout_marginRight="17dp"
             android:padding="8dp"
             android:text="完成"
-            android:textColor="@color/pink1"
+            android:textColor="@color/nomal_green"
             android:textSize="16sp" />
 
         <View

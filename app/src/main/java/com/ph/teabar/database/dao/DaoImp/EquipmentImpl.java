@@ -69,18 +69,18 @@ public class EquipmentImpl {
      * @param macAddress
      * @return
      */
-//    public List<Equpment> findDeviceByMacAddress(String macAddress){
-//        return equipmentDao.queryBuilder().where(EqupmentDao.Properties.DeviceMac.eq(macAddress)).list();
-//    }
+    public List<Equpment> findDeviceByMacAddress(String macAddress){
+        return equipmentDao.queryBuilder().where(EqupmentDao.Properties.MacAdress.eq(macAddress)).list();
+    }
 
     /**
      * 根据macAddress来查询设备
      * @param macAddress
      * @return
      */
-//    public Equpment findDeviceByMacAddress2(String macAddress){
-//        return equipmentDao.queryBuilder().where(EquipmentDao.Properties.DeviceMac.eq(macAddress)).unique();
-//    }
+    public Equpment findDeviceByMacAddress2(String macAddress){
+        return equipmentDao.queryBuilder().where(EqupmentDao.Properties.MacAdress.eq(macAddress)).unique();
+    }
 
     /**
      * 根据macAddress来查询分享设备

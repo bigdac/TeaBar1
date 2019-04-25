@@ -34,28 +34,36 @@
             android:layout_below="@+id/tv_sbxq"
             android:overScrollMode="never"
             />
-    <ImageView
-        android:id="@+id/iv_equxq_xz"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:scaleType="centerInside"
-        android:src="@mipmap/equ_choose"
+    <LinearLayout
+        android:id="@+id/li_equ_choose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_below="@+id/rv_equmentxq"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="23dp"
-        />
-    <TextView
-        android:layout_toRightOf="@+id/iv_equxq_xz"
-        android:layout_alignTop="@+id/iv_equxq_xz"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:scaleType="centerInside"
-        android:gravity="center"
-        android:text="设置为默认冲泡设备"
-        android:textColor="#333333"
-        android:layout_marginLeft="12dp"
-        android:textSize="18sp"
-        />
+        >
+        <ImageView
+            android:id="@+id/iv_equxq_xz"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/set_xz2"
+            />
+        <TextView
+            android:layout_toRightOf="@+id/iv_equxq_xz"
+            android:layout_alignTop="@+id/iv_equxq_xz"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:scaleType="centerInside"
+            android:gravity="center"
+            android:text="设置为默认冲泡设备"
+            android:textColor="#333333"
+            android:layout_marginLeft="12dp"
+            android:textSize="18sp"
+            />
+    </LinearLayout>
+
 
 
 </RelativeLayout>

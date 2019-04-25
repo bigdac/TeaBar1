@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dp">
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="红枣龙眼茶"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp"
+        />
+    <TextView
+        android:layout_below="@+id/tv_name"
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:textSize="12sp"
+        android:text="养生套餐"
+        android:textColor="@color/social_gray"
+        />
+    <ImageView
+        android:id="@+id/iv_favirate_yes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/social_yes"
+        android:layout_toRightOf="@+id/tv_name"
+        android:layout_alignTop="@+id/tv_name"
+        android:layout_marginLeft="20dp"
+        />
+
+
+    <Button
+        android:id="@+id/bt_brew"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="@string/equ_xq_cp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/brew_button"
+        android:textColor="@color/nomal_green"
+        android:textSize="14sp"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#f5f5f5"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        />
+</RelativeLayout>

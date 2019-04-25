@@ -1,10 +1,17 @@
 package teabar.ph.com.teabar.activity;
 
+import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.util.Log;
@@ -14,6 +21,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 
 import org.greenrobot.eventbus.EventBus;
@@ -42,16 +50,15 @@ import teabar.ph.com.teabar.fragment.EqumentFragment;
 import teabar.ph.com.teabar.fragment.FriendCircleFragment1;
 import teabar.ph.com.teabar.fragment.FriendFragment;
 import teabar.ph.com.teabar.fragment.MailFragment;
-import teabar.ph.com.teabar.fragment.MainFragment;
-import teabar.ph.com.teabar.fragment.MainFragment1;
 import teabar.ph.com.teabar.fragment.MainFragment2;
 import teabar.ph.com.teabar.fragment.MyselfFragment;
 import teabar.ph.com.teabar.fragment.SocialFragment;
-import teabar.ph.com.teabar.fragment.TeaFragment;
-import teabar.ph.com.teabar.pojo.FriendInfor;
+import teabar.ph.com.teabar.pojo.Equpment;
+import teabar.ph.com.teabar.service.MQService;
+import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.view.NoSrcollViewPage;
 
-public class MainActivity extends BaseActivity implements FriendCircleFragment1.hidenShowView {
+public class MainActivity extends BaseActivity implements FriendCircleFragment1.hidenShowView ,EqumentFragment.EquipmentCtrl,MainFragment2.FirstEquipmentCtrl {
     @BindView(R.id.main_viewPage)
     NoSrcollViewPage main_viewPage;
     @BindView(R.id.main_tabLayout)
@@ -64,8 +71,12 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
     SocialFragment socialFragment ;
     MailFragment mailFragment ;
     MyselfFragment myselfFragment ;
-    TeaFragment teaFragment;
+    private boolean MQBound;
     public static float scale = 0 ;
+    MessageReceiver receiver;
+    EquipmentImpl equipmentDao;
+    List<Equpment> equpments;
+    public static boolean isRunning = false;
     @Override
     public void initParms(Bundle parms) {
 
@@ -80,7 +91,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
 
     @Override
     public void initView(View view) {
-
+        isRunning =true;
         scale = getApplicationContext().getResources().getDisplayMetrics().density;
         if (application == null) {
             application = (MyApplication) getApplication();
@@ -91,12 +102,73 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
         socialFragment=new SocialFragment();
         mailFragment = new MailFragment();
         myselfFragment = new MyselfFragment();
-
+        equipmentDao = new EquipmentImpl( getApplicationContext());
+        equpments= equipmentDao.findAll();
         initView();
+        //绑定services
+        MQintent = new Intent(this, MQService.class);
+        MQBound =  bindService(MQintent, MQconnection, Context.BIND_AUTO_CREATE);
+        IntentFilter intentFilter = new IntentFilter("MainActivity");
+        receiver = new  MessageReceiver();
+        registerReceiver(receiver, intentFilter);
+    }
+    Equpment msg1;
+    class MessageReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.e("qqqqqZZZZ???", "11111");
+            String msg = intent.getStringExtra("msg");
+             msg1 = (Equpment) intent.getSerializableExtra("msg1");
+             if (MainFragment2.isRunning){
+                 mainFragment.RefrashFirstEqu(msg1);
+             }
+            if (EqumentFragment.isRunning){
+                equmentFragment.RefrashFirstEqu(msg1);
+            }
+        }
     }
 
+    public Equpment getFirstEqu(){
+        if (msg1!=null){
+            return  msg1;
+        }
+         return null;
+    }
+    Intent MQintent;
+    MQService MQservice;
+    boolean boundservice;
+    ServiceConnection MQconnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MQService.LocalBinder binder = (MQService.LocalBinder) service;
+            MQservice = binder.getService();
+            boundservice = true;
+            new FirstAsynctask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            Log.e("QQQQQQQQQQQDDDDDDD", "onServiceConnected: ------->");
+        }
 
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+        }
+    };
 
+    @SuppressLint("StaticFieldLeak")
+    class  FirstAsynctask extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            for (Equpment equpment:equpments){
+                try {
+                    Thread.sleep(500);
+                    if (!ToastUtil.isEmpty(equpment.getMacAdress()))
+                    MQservice.sendFindEqu(equpment.getMacAdress());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+    }
 
     @Override
     public void doBusiness(Context mContext) {
@@ -211,7 +283,10 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
 
     @Override
     protected void onDestroy() {
-
+        if (MQBound) {
+            unbindService(MQconnection);
+        }
+        isRunning = false;
         super.onDestroy();
     }
 
@@ -221,5 +296,11 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
         if (resultCode==1000) {
             socialFragment.Refrashfriend();
         }
+    }
+
+    @Override
+    public void open(int type,String mac) {
+            MQservice.sendOpenEqu(type,mac);
+        Log.e(TAG, "open: --------------->"+type+">>>>>>"+mac );
     }
 }
