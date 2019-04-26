@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.LoginActivity;
+import teabar.ph.com.teabar.activity.login.LoginActivity;
 
 public class GuideFragment extends Fragment {
     View view;

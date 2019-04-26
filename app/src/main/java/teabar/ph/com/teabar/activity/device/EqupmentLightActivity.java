@@ -1,4 +1,4 @@
-package teabar.ph.com.teabar.activity;
+package teabar.ph.com.teabar.activity.device;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +22,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
+import teabar.ph.com.teabar.activity.ChooseColorActvity;
 import teabar.ph.com.teabar.adpter.EqupmentInformAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;

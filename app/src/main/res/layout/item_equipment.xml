@@ -27,6 +27,7 @@
         android:layout_marginTop="25dp"
         >
         <TextView
+            android:id="@+id/tv_light_bj"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@drawable/light_button"
@@ -62,14 +63,15 @@
         android:layout_marginBottom="10dp"
         />
     <TextView
+        android:id="@+id/tv_equ_online"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="在线"
+        android:text="离线"
         android:textSize="14sp"
         android:layout_marginLeft="17dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="26dp"
-        android:textColor="@color/nomal_green"
+        android:textColor="@color/social_gray"
         />
 
 </RelativeLayout>

@@ -1,21 +1,11 @@
 package teabar.ph.com.teabar.fragment;
 
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
-import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.os.IBinder;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -23,21 +13,17 @@ import android.widget.TextView;
 
 import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.EquipmentDetailsActivity;
+import teabar.ph.com.teabar.activity.device.EquipmentDetailsActivity;
 import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.activity.device.AddDeviceActivity;
 import teabar.ph.com.teabar.adpter.EqupmentAdapter;
 import teabar.ph.com.teabar.base.BaseFragment;
 import teabar.ph.com.teabar.pojo.Equpment;
-import teabar.ph.com.teabar.service.MQService;
-import teabar.ph.com.teabar.util.ToastUtil;
 
 public class EqumentFragment extends BaseFragment {
 //    @BindView(R.id.rv_equment)
@@ -56,7 +42,7 @@ public class EqumentFragment extends BaseFragment {
     @BindView(R.id. li_main_title)
     LinearLayout li_main_title ;
     EquipmentImpl equipmentDao;
-
+    Equpment FirEqupment;
     String firstMac;
     boolean isOpen = false;
     @Override
@@ -71,8 +57,10 @@ public class EqumentFragment extends BaseFragment {
         equipmentDao = new EquipmentImpl(getActivity().getApplicationContext());
         equpments= equipmentDao.findAll();
         for (int i = 0;i<equpments.size();i++){
-            if (equpments.get(i).getIsFirst())
-            firstMac = equpments.get(i).getMacAdress();
+            if (equpments.get(i).getIsFirst()){
+                firstMac = equpments.get(i).getMacAdress();
+                FirEqupment = equpments.get(i);
+            }
         }
         equpmentAdapter = new EqupmentAdapter(getActivity(),equpments);
         rv_equment.setLayoutManager( new GridLayoutManager(getActivity(),2));
@@ -84,7 +72,7 @@ public class EqumentFragment extends BaseFragment {
                     Equpment equpment = equpmentAdapter.getmData().get(position);
                     Intent intent = new Intent(getActivity(),EquipmentDetailsActivity.class);
                     intent.putExtra("equment",equpment);
-                    startActivity(intent);
+                    startActivityForResult(intent,6000);
             }
 
             @Override
@@ -104,6 +92,13 @@ public class EqumentFragment extends BaseFragment {
                          type=1;
                      }
                      equipmentCtrl.open(type,mac);
+                 }
+                 if (equpmentAdapter.getmData().get(position).getIsFirst()){
+                     if (equpmentAdapter.getmData().get(position).getMStage()==0){
+                         li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
+                     }else {
+                         li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
+                     }
                  }
             }
         });
@@ -131,6 +126,13 @@ public class EqumentFragment extends BaseFragment {
     public  interface EquipmentCtrl{
         void open(int type,String mac);
     }
+
+    //刷新全部设备
+    public void RefrashChooseEqu(){
+        equpments = equipmentDao.findAll();
+        equpmentAdapter.setEqumentData1(equpments);
+    }
+
     public void  RefrashFirstEqu1(){
         Equpment equpment =  ((MainActivity)getActivity()).getFirstEqu();
         if (equpment!=null){
@@ -145,7 +147,7 @@ public class EqumentFragment extends BaseFragment {
             }else {
                 tv_main_hot.setText("未预热");
             }
-            if (equpment.getMStage()==5){
+            if (equpment.getMStage()==0){
                 li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
             }else {
                 li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
@@ -168,7 +170,7 @@ public class EqumentFragment extends BaseFragment {
         }else {
             tv_main_hot.setText("未预热");
         }
-        if (equpment.getMStage()==5){
+        if (equpment.getMStage()==0){
             li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
         }else {
             li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
@@ -181,17 +183,24 @@ public class EqumentFragment extends BaseFragment {
     public  void onClick(View view){
         switch (view.getId()){
             case R.id.iv_equ_add:
-                startActivity(new Intent(getActivity(),AddDeviceActivity.class));
+                Intent intent = new Intent(getActivity(),AddDeviceActivity.class);
+                startActivityForResult(intent,4000);
                 break;
 
             case R.id.li_main_title:
                 if (isOpen){
                     li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
                     equipmentCtrl.open(1, firstMac );
+
+                    FirEqupment.setMStage(0);
+                    RefrashAllEqu(FirEqupment.getMacAdress(),FirEqupment);
                     isOpen=false;
                 }else {
                     li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
                     equipmentCtrl.open(0,firstMac );
+
+                    FirEqupment.setMStage(2);
+                    RefrashAllEqu(FirEqupment.getMacAdress(),FirEqupment);
                     isOpen= true;
                 }
                 break;

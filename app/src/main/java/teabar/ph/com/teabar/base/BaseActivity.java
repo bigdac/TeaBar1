@@ -18,8 +18,6 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.ph.teabar.database.dao.DaoImp.FriendInforImpl;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.io.File;
 
 import butterknife.ButterKnife;
@@ -28,12 +26,6 @@ import cn.jpush.im.android.api.callback.GetUserInfoCallback;
 import cn.jpush.im.android.api.event.ContactNotifyEvent;
 import cn.jpush.im.android.api.event.LoginStateChangeEvent;
 import cn.jpush.im.android.api.model.UserInfo;
-import cn.jpush.im.api.BasicCallback;
-import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.LoginActivity;
-import teabar.ph.com.teabar.activity.MainActivity;
-import teabar.ph.com.teabar.bean.FirstEvent;
-import teabar.ph.com.teabar.fragment.FriendFragment;
 import teabar.ph.com.teabar.pojo.FriendInfor;
 import teabar.ph.com.teabar.util.LogUtil;
 import teabar.ph.com.teabar.util.SharePreferenceManager;

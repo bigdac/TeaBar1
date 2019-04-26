@@ -1,24 +1,17 @@
 package teabar.ph.com.teabar.activity.device;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -45,15 +38,12 @@ import com.bumptech.glide.request.target.Target;
 import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -337,10 +327,10 @@ public class AddDeviceActivity extends BaseActivity {
 
                 case "200":
                         toast(returnMsg1);
-                    if (tipDialog.isShowing()){
-                        tipDialog.dismiss();
-                    }
-                        finish();
+                    Map<String,Object> params = new HashMap<>();
+                    params.put("userId",userId);
+                    new  FindDeviceAsynTask().execute(params);
+
                     break;
                     default:
                         if (tipDialog.isShowing()){
@@ -352,6 +342,84 @@ public class AddDeviceActivity extends BaseActivity {
             }
         }
     }
+
+
+    class FindDeviceAsynTask extends AsyncTask<Map<String,Object>,Void,String> {
+
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+            String code = "";
+            Map<String, Object> prarms = maps[0];
+            String result =   HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/app/showUserDevice",prarms);
+
+            Log.e("back", "--->" + result);
+            if (!ToastUtil.isEmpty(result)) {
+                if (!"4000".equals(result)){
+                    try {
+                        JSONObject jsonObject = new JSONObject(result);
+                        code = jsonObject.getString("state");
+                        returnMsg1=jsonObject.getString("message1");
+                        if ("200".equals(code)) {
+                            equipmentDao.deleteAll();
+                            JSONArray returnData = jsonObject.getJSONArray("data");
+                            if (returnData.length()>0){
+                                for ( int i =0;i<returnData.length();i++){
+                                    JSONObject jsonObject1 = returnData.getJSONObject(i);
+                                    Equpment equpment = new Equpment();
+                                    equpment.setMacAdress(jsonObject1.getString("mac"));
+                                    equpment.setEqupmentId(jsonObject1.getLong("id"));
+                                    equpment.setName(jsonObject1.getString("deviceName"));
+                                    int flag = jsonObject1.getInt("flag");
+                                    if (flag==1){
+                                        equpment.setIsFirst(true);
+
+                                    }else {
+                                        equpment.setIsFirst(false);
+                                    }
+                                    equipmentDao.insert(equpment);
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    code="4000";
+                }
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            switch (s) {
+
+                case "200":
+                    if (tipDialog!=null&&tipDialog.isShowing()){
+                        tipDialog.dismiss();
+                    }
+                    setResult(2000);
+                    finish();
+                    break;
+                case "4000":
+                    if (tipDialog!=null&&tipDialog.isShowing()){
+                        tipDialog.dismiss();
+                    }
+                    toast( "连接超时，请重试");
+                    break;
+                default:
+                    if (tipDialog!=null&&tipDialog.isShowing()){
+                        tipDialog.dismiss();
+                    }
+                    toast( returnMsg1);
+                    break;
+
+            }
+        }
+    }
+
 
 
 

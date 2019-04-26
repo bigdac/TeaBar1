@@ -3,14 +3,12 @@ package teabar.ph.com.teabar.base;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 
 import java.io.File;
 
@@ -19,12 +17,7 @@ import butterknife.Unbinder;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.event.LoginStateChangeEvent;
 import cn.jpush.im.android.api.model.UserInfo;
-import cn.jpush.im.api.BasicCallback;
-import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.LoginActivity;
-import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.util.SharePreferenceManager;
-import teabar.ph.com.teabar.util.chat.DialogCreator;
 
 
 public abstract class BaseFragment extends Fragment implements View.OnClickListener {

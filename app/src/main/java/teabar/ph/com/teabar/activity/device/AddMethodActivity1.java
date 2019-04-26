@@ -1,7 +1,8 @@
-package teabar.ph.com.teabar.activity;
+package teabar.ph.com.teabar.activity.device;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -11,22 +12,31 @@ import android.widget.TextView;
 import com.jaygoo.widget.OnRangeChangedListener;
 import com.jaygoo.widget.RangeSeekBar;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
+import teabar.ph.com.teabar.adpter.MethodAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
+import teabar.ph.com.teabar.view.ArcProgressBar;
+import teabar.ph.com.teabar.view.MyView;
 
-public class EqupmentWashActivity extends BaseActivity {
-    MyApplication application;
+
+public class AddMethodActivity1 extends BaseActivity {
+
     @BindView(R.id.tv_main_1)
     TextView tv_main_1;
-    @BindView(R.id.iv_equ_fh)
-    ImageView iv_equ_fh;
-    @BindView(R.id.tv_wash_number)
-    TextView tv_wash_number;
-    private RangeSeekBar seekbar1;
+    @BindView(R.id.iv_power_fh)
+    ImageView iv_power_fh;
+    @BindView(R.id.arcprogressBar)
+    MyView arcProgressbar;
+    MyApplication application;
+    List<String> mList = new ArrayList<>();
+
     @Override
     public void initParms(Bundle parms) {
 
@@ -35,38 +45,19 @@ public class EqupmentWashActivity extends BaseActivity {
     @Override
     public int bindLayout() {
         setSteepStatusBar(true);
-        return R.layout.activity_wash;
+        return R.layout.activity_addmethod1;
     }
 
     @Override
     public void initView(View view) {
-        if (application == null) {
-            application = (MyApplication) getApplication();
-        }
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 ScreenUtils.getStatusBarHeight());
         tv_main_1.setLayoutParams(params);
+
+        if (application == null) {
+            application = (MyApplication) getApplication();
+        }
         application.addActivity(this);
-        seekbar1 = findViewById(R.id.seekbar1);
-        seekbar1.setValue(18);
-        seekbar1.setOnRangeChangedListener(new OnRangeChangedListener() {
-            @Override
-            public void onRangeChanged(RangeSeekBar view, float leftValue, float rightValue, boolean isFromUser) {
-                tv_wash_number.setText((int) leftValue+"");
-            }
-
-            @Override
-            public void onStartTrackingTouch(RangeSeekBar view,  boolean isLeft) {
-                //do what you want!!
-            }
-
-            @Override
-            public void onStopTrackingTouch(RangeSeekBar view,  boolean isLeft) {
-                //do what you want!!
-
-
-            }
-        });
 
 
     }
@@ -80,14 +71,15 @@ public class EqupmentWashActivity extends BaseActivity {
     public void widgetClick(View v) {
 
     }
-    @OnClick({R.id.iv_equ_fh })
+
+
+    @OnClick({ R.id.iv_power_fh })
     public void onClick(View view){
         switch (view.getId()){
-            case R.id.iv_equ_fh:
+
+            case R.id.iv_power_fh:
                 finish();
                 break;
-
-
 
         }
     }

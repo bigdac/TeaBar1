@@ -9,7 +9,7 @@ import cn.jpush.im.android.api.enums.ConversationType;
 import cn.jpush.im.android.api.event.NotificationClickEvent;
 import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.Message;
-import teabar.ph.com.teabar.activity.ChatActivity;
+import teabar.ph.com.teabar.activity.chat.ChatActivity;
 
 
 public class NotificationClickEventReceiver {

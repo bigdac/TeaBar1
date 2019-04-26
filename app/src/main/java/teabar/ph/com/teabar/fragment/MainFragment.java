@@ -17,15 +17,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.OnClick;
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.MakeActivity;
+import teabar.ph.com.teabar.activity.device.MakeActivity;
 import teabar.ph.com.teabar.activity.QusetionActivity;
 import teabar.ph.com.teabar.activity.SearchActivity;
 import teabar.ph.com.teabar.adpter.BaseRecyclerAdapter;

@@ -10,7 +10,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,25 +24,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.MakeActivity;
 import teabar.ph.com.teabar.activity.QusetionActivity;
 import teabar.ph.com.teabar.activity.SearchActivity;
-import teabar.ph.com.teabar.adpter.BaseRecyclerAdapter;
-import teabar.ph.com.teabar.adpter.BaseViewHolder;
-import teabar.ph.com.teabar.adpter.ClickViewPageAdapter;
 import teabar.ph.com.teabar.adpter.ClickfragAdapter;
 import teabar.ph.com.teabar.adpter.MyViewPagerAdapter;
 import teabar.ph.com.teabar.adpter.RecyclerViewAdapter;
-import teabar.ph.com.teabar.adpter.TabAdapter;
 import teabar.ph.com.teabar.adpter.WetherAdapter;
 import teabar.ph.com.teabar.base.BaseFragment;
 import teabar.ph.com.teabar.base.TabItemBean;
-import teabar.ph.com.teabar.util.DisplayUtil;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.zxing.android.CaptureActivity;
-import teabar.ph.com.teabar.view.MyLayoutManager;
 import teabar.ph.com.teabar.view.MyRecyclerView;
-import teabar.ph.com.teabar.view.MyScrollView;
 import teabar.ph.com.teabar.view.WeatherLayoutManager;
 
 

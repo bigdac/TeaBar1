@@ -1,6 +1,5 @@
-package teabar.ph.com.teabar.activity;
+package teabar.ph.com.teabar.activity.chat;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
@@ -8,15 +7,10 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -32,21 +26,15 @@ import com.lzy.imagepicker.bean.ImageItem;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.sj.emoji.EmojiBean;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import cn.jpush.im.android.api.JMessageClient;
-import cn.jpush.im.android.api.callback.GetGroupInfoCallback;
 import cn.jpush.im.android.api.content.EventNotificationContent;
-import cn.jpush.im.android.api.content.FileContent;
 import cn.jpush.im.android.api.content.ImageContent;
-import cn.jpush.im.android.api.content.LocationContent;
 import cn.jpush.im.android.api.content.TextContent;
 import cn.jpush.im.android.api.enums.ContentType;
 import cn.jpush.im.android.api.enums.ConversationType;
@@ -65,12 +53,8 @@ import cn.jpush.im.api.BasicCallback;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
-import teabar.ph.com.teabar.pojo.Event;
-import teabar.ph.com.teabar.pojo.EventType;
-import teabar.ph.com.teabar.util.SharePreferenceManager;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.chat.EmoticonsKeyboardUtils;
-import teabar.ph.com.teabar.util.chat.IdHelper;
 import teabar.ph.com.teabar.util.chat.XhsEmoticonsKeyBoard;
 import teabar.ph.com.teabar.util.chat.adpter.ChattingListAdapter;
 import teabar.ph.com.teabar.util.chat.data.EmoticonEntity;

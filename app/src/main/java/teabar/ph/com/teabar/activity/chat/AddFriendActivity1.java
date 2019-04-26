@@ -1,4 +1,4 @@
-package teabar.ph.com.teabar.activity;
+package teabar.ph.com.teabar.activity.chat;
 
 
 import android.content.Context;

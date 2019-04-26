@@ -1,4 +1,4 @@
-package teabar.ph.com.teabar.activity;
+package teabar.ph.com.teabar.activity.device;
 
 import android.app.Dialog;
 import android.content.ComponentName;
@@ -32,6 +32,7 @@ import butterknife.OnClick;
 import me.jessyan.autosize.AutoSizeCompat;
 import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
+import teabar.ph.com.teabar.activity.MethodActivity;
 import teabar.ph.com.teabar.adpter.MethodAdapter;
 import teabar.ph.com.teabar.adpter.PlanAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;

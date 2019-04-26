@@ -1,20 +1,14 @@
 package teabar.ph.com.teabar.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.MakeActivity;
-import teabar.ph.com.teabar.adpter.BaseRecyclerAdapter;
-import teabar.ph.com.teabar.adpter.BaseViewHolder;
 import teabar.ph.com.teabar.adpter.RecyclerViewAdapter;
-import teabar.ph.com.teabar.adpter.SocialAdapter;
 import teabar.ph.com.teabar.base.BaseFragment;
 import teabar.ph.com.teabar.view.MyLayoutManager;
 

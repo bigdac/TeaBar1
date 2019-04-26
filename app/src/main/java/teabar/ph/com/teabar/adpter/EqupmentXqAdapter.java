@@ -3,6 +3,7 @@ package teabar.ph.com.teabar.adpter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +22,13 @@ public class EqupmentXqAdapter extends RecyclerView.Adapter<EqupmentXqAdapter.My
     private Context context;
     private OnItemClickListener onItemClickListener;
     boolean isOpen =true;
+    private  Equpment equpment;
 
     private boolean isShare=false;
-    public EqupmentXqAdapter(Context context , List<String> list ) {
+    public EqupmentXqAdapter(Context context , List<String> list ,Equpment equpment) {
         this.context = context;
         this.mData = list;
-
+        this.equpment = equpment;
     }
 
 
@@ -47,17 +49,43 @@ public class EqupmentXqAdapter extends RecyclerView.Adapter<EqupmentXqAdapter.My
         switch (position){
             case 0:
                 holder.tv_equ_name.setText(R.string.equ_xq_name);
+                String name = equpment.getName();
+                holder.tv_equ_xq.setText(name);
+                holder.tv_equ_xq.setVisibility(View.VISIBLE);
                 break;
             case 1:
                 holder.tv_equ_name.setText(R.string.equ_xq_inform);
                 holder.tv_equ_xq.setVisibility(View.INVISIBLE);
+
                 break;
             case 2:
                 holder.tv_equ_name.setText(R.string.equ_xq_state);
                 holder.iv_equ_choose.setVisibility(View.GONE);
                 holder.tv_equ_xq.setVisibility(View.GONE);
                 holder.tv_equ_xq1.setVisibility(View.VISIBLE);
-                holder.tv_equ_xq1.setText("连接中");
+
+                String s ="";
+                switch (equpment.getMStage()){
+                    case 0:
+                        s="开机";
+                        break;
+                    case 1:
+                        s="已经预热";
+                        break;
+                    case 2:
+                        s="未预热";
+                        break;
+                    case 3:
+                        s="休眠";
+                        break;
+                    case 4:
+                        s="异常";
+                        break;
+                    case 5:
+                        s="关机";
+                        break;
+                }
+                holder.tv_equ_xq1.setText(s);
                 break;
             case 3:
                 holder.tv_equ_name.setText(R.string.equ_xq_light);
@@ -67,10 +95,12 @@ public class EqupmentXqAdapter extends RecyclerView.Adapter<EqupmentXqAdapter.My
             case 4:
                 holder.tv_equ_name.setText(R.string.equ_xq_day);
                 holder.tv_equ_xq.setVisibility(View.INVISIBLE);
+
                 break;
             case 5:
                 holder.tv_equ_name.setText(R.string.equ_xq_delt);
                 holder.tv_equ_xq.setVisibility(View.INVISIBLE);
+
                 break;
         }
 
@@ -91,9 +121,10 @@ public class EqupmentXqAdapter extends RecyclerView.Adapter<EqupmentXqAdapter.My
 
 
     }
-//    public void RefrashData(List<Equpment> list){
-//        this.mData =list;
-//    }
+    public void RefrashName(Equpment equpment){
+        this.equpment = equpment;
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getItemCount() {

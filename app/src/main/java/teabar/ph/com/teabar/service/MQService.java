@@ -33,9 +33,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import teabar.ph.com.teabar.activity.MainActivity;
-import teabar.ph.com.teabar.activity.MakeActivity;
 import teabar.ph.com.teabar.fragment.EqumentFragment;
-import teabar.ph.com.teabar.fragment.MainFragment2;
 import teabar.ph.com.teabar.pojo.Equpment;
 
 public class MQService extends Service {
@@ -321,8 +319,8 @@ public class MQService extends Service {
                         equipment.setErrorCode(errorCode);
                         equipment.setMStage(mStage);
                         equipment.setLightColor(lightColor);
-
                         equipment.setMacAdress(macAddress);
+                        equipmentDao.update(equipment);
                         if (isFirst){
                             if (MainActivity.isRunning){
                                 Intent mqttIntent = new Intent("MainActivity");

@@ -1,8 +1,7 @@
-package teabar.ph.com.teabar.activity;
+package teabar.ph.com.teabar.activity.chat;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,11 +22,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,13 +38,10 @@ import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.Mode.InfoModel;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.adpter.FriendAddAdapter;
-import teabar.ph.com.teabar.adpter.SocialInformAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.pojo.Friend;
 import teabar.ph.com.teabar.util.HttpUtils;
-import teabar.ph.com.teabar.util.ToastUtil;
-import teabar.ph.com.teabar.util.dialog.LoadDialog;
 
 
 public class AddFriendActivity extends BaseActivity {

@@ -1,4 +1,4 @@
-package teabar.ph.com.teabar.activity;
+package teabar.ph.com.teabar.activity.device;
 
 import android.content.Context;
 import android.os.Bundle;

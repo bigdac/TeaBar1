@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import teabar.ph.com.teabar.activity.LoginActivity;
+import teabar.ph.com.teabar.activity.login.LoginActivity;
 
 
 public class HandleResponseCode {

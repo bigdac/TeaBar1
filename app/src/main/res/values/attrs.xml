@@ -72,4 +72,44 @@
             <enum name="R2L" value="1" />
         </attr>
     </declare-styleable>
+
+
+    <declare-styleable name="ArcProgressBar">
+        <attr name="arcDistance" format="integer"/>
+        <attr name="arcBgColor" format="color"/>
+        <attr name="dottedDefaultColor" format="color"/>
+        <attr name="dottedRunColor" format="color"/>
+        <attr name="dottedLineCount" format="integer"/>
+        <attr name="dottedLineWidth" format="integer"/>
+        <attr name="dottedLineHeight" format="integer"/>
+        <attr name="lineDistance" format="integer"/>
+        <attr name="progressMax" format="integer"/>
+        <attr name="progressTextSize" format="integer"/>
+        <attr name="progressDesc" format="string"/>
+        <attr name="arcText" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="ColorCircleProgressView">
+        <!--定义圆环的渐变颜色-->
+        <attr name="Color01" format="color"/>
+        <attr name="Color02" format="color"/>
+        <attr name="Color03" format="color"/>
+        <attr name="Color04" format="color"/>
+        <attr name="Color05" format="color"/>
+        <attr name="Color06" format="color"/>
+        <attr name="Color07" format="color"/>
+        <!--定义圆环角度及开始位置的角度,圆环到view边框的距离-->
+        <attr name="ViewAngle" format="integer"/>
+        <attr name="StartAngle" format="integer"/>
+        <attr name="ViewPadding" format="integer"/>
+        <!--定义圆环的大小，是否圆角-->
+        <attr name="StrokeWith" format="integer"/>
+        <attr name="IsRound" format="boolean"/>
+
+        <!--定义点的大小和颜色-->
+        <attr name="PointColor" format="color"/>
+        <attr name="PointRadio" format="integer"/>
+
+    </declare-styleable>
+
 </resources>

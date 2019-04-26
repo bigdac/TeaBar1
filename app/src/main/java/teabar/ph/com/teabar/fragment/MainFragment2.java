@@ -147,10 +147,12 @@ public class MainFragment2 extends BaseFragment  {
                 if (isOpen){
                     li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
                     firstEquipmentCtrl.open(1, firstMac );
+
                     isOpen=false;
                 }else {
                     li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
                     firstEquipmentCtrl.open(0, firstMac );
+
                     isOpen= true;
                 }
 
@@ -239,6 +241,7 @@ public class MainFragment2 extends BaseFragment  {
          }
         if (equpment.getMStage()==5){
             li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
+
         }else {
             li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
         }

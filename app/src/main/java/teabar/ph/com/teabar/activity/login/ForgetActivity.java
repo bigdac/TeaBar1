@@ -1,4 +1,4 @@
-package teabar.ph.com.teabar.activity;
+package teabar.ph.com.teabar.activity.login;
 
 import android.content.Context;
 import android.content.Intent;
@@ -28,23 +28,24 @@ import butterknife.OnClick;
 import me.jessyan.autosize.AutoSizeCompat;
 import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
+import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
 
-public class RegisterActivity extends BaseActivity {
+public class ForgetActivity extends BaseActivity {
     MyApplication application;
     @BindView(R.id.tv_main_1)
     TextView tv_main_1;
-    @BindView(R.id.et_regist_nick)
-    EditText et_regist_nick;
     @BindView(R.id.et_regist_user)
     EditText et_regist_user;
     @BindView(R.id.et_regist_code)
     EditText et_regist_code;
     @BindView(R.id.et_regist_pasw)
     EditText et_regist_pasw;
+    @BindView(R.id.et_regist_pasw2)
+    EditText et_regist_pasw2;
     @BindView(R.id.bt_register_code)
     Button bt_register_code;
     SharedPreferences preferences;
@@ -59,7 +60,16 @@ public class RegisterActivity extends BaseActivity {
     @Override
     public int bindLayout() {
         setSteepStatusBar(true);
-        return R.layout.activity_register;
+        return R.layout.activity_forget;
+    }
+
+    @Override
+    public Resources getResources() {
+        //需要升级到 v1.1.2 及以上版本才能使用 AutoSizeCompat
+//        AutoSizeCompat.autoConvertDensityOfGlobal((super.getResources()));//如果没有自定义需求用这个方法
+        AutoSizeCompat.autoConvertDensity((super.getResources()), 667, false);//如果有自定义需求就用这个方法
+        return super.getResources();
+
     }
 
     @Override
@@ -73,22 +83,9 @@ public class RegisterActivity extends BaseActivity {
         tv_main_1.setLayoutParams(params);
         application.addActivity(this);
         preferences = getSharedPreferences("my", MODE_PRIVATE);
-        tipDialog = new QMUITipDialog.Builder(this)
-                .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
-                .setTipWord("请稍后...")
-                .create();
         }
 
-    @Override
-    public Resources getResources() {
-        //需要升级到 v1.1.2 及以上版本才能使用 AutoSizeCompat
-//        AutoSizeCompat.autoConvertDensityOfGlobal((super.getResources()));//如果没有自定义需求用这个方法
-        AutoSizeCompat.autoConvertDensity((super.getResources()), 667, false);//如果有自定义需求就用这个方法
-        return super.getResources();
-
-    }
-
-    @Override
+        @Override
         public void doBusiness(Context mContext) {
 
         }
@@ -97,10 +94,10 @@ public class RegisterActivity extends BaseActivity {
         public void widgetClick(View v) {
 
         }
-        @OnClick({R.id.tv_regist_login,R.id.bt_register_code,R.id.et_regist_nick,R.id.bt_regist_ensure})
+        @OnClick({R.id.iv_forget_back,R.id.bt_register_code,R.id.et_regist_nick,R.id.bt_regist_ensure})
         public void onClick(View view){
             switch (view.getId()){
-                case R.id.tv_regist_login:
+                case R.id.iv_forget_back:
                     finish();
                     break;
 
@@ -117,21 +114,16 @@ public class RegisterActivity extends BaseActivity {
                         }
                         showProgressDialog();
                         new HasCountAsyncTask().execute(params1);
-
                     }
 
                     break;
 
                 case R.id.bt_regist_ensure:
 
-                    String nick =  et_regist_nick.getText().toString().trim();
                     String code=et_regist_code.getText().toString().trim();
                     password=et_regist_pasw.getText().toString().trim();
                     user = et_regist_user.getText().toString().trim();
-                    if (TextUtils.isEmpty(nick)){
-                        toast("昵称不能为空");
-                        break;
-                    }
+                    String password2 = et_regist_pasw2.getText().toString().trim();
                     if (TextUtils.isEmpty(code)){
                         toast( "请输入验证码");
                         break;
@@ -144,21 +136,24 @@ public class RegisterActivity extends BaseActivity {
                         toast( "请输入手机号或邮箱");
                         break;
                     }
+
                     if (password.length()<6||password.length()>18){
                         toast( "密码位数应该大于6小于18");
                     }else {
-                        Map<String,Object> params=new HashMap<>();
-                        params.put("userName",nick);
-                        params.put("verification",code);
-                        params.put("password",password);
-                        if (user.contains("@")){
-                         params.put("email",user);
+                        if (password2.equals(password)) {
+                            Map<String, Object> params = new HashMap<>();
+                            params.put("verification", code);
+                            params.put("password", password);
+                            if (user.contains("@")) {
+                                params.put("email", user);
+                            } else {
+                                params.put("phone", user);
+                            }
+                            showProgressDialog();
+                            new ForgetAsyncTask().execute(params);
                         }else {
-                         params.put("phone",user);
+                            toast("两次密码输入不同");
                         }
-                        showProgressDialog();
-                        new RegistAsyncTask().execute(params);
-
                     }
                     break;
         }
@@ -166,21 +161,26 @@ public class RegisterActivity extends BaseActivity {
 
     //显示dialog
     public void showProgressDialog() {
+
+        tipDialog = new QMUITipDialog.Builder(this)
+                .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
+                .setTipWord("正在注册，请稍后")
+                .create();
         tipDialog.show();
     }
 
     /**
-     *  注册
+     *  忘记密码
      *
      */
     String returnMsg1,returnMsg2;
-    class RegistAsyncTask extends AsyncTask<Map<String,Object>,Void,String> {
+    class ForgetAsyncTask extends AsyncTask<Map<String,Object>,Void,String> {
 
         @Override
         protected String doInBackground(Map<String, Object>... maps) {
             String code = "";
             Map<String, Object> prarms = maps[0];
-            String result =   HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/api/regist",prarms);
+            String result =   HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/api/forget",prarms);
 
             Log.e("back", "--->" + result);
             if (!ToastUtil.isEmpty(result)) {
@@ -224,7 +224,7 @@ public class RegisterActivity extends BaseActivity {
                     if (tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                    startActivity(new Intent(ForgetActivity.this, MainActivity.class));
                     toast( "登录成功");
 
                     break;
@@ -336,14 +336,14 @@ public class RegisterActivity extends BaseActivity {
 
             switch (s) {
 
-                case "400":
+                case "200":
                     Map<String,Object> params1=new HashMap<>();
                     if (user.contains("@")){
                         params1.put("email",user);
                     }else {
                         params1.put("phone",user);
                     }
-                    new GetCheckCodeAsyncTask().execute(params1);
+                    new  GetCheckCodeAsyncTask().execute(params1);
                     break;
                 case "4000":
                     if (tipDialog.isShowing()){
@@ -361,6 +361,7 @@ public class RegisterActivity extends BaseActivity {
             }
         }
     }
+
     CountTimer  countTimer;
     class CountTimer extends CountDownTimer {
         public CountTimer(long millisInFuture, long countDownInterval) {

@@ -9,7 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import cn.jpush.im.android.api.model.Conversation;
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.ChatActivity;
+import teabar.ph.com.teabar.activity.chat.ChatActivity;
 import teabar.ph.com.teabar.util.chat.adpter.ChattingListAdapter;
 
 

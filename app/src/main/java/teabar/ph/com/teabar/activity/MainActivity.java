@@ -296,6 +296,9 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
         if (resultCode==1000) {
             socialFragment.Refrashfriend();
         }
+        if (resultCode==2000){
+                equmentFragment.RefrashChooseEqu();
+        }
     }
 
     @Override

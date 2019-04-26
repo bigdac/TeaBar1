@@ -1,4 +1,4 @@
-package teabar.ph.com.teabar.activity;
+package teabar.ph.com.teabar.activity.login;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
