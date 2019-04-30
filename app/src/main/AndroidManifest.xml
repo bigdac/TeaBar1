@@ -52,7 +52,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.device.AddMethodActivity1">
+        <activity android:name=".activity.login.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -64,7 +64,7 @@
             android:enabled="true"
             android:exported="true" />
         <activity android:name=".activity.login.RegisterActivity" />
-        <!--<activity android:name=".activity.LoginActivity" />-->
+        <activity android:name=".activity.login.LoginActivity" />
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.device.EquipmentDetailsActivity" />
         <activity android:name=".activity.device.EqupmentInformActivity" />
@@ -111,7 +111,9 @@
         <activity android:name=".activity.NearestActivity" />
         <activity android:name=".activity.FavoriteActivity" />
         <activity android:name=".activity.device.AddDeviceActivity" />
-        <!--<activity android:name=".activity.device.AddMethodActivity1" />-->
+        <activity android:name=".activity.device.AddMethodActivity1" />
+        <activity android:name=".activity.AllCommentActivity" />
+        <!--<activity android:name=".activity.question.BaseQuestionActivity" />-->
     </application>
 
 </manifest>

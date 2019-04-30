@@ -72,7 +72,7 @@
 
     <!--wash-->
     <string name="equ_wash_1">根据使用次数来清洗设备</string>
-    <string name="equ_wash_2">酿造次数</string>
+    <string name="equ_wash_2">冲泡次数</string>
     <string name="equ_wash_3">保存设置</string>
     <string name="equ_wash_4">次</string>
 

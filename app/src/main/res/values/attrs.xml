@@ -108,8 +108,19 @@
 
         <!--定义点的大小和颜色-->
         <attr name="PointColor" format="color"/>
+        <attr name="PointColor1" format="color"/>
         <attr name="PointRadio" format="integer"/>
-
+        <attr name="PointRadio1" format="integer"/>
     </declare-styleable>
 
+    <declare-styleable name="MySeekBar">
+        <attr name="textSize" format="dimension" />
+        <attr name="textColor" format="color" />
+        <attr name="textBackground" format="reference" />
+        <attr name="textOrientation" format="enum">
+            <enum name="top" value="1" />
+            <enum name="bottom" value="2" />
+            <enum name="center" value="3" />
+        </attr>
+    </declare-styleable>
 </resources>

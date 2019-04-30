@@ -5,10 +5,8 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.SweepGradient;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -16,10 +14,9 @@ import android.view.View;
 
 import com.jaygoo.widget.Utils;
 
-import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 
-public class MyView extends View
+public class MyView1 extends View
 {
 
     private Paint mPaint;
@@ -51,11 +48,11 @@ public class MyView extends View
         mOnProgressListener = onProgressListener;
     }
 
-    public MyView(Context context) {
+    public MyView1(Context context) {
         super(context);
     }
 
-    public MyView(Context context, AttributeSet attrs) {
+    public MyView1(Context context, AttributeSet attrs) {
         super(context, attrs);
         int color_01 = getResources().getColor(R.color.nomal_green);
         int color_02 = getResources().getColor(R.color.nomal_green);
@@ -72,17 +69,11 @@ public class MyView extends View
         TypedArray typedArray = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.ColorCircleProgressView, 0, 0);
 
         /*渐变颜色值*/
-//        mColor01 = typedArray.getColor(R.styleable.ColorCircleProgressView_Color01, color_01);
-//        mColor02 = typedArray.getColor(R.styleable.ColorCircleProgressView_Color02, color_02);
-//        mColor03 = typedArray.getColor(R.styleable.ColorCircleProgressView_Color03, color_03);
-//        mColor04 = typedArray.getColor(R.styleable.ColorCircleProgressView_Color04, color_04);
-//        mColor05 = typedArray.getColor(R.styleable.ColorCircleProgressView_Color05, color_05);
-//        mColor06 = typedArray.getColor(R.styleable.ColorCircleProgressView_Color06, color_06);
-//        mColor07 = typedArray.getColor(R.styleable.ColorCircleProgressView_Color07, color_07);
+
 
         /*圆环角度，开始的角度，到边框的距离*/
         mViewAangle = typedArray.getInteger(R.styleable.ColorCircleProgressView_ViewAngle, 180);
-        mStartAangle = typedArray.getInteger(R.styleable.ColorCircleProgressView_StartAngle, 180);
+        mStartAangle = typedArray.getInteger(R.styleable.ColorCircleProgressView_StartAngle, 0);
         mViewPadding = typedArray.getInteger(R.styleable.ColorCircleProgressView_ViewPadding, 40);
 
         /*圆环的大小及是否圆角*/
@@ -123,7 +114,7 @@ public class MyView extends View
         mPaint2.setStyle(Paint.Style.STROKE);  /*画笔为线条线条*/
         mPaint2.setStrokeWidth(mStrokeWith);     /*线条的宽*/
         mPaint2.setAntiAlias(true);               /*抗锯齿*/
-        mPaint2.setColor(Color.parseColor("#FC4D80"));
+        mPaint2.setColor(Color.parseColor("#35DAC1"));
         if(mIsRound) {mPaint2.setStrokeCap(Paint.Cap.ROUND);}  /*是否圆角*/
 
         mTextPaint = new Paint();
@@ -149,11 +140,11 @@ int width1 = 0;
         /*把宽高赋值给全局变量,得到圆心的坐标*/
         mView_x0=width/2;
         mView_y0=height/2;
-        String str = "65";
+        String str = "0";
         canvas.drawText(str, mViewPadding+50, mView_y0+15, mTextPaint);
 
-        canvas.drawText("90", width-mViewPadding-50- getTextWidth(str,mTextPaint), mView_y0+15, mTextPaint);
-        canvas.drawText("温度",mView_x0-mViewPadding/2- getTextWidth(str,mTextPaint)/2,mView_y0-20,mTextPaint);
+        canvas.drawText("30", width-mViewPadding-50- getTextWidth("30",mTextPaint), mView_y0+15, mTextPaint);
+        canvas.drawText("侵泡时间",mView_x0-mViewPadding/2- (int)(getTextWidth("侵泡时间",mTextPaint)/2.5),height-130,mTextPaint);
 //        canvas.drawText(temp,mView_x0-mViewPadding/2- getTextWidth(temp,mTextPaint1)/2,mView_y0-50,mTextPaint1);
 //        Log.i(TAG, (float) (mArcRadius + bDistance) - 2 * (mTextPaint.descent() + mTextPaint.ascent()) + "");
 
@@ -181,8 +172,18 @@ int width1 = 0;
         //角度：a0
 
 
-        if(mPointAngle<=90){mPointAngle=90;}
-        else if(mPointAngle>270&mPointAngle<=360){mPointAngle=270;}
+//        if(mPointAngle<=90){mPointAngle=90;}
+//        else if(mPointAngle>270&mPointAngle<=360){mPointAngle=270;}
+        if (mPointAngle>=90&mPointAngle<180){
+            mPointAngle=0;
+        }else if (mPointAngle>180&mPointAngle<270){
+            mPointAngle=180;
+        }
+        if (0<mPointAngle&mPointAngle<90){
+            mPointAngle=90-mPointAngle;
+        }else if (mPointAngle<=360&mPointAngle>=270){
+            mPointAngle=360-mPointAngle+90;
+        }
 
         /*将45-315范围的角度转为0-100*/
 //        if(mOnProgressListener!=null) {
@@ -193,14 +194,18 @@ int width1 = 0;
         float x0=width/2;
         float y0=height/2;
         float R = (float) ((width - mViewPadding - mViewPadding) / 2);
-        float Point_x= (float) (x0+R*Math.cos(mPointAngle*3.14/180));
-        float Point_y= (float) (y0+R*Math.sin(mPointAngle * 3.14 / 180));
-        canvas.drawArc(rectF, mStartAangle-90 , mPointAngle-90, false, mPaint2);
-        Log.e("GGGGGGGGGGGGGG", "onDraw: -->"+mPointAngle );
+        float Point_x= (float) (x0+R*Math.sin(mPointAngle*3.14/180));
+        float Point_y= (float) (y0+R*Math.cos(mPointAngle * 3.14 / 180));
+        canvas.drawArc(rectF, mStartAangle+90 ,- mPointAngle, false, mPaint2);
+//        Log.e("GGGGGGGGGGGGGG", "onDraw: -->"+(mStartAangle+90)+"...."+(mPointAngle) +"..."+mPointAngle);
         canvas.drawCircle(Point_x,Point_y,mPointRaido1,mPaint2);
         canvas.drawCircle(Point_x,Point_y,mPointRaido,mPaint1);
 
+        if(mOnProgressListener!=null) {
+            mOnProgressListener.onScrollingListener( (mPointAngle)*30/180);
+            Log.e("DDDDDD", "setCurProgress: -->"+mPointAngle +"...."+(mPointAngle)*30/180);
 
+        }
     }
 
     public int getTextWidth(String str,Paint paint){
@@ -212,9 +217,12 @@ int width1 = 0;
     }
 
     public void setCurProgress(int curProgress) {
-        this.mPointAngle = (int)(((float)curProgress-65)/25f*180)+90;
+        if (curProgress< 15){
+            this.mPointAngle = 90-(int)(((float)curProgress)/30f*180);
+        }else {
+           this.mPointAngle=360-(int)(((float)curProgress)/30f*180)+90;
+        }
 
-        Log.e("DDDDDD", "setCurProgress: -->"+mPointAngle +"...."+curProgress+";;;;"+(((float)curProgress-65)/25f*180));
     }
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -261,10 +269,7 @@ int width1 = 0;
                     double atan = Math.atan(tan_y / tan_x);
                     mPointAngle = (int) Math.toDegrees(atan) + 270;
                 }
-                if(mOnProgressListener!=null) {
 
-                    mOnProgressListener.onScrollingListener(65+(mPointAngle-90)*25/180);
-                }
 
                 /*得到点的角度后进行重绘*/
                 invalidate();
@@ -283,7 +288,7 @@ int width1 = 0;
         float get_x0 = x - mView_x0;
         float get_y0 = y - mView_y0;
 
-        if (distance>=smallCircleRadus && distance<=width1 &&((get_x0 <= 0 & get_y0 <= 0)||(get_x0 >= -10 & get_y0 <= 10)))
+        if (distance>=smallCircleRadus && distance<=width1 &&(get_x0 <= 0 & get_y0 >= -5||(get_x0 >= 0 & get_y0 >= -5)))
             return true;
         else
             return false;
@@ -301,7 +306,7 @@ private float getCircleWidth() {
 
     public interface OnProgressListener{
 
-        public void onScrollingListener( Integer progress);
+        public void onScrollingListener(Integer progress);
 
     }
 

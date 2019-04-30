@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingBottom="5dp"
+    android:padding ="5dp"
     >
 
 
@@ -18,14 +18,7 @@
             android:scaleType="fitXY"
             android:src="@mipmap/mu" />
         
-        <ImageView
-            android:id="@+id/iv_method_xz"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/loign_dian1"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
-            />
+
         <TextView
             android:id="@+id/tv_plan_name"
             android:layout_width="wrap_content"
@@ -33,16 +26,19 @@
             android:text="冲泡方法1"
             android:textColor="@color/login_black"
             android:textSize="18sp"
-            android:layout_toRightOf="@+id/iv_method_xz"
+
             android:layout_marginTop="21dp"
             android:layout_marginLeft="20dp"
             />
             <ImageView
+                android:id="@+id/iv_method_del"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@mipmap/method_close"
                 android:scaleType="centerInside"
                 android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
                 />
         <LinearLayout
             android:layout_below="@+id/tv_plan_name"
@@ -55,23 +51,11 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/make_tea"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="40s"
-                android:textColor="@color/social_gray"
-                android:textSize="14sp"
-                android:layout_marginLeft="10dp"
-                />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+
                 android:src="@mipmap/make_wd"
-                android:layout_marginLeft="46dp"
                 />
             <TextView
+                android:id="@+id/tv_method_temp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="80℃"
@@ -82,13 +66,29 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/make_small"
+                android:src="@mipmap/make_tea"
                 android:layout_marginLeft="46dp"
                 />
             <TextView
+                android:id="@+id/tv_method_capacity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="小"
+                android:text="300ml"
+                android:textColor="@color/social_gray"
+                android:textSize="14sp"
+                android:layout_marginLeft="10dp"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/make_time"
+                android:layout_marginLeft="46dp"
+                />
+            <TextView
+                android:id="@+id/tv_method_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="30s"
                 android:textColor="@color/social_gray"
                 android:textSize="14sp"
                 android:layout_marginLeft="10dp"

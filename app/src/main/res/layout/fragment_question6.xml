@@ -1,43 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/iv_question_logo"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:src="@mipmap/logo"
-        android:layout_marginTop="180dp"
+        android:layout_marginTop="80dp"
         android:layout_marginLeft="18dp"
         />
     <TextView
         android:layout_below="@+id/iv_question_logo"
-        android:id="@+id/tv_question1"
+        android:id="@+id/tv_question_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="太棒了！他是这样工作的，你告诉我越多，我越聪明"
+        android:text="你的健康目标是什么？（多项选择、无顺序）这将帮助我们个性化的"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="18dp"
         android:textColor="@color/login_black"
         />
-    <TextView
-        android:id="@+id/tv_question2"
-        android:layout_below="@+id/tv_question1"
-        android:layout_marginTop="13dp"
-        android:layout_marginLeft="18dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="能更好的帮助你。首先让我们从基础开始"
-        />
+
+    <teabar.ph.com.teabar.view.FlowTagView
+        android:id="@+id/fv_history"
+        android:layout_marginTop="12dp"
+        android:layout_below="@+id/tv_question_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </teabar.ph.com.teabar.view.FlowTagView>
+
     <Button
         android:id="@+id/bt_question1_esure"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="好的"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/tv_question2"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/brew_button"
         android:textColor="@color/nomal_green"

@@ -1,15 +1,18 @@
 package teabar.ph.com.teabar.fragment;
 
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.speech.RecognizerIntent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
 
@@ -28,6 +31,7 @@ import teabar.ph.com.teabar.pojo.Equpment;
 public class EqumentFragment extends BaseFragment {
 //    @BindView(R.id.rv_equment)
 //    RecyclerView rv_equment;
+protected static final int RESULT_SPEECH = 1;
     List<Equpment> equpments;
     EqupmentAdapter equpmentAdapter;
     public static boolean isRunning = false;
@@ -179,30 +183,48 @@ public class EqumentFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.iv_equ_add ,R.id.li_main_title})
+    @OnClick({R.id.iv_equ_add ,R.id.li_main_title,R.id.iv_equ_yy})
     public  void onClick(View view){
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.iv_equ_add:
-                Intent intent = new Intent(getActivity(),AddDeviceActivity.class);
-                startActivityForResult(intent,4000);
+                Intent intent = new Intent(getActivity(), AddDeviceActivity.class);
+                startActivityForResult(intent, 4000);
                 break;
 
             case R.id.li_main_title:
-                if (isOpen){
+                if (isOpen) {
                     li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
-                    equipmentCtrl.open(1, firstMac );
+                    equipmentCtrl.open(1, firstMac);
 
                     FirEqupment.setMStage(0);
-                    RefrashAllEqu(FirEqupment.getMacAdress(),FirEqupment);
-                    isOpen=false;
-                }else {
+                    RefrashAllEqu(FirEqupment.getMacAdress(), FirEqupment);
+                    isOpen = false;
+                } else {
                     li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
-                    equipmentCtrl.open(0,firstMac );
+                    equipmentCtrl.open(0, firstMac);
 
                     FirEqupment.setMStage(2);
-                    RefrashAllEqu(FirEqupment.getMacAdress(),FirEqupment);
-                    isOpen= true;
+                    RefrashAllEqu(FirEqupment.getMacAdress(), FirEqupment);
+                    isOpen = true;
                 }
+                break;
+
+            case R.id.iv_equ_yy:
+                /*Intent intent1 = new Intent(
+                        RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+
+                intent1.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+
+                try {
+                    startActivityForResult(intent1, RESULT_SPEECH);
+//                    txtText.setText("");
+                } catch (ActivityNotFoundException a) {
+                    Toast t = Toast.makeText(getActivity().getApplicationContext(),
+                            "Opps! Your device doesn't support Speech to Text",
+                            Toast.LENGTH_SHORT);
+                    t.show();
+                }*/
+
                 break;
         }
     }

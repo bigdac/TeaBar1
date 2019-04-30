@@ -17,6 +17,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -51,7 +53,7 @@ import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 public class FriendFragment extends BaseFragment {
 
     @BindView(R.id.tv_talk_no)
-    TextView tv_talk_no;
+    LinearLayout tv_talk_no;
     RecyclerView rv_friend;
     FriendAdapter friendAdapter ;
     private List<Conversation> mDatas = new ArrayList<Conversation>();

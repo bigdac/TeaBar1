@@ -1,6 +1,7 @@
 package teabar.ph.com.teabar.adpter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import teabar.ph.com.teabar.R;
+import teabar.ph.com.teabar.activity.AllCommentActivity;
 import teabar.ph.com.teabar.activity.ImagePagerActivity;
 import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.activity.MainActivity1;
@@ -128,6 +130,15 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
             }else {
                 holder.allMess.setVisibility(View.VISIBLE);
             }
+
+            holder.allMess.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context,AllCommentActivity.class);
+                    intent.putExtra("contentId",circleId);
+                    context.startActivity(intent);
+                }
+            });
 
             if (!isOpen[0]){
                 holder.iv_social_no.setImageResource(R.mipmap.social_no);

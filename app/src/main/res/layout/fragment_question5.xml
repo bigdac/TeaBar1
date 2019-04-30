@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv_question_logo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@mipmap/logo"
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="18dp"
+        />
+    <TextView
+        android:layout_below="@+id/iv_question_logo"
+        android:id="@+id/tv_question_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="你的体重和身高是多少？"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="18dp"
+        android:textColor="@color/login_black"
+        />
+
+    <TextView
+        android:id="@+id/tv_ques_weight"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/tv_question_name"
+        android:layout_marginLeft="18dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="体重"
+        />
+    <EditText
+        android:id="@+id/et_ques_weight"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="#f5f5f5"
+        android:layout_below="@+id/tv_ques_weight"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="10dp"
+        android:hint="单位：kg"
+        />
+    <TextView
+        android:id="@+id/tv_ques_tall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="身高"
+        android:layout_below="@+id/et_ques_weight"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="20dp"
+        />
+    <EditText
+        android:id="@+id/et_ques_tall"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="#f5f5f5"
+        android:layout_below="@+id/tv_ques_tall"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="10dp"
+        android:hint="单位：cm"
+        />
+
+    <Button
+        android:id="@+id/bt_question1_esure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="好的"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/brew_button"
+        android:textColor="@color/nomal_green"
+        android:layout_marginTop="50dp"
+        />
+
+</RelativeLayout>
