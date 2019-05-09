@@ -42,23 +42,23 @@ public class ClickViewPageAdapter extends FragmentPagerAdapter {
             case 0:
                 //drawable代码在文章最后贴出
                 iv.setImageDrawable(context.getResources().getDrawable(R.drawable.rb_memu_icon1));
-                tv.setText("茶饮");
+                tv.setText(R.string.menu_tea);
                 break;
             case 1:
                  iv.setImageDrawable(context.getResources().getDrawable(R.drawable.rb_memu_icon2));
-                tv.setText("设备");
+                tv.setText(R.string.menu_equ);
                 break;
             case 2:
                 iv.setImageDrawable(context.getResources().getDrawable(R.drawable.rb_memu_icon3));
-                tv.setText("社区");
+                tv.setText(R.string.menu_sq);
                 break;
             case 3:
                 iv.setImageDrawable(context.getResources().getDrawable(R.drawable.rb_memu_icon4));
-                tv.setText("商城");
+                tv.setText(R.string.menu_sc);
                 break;
             case 4:
                 iv.setImageDrawable(context.getResources().getDrawable(R.drawable.rb_memu_icon5));
-                tv.setText("我的");
+                tv.setText(R.string.menu_wd);
                 break;
 
         }

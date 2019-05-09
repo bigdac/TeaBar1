@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="4dp"
+    >
+    <RelativeLayout
+        android:id="@+id/rl_mail"
+        android:layout_width="165dp"
+        android:layout_height="230dp">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/teacard"
+            android:scaleType="fitXY"
+            />
+        
+        <ImageView
+            android:id="@+id/iv_mail_pic"
+            android:layout_width="135dp"
+            android:layout_height="160dp"
+            android:padding="8dp"
+            android:scaleType="centerCrop"
+            android:layout_centerHorizontal="true"
+           />
+        <TextView
+            android:id="@+id/tv_mail_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="红枣龙眼茶"
+            android:textColor="#333333"
+            android:layout_below="@+id/iv_mail_pic"
+            android:layout_toLeftOf="@+id/iv_mail_xa"
+            android:layout_alignLeft="@+id/iv_mail_pic"
+            android:layout_marginTop="15dp"
+            android:textSize="16sp"
+            />
+
+        <ImageView
+            android:id="@+id/iv_mail_xa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/social_no"
+            android:layout_below="@+id/iv_mail_pic"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            />
+    </RelativeLayout>
+
+
+</LinearLayout>

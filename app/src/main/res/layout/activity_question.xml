@@ -18,60 +18,64 @@
         android:scaleType="centerInside"
         android:src="@mipmap/login_back"
         />
-    <TextView
-        android:id="@+id/tv_power"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/question_title"
+    <ImageView
+        android:id="@+id/iv_question_logo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@mipmap/logo"
         android:layout_below="@+id/iv_power_fh"
-        android:layout_marginLeft="17dp"
-        android:layout_centerHorizontal="true"
-        android:textSize="20sp"
-        android:textColor="@color/login_black"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="15dp"
         />
     <TextView
-        android:id="@+id/tv_ques_style"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/question_style"
-        android:layout_below="@+id/tv_power"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
-        android:textColor="@color/login_black"
-        android:textSize="28sp"
-        />
-    <TextView
-        android:id="@+id/tv_ques_xq"
-        android:layout_below="@+id/tv_ques_style"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="您的皮肤看起来是怎样的？"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:textColor="#999999"
-        />
-    <teabar.ph.com.teabar.view.FlowTagView
-        android:id="@+id/fv_answer"
-        android:layout_below="@+id/tv_ques_xq"
-        android:layout_marginTop="40dp"
-        android:layout_marginLeft="17dp"
-        android:layout_marginRight="17dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-    </teabar.ph.com.teabar.view.FlowTagView>
+        android:id="@+id/tv_question_title1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="皮肤状态"
+        android:layout_below="@+id/iv_question_logo"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:textSize="20sp"
+        android:textColor="#333333"
+        />
+    <TextView
+
+        android:id="@+id/tv_question_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="1.填寫是為了"
+        android:layout_below="@+id/iv_question_logo"
+        android:layout_marginTop="70dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:textSize="15sp"
+        android:textColor="#333333"
+        />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_question_da"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_question_title"
+        android:layout_marginTop="20dp"
+        android:overScrollMode="never"
+        android:paddingBottom="90dp"
+        />
+
     <Button
         android:id="@+id/bt_question_finish"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:textSize="14sp"
-        android:text="完成"
+        android:textSize="16sp"
+        android:paddingBottom="10dp"
+        android:text="@string/question_button"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="20dp"
-        android:layout_marginLeft="76dp"
-        android:layout_marginRight="76dp"
-        android:background="@drawable/login_button"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@mipmap/login_button"
         />
 
 </RelativeLayout>

@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">MultiLanguages</string>
+    <string name="app_name">TeaBar</string>
     <string name="language_auto">自动</string>
     <string name="language_traditional">繁體</string>
     <string name="dialog_title">Please Select Color</string>
@@ -8,33 +8,40 @@
     <string name="facebook_app_id">630899240681105</string>
 
     <string name="login_tv_login">Login</string>
-    <string name="login_tv_regist">Regist</string>
+    <string name="login_tv_regist">Register</string>
     <string name="login_tv_welcom">Hello! Welcome to LIFY</string>
     <string name="login_et_user">Phone number or email address</string>
-    <string name="login_tv_forget">Forget Password</string>
+    <string name="login_tv_forget">Forgot Password</string>
      <string name="login_et_pass">Password</string>
     <string name="login_et_pass1">Confirm Password</string>
     <string name="login_tv_clause1">By logging in you agree to Lify terms</string>
     <string name="login_tv_clause2">《Privacy policy and terms》</string>
-
+    <string name="login_tv_third">Three parties login</string>
 
     <!--register-->
     <string name="regist_tv_welcom">现在创建您的LIFY账号</string>
-    <string name="regist_et_nick">昵称</string>
-    <string name="login_et_code">验证码</string>
-    <string name="login_bt_getcode">获取验证码</string>
-    <string name="login_bt_regist">注册</string>
+    <string name="regist_et_nick">Name</string>
+    <string name="login_et_code">Verification code</string>
+    <string name="login_bt_getcode">Get code</string>
+    <string name="login_bt_regist">Register</string>
+
+    <!--menu-->
+    <string name="menu_tea">Brew</string>
+    <string name="menu_equ">Machine</string>
+    <string name="menu_sq">Community</string>
+    <string name="menu_sc">Shop</string>
+    <string name="menu_wd">Profile</string>
 
     <!--encourage-->
     <string name="encourage_bt_in">IN</string>
 
     <!--equipment-->
-    <string name="equ_xq_title">Equipment Details</string>
-    <string name="equ_xq_name">Equipment Name</string>
+    <string name="equ_xq_title">Machine Details</string>
+    <string name="equ_xq_name">Machine Name</string>
     <string name="equ_xq_inform">Notification</string>
     <string name="equ_xq_state">Status</string>
     <string name="equ_xq_light">Light Setting</string>
-    <string name="equ_xq_day">Cleaning Period</string>
+    <string name="equ_xq_day">Washing Cycle</string>
     <string name="equ_xq_delt">Delete</string>
 
     <string name="equ_dia_del">Cancel</string>
@@ -50,6 +57,14 @@
     <string name="equ_xq_ishot">Heating</string>
     <string name="equ_xq_nohot">No preheating</string>
     <string name="equ_xq_cp">Brew</string>
+
+    <string name="equ_xq_star">Star Brew</string>
+    <string name="equ_xq_buy">Shop Now</string>
+    <string name="equ_xq_method">Brewing Method</string>
+    <string name="equ_xq_yc">Advantage</string>
+    <string name="equ_xq_pl">Dosing:</string>
+    <string name="equ_xq_kw">Series</string>
+
     <!--inform-->
     <string name="equ_xq_informs">Enable or disable notifications</string>
     <string name="equ_xq_finish">Brewing complete</string>
@@ -57,45 +72,60 @@
     <string name="equ_xq_water">Under water</string>
     <string name="equ_xq_full">The capsule waste box is full</string>
     <string name="equ_xq_wash">The cleaning cycle is over</string>
-
+    <string name="equ_xq_jpz">Infusion Process</string>
+    <string name="equ_xq_stopjp">Stop</string>
+    <string name="equ_xq_cpwc">Finish</string>
+    <string name="equ_xq_sc">Collect</string>
+    <string name="equ_xq_fx">Share</string>
+    <string name="equ_xq_xg">Modification</string>
+    <string name="equ_xq_hdmr">Back default</string>
+    <string name="equ_xq_temp">Temp</string>
+    <string name="equ_xq_time">Soak time</string>
+    <string name="equ_xq_mr">Set as the default brewing machine</string>
     <!--light-->
-    <string name="equ_light_light">The color of the light</string>
+    <string name="equ_light_light">Lighting Colour</string>
     <string name="equ_light_mode">Mode</string>
     <string name="equ_light_cz">Reset</string>
     <string name="equ_light_lightset">Light color Settings</string>
 
     <!--mode-->
-    <string name="equ_mode_1">Breathe</string>
+    <string name="equ_mode_1">Breathing</string>
     <string name="equ_mode_2">Random</string>
-    <string name="equ_mode_3">Often</string>
+    <string name="equ_mode_3">Always On</string>
 
     <!--wash-->
-    <string name="equ_wash_1">Clean equipment according to frequency of use</string>
-    <string name="equ_wash_2">Brewing times</string>
-    <string name="equ_wash_3">Save settings</string>
+    <string name="equ_wash_1">Set reminder according to number of brews</string>
+    <string name="equ_wash_2">Number of Brews</string>
+    <string name="equ_wash_3">Save</string>
     <string name="equ_wash_4">Number</string>
 
 
     <!--social-->
-    <string name="social_circle_title">Circle</string>
-    <string name="social_circle_message">Message</string>
-    <string name="social_inform_title">Inform</string>
+    <string name="social_circle_title">Community</string>
+    <string name="social_circle_message">News</string>
+    <string name="social_inform_title">Notifications</string>
     <string name="social_inform_add">Request to add you as a friend</string>
     <string name="social_inform_esure">Accept</string>
     <string name="social_friend_list">Friend list</string>
     <string name="social_friend_add">Add friends</string>
     <string name="social_friend_search">Search nickname or ID number</string>
     <string name="social_friend_add1">Add</string>
+    <string name="social_friend_publish">Publish</string>
+    <string name="social_friend_star">Start typing your content here</string>
     <!--power-->
-    <string name="my_power_title">Energy index diagram</string>
+    <string name="my_power_title">Your body score</string>
+    <string name="my_power_title1">Your body is not balanced, I hope you love your body</string>
+    <string name="my_power_s1">Physical Condition</string>
+    <string name="my_power_s2">Living Habit </string>
+    <string name="my_power_s3">Dietary Habit </string>
+    <string name="my_power_s4">Emotion Management </string>
     <string name="my_power_day">Day</string>
     <string name="my_power_week">Week</string>
     <string name="my_power_month">Month</string>
-
     <!--homepage-->
     <string name="main_home_page">Home Page</string>
     <string name="main_home_hello">Hello</string>
-    <string name="my_power_know">Health knowledge</string>
+    <string name="my_power_know">Health Tips of the Day</string>
     <string name="main_home_title">Please fill in the questionnaire in order to recommend a suitable individual tea drinking plan for you.</string>
     <string name="my_power_tea1">Herbal series</string>
     <string name="my_power_tea2">Fruit series</string>
@@ -103,31 +133,34 @@
     <string name="my_power_tea4">Personal plan</string>
 
     <!--mypage-->
-    <string name="my_healthplan">Health plan</string>
+    <string name="my_healthplan">Wellness Programs</string>
     <string name="my_health">My healthy energy index</string>
-    <string name="my_plan">My personal plan</string>
-    <string name="my_issue">Release</string>
-    <string name="my_ask">My questionnaire records</string>
+    <string name="my_plan">My Wellness Programs</string>
+    <string name="my_issue">My Posts</string>
+    <string name="my_ask">My Lify Score Records</string>
     <string name="my_setting">Setting</string>
-    <string name="my_today">Today goal</string>
-    <string name="my_teanum">Tea drinkers</string>
-    <string name="my_plannum">Plan</string>
+    <string name="my_today">Today\'s goal</string>
+    <string name="my_teanum">Number of Brews</string>
+    <string name="my_plannum">Programs</string>
     <string name="my_friendnum">Friends</string>
     <string name="my_drink">Beverages</string>
     <string name="my_like">My Favorite</string>
-    <string name="my_now">Nearest</string>
+    <string name="my_now">Most Recent</string>
     <!--myplan-->
-    <string name="plan_title">My personal plan</string>
-    <string name="plan_tz">Plan to inform</string>
-    <string name="plan_time">Reminder time</string>
-
+    <string name="plan_title">My Wellness Programs</string>
+    <string name="plan_tz">Set Reminder</string>
+    <string name="plan_time">Reminder Time</string>
+    <string name="buyplan_health">A Health Plan</string>
+    <string name="buyplan_about">About</string>
+    <string name="buyplan_td">Feature</string>
+    <string name="buyplan_yys">Nutritionist Certification</string>
     <!--setting-->
-    <string name="set_name">ID</string>
-    <string name="set_pass">Change password </string>
-    <string name="set_mess">Message reminding</string>
-    <string name="set_person">User feedback</string>
-    <string name="set_update">Version updating</string>
-    <string name="set_clean">Wipe cache</string>
+    <string name="set_name">Account ID</string>
+    <string name="set_pass">Change Password </string>
+    <string name="set_mess">Notifications </string>
+    <string name="set_person">Users Feedback</string>
+    <string name="set_update">Version Updates</string>
+    <string name="set_clean">Erase storage</string>
     <string name="set_now">Current version:</string>
 
     <!--drink-->
@@ -141,7 +174,7 @@
     <string name="drink_cup3">Jorum</string>
     <string name="drink_size1">About 200 ml</string>
     <string name="drink_size2">About 300 ml</string>
-    <string name="drink_save">Save settings</string>
+    <string name="drink_save">Save</string>
     <string name="drink_method">Brew list</string>
     <string name="drink_makemethod">Brewing method</string>
 
@@ -174,11 +207,35 @@
     <string name="search_history">History</string>
 
     <!--question-->
-    <string name="question_title">20 Questions</string>
-    <string name="question_style">My physical condition</string>
-    <string name="question_score">Your body score</string>
-    <string name="question_plan">Referral program</string>
+    <string name="question_button">Next</string>
+
 
     <!--talk-->
-    <string name="somebody_at_me">[有人@我]</string>
+    <string name="somebody_at_me">[Somebody@Me]</string>
+    <string name="talk_nomes">No chat content</string>
+
+    <!--tea-->
+    <string name="tea_kouwei_cb">Herbal Wellness Series</string>
+    <string name="tea_kouwei_sg">Fruit Tea Series</string>
+    <string name="tea_kouwei_gn">Healing Tea Series</string>
+    <string name="tea_kouwei_tj">Recommend tea</string>
+    <string name="tea_kouwei_tjti">We recommend it to you:</string>
+    <string name="tea_kouwei_xa">One click to add favorite</string>
+    <string name="tea_kouwei_tg">Skip</string>
+    <!--adress-->
+    <string name="adress_xz">Select Address</string>
+    <string name="adress_hot">Hot countries/Regions</string>
+    <string name="adress_country">All the countries</string>
+    <string name="adress_hot_1">Chinese</string>
+    <string name="adress_hot_2">the United States</string>
+    <string name="adress_hot_4">Hong Kong,China</string>
+    <string name="adress_hot_7">Macau,China,</string>
+    <string name="adress_hot_8">UK</string>
+    <string name="adress_hot_10">Taiwan,China </string>
+
+    <!--dialog-->
+    <string name="dialog_love_title">Add favorite</string>
+    <string name="dialog_love_deltitle">Delete favorite</string>
+    <string name="dialog_love_title1">Whether to add favorites or not</string>
+    <string name="dialog_love_deltitle1">Whether to Delete Favorites</string>
 </resources>

@@ -57,26 +57,14 @@
         android:layout_marginTop="40dp"
         />
 
-    <TextView
-        android:id="@+id/tv_login_welcom"
-        android:layout_below="@+id/iv_login_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/login_tv_welcom"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:textColor="@color/login_black"
-        android:textSize="18sp"
-        />
-
 
     <EditText
         android:id="@+id/et_login_user"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_below="@+id/tv_login_welcom"
+        android:layout_below="@+id/iv_login_logo"
         android:layout_marginLeft="26dp"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="60dp"
         android:layout_marginRight="26dp"
         android:background="@drawable/login_edtext"
         android:hint="@string/login_et_user"
@@ -179,7 +167,7 @@
             android:id="@+id/tv_third_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="第三方登录"
+            android:text="@string/login_tv_third"
             android:textColor="#bbbbbb"
             android:textSize="15sp"
             android:layout_centerInParent="true"

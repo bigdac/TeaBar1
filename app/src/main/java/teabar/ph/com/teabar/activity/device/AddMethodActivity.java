@@ -129,13 +129,11 @@ public class AddMethodActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.rl_drink_smal:
-                iv_drink_scup.setImageResource(R.mipmap.cup_s1);
-                iv_drink_bcup.setImageResource(R.mipmap.cup_b2);
+
                 break;
 
             case R.id.rl_drink_big:
-                iv_drink_scup.setImageResource(R.mipmap.cup_s2);
-                iv_drink_bcup.setImageResource(R.mipmap.cup_b1);
+
                 break;
         }
     }

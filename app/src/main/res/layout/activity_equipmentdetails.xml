@@ -57,7 +57,7 @@
             android:layout_height="30dp"
             android:scaleType="centerInside"
             android:gravity="center"
-            android:text="设置为默认冲泡设备"
+            android:text="@string/equ_xq_mr"
             android:textColor="#333333"
             android:layout_marginLeft="12dp"
             android:textSize="18sp"

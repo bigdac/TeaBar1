@@ -23,7 +23,7 @@
             android:id="@+id/tv_plan_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="问卷一"
+            android:text="個人測驗一"
             android:textColor="@color/login_black"
             android:textSize="20sp"
             android:layout_marginTop="21dp"

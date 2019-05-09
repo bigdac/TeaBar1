@@ -17,6 +17,7 @@ import butterknife.OnClick;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.login.LoginActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
+import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.util.HttpUtils;
 
 public class EncourageActivity extends BaseActivity {
@@ -26,6 +27,7 @@ public class EncourageActivity extends BaseActivity {
     TextView encourage_tv_day;
     @BindView(R.id.encourage_tv_year)
     TextView encourage_tv_year;
+    MyApplication application;
     @Override
     public void initParms(Bundle parms) {
 
@@ -39,13 +41,17 @@ public class EncourageActivity extends BaseActivity {
 
     @Override
     public void initView(View view) {
+        if (application == null) {
+            application = (MyApplication) getApplication();
+        }
+        application.addActivity(this);
         new GetEncourageAsyncTask().execute();
         Calendar c = Calendar.getInstance();
         int  year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH)+1;
-        int day = c.get(Calendar.DATE);
-        encourage_tv_year.setText(year+"-"+month);
-        encourage_tv_day.setText(day+"");
+        String month = c.get(Calendar.MONTH)+1 <10 ? "0"+(c.get(Calendar.MONTH)+1):(c.get(Calendar.MONTH)+1)+"" ;
+        String day = c.get(Calendar.DATE)<10?"0"+c.get(Calendar.DATE):c.get(Calendar.DATE)+"";
+        encourage_tv_year.setText(month);
+        encourage_tv_day.setText(day);
     }
 
     @Override
@@ -96,7 +102,7 @@ public class EncourageActivity extends BaseActivity {
                     tv_encourage.setText(encouraging);
                     break;
                     default:
-                        toast(message1);
+
                         break;
             }
         }

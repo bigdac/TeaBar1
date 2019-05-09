@@ -61,8 +61,6 @@ public class WetherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 	static class ItemViewHolder extends RecyclerView.ViewHolder {
 		public ItemViewHolder(View view) {
 			super(view);
-
-
 			pic = (ImageView) view.findViewById(R.id.iv_item_pic);
 			li_weather = view.findViewById(R.id.li_weather);
 		}

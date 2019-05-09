@@ -5,29 +5,32 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
+import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,9 +38,8 @@ import java.util.List;
 import butterknife.BindView;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.MainActivity;
-import teabar.ph.com.teabar.activity.QusetionActivity;
+import teabar.ph.com.teabar.activity.question.QusetionActivity;
 import teabar.ph.com.teabar.activity.SearchActivity;
-import teabar.ph.com.teabar.adpter.ClickfragAdapter;
 import teabar.ph.com.teabar.adpter.MyViewPagerAdapter;
 import teabar.ph.com.teabar.adpter.MyplanAdapter;
 import teabar.ph.com.teabar.adpter.RecyclerViewAdapter;
@@ -46,17 +48,16 @@ import teabar.ph.com.teabar.adpter.WetherAdapter;
 import teabar.ph.com.teabar.base.BaseFragment;
 import teabar.ph.com.teabar.base.TabItemBean;
 import teabar.ph.com.teabar.pojo.Equpment;
+import teabar.ph.com.teabar.pojo.Plan;
+import teabar.ph.com.teabar.pojo.Tea;
 import teabar.ph.com.teabar.service.MQService;
+import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.zxing.android.CaptureActivity;
-import teabar.ph.com.teabar.view.MyRecyclerView;
 import teabar.ph.com.teabar.view.WeatherLayoutManager;
 
 
 public class MainFragment2 extends BaseFragment  {
-
-
-    private List<MyRecyclerView> recyclerViewList=new ArrayList<>();
 
     private ArrayList<View> views,views1;
     /**保存的选项卡的下标值*/
@@ -80,6 +81,10 @@ public class MainFragment2 extends BaseFragment  {
     LinearLayout li_main_title ;
     TeaListAdapter teaListAdapter ;
     MyplanAdapter myplanAdapter ;
+    List<Plan> planList = new ArrayList<>();
+    List<Tea> list1 = new ArrayList<>();
+    List<Tea> list2 = new ArrayList<>();
+    List<Tea> list3 = new ArrayList<>();
     List<String> list = new ArrayList<>();
     boolean isOpen = false;
     ImageView iv_main_search,iv_main_ask,iv_main_sm;
@@ -93,9 +98,15 @@ public class MainFragment2 extends BaseFragment  {
     TextView tv_main_online;
     @BindView(R.id.tv_main_hot)
     TextView tv_main_hot;
+    @BindView(R.id.tv_main_name)
+    TextView tv_main_name;
+    @BindView(R.id.tv_main_know)
+    TextView tv_main_know;
     String firstMac;
     EquipmentImpl equipmentDao;
     List<Equpment> equpments;
+    SharedPreferences preferences;
+    long userId;
     @Override
     public int bindLayout() {
         return R.layout.fragment_main2;
@@ -104,9 +115,15 @@ public class MainFragment2 extends BaseFragment  {
 
     @Override
     public void initView(View view) {
-
+        if (TextUtils.isEmpty(tips)){
+            new getTipsAsynTask().execute();//获取健康小知识
+        }
         equipmentDao = new EquipmentImpl(getActivity().getApplicationContext());
         equpments= equipmentDao.findAll();
+        preferences = getActivity().getSharedPreferences("my",Context.MODE_PRIVATE);
+        String name = preferences.getString("userName","");
+        userId = preferences.getLong("userId",0);
+        tv_main_name.setText(name);
         scrollView =view. findViewById(R.id.scrollView);
         rv_main_jh = view.findViewById(R.id.rv_main_jh);
         rv_main_tealist = view.findViewById(R.id.rv_main_tealist);
@@ -206,15 +223,15 @@ public class MainFragment2 extends BaseFragment  {
        Equpment equpment =  ((MainActivity)getActivity()).getFirstEqu();
        if (equpment!=null){
            if ("2".equals(equpment.getErrorCode()) ){
-               tv_main_water.setText("不足");
+               tv_main_water.setText(R.string.equ_xq_waters);
            }else {
-               tv_main_water.setText("充足");
+               tv_main_water.setText(R.string.equ_xq_waterf);
            }
-           tv_main_online.setText("在线");
+           tv_main_online.setText(R.string.equ_xq_online);
            if (equpment.getMStage()==1){
-               tv_main_hot.setText("已经预热");
+               tv_main_hot.setText(R.string.equ_xq_ishot);
            }else {
-               tv_main_hot.setText("未预热");
+               tv_main_hot.setText(R.string.equ_xq_nohot);
            }
            if (equpment.getMStage()==5){
                li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
@@ -229,15 +246,15 @@ public class MainFragment2 extends BaseFragment  {
     public void  RefrashFirstEqu(Equpment equpment){
 
          if ("2".equals(equpment.getErrorCode()) ){
-             tv_main_water.setText("不足");
+             tv_main_water.setText(R.string.equ_xq_waters);
          }else {
-             tv_main_water.setText("充足");
+             tv_main_water.setText(R.string.equ_xq_waterf);
          }
-        tv_main_online.setText("在线");
+        tv_main_online.setText(R.string.equ_xq_online);
          if (equpment.getMStage()==1){
-             tv_main_hot.setText("已经预热");
+             tv_main_hot.setText(R.string.equ_xq_ishot);
          }else {
-             tv_main_hot.setText("未预热");
+             tv_main_hot.setText(R.string.equ_xq_nohot);
          }
         if (equpment.getMStage()==5){
             li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
@@ -261,15 +278,25 @@ public class MainFragment2 extends BaseFragment  {
     public void onStart() {
         super.onStart();
         isRunning = true;
+        if (!TextUtils.isEmpty(tips)){
+            tv_main_know.setText(tips);//获取健康小知识
+        }
     }
 
     private void initView1() {
 
-        for (int i= 0 ;i<3;i++){
-            list.add(i+"");
+        if (list.size()<3){
+            for (int i= 0 ;i<3;i++){
+                list.add(i+"");
+            }
         }
-        teaListAdapter = new TeaListAdapter(getActivity(),list);
-        myplanAdapter = new MyplanAdapter(getActivity(),list);
+        teaListAdapter = new TeaListAdapter(getActivity(),list,list1,list2,list3);
+        teaListAdapter.update(list3,list2,list1);
+        myplanAdapter = new MyplanAdapter(getActivity(),planList);
+        if (planList.size()==0){
+            new getAllPlanAsynTask().execute();
+        }
+        Log.e(TAG, "initView1: -->"+planList.size()+"...."+list1.size()+"...."+tips );
         LinearLayoutManager linearLayoutManager  = new LinearLayoutManager(getActivity());
         rv_main_tealist.setLayoutManager(linearLayoutManager);
         rv_main_tealist.setAdapter(teaListAdapter);
@@ -280,6 +307,7 @@ public class MainFragment2 extends BaseFragment  {
         rv_main_jh.setAdapter(myplanAdapter);
         rv_main_jh.setHasFixedSize(true);
         rv_main_jh.setNestedScrollingEnabled(false);
+
     }
 
     @Override
@@ -287,11 +315,10 @@ public class MainFragment2 extends BaseFragment  {
         super.onStop();
         isRunning =false;
         Log.e(TAG, "onStop: -->" );
-        if (mWetherAdapter!=null)
-            mWetherAdapter=null;
-        list.clear();
-        recyclerViewList.clear();
-        recyclerViewAdapter2=null;
+//        list.clear();
+//        if (mWetherAdapter!=null)
+//            mWetherAdapter=null;
+//        recyclerViewAdapter2=null;
 
   }
 
@@ -320,11 +347,9 @@ public class MainFragment2 extends BaseFragment  {
             tv_tab_bz.setAdapter(mWetherAdapter);
             //添加分割线
             //设置添加删除动画
-            //调用ListView的setSelected(!ListView.isSelected())方法，这样就能及时刷新布局
+
             tv_tab_bz.setSelected(true);
-//        }else{
-//            mWetherAdapter.notifyDataSetChanged();
-//        }
+//
 
 
         //初始化ViewPager项布局
@@ -332,7 +357,6 @@ public class MainFragment2 extends BaseFragment  {
         for (int i = 0; i < mTabItemBeanArrayList1.size(); i++) {
             View view1 = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_weatherlist, null);
             final RecyclerView recycler_view2 = view1.findViewById(R.id.rv_weatherlist);
-
             recyclerViewAdapter2 = new RecyclerViewAdapter(getActivity(), R.layout.item_weather, twoDataList);
             final WeatherLayoutManager weatherLayoutManager=new WeatherLayoutManager(getActivity());
             recycler_view2.setLayoutManager(weatherLayoutManager);
@@ -372,10 +396,201 @@ public class MainFragment2 extends BaseFragment  {
 
             }
         });
+        if(list1.size()==0){
+            new getTeaListAsynTask().execute();
+        }
 
     }
 
+    String returnMsg1,returnMsg2;
+    /*  获取茶列表*/
+    class getTeaListAsynTask extends AsyncTask<Void,Void,String> {
 
+        @Override
+        protected String doInBackground(Void... voids) {
+            String code = "";
+            String result =   HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/app/getTea?userId="+userId );
+            Log.e("back", "--->" + result);
+            if (!ToastUtil.isEmpty(result)) {
+                if (!"4000".equals(result)){
+                    try {
+                        list1.clear();
+                        list2.clear();
+                        list3.clear();
+                        JSONObject jsonObject = new JSONObject(result);
+//                        JsonObject content = new JsonParser().parse(result).getAsJsonObject();
+                        code = jsonObject.getString("state");
+                        returnMsg1=jsonObject.getString("message1");
+                        JSONObject jsonObject1 =  jsonObject.getJSONObject("data");
+//                        JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                        if ("200".equals(code)) {
+                            JSONArray healingTea = jsonObject1.getJSONArray("healingTea");
+                            Gson gson = new Gson();
+                            for (int i = 0; i < healingTea.length(); i++) {
+                                //功能茶
+                                Tea teaList = gson.fromJson(healingTea.get(i).toString(),Tea.class);
+                                list1.add(teaList);
+                            }
+                            JSONArray fruitTea = jsonObject1.getJSONArray("fruitTea");
+                            for (int i = 0; i < fruitTea.length(); i++) {
+                                //水果
+                                Tea teaList = gson.fromJson(fruitTea.get(i).toString() ,Tea.class);
+                                list2.add(teaList);
+                            }
+                            JSONArray herbalWellness = jsonObject1.getJSONArray("herbalWellness");
+                            for (int i = 0; i < herbalWellness.length(); i++) {
+                                // 草本
+                                Tea teaList = gson.fromJson(herbalWellness.get(i).toString(),Tea.class);
+                                list3.add(teaList);
+                            }
+
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    code="4000";
+                }
+            }
+            return code;
+        }
+
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            switch (s) {
+
+                case "200":
+                    teaListAdapter.update(list3,list2,list1);
+                    break;
+                case "4000":
+
+                    ToastUtil.showShort(getActivity(), "连接超时，请重试");
+
+                    break;
+                default:
+
+                    ToastUtil.showShort(getActivity(), returnMsg1);
+                    break;
+
+            }
+        }
+    }
+
+    /*  获取小知识*/
+    String tips ;
+    class getTipsAsynTask extends AsyncTask<Void,Void,String> {
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            String code = "";
+            String result =   HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/app/getTips?type=1" );
+            Log.e("back", "--->" + result);
+            if (!ToastUtil.isEmpty(result)) {
+                if (!"4000".equals(result)){
+                    try {
+                        JSONObject jsonObject = new JSONObject(result);
+                        code = jsonObject.getString("state");
+                        returnMsg1=jsonObject.getString("message1");
+                        JSONObject jsonObject1 =  jsonObject.getJSONObject("data");
+                      if ("200".equals(code)) {
+                           tips = jsonObject1.getString("tips");
+
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    code="4000";
+                }
+            }
+            return code;
+        }
+
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            switch (s) {
+
+                case "200":
+                    tv_main_know.setText(tips);
+                    break;
+                case "4000":
+
+                    ToastUtil.showShort(getActivity(), "连接超时，请重试");
+
+                    break;
+                default:
+                    ToastUtil.showShort(getActivity(), returnMsg1);
+                    break;
+
+            }
+        }
+    }
+/*  获取全部计划*/
+    class getAllPlanAsynTask extends AsyncTask<Void,Void,String> {
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            String code = "";
+            String result =   HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/app/getPlan" );
+            Log.e("back", "--->" + result);
+            if (!ToastUtil.isEmpty(result)) {
+                if (!"4000".equals(result)){
+                    try {
+                        JSONObject jsonObject = new JSONObject(result);
+                        code = jsonObject.getString("state");
+                        returnMsg1=jsonObject.getString("message1");
+                        JSONArray jsonArray =  jsonObject.getJSONArray("data");
+                        if ("200".equals(code)) {
+                            planList.clear();
+                            Gson gson = new Gson();
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                //功能茶
+                                Plan plan = gson.fromJson(jsonArray.get(i).toString(),Plan.class);
+                                planList.add(plan);
+                            }
+
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    code="4000";
+                }
+            }
+            return code;
+        }
+
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            switch (s) {
+
+                case "200":
+                    myplanAdapter.update(planList);
+                    break;
+                case "4000":
+
+                    ToastUtil.showShort(getActivity(), "连接超时，请重试");
+
+                    break;
+                default:
+                    ToastUtil.showShort(getActivity(), returnMsg1);
+                    break;
+
+            }
+        }
+    }
     @Override
     public void doBusiness(Context mContext) {
 
@@ -476,7 +691,7 @@ public class MainFragment2 extends BaseFragment  {
 //
 ////                ToastUtil.showShort(this,content);
 //                }else {
-                    ToastUtil.showShort(getActivity(),"请扫描正确的二维码");
+//                    ToastUtil.showShort(getActivity(),"请扫描正确的二维码");
 //                }
 
 

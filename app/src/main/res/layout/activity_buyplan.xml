@@ -23,10 +23,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
+            <ImageView
+                android:id="@+id/iv_buy_head"
                 android:layout_width="match_parent"
                 android:layout_height="220dp"
-                android:background="@color/social_gray"
+                android:scaleType="centerCrop"
                 />
             <ImageView
                 android:id="@+id/iv_buy_back"
@@ -45,13 +46,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="健康计划"
+                android:text="@string/buyplan_health"
                 android:layout_marginTop="19dp"
                 android:layout_marginLeft="20dp"
                 android:textSize="18sp"
                 android:textColor="#333333"
                 />
             <TextView
+                android:id="@+id/tv_buy_des"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="学习如何提高睡眠质量，减轻身体疲劳。学习如何提高"
@@ -75,7 +77,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="关于"
+                android:text="@string/buyplan_about"
                 android:textColor="#333333"
                 android:layout_marginTop="19dp"
                 android:layout_marginLeft="20dp"
@@ -83,6 +85,7 @@
                 />
 
             <TextView
+                android:id="@+id/tv_buy_about"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="在一周内改变你的睡眠计划会长期影响你的健康。它还会导致疲劳，使你的减肥努力在短期内付诸东流。在这个节目中，我们提供了一些帮助你克服社交时差的机制和技巧，让你的睡眠模式恢复同步。推荐使用红枣龙眼茶、菊花茶，可以更好地调理身体，使身体保持在健康状态。"
@@ -104,7 +107,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="特点"
+                android:text="@string/buyplan_td"
                 android:textColor="#333333"
                 android:layout_marginTop="19dp"
                 android:layout_marginLeft="20dp"
@@ -112,6 +115,7 @@
                 />
 
             <TextView
+                android:id="@+id/tv_buy_td"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="在一周内改变你的睡眠计划会长期影响你的健康。它还会导致疲劳，使你的减肥努力在短期内付诸东流。在这个节目中，我们提供了一些帮助你克服社交时差的机制和技巧，让你的睡眠模式恢复同步。"
@@ -131,16 +135,16 @@
             android:layout_marginTop="11dp"
             android:paddingBottom="70dp"
             >
+
             <TextView
                 android:id="@+id/tv_buy_yy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="营养师认证"
-                android:textColor="#333333"
-                android:layout_marginTop="19dp"
                 android:layout_marginLeft="20dp"
-                android:textSize="18sp"
-                />
+                android:layout_marginTop="10dp"
+                android:text="@string/buyplan_yys"
+                android:textColor="#333333"
+                android:textSize="18sp" />
             <TextView
                 android:id="@+id/tv_buy_name"
                 android:layout_below="@+id/tv_buy_yy"
@@ -153,6 +157,7 @@
                 android:textSize="16sp"
                 />
             <ImageView
+                android:id="@+id/iv_buy_pic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/my_pic"
@@ -187,7 +192,7 @@
             android:id="@+id/tv_buy_tc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="预计需要用量15天"
+            android:text="It is expected to take 15 days"
             android:layout_marginTop="13dp"
             android:layout_marginLeft="20dp"
             android:textColor="#333333"
@@ -206,10 +211,11 @@
         <Button
             android:layout_width="130dp"
             android:layout_height="40dp"
-            android:text="购买计划"
+            android:text="@string/equ_xq_buy"
             android:textSize="14sp"
+            android:paddingBottom="10dp"
             android:textColor="@color/white"
-            android:background="@drawable/login_button"
+            android:background="@mipmap/login_button"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"

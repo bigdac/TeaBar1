@@ -55,6 +55,8 @@ import me.jessyan.autosize.AutoSizeCompat;
 import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.MainActivity;
+import teabar.ph.com.teabar.activity.question.BaseQuestionActivity;
+import teabar.ph.com.teabar.activity.question.RecommendActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.pojo.Equpment;
@@ -467,13 +469,16 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                        userId = returnData.getLong("userId");
                         String userName = returnData.getString("userName");
                         String token = returnData.getString("token");
-                        int type = returnData.getInt("type");
+                        String photoUrl = returnData.getString("photoUrl");
+                        type = returnData.getInt("type");
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putString("user",user);
                         editor.putString("password",password);
                         editor.putLong("userId", userId);
                         editor.putString("token",token);
                         editor.putString("userName",userName);
+                        editor.putString("photoUrl",photoUrl);
+                        editor.putString("photo","");
                         editor.putInt("type",type);
                         editor.commit();
                     }
@@ -517,6 +522,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
         }
     }
     long userId;
+    int type;
     class ThirdLoginAsynTask extends AsyncTask<Map<String,Object>,Void,String> {
 
         @Override
@@ -537,14 +543,16 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                              userId = returnData.getLong("userId");
                             String userName = returnData.getString("userName");
                             String token = returnData.getString("token");
-                            int type = returnData.getInt("type");
+                             type = returnData.getInt("type");
                             String photoUrl = returnData.getString("photoUrl");
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putString("user",user);
                             editor.putString("password",password);
                             editor.putLong("userId", userId);
                             editor.putString("token",token);
+                            editor.putString("photoUrl",photoUrl);
                             editor.putString("userName",userName);
+                            editor.putString("photo","");
                             editor.putInt("type",type);
                             editor.commit();
                         }
@@ -682,11 +690,16 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                         tipDialog.dismiss();
                     }
 //                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    Intent intent = new Intent(LoginActivity.this, MQService.class);
-                    startService(intent);// 启动服务
-                    startActivity( MainActivity.class);
+                    if (type==0){
+                        Intent intent = new Intent(LoginActivity.this, MQService.class);
+                        startService(intent);// 启动服务
+                        startActivity( BaseQuestionActivity.class);
+                    }else {
+                        Intent intent = new Intent(LoginActivity.this, MQService.class);
+                        startService(intent);// 启动服务
+                        startActivity( MainActivity.class);
+                    }
                     toast( "登录成功");
-
                     break;
                 case "4000":
                     if (tipDialog!=null&&tipDialog.isShowing()){

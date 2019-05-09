@@ -12,17 +12,18 @@
         android:textColor="@color/white"
         android:textSize="48sp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="151dp"
+        android:layout_below="@+id/encourage_tv_year"
+        android:layout_marginTop="-11dp"
         />
     <TextView
         android:id="@+id/encourage_tv_year"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="2019年3月"
+        android:text="03"
         android:textColor="@color/white"
-        android:textSize="16sp"
+        android:textSize="48sp"
         android:layout_marginLeft="20dp"
-        android:layout_below="@+id/encourage_tv_day"
+        android:layout_marginTop="151dp"
         />
     <TextView
         android:id="@+id/tv_encourage"
@@ -33,14 +34,14 @@
         android:layout_marginRight="20dp"
         android:textColor="@color/white"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/encourage_tv_year"
+        android:layout_below="@id/encourage_tv_day"
         android:layout_marginTop="33dp"
-        android:textSize="18dp"
+        android:textSize="18sp"
         />
     <Button
         android:id="@+id/encourage_bt_in"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="100dp"

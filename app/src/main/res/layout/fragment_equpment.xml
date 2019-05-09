@@ -82,7 +82,7 @@
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="设备"
+        android:text="@string/menu_equ"
         android:layout_marginLeft="13dp"
         android:layout_marginTop="21dp"
         android:layout_below="@+id/li_main_title"

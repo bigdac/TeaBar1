@@ -1,182 +1,238 @@
 <resources>
     <string name="app_name">TeaBar</string>
 
-    <string name="language_auto">自动</string>
+    <string name="language_auto">自動</string>
     <string name="language_traditional">繁體</string>
     <string name="dialog_title">Please Select Color</string>
-    <string name="dialog_positive">确定</string>
+    <string name="dialog_positive">確定</string>
     <string name="dialog_negative">取消</string>
     <string name="facebook_app_id">630899240681105</string>
 
-<!--login-->
-    <string name="login_tv_login">登录</string>
-    <string name="login_tv_regist">注册</string>
-    <string name="login_tv_welcom">你好！欢迎来到LIFY</string>
-    <string name="login_et_user">手机号或邮箱</string>
-    <string name="login_tv_forget">忘记密码</string>
-    <string name="login_et_pass">密码</string>
-    <string name="login_et_pass1">确认密码</string>
-    <string name="login_tv_clause1">通过登录你同意Lify的</string>
-    <string name="login_tv_clause2">《隐私政策和条款》</string>
+    <!--login-->
+    <string name="login_tv_login">登錄</string>
+    <string name="login_tv_regist">注冊</string>
+    <string name="login_tv_welcom">你好！歡迎來到LIFY</string>
+    <string name="login_et_user">手機號或郵箱</string>
+    <string name="login_tv_forget">忘記密碼</string>
+    <string name="login_et_pass">密碼</string>
+    <string name="login_et_pass1">確認密碼</string>
+    <string name="login_tv_clause1">通過登錄你同意Lify的</string>
+    <string name="login_tv_clause2">《隱私政策和條款》</string>
+    <string name="login_tv_third">三方登錄</string>
 
+    <!--register-->
+    <string name="regist_tv_welcom">現在創建您的LIFY賬號</string>
+    <string name="regist_et_nick">名稱</string>
+    <string name="login_et_code">驗證碼</string>
+    <string name="login_bt_getcode">獲取驗證碼</string>
+    <string name="login_bt_regist">注冊</string>
 
-<!--register-->
-    <string name="regist_tv_welcom">现在创建您的LIFY账号</string>
-    <string name="regist_et_nick">昵称</string>
-    <string name="login_et_code">验证码</string>
-    <string name="login_bt_getcode">获取验证码</string>
-    <string name="login_bt_regist">注册</string>
+    <!--menu-->
+    <string name="menu_tea">茶飲</string>
+    <string name="menu_equ">設備</string>
+    <string name="menu_sq">社區</string>
+    <string name="menu_sc">商城</string>
+    <string name="menu_wd">我的</string>
+    <!--encourage-->
+    <string name="encourage_bt_in">進入</string>
 
-<!--encourage-->
-    <string name="encourage_bt_in">进入</string>
-
-<!--equipment-->
-    <string name="equ_xq_title">设备详情</string>
-    <string name="equ_xq_name">设备名称</string>
+    <!--equipment-->
+    <string name="equ_xq_title">設備詳情</string>
+    <string name="equ_xq_name">設備名稱</string>
     <string name="equ_xq_inform">通知</string>
-    <string name="equ_xq_state">状态</string>
-    <string name="equ_xq_light">灯光设置</string>
+    <string name="equ_xq_state">狀態</string>
+    <string name="equ_xq_light">燈光設置</string>
     <string name="equ_xq_day">清洗周期</string>
-    <string name="equ_xq_delt">删除</string>
+    <string name="equ_xq_delt">刪除</string>
 
     <string name="equ_dia_del">取消</string>
-    <string name="equ_dia_esure">确定</string>
-    <string name="equ_xq_deltitle">删除设备</string>
-    <string name="equ_xq_tistitle">是否删除该设备</string>
+    <string name="equ_dia_esure">確定</string>
+    <string name="equ_xq_deltitle">刪除設備</string>
+    <string name="equ_xq_tistitle">是否刪除該設備</string>
 
-    <string name="equ_xq_online">在线</string>
-    <string name="equ_xq_outline">离线</string>
-    <string name="equ_xq_waterf">水量充足</string>
-    <string name="equ_xq_waters">水量不足</string>
-    <string name="equ_xq_ishot">正在加热</string>
-    <string name="equ_xq_nohot">未预热</string>
-    <string name="equ_xq_cp">冲泡</string>
-<!--inform-->
-    <string name="equ_xq_informs">启用或禁用通知</string>
-    <string name="equ_xq_finish">冲泡完成</string>
-    <string name="equ_xq_yrfinish">预热完成时</string>
-    <string name="equ_xq_water">水量不足时</string>
-    <string name="equ_xq_full">胶囊废盒已满时</string>
-    <string name="equ_xq_wash">清洗周期已到时</string>
+    <string name="equ_xq_online">在線</string>
+    <string name="equ_xq_outline">離線</string>
+    <string name="equ_xq_waterf">充足</string>
+    <string name="equ_xq_waters">不足</string>
+    <string name="equ_xq_ishot">已預熱</string>
+    <string name="equ_xq_nohot">未預熱</string>
+    <string name="equ_xq_cp">沖泡</string>
 
-<!--light-->
-    <string name="equ_light_light">光的颜色</string>
+    <string name="equ_xq_star">開始沖泡</string>
+    <string name="equ_xq_buy">去購買</string>
+    <string name="equ_xq_method">沖泡方法</string>
+    <string name="equ_xq_yc">益處</string>
+    <string name="equ_xq_pl">配料:</string>
+    <string name="equ_xq_kw">口味</string>
+    <!--inform-->
+    <string name="equ_xq_informs">啟用或禁用通知</string>
+    <string name="equ_xq_finish">沖泡完成</string>
+    <string name="equ_xq_yrfinish">預熱完成時</string>
+    <string name="equ_xq_water">水量不足時</string>
+    <string name="equ_xq_full">膠囊廢盒已滿時</string>
+    <string name="equ_xq_wash">清洗周期已到時</string>
+    <string name="equ_xq_jpz">浸泡中</string>
+    <string name="equ_xq_stopjp">停止浸泡</string>
+    <string name="equ_xq_cpwc">沖泡完成</string>
+    <string name="equ_xq_sc">收藏</string>
+    <string name="equ_xq_fx">分享</string>
+    <string name="equ_xq_xg">修改</string>
+    <string name="equ_xq_hdmr">回到默認</string>
+    <string name="equ_xq_temp">溫度</string>
+    <string name="equ_xq_time">浸泡時間</string>
+    <string name="equ_xq_mr">設置為默認沖泡設備</string>
+    <!--light-->
+    <string name="equ_light_light">光的顏色</string>
     <string name="equ_light_mode">模式</string>
-    <string name="equ_light_cz">重置为默认</string>
-    <string name="equ_light_lightset">灯光颜色设置</string>
+    <string name="equ_light_cz">重置為默認</string>
+    <string name="equ_light_lightset">燈光顏色設置</string>
 
     <!--mode-->
     <string name="equ_mode_1">呼吸</string>
-    <string name="equ_mode_2">随机</string>
+    <string name="equ_mode_2">隨機</string>
     <string name="equ_mode_3">常在</string>
 
     <!--wash-->
-    <string name="equ_wash_1">根据使用次数来清洗设备</string>
-    <string name="equ_wash_2">冲泡次数</string>
-    <string name="equ_wash_3">保存设置</string>
+    <string name="equ_wash_1">根據使用次數來清洗設備</string>
+    <string name="equ_wash_2">沖泡次數</string>
+    <string name="equ_wash_3">保存</string>
     <string name="equ_wash_4">次</string>
 
     <!--social-->
     <string name="social_circle_title">圈子</string>
     <string name="social_circle_message">消息</string>
     <string name="social_inform_title">通知</string>
-    <string name="social_inform_add">请求添加你为好友</string>
+    <string name="social_inform_add">請求添加你為好友</string>
     <string name="social_inform_esure">接受</string>
     <string name="social_friend_list">好友列表</string>
     <string name="social_friend_add">添加好友</string>
-    <string name="social_friend_search">搜索昵称或ID号</string>
+    <string name="social_friend_search">搜索昵稱或ID號</string>
     <string name="social_friend_add1">添加</string>
+    <string name="social_friend_publish">發佈</string>
+    <string name="social_friend_star">開始在這裡輸入您的內容</string>
     <!--power-->
-    <string name="my_power_title">能量指标图</string>
+    <string name="my_power_title">你的身體分數</string>
+    <string name="my_power_title1">你的身體是不平衡的，希望你愛護自己的身體</string>
+    <string name="my_power_s1">身體狀況</string>
+    <string name="my_power_s2">生活習慣</string>
+    <string name="my_power_s3">飲食習慣</string>
+    <string name="my_power_s4">情緒管理</string>
     <string name="my_power_day">日</string>
     <string name="my_power_week">周</string>
     <string name="my_power_month">月</string>
-
     <!--homepage-->
-    <string name="main_home_page">首页</string>
+    <string name="main_home_page">首頁</string>
     <string name="main_home_hello">您好!</string>
-    <string name="my_power_know">健康知识</string>
-    <string name="main_home_title">为了更好地为您推荐适合的个人茶饮计划，请您填写问卷单。</string>
+    <string name="my_power_know">健康知識</string>
+    <string name="main_home_title">為了更好地為您推薦適合的個人茶飲計劃，請您填寫問卷單。</string>
     <string name="my_power_tea1">草本系列</string>
     <string name="my_power_tea2">水果系列</string>
     <string name="my_power_tea3">功能茶</string>
-    <string name="my_power_tea4">个人计划</string>
+    <string name="my_power_tea4">個人計劃</string>
 
     <!--mypage-->
-    <string name="my_healthplan">健康计划</string>
-    <string name="my_health">我的健康能量指标</string>
-    <string name="my_plan">我的个人计划</string>
-    <string name="my_issue">我的发布</string>
-    <string name="my_ask">我的问卷记录</string>
-    <string name="my_setting">设置</string>
-    <string name="my_today">今日目标</string>
-    <string name="my_teanum">茶饮量</string>
-    <string name="my_plannum">计划</string>
-    <string name="my_friendnum">好友量</string>
-    <string name="my_drink">饮料</string>
-    <string name="my_like">我的最爱</string>
+    <string name="my_healthplan">健康計劃</string>
+    <string name="my_health">我的健康能量指標</string>
+    <string name="my_plan">我的個人計劃</string>
+    <string name="my_issue">我的發布</string>
+    <string name="my_ask">我的問卷記錄</string>
+    <string name="my_setting">設置</string>
+    <string name="my_today">今日目標</string>
+    <string name="my_teanum">茶飲量</string>
+    <string name="my_plannum">計劃</string>
+    <string name="my_friendnum">好友</string>
+    <string name="my_drink">飲料</string>
+    <string name="my_like">我的最愛</string>
     <string name="my_now">最近的</string>
     <!--myplan-->
-    <string name="plan_title">我的个人计划</string>
-    <string name="plan_tz">计划通知</string>
-    <string name="plan_time">提醒时间</string>
-
+    <string name="plan_title">我的個人計劃</string>
+    <string name="plan_tz">設置提醒</string>
+    <string name="plan_time">提醒時間</string>
+    <string name="buyplan_health">健康計畫</string>
+    <string name="buyplan_about">關於</string>
+    <string name="buyplan_td">特點</string>
+    <string name="buyplan_yys">營養師認證</string>
     <!--setting-->
-    <string name="set_name">账号</string>
-    <string name="set_pass">更改密码</string>
+    <string name="set_name">賬號</string>
+    <string name="set_pass">更改密碼</string>
     <string name="set_mess">消息提醒</string>
-    <string name="set_person">用户反馈</string>
+    <string name="set_person">用戶反饋</string>
     <string name="set_update">版本更新</string>
-    <string name="set_clean">清除缓存</string>
-    <string name="set_now">当前版本：</string>
+    <string name="set_clean">清除緩存</string>
+    <string name="set_now">當前版本：</string>
 
     <!--drink-->
     <string name="drink_unit">杯</string>
-    <string name="drink_units">单位（杯）</string>
-    <string name="drink_set">设置目标</string>
-    <string name="drink_reminder">提醒时间</string>
-    <string name="drink_num">冲泡次数</string>
-    <string name="drink_cup1">杯体积</string>
+    <string name="drink_units">單位（杯）</string>
+    <string name="drink_set">設置目標</string>
+    <string name="drink_reminder">提醒時間</string>
+    <string name="drink_num">沖泡次數</string>
+    <string name="drink_cup1">杯體積</string>
     <string name="drink_cup2">小杯</string>
     <string name="drink_cup3">大杯</string>
-    <string name="drink_size1">约200ml</string>
-    <string name="drink_size2">约300ml</string>
-    <string name="drink_save">保存设置</string>
-    <string name="drink_method">冲泡列表</string>
-    <string name="drink_makemethod">冲泡方法</string>
+    <string name="drink_size1">約200ml</string>
+    <string name="drink_size2">約300ml</string>
+    <string name="drink_save">保存設置</string>
+    <string name="drink_method">沖泡列表</string>
+    <string name="drink_makemethod">沖泡方法</string>
     <!--personal center-->
-    <string name="personal_center">个人中心</string>
-    <string name="personal_pic">头像</string>
-    <string name="personal_nick">昵称</string>
-    <string name="personal_id">ID号</string>
-    <string name="personal_mess">基本信息设置</string>
+    <string name="personal_center">個人中心</string>
+    <string name="personal_pic">頭像</string>
+    <string name="personal_nick">昵稱</string>
+    <string name="personal_id">ID號</string>
+    <string name="personal_mess">基本信息設置</string>
 
     <!--person set-->
     <string name="personal_set_man">男</string>
     <string name="personal_set_women">女</string>
-    <string name="personal_set_baby">是否怀孕</string>
+    <string name="personal_set_baby">是否懷孕</string>
     <string name="personal_set_yes">是</string>
     <string name="personal_set_no">否</string>
-    <string name="personal_set_old">年龄</string>
+    <string name="personal_set_old">年齡</string>
     <string name="personal_set_tall">身高</string>
-    <string name="personal_set_weight">体重</string>
-    <string name="personal_set_place">地区</string>
-    <string name="personal_set_mystyle">我的身体状况</string>
+    <string name="personal_set_weight">體重</string>
+    <string name="personal_set_place">地區</string>
+    <string name="personal_set_mystyle">我的身體狀況</string>
 
     <!--search-->
     <string name="search_title">搜索</string>
     <string name="search_taste">口味</string>
     <string name="search_function">功能</string>
-    <string name="search_aim">目标</string>
-    <string name="search_history">历史记录</string>
+    <string name="search_aim">目標</string>
+    <string name="search_history">曆史記錄</string>
 
     <!--question-->
-    <string name="question_title">20道问卷题</string>
-    <string name="question_style">我的身体状况</string>
-    <string name="question_score">你的身体分数</string>
-    <string name="question_plan">推荐计划</string>
+    <string name="question_button">下一步</string>
+
+
+
 
     <!--talk-->
     <string name="somebody_at_me">[有人@我]</string>
+    <string name="talk_nomes">暫無聊天內容</string>
+    <!--tea-->
+    <string name="tea_kouwei_cb">草本口味</string>
+    <string name="tea_kouwei_sg">水果口味</string>
+    <string name="tea_kouwei_gn">功能茶</string>
+    <string name="tea_kouwei_tj">推薦茶</string>
+    <string name="tea_kouwei_tjti">推薦结果：</string>
+    <string name="tea_kouwei_xa">一鍵加入喜愛</string>
+    <string name="tea_kouwei_tg">跳過</string>
+    <!--adress-->
+    <string name="adress_xz">選擇地址</string>
+    <string name="adress_hot">熱門國家/地區</string>
+    <string name="adress_country">所有國家</string>
+    <string name="adress_hot_1">中國</string>
+    <string name="adress_hot_2">美國</string>
+    <string name="adress_hot_4">中國香港</string>
+    <string name="adress_hot_7">中國澳門</string>
+    <string name="adress_hot_8">英國</string>
+    <string name="adress_hot_10">中國台灣</string>
 
-    </resources>
+    <!--dialog-->
+    <string name="dialog_love_title">添加喜愛</string>
+    <string name="dialog_love_deltitle">刪除喜愛</string>
+    <string name="dialog_love_title1">是否添加喜愛</string>
+    <string name="dialog_love_deltitle1">是否刪除喜愛</string>
+
+</resources>

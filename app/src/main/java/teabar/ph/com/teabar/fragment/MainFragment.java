@@ -24,7 +24,7 @@ import java.util.List;
 
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.device.MakeActivity;
-import teabar.ph.com.teabar.activity.QusetionActivity;
+import teabar.ph.com.teabar.activity.question.QusetionActivity;
 import teabar.ph.com.teabar.activity.SearchActivity;
 import teabar.ph.com.teabar.adpter.BaseRecyclerAdapter;
 import teabar.ph.com.teabar.adpter.BaseViewHolder;
@@ -144,14 +144,14 @@ public class MainFragment extends BaseFragment  {
         //获取数据
         getData();
         initView1();
-        initView2();
+
 
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
+        initView2();
     }
 
     @Override

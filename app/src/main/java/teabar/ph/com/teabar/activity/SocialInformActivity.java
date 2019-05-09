@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.github.zlpolygonview.ZLPolygonView;
+
 import com.ph.teabar.database.dao.DaoImp.FriendImpl;
 import com.ph.teabar.database.dao.DaoImp.FriendInforImpl;
 import com.ph.teabar.database.dao.DaoImp.UserEntryImpl;

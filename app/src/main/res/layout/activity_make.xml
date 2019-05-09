@@ -9,12 +9,12 @@
         android:layout_height="wrap_content"
         />
 
-    <TextView
+    <ImageView
         android:id="@+id/iv_make_pic"
         android:layout_below="@+id/tv_main_1"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@color/social_gray"
+        android:layout_height="185dp"
+        android:scaleType="centerCrop"
         />
     <ImageView
         android:id="@+id/iv_equ_fh"
@@ -27,9 +27,11 @@
   <TextView
       android:id="@+id/tv_make_name"
       android:layout_below="@id/iv_make_pic"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="36dp"
+      android:layout_toLeftOf="@+id/iv_make_love"
+      android:layout_marginRight="20dp"
+      android:layout_marginTop="26dp"
       android:layout_marginLeft="15dp"
       android:textColor="#333333"
       android:textSize="18sp"
@@ -46,6 +48,7 @@
         android:layout_marginLeft="15dp"
         />
     <ImageView
+        android:id="@+id/iv_make_love"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:src="@mipmap/social_no"
@@ -65,13 +68,26 @@
         android:layout_marginRight="24dp"
         />
     <TextView
+        android:id="@+id/tv_make_kw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12344"
+        android:textColor="@color/social_gray"
+        android:textSize="14sp"
+        android:layout_below="@+id/tv_make_style"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        />
+    <TextView
         android:id="@+id/tv_make_mes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="一种起源于古代东方的茶，具有丰富的风味和社会效益。由于生姜的有效成分，这种草药茶是对正常消化功能的理想支持，并改善正常的生理活动。"
         android:textColor="@color/social_gray"
         android:textSize="14sp"
-        android:layout_below="@+id/tv_make_style"
+        android:layout_below="@+id/tv_make_kw"
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="16dp"
@@ -83,7 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="12dp"
-        android:text="配料："
+        android:text="@string/equ_xq_pl"
         />
     <TextView
         android:id="@+id/tv_make_plmes"
@@ -92,13 +108,14 @@
         android:text="姜、柠檬草、鼠尾草"
         android:layout_alignTop="@+id/tv_make_pl"
         android:layout_toRightOf="@+id/tv_make_pl"
+        android:layout_marginLeft="5dp"
         android:textColor="@color/social_gray"
         />
     <TextView
         android:id="@+id/tv_make_method"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="冲泡方法"
+        android:text="@string/equ_xq_method"
         android:layout_below="@+id/tv_make_plmes"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="15dp"
@@ -119,6 +136,7 @@
             android:src="@mipmap/make_wd"
             />
         <TextView
+            android:id="@+id/tv_make_temp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="80℃"
@@ -133,6 +151,7 @@
             android:layout_marginLeft="46dp"
             />
         <TextView
+            android:id="@+id/tv_make_sl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="300ml"
@@ -147,6 +166,7 @@
             android:layout_marginLeft="46dp"
             />
         <TextView
+            android:id="@+id/tv_make_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="30S"
@@ -169,24 +189,25 @@
         android:id="@+id/bt_make_make"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="开始冲泡"
+        android:text="@string/equ_xq_star"
         android:textColor="@color/white"
         android:background="@mipmap/login_button"
         android:layout_below="@+id/iv_make_choose"
         android:paddingBottom="10dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="45dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+
         />
     <Button
         android:id="@+id/bt_make_buy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="去购买"
+        android:text="@string/equ_xq_buy"
         android:textColor="@color/login_black"
         android:background="@drawable/answer_button1"
         android:layout_below="@+id/bt_make_make"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="11dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         />

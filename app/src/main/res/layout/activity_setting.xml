@@ -45,6 +45,7 @@
             android:layout_marginLeft="16dp"
             />
         <TextView
+            android:id="@+id/tv_set_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="15531846548"

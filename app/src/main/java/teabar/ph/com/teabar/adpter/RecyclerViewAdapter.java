@@ -45,4 +45,6 @@ public class RecyclerViewAdapter extends BaseRecyclerAdapter<String> {
             }
         });
     }
+
+
 }

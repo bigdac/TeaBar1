@@ -13,17 +13,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import teabar.ph.com.teabar.R;
+import teabar.ph.com.teabar.pojo.Tea;
 
 public class TeaListAdapter extends RecyclerView.Adapter<TeaListAdapter.MyViewHolder> {
 
     private List<String> mDatas = new ArrayList<>();
+    private List<Tea> teaList1 = new ArrayList<>();
+    private List<Tea> teaList2 = new ArrayList<>();
+    private List<Tea> teaList3 = new ArrayList<>();
     private Context mContext;
-    TeaAdapter teaAdapter;
-    public TeaListAdapter(Context context, List<String> list) {
+    TeaAdapter teaAdapter1,teaAdapter2,teaAdapter3;
+    public TeaListAdapter(Context context, List<String> list,List<Tea> tea1,List<Tea> tea2,List<Tea> tea3) {
         this.mContext = context;
         this.mDatas = list;
-        teaAdapter = new TeaAdapter(context,list);
-
+        teaAdapter1 = new TeaAdapter(context,tea1);
+        teaAdapter2 = new TeaAdapter(context,tea2);
+        teaAdapter3 = new TeaAdapter(context,tea3);
     }
 
     @NonNull
@@ -37,14 +42,29 @@ public class TeaListAdapter extends RecyclerView.Adapter<TeaListAdapter.MyViewHo
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int position) {
         switch (position){
+            case 0:
+                teaAdapter1.update(teaList1);
+                myViewHolder.rv_tea_list1.setAdapter(teaAdapter1);
+                break;
             case 1:
-                myViewHolder.tv_tea_name.setText("水果口味");
+                myViewHolder.tv_tea_name.setText(R.string.tea_kouwei_sg);
+                teaAdapter2.update(teaList2);
+                myViewHolder.rv_tea_list1.setAdapter(teaAdapter2);
                 break;
             case 2:
-                myViewHolder.tv_tea_name.setText("功能茶");
+                myViewHolder.tv_tea_name.setText(R.string.tea_kouwei_gn);
+                teaAdapter3.update(teaList3);
+                myViewHolder.rv_tea_list1.setAdapter(teaAdapter3);
                 break;
         }
 
+    }
+
+    public void update(List<Tea> tea1,List<Tea> tea2,List<Tea> tea3){
+        this.teaList1 = tea1;
+        this.teaList2 = tea2;
+        this.teaList3 = tea3;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -61,7 +81,7 @@ public class TeaListAdapter extends RecyclerView.Adapter<TeaListAdapter.MyViewHo
             tv_tea_name = itemView.findViewById(R.id.tv_tea_name);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext,LinearLayoutManager.HORIZONTAL,false);
              rv_tea_list1.setLayoutManager(linearLayoutManager);
-             rv_tea_list1.setAdapter(teaAdapter);
+
         }
     }
 

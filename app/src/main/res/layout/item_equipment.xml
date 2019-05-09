@@ -66,7 +66,7 @@
         android:id="@+id/tv_equ_online"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="离线"
+        android:text="@string/equ_xq_outline"
         android:textSize="14sp"
         android:layout_marginLeft="17dp"
         android:layout_alignParentBottom="true"

@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.view.View;
 
 import teabar.ph.com.teabar.R;
+import teabar.ph.com.teabar.activity.EncourageActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
 
 public class SplashActivity extends BaseActivity {
@@ -52,7 +53,7 @@ public class SplashActivity extends BaseActivity {
 
     // 去主界面
     private void gohome() {
-        startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+        startActivity(new Intent(SplashActivity.this, EncourageActivity.class));
         finish();
     }
 

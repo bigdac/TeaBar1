@@ -52,7 +52,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.login.SplashActivity">
+        <activity android:name=".activity.PowerpicActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -71,12 +71,12 @@
         <activity android:name=".activity.device.EqupmentLightActivity" />
         <activity android:name=".activity.ChooseColorActvity" />
         <activity android:name=".activity.device.EqupmentWashActivity" />
-        <activity android:name=".activity.PowerpicActivity" />
-        <activity android:name=".activity.MyPlanActivity" />
+        <!--<activity android:name=".activity.PowerpicActivity" />-->
+        <activity android:name=".activity.my.MyPlanActivity" />
         <activity android:name=".activity.PlanInformActivity" />
         <activity android:name=".activity.MyIssueActivity" />
         <activity android:name=".activity.MyQuestionActivity" />
-        <activity android:name=".activity.SettingActivity" />
+        <activity android:name=".activity.my.SettingActivity" />
         <activity android:name=".activity.ChangePassActivity" />
         <activity android:name=".activity.FeedbackActivity" />
         <activity
@@ -85,10 +85,10 @@
             android:theme="@style/ImagePickerThemeFullScreen" />
         <activity android:name=".activity.DrinkNumActivity" />
         <activity android:name=".activity.SetDrinkActivity" />
-        <activity android:name=".activity.PersonnalActivity" />
+        <activity android:name=".activity.my.PersonnalActivity" />
         <activity android:name=".activity.PersonSetActivity" />
         <activity android:name=".activity.SearchActivity" />
-        <activity android:name=".activity.QusetionActivity" />
+        <!--<activity android:name=".activity.question.QusetionActivity" />-->
         <activity android:name=".activity.ScoreActivity" />
         <activity android:name=".activity.AnswerPlanActivity" />
         <activity android:name=".activity.device.MakeActivity" />
@@ -108,12 +108,14 @@
         <activity android:name=".activity.chat.AddFriendActivity1" />
         <activity android:name=".activity.chat.ChatActivity" />
         <activity android:name=".activity.login.GuideActivity" />
-        <activity android:name=".activity.NearestActivity" />
-        <activity android:name=".activity.FavoriteActivity" />
+        <activity android:name=".activity.my.NearestActivity" />
+        <activity android:name=".activity.my.FavoriteActivity" />
         <activity android:name=".activity.device.AddDeviceActivity" />
         <activity android:name=".activity.device.AddMethodActivity1" />
         <activity android:name=".activity.AllCommentActivity" />
-        <!--<activity android:name=".activity.question.BaseQuestionActivity" />-->
+        <activity android:name=".activity.EncourageActivity" />
+        <activity android:name=".activity.question.RecommendActivity" />
+        <activity android:name=".activity.question.BaseQuestionActivity" />
     </application>
 
 </manifest>

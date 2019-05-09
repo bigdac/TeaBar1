@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.GetBuilder;
 
@@ -40,7 +41,7 @@ import teabar.ph.com.teabar.base.MyApplication;
 public class HttpUtils {
 
 //    public static String ipAddress="http://168v7u7115.iask.in:32054";
-//public static String ipAddress="http://192.168.1.24:8081";
+//    public static String ipAddress="http://192.168.1.24:8081";
     public static String ipAddress="http://47.98.131.11:8081";
     public static String Address="http://192.168.1.27:8094";
     public static String getInputStream(InputStream is) {
@@ -215,10 +216,9 @@ public class HttpUtils {
             JSONObject jsonObject = new JSONObject();
             for (Map.Entry<String, Object> param : map.entrySet()) {
                 jsonObject.put(param.getKey(), param.getValue());
+                Log.e("ss", "postOkHpptRequest: --?"+param.getKey()+"..."+param.getValue());
             }
-
-
-            String s=jsonObject.toJSONString();
+            String s= jsonObject.toJSONString();
                 Log.i("ss",s);
             RequestBody requestBody = RequestBody.create(MediaType.parse(CONTENT_TYPE), jsonObject.toJSONString());
             Log.e("DDDDDDDDDDDDD", "postOkHpptRequest: --》"+requestBody.contentType().toString());
@@ -231,11 +231,6 @@ public class HttpUtils {
                     .post(requestBody)
                     .build();
 
-//            OkHttpClient okHttpClient = new OkHttpClient.Builder()
-//                    .readTimeout(TimeOut, TimeUnit.SECONDS)
-//                    .connectTimeout(TimeOut, TimeUnit.SECONDS)
-//                    .writeTimeout(TimeOut, TimeUnit.SECONDS)
-//                    .build() ;
             OkHttpClient okHttpClient = new OkHttpClient();
             Response response = okHttpClient.newCall(request).execute();
             if (response.isSuccessful()) {
@@ -432,7 +427,7 @@ public class HttpUtils {
         SharedPreferences my=MyApplication.getContext().getSharedPreferences("my", Context.MODE_PRIVATE);
 //            SharedPreferences userSettings= ge6getSharedPreferences("my", 0);
         String token =my.getString("token","");
-       MediaType MEDIA_TYPE_FILE = MediaType.parse("image/png");
+        MediaType MEDIA_TYPE_FILE = MediaType.parse("image/png");
         try {
             //入参-字符串
 
@@ -468,10 +463,10 @@ public class HttpUtils {
                 Log.e("qqqqqqqqXXXX", "111111");
                 result = response.body().string();
             }
-            for (Map.Entry entry : fileMap.entrySet()) {
-                File file = (File) entry.getValue();
-                file.delete();
-            }
+//            for (Map.Entry entry : fileMap.entrySet()) {
+//                File file = (File) entry.getValue();
+//                file.delete();
+//            }
         }catch (Exception e){
             e.printStackTrace();
         }

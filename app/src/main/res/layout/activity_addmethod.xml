@@ -184,7 +184,7 @@
                 android:id="@+id/iv_drink_scup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/cup_s1"
+
                 android:layout_below="@+id/tv_drink_scup"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
@@ -220,7 +220,7 @@
                 android:id="@+id/iv_drink_bcup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/cup_b2"
+
                 android:layout_below="@+id/tv_drink_bcup"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"

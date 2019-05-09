@@ -79,6 +79,7 @@
             android:textColor="@color/login_black"
             />
         <TextView
+            android:id="@+id/tv_person_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/social_gray"
@@ -106,6 +107,7 @@
             android:textColor="@color/login_black"
             />
         <TextView
+            android:id="@+id/tv_person_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/social_gray"

@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.QusetionActivity;
+import teabar.ph.com.teabar.activity.question.QusetionActivity;
 import teabar.ph.com.teabar.activity.SearchActivity;
 import teabar.ph.com.teabar.adpter.ClickfragAdapter;
 import teabar.ph.com.teabar.adpter.MyViewPagerAdapter;

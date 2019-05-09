@@ -142,7 +142,7 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
         if (makeMethod!=null){
             tv_power.setText(makeMethod.getName());
             arcProgressbar.setCurProgress(makeMethod.getTemp());
-            arcProgressbar1.setCurProgress(makeMethod.getTime());
+            arcProgressbar1.setCurProgress(makeMethod.getTime()-5);
             beautySeekBar.setProgress(makeMethod.getCapacity());
             tv_add_temp.setText(makeMethod.getTemp()+"");
             tv_add_time.setText(makeMethod.getTime()+"");
@@ -165,7 +165,7 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
             @Override
             public void onScrollingListener(Integer progress) {
                 Log.e(TAG, "onScrollingListener: -->"+progress );
-                tv_add_time.setText(progress+"");
+                tv_add_time.setText(progress+5+"");
             }
         });
 

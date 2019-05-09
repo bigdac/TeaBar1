@@ -41,6 +41,7 @@ public class MyView1 extends View
     private float mView_x0;
     private float mView_y0;
     private int mPointAngle=0;
+    private int mPointAngle1=0;
     private  OnProgressListener mOnProgressListener;
     private Paint mTextPaint;
     private Paint mTextPaint1;
@@ -140,11 +141,11 @@ int width1 = 0;
         /*把宽高赋值给全局变量,得到圆心的坐标*/
         mView_x0=width/2;
         mView_y0=height/2;
-        String str = "0";
+        String str = "5";
         canvas.drawText(str, mViewPadding+50, mView_y0+15, mTextPaint);
-
+        String s = getResources().getText(R.string.equ_xq_time).toString();
         canvas.drawText("30", width-mViewPadding-50- getTextWidth("30",mTextPaint), mView_y0+15, mTextPaint);
-        canvas.drawText("侵泡时间",mView_x0-mViewPadding/2- (int)(getTextWidth("侵泡时间",mTextPaint)/2.5),height-130,mTextPaint);
+        canvas.drawText(s,mView_x0-mViewPadding/2- (int)(getTextWidth("侵泡时间",mTextPaint)/2.5),height-130,mTextPaint);
 //        canvas.drawText(temp,mView_x0-mViewPadding/2- getTextWidth(temp,mTextPaint1)/2,mView_y0-50,mTextPaint1);
 //        Log.i(TAG, (float) (mArcRadius + bDistance) - 2 * (mTextPaint.descent() + mTextPaint.ascent()) + "");
 
@@ -201,11 +202,7 @@ int width1 = 0;
         canvas.drawCircle(Point_x,Point_y,mPointRaido1,mPaint2);
         canvas.drawCircle(Point_x,Point_y,mPointRaido,mPaint1);
 
-        if(mOnProgressListener!=null) {
-            mOnProgressListener.onScrollingListener( (mPointAngle)*30/180);
-            Log.e("DDDDDD", "setCurProgress: -->"+mPointAngle +"...."+(mPointAngle)*30/180);
 
-        }
     }
 
     public int getTextWidth(String str,Paint paint){
@@ -217,10 +214,10 @@ int width1 = 0;
     }
 
     public void setCurProgress(int curProgress) {
-        if (curProgress< 15){
-            this.mPointAngle = 90-(int)(((float)curProgress)/30f*180);
+        if (curProgress< 12.5){
+            this.mPointAngle = 90-(int)(((float)curProgress)/25f*180);
         }else {
-           this.mPointAngle=360-(int)(((float)curProgress)/30f*180)+90;
+           this.mPointAngle=360-(int)(((float)curProgress)/25f*180)+90;
         }
 
     }
@@ -269,7 +266,21 @@ int width1 = 0;
                     double atan = Math.atan(tan_y / tan_x);
                     mPointAngle = (int) Math.toDegrees(atan) + 270;
                 }
+                if(mOnProgressListener!=null) {
+                    if (mPointAngle>=90&mPointAngle<180){
+                        mPointAngle1=0;
+                    }else if (mPointAngle>180&mPointAngle<270){
+                        mPointAngle1=180;
+                    }
+                    if (0<mPointAngle&mPointAngle<90){
+                        mPointAngle1=90-mPointAngle;
+                    }else if (mPointAngle<=360&mPointAngle>=270){
+                        mPointAngle1=360-mPointAngle+90;
+                    }
+                    mOnProgressListener.onScrollingListener( (mPointAngle1)*25/180);
+                    Log.e("DDDDDD", "setCurProgress: -->"+mPointAngle +"...."+(mPointAngle)*25/180);
 
+                }
 
                 /*得到点的角度后进行重绘*/
                 invalidate();

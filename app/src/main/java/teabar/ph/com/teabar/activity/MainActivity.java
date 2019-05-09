@@ -16,10 +16,12 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
@@ -286,6 +288,8 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
         if (MQBound) {
             unbindService(MQconnection);
         }
+        if (receiver!=null)
+            unregisterReceiver(receiver);
         isRunning = false;
         super.onDestroy();
     }
@@ -306,4 +310,26 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
             MQservice.sendOpenEqu(type,mac);
         Log.e(TAG, "open: --------------->"+type+">>>>>>"+mac );
     }
+
+
+    //记录用户首次点击返回键的时间
+    private long firstTime=0;
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch (keyCode){
+            case KeyEvent.KEYCODE_BACK:
+                long secondTime=System.currentTimeMillis();
+                if(secondTime-firstTime>2000){
+                    Toast.makeText(MainActivity.this,"再按一次退出程序",Toast.LENGTH_SHORT).show();
+                    firstTime=secondTime;
+                    return true;
+                }else{
+                     application.removeAllActivity();
+                }
+                break;
+        }
+        return super.onKeyUp(keyCode, event);
+    }
+
 }
