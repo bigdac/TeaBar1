@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,7 @@ public class TeaAdapter extends RecyclerView.Adapter<TeaAdapter.MyViewHolder> {
         String headImg = mDatas.get(i).getTeaPicture();
         myViewHolder.tv_mail_name .setText(mDatas.get(i).getProductNameEn());
         Glide.with(mContext).load(headImg).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.color.white).into(myViewHolder.iv_mail_pic);
+        Log.e("Adress", "onBindViewHolder: -->"+headImg );
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

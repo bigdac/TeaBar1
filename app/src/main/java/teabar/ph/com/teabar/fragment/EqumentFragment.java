@@ -1,10 +1,15 @@
 package teabar.ph.com.teabar.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.os.AsyncTask;
+import android.os.IBinder;
 import android.speech.RecognizerIntent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +21,7 @@ import android.widget.Toast;
 
 import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -27,6 +33,8 @@ import teabar.ph.com.teabar.activity.device.AddDeviceActivity;
 import teabar.ph.com.teabar.adpter.EqupmentAdapter;
 import teabar.ph.com.teabar.base.BaseFragment;
 import teabar.ph.com.teabar.pojo.Equpment;
+import teabar.ph.com.teabar.service.MQService;
+import teabar.ph.com.teabar.util.ToastUtil;
 
 public class EqumentFragment extends BaseFragment {
 //    @BindView(R.id.rv_equment)
@@ -49,6 +57,7 @@ protected static final int RESULT_SPEECH = 1;
     Equpment FirEqupment;
     String firstMac;
     boolean isOpen = false;
+    private boolean MQBound;
     @Override
     public int bindLayout() {
         return R.layout.fragment_equpment;
@@ -59,13 +68,9 @@ protected static final int RESULT_SPEECH = 1;
 
         RecyclerView rv_equment = view.findViewById(R.id.rv_equment);
         equipmentDao = new EquipmentImpl(getActivity().getApplicationContext());
-        equpments= equipmentDao.findAll();
-        for (int i = 0;i<equpments.size();i++){
-            if (equpments.get(i).getIsFirst()){
-                firstMac = equpments.get(i).getMacAdress();
-                FirEqupment = equpments.get(i);
-            }
-        }
+        equpments = equipmentDao.findAll();
+        FirEqupment = ((MainActivity)getActivity()).getFirstEqument() ;
+        firstMac = FirEqupment.getMacAdress();
         equpmentAdapter = new EqupmentAdapter(getActivity(),equpments);
         rv_equment.setLayoutManager( new GridLayoutManager(getActivity(),2));
 //        rv_equment.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
@@ -95,7 +100,8 @@ protected static final int RESULT_SPEECH = 1;
                      }else {
                          type=1;
                      }
-                     equipmentCtrl.open(type,mac);
+                     /*開關機 0開 1 關*/
+                     equipmentCtrl.open1(type,mac);
                  }
                  if (equpmentAdapter.getmData().get(position).getIsFirst()){
                      if (equpmentAdapter.getmData().get(position).getMStage()==0){
@@ -112,15 +118,65 @@ protected static final int RESULT_SPEECH = 1;
         IntentFilter intentFilter = new IntentFilter("EqumentFragment");
         receiver = new MessageReceiver();
         getActivity().registerReceiver(receiver, intentFilter);
-
+        MQintent = new Intent(getActivity(), MQService.class);
+        MQBound = getActivity().bindService(MQintent, MQconnection, Context.BIND_AUTO_CREATE);
     }
+    Intent MQintent;
+    MQService MQservice;
+    boolean boundservice;
+    ServiceConnection MQconnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MQService.LocalBinder binder = (MQService.LocalBinder) service;
+            MQservice = binder.getService();
+            boundservice = true;
+            Log.e("QQQQQQQQQQQDDDDDDD", "onServiceConnected: ------->");
+            new  FirstAsynctask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
 
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+        }
+    };
     @Override
     public void onStart() {
         super.onStart();
         isRunning =true;
+
     }
 
+    /*兩個默認設備同步*/
+    public void  Synchronization(int type){
+        //0是开机 1是关机 这里是显示 0 为绿色
+        if (type==1){
+            isOpen = false;
+            li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
+            FirEqupment.setMStage(0);
+            RefrashAllEqu(FirEqupment.getMacAdress(), FirEqupment);
+        }else {
+            FirEqupment.setMStage(2);
+            RefrashAllEqu(FirEqupment.getMacAdress(), FirEqupment);
+            isOpen = true;
+            li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
+        }
+    }
+    @SuppressLint("StaticFieldLeak")
+    class  FirstAsynctask extends AsyncTask<Void,Void,Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            for (Equpment equpment:equpments){
+                try {
+                    Thread.sleep(500);
+                    if (!ToastUtil.isEmpty(equpment.getMacAdress()))
+                        MQservice.sendFindEqu(equpment.getMacAdress());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -128,12 +184,19 @@ protected static final int RESULT_SPEECH = 1;
     }
     EquipmentCtrl equipmentCtrl;
     public  interface EquipmentCtrl{
-        void open(int type,String mac);
+        void open1(int type,String mac);
     }
 
     //刷新全部设备
     public void RefrashChooseEqu(){
-        equpments = equipmentDao.findAll();
+        equipmentDao = new EquipmentImpl(getActivity().getApplicationContext());
+        List<Equpment> equpments = equipmentDao.findAll();
+        for (int i = 0;i<equpments.size();i++){
+            if (  equpments.get(i).getIsFirst()){
+                ((MainActivity)getActivity()).setFirstEqument(equpments.get(i));
+                FirEqupment = equpments.get(i);
+            }
+        }
         equpmentAdapter.setEqumentData1(equpments);
     }
 
@@ -194,14 +257,13 @@ protected static final int RESULT_SPEECH = 1;
             case R.id.li_main_title:
                 if (isOpen) {
                     li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
-                    equipmentCtrl.open(1, firstMac);
-
+                    equipmentCtrl.open1(1, firstMac);
                     FirEqupment.setMStage(0);
                     RefrashAllEqu(FirEqupment.getMacAdress(), FirEqupment);
                     isOpen = false;
                 } else {
                     li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
-                    equipmentCtrl.open(0, firstMac);
+                    equipmentCtrl.open1(0, firstMac);
 
                     FirEqupment.setMStage(2);
                     RefrashAllEqu(FirEqupment.getMacAdress(), FirEqupment);
@@ -210,7 +272,7 @@ protected static final int RESULT_SPEECH = 1;
                 break;
 
             case R.id.iv_equ_yy:
-                /*Intent intent1 = new Intent(
+                Intent intent1 = new Intent(
                         RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
 
                 intent1.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
@@ -223,7 +285,7 @@ protected static final int RESULT_SPEECH = 1;
                             "Opps! Your device doesn't support Speech to Text",
                             Toast.LENGTH_SHORT);
                     t.show();
-                }*/
+                }
 
                 break;
         }
@@ -247,14 +309,7 @@ protected static final int RESULT_SPEECH = 1;
         isRunning = false;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
 
-        if (receiver != null) {
-            getActivity(). unregisterReceiver(receiver);
-        }
-    }
 
     class MessageReceiver extends BroadcastReceiver {
         @Override
@@ -272,20 +327,32 @@ protected static final int RESULT_SPEECH = 1;
         equpmentAdapter.setEqumentData(macAdress,equpment);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (     requestCode== RESULT_SPEECH&& data != null){
+            ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            ToastUtil.showShort(getActivity(),result.get(0));
+            Log.e(TAG, "onActivityResult: zzz-->"+result.get(0) );
+        }
+        if (resultCode==2000){
+            RefrashChooseEqu();
+        }
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (MQBound) {
+            getActivity().unbindService(MQconnection);
+        }
+        if (receiver != null) {
+            getActivity(). unregisterReceiver(receiver);
+        }
+
+    }
 
 
-
-
-
-
-
-
-
-
-
-
-
-//
+    //
 //    public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 //
 //

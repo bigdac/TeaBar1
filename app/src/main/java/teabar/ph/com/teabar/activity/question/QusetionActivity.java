@@ -1,6 +1,7 @@
 package teabar.ph.com.teabar.activity.question;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -245,9 +247,8 @@ public class QusetionActivity extends BaseActivity {
      *  问卷结束
      *
      */
-    String bodyGrades;
-    String nutritionGrades;
-    String mindGradesc;
+    double bodyGrades,nutritionGrades,mindGradesc,lifeGrades;
+
     List<Tea> teaList = new ArrayList<>();
     class examEndTeaAsyncTask extends AsyncTask<Map<String,Object>,Void,String> {
 
@@ -265,9 +266,10 @@ public class QusetionActivity extends BaseActivity {
                         returnMsg1=jsonObject.getString("message1");
                         if ("200".equals(code)){
                             JSONObject jsonObject1 = jsonObject.getJSONObject("data");
-                             bodyGrades = jsonObject1.getString("bodyGrades");
-                             nutritionGrades = jsonObject1.getString("nutritionGrades");
-                             mindGradesc = jsonObject1.getString("mindGrades");
+                             bodyGrades = jsonObject1.getDouble("bodyGrades");
+                             nutritionGrades = jsonObject1.getDouble("nutritionGrades");
+                             mindGradesc = jsonObject1.getDouble("mindGrades");
+                             lifeGrades = jsonObject1.getDouble("lifeGrades");
                              JSONArray jsonArray = jsonObject1.getJSONArray("teaList");
                              Gson gson = new Gson();
                              for (int i = 0;i<jsonArray.length();i++){
@@ -294,7 +296,15 @@ public class QusetionActivity extends BaseActivity {
             switch (s) {
                 case "200":
                     tipDialog.dismiss();
-
+                    Intent intent = new Intent(QusetionActivity.this,PowerpicActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("teaList", (Serializable) teaList);
+                    bundle.putDouble("bodyGrades",bodyGrades);
+                    bundle.putDouble("nutritionGrades",nutritionGrades);
+                    bundle.putDouble("mindGradesc",mindGradesc);
+                    bundle.putDouble("lifeGrades",lifeGrades);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                     break;
 
                 case "4000":

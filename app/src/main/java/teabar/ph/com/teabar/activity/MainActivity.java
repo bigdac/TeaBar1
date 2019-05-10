@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.speech.RecognizerIntent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.util.Log;
@@ -79,6 +80,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
     EquipmentImpl equipmentDao;
     List<Equpment> equpments;
     public static boolean isRunning = false;
+    Equpment FirstEqument;
     @Override
     public void initParms(Bundle parms) {
 
@@ -106,6 +108,12 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
         myselfFragment = new MyselfFragment();
         equipmentDao = new EquipmentImpl( getApplicationContext());
         equpments= equipmentDao.findAll();
+        equpments= equipmentDao.findAll();
+        for (int i = 0;i<equpments.size();i++){
+            if (equpments.get(i).getIsFirst()){
+                FirstEqument = equpments.get(i) ;
+            }
+        }
         initView();
         //绑定services
         MQintent = new Intent(this, MQService.class);
@@ -121,6 +129,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
             Log.e("qqqqqZZZZ???", "11111");
             String msg = intent.getStringExtra("msg");
              msg1 = (Equpment) intent.getSerializableExtra("msg1");
+             FirstEqument = msg1;
              if (MainFragment2.isRunning){
                  mainFragment.RefrashFirstEqu(msg1);
              }
@@ -300,14 +309,30 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
         if (resultCode==1000) {
             socialFragment.Refrashfriend();
         }
-        if (resultCode==2000){
-                equmentFragment.RefrashChooseEqu();
-        }
+//        if (resultCode==2000){
+//                equmentFragment.RefrashChooseEqu();
+//        }
+
+    }
+
+    public Equpment getFirstEqument(){
+        return FirstEqument;
+    }
+
+    public void setFirstEqument(Equpment firstEqument){
+        this.FirstEqument = firstEqument;
     }
 
     @Override
     public void open(int type,String mac) {
             MQservice.sendOpenEqu(type,mac);
+            equmentFragment.Synchronization(type);//设备同步
+        Log.e(TAG, "open: --------------->"+type+">>>>>>"+mac );
+    }
+    @Override
+    public void open1(int type,String mac) {
+        MQservice.sendOpenEqu(type,mac);
+        mainFragment.Synchronization(type);//设备同步
         Log.e(TAG, "open: --------------->"+type+">>>>>>"+mac );
     }
 

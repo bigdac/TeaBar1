@@ -121,10 +121,10 @@ public class RadarChart02View extends DemoView {
 			chart.getDataAxis().setTickLabelMargin(40);
 			
 //			chart.getLinePaint().setColor(Color.rgb(133, 194, 2)); //Color.parseColor("#BFE154"));
-			chart.getLinePaint().setColor(Color.parseColor("#BFE154")); //Color.parseColor("#BFE154"));
+			chart.getLinePaint().setColor(Color.parseColor("#C5C5C5")); //Color.parseColor("#BFE154"));
 			chart.getLabelPaint().setColor(Color.parseColor("#333333"));
 			chart.getLabelPaint().setFakeBoldText(true);
-			
+
 			//定义数据轴标签显示格式
 			chart.getDataAxis().setLabelFormatter(new IFormatterTextCallBack(){
 
@@ -141,15 +141,16 @@ public class RadarChart02View extends DemoView {
 			});
 
 			//定义数据点标签显示格式
-//			chart.setDotLabelFormatter(new IFormatterDoubleCallBack() {
-//				@Override
-//				public String doubleFormatter(Double value) {
-//					// TODO Auto-generated method stub
-//					DecimalFormat df= new DecimalFormat("#0");
+			chart.setDotLabelFormatter(new IFormatterDoubleCallBack() {
+				@Override
+				public String doubleFormatter(Double value) {
+					// TODO Auto-generated method stub
+					DecimalFormat df= new DecimalFormat("#0");
 //					String label = "["+df.format(value).toString()+"]";
-//					return label;
-//				}});
-//
+					String label = "";
+					return label;
+				}});
+
 			chart.enablePanMode();
 			
 		} catch (Exception e) {
@@ -158,10 +159,10 @@ public class RadarChart02View extends DemoView {
 		}
 		
 	}
-	
+	LinkedList<Double> dataSeriesA;
 	private void chartDataSet()
 	{
-		LinkedList<Double> dataSeriesA= new LinkedList<Double>();
+	 	dataSeriesA= new LinkedList<Double>();
 		dataSeriesA.add(20d); 
 		dataSeriesA.add(10d); 
 		dataSeriesA.add(30d); 
@@ -172,7 +173,7 @@ public class RadarChart02View extends DemoView {
 //		dataSeriesA.add(90d);
 		
 		RadarData lineData1 = new RadarData("",dataSeriesA,
-					Color.rgb(234, 83, 71),XEnum.DataAreaStyle.FILL);
+					Color.rgb(159,136,250),XEnum.DataAreaStyle.FILL);
 		lineData1.setLabelVisible(true);	
 		lineData1.getPlotLine().getDotLabelPaint().setTextAlign(Align.LEFT);
 
@@ -180,7 +181,17 @@ public class RadarChart02View extends DemoView {
 
 		
 	}
-    
+    public  void setData (LinkedList<Double> dataSeriesA){
+		this.dataSeriesA = dataSeriesA;
+		chartData.clear();
+		RadarData lineData1 = new RadarData("",dataSeriesA,
+				Color.rgb(159,136,250),XEnum.DataAreaStyle.FILL);
+		lineData1.setLabelVisible(true);
+		lineData1.getPlotLine().getDotLabelPaint().setTextAlign(Align.LEFT);
+		chartData.add(lineData1);
+		refreshChart();
+	}
+
 	private void chartLabels()
 	{
 		labels.add("");

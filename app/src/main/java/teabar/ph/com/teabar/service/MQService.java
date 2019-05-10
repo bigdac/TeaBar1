@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
@@ -26,7 +27,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -35,6 +38,7 @@ import java.util.concurrent.TimeUnit;
 import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.fragment.EqumentFragment;
 import teabar.ph.com.teabar.pojo.Equpment;
+import teabar.ph.com.teabar.util.HttpUtils;
 
 public class MQService extends Service {
 
@@ -58,12 +62,13 @@ public class MQService extends Service {
     LocalBinder binder = new LocalBinder();
     int headCode = 0x32;
    EquipmentImpl equipmentDao;
-
+   SharedPreferences preferences;
 
     @Override
     public void onCreate() {
         super.onCreate();
         equipmentDao = new EquipmentImpl(this);
+        preferences = getSharedPreferences("my", MODE_PRIVATE);
         Log.i("MQService", "-->onCreate");
         init();
 
@@ -146,7 +151,6 @@ public class MQService extends Service {
      */
     public void sendFindEqu( String mac) {
 
-
         try {
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
@@ -158,8 +162,7 @@ public class MQService extends Service {
             jsonArray.put(2,length);
             jsonArray.put(3,checkCode);
             jsonObject.put("Coffee",jsonArray);
-            List <Equpment> equpments = equipmentDao.findAll();
-            String topicName = "coffee/"+mac+"/status/set";
+            String topicName = "tea/"+mac+"/status/set";
             String payLoad =jsonObject.toString();
             boolean success = publish(topicName, 1, payLoad);
             Log.e("GGGGGTTTTTT", "open: --------------->"+ success );
@@ -196,7 +199,7 @@ public class MQService extends Service {
             jsonArray.put(4,checkCode);
             jsonObject.put("Coffee",jsonArray);
 
-            String topicName = "coffee/"+mac+"/operate/set";
+            String topicName = "tea/"+mac+"/operate/set";
             String payLoad =jsonObject.toString();
             boolean success = publish(topicName, 1, payLoad);
             Log.e("GGGGGTTTTTT", "open: --------------->"+type+">>>>>>"+mac+"...."+success );
@@ -234,7 +237,7 @@ public class MQService extends Service {
             jsonArray.put(7,checkCode);
             jsonObject.put("Coffee",jsonArray);
 
-            String topicName = "coffee/"+mac+"/operate/set";
+            String topicName = "tea/"+mac+"/operate/set";
             String payLoad =jsonObject.toString();
             boolean success = publish(topicName, 1, payLoad);
             Log.e("GGGGGTTTTTT", "open: --------------->"  +success );
@@ -263,7 +266,7 @@ public class MQService extends Service {
             jsonArray.put(2,length);
             jsonArray.put(3,checkCode);
             jsonObject.put("Coffee",jsonArray);
-            String topicName = "coffee/"+mac+"/operate/set";
+            String topicName = "tea/"+mac+"/operate/set";
             String payLoad =jsonObject.toString();
             boolean success = publish(topicName, 1, payLoad);
             Log.e("GGGGGTTTTTT", "open: --------------->"  +success );
@@ -285,10 +288,12 @@ public class MQService extends Service {
             String message = strings[1];/**收到的消息*/
             Log.i("topicName", "-->:" + topicName);
             String macAddress = null;
-            if (topicName.startsWith("coffee")) {
+            String topic = null;
+            if (topicName.startsWith("tea")) {
                 String[] aa = topicName.split("/");
                 if (aa.length>2){
                     macAddress = aa[1];
+                    topic = aa[2];
                 }
             }
             JSONArray messageJsonArray = null;
@@ -329,16 +334,55 @@ public class MQService extends Service {
                                 sendBroadcast(mqttIntent);
                             }
                         }
+                            if (EqumentFragment.isRunning) {
+                                Intent mqttIntent = new Intent("EqumentFragment");
+                                mqttIntent.putExtra("msg", macAddress);
+                                mqttIntent.putExtra("msg1", equipment);
+                                sendBroadcast(mqttIntent);
+                            }
+                             }
+                    }else if (messageJsonArray != null && messageJsonArray.getInt(1) == 0xA2){
+                            /*制作茶返回*/
+                    }else if (messageJsonArray != null && messageJsonArray.getInt(1) == 0xA3){
+                        /*终止操作返回*/
+                    }else if (messageJsonArray != null && messageJsonArray.getInt(1) == 0xA4){
+                        /*开关机返回*/
+                        boolean isFirst = equipment.getIsFirst()  ;//是否是默认设备
+                        int mStage  = messageJsonArray.getInt(3);
+                        equipment.setMStage(mStage);
+                        if (isFirst){
+                            if (MainActivity.isRunning){
+                                Intent mqttIntent = new Intent("MainActivity");
+                                mqttIntent.putExtra("msg", macAddress);
+                                mqttIntent.putExtra("msg1", equipment);
+                                sendBroadcast(mqttIntent);
+                            }
+                        }
+                        if (EqumentFragment.isRunning) {
+                            Intent mqttIntent = new Intent("EqumentFragment");
+                            mqttIntent.putExtra("msg", macAddress);
+                            mqttIntent.putExtra("msg1", equipment);
+                            sendBroadcast(mqttIntent);
+                        }
+
+                    }else if (messageJsonArray != null && messageJsonArray.getInt(1) == 0xA6){
+                        /*机器灯光返回*/
                     }
+                    if ("reset".equals(topic)){
+                        long  userId = preferences.getLong("userId",0) ;
+                        Map<String,Object> params = new HashMap<>();
+                        long id = -1;
+                        if (equipment!=null){
+                             id = equipment.getEqupmentId();
+                             delEqupment = equipment;
+                        }
+                        params.put("id", id);
+                        params.put("userId",userId);
+                        new DeleteDeviceAsyncTask().execute(params);
                     }
                 }
 
-                if (EqumentFragment.isRunning) {
-                    Intent mqttIntent = new Intent("EqumentFragment");
-                    mqttIntent.putExtra("msg", macAddress);
-                    mqttIntent.putExtra("msg1", equipment);
-                    sendBroadcast(mqttIntent);
-                }
+
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -346,6 +390,58 @@ public class MQService extends Service {
             return null;
         }
 
+    }
+
+    /*
+     *
+     *删除设备
+     * */
+    Equpment delEqupment = null;
+    class DeleteDeviceAsyncTask extends AsyncTask<Map<String,Object>,Void,String>{
+
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+            String code = "";
+            Map<String,Object> params = maps[0];
+            String result = HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/app/deleteDevice",params);
+            Log.e("GGGG", "doInBackground: -->"+result );
+            if (!TextUtils.isEmpty(result)){
+                if (!"4000".equals(result)){
+                    try {
+                        JSONObject jsonObject = new JSONObject(result);
+                        code = jsonObject.getString("state");
+
+                    } catch (JSONException e) {
+
+                    }
+
+                }else{
+                    code="4000";
+                }
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            switch (s){
+                case  "200":
+
+                    equipmentDao.delete(delEqupment);
+                    delEqupment = null;
+
+                    break;
+
+                case  "4000":
+
+                    break;
+
+                default:
+
+                    break;
+            }
+        }
     }
 
     public List<String> getTopicNames() {
@@ -356,10 +452,10 @@ public class MQService extends Service {
             String macAddress = equpment.getMacAdress();
             String onlineTopicName = "";
             String offlineTopicName = "";
-            onlineTopicName = "coffee/" + macAddress + "/status/transfer";
-            offlineTopicName = "coffee/" + macAddress + "/lwt";
-            String s3 = "coffee/" + macAddress + "/operate/transfer";
-            String s4 = "coffee/" + macAddress + "/extra/transfer";
+            onlineTopicName = "tea/" + macAddress + "/status/transfer";
+            offlineTopicName = "tea/" + macAddress + "/lwt";
+            String s3 = "tea/" + macAddress + "/operate/transfer";
+            String s4 = "tea/" + macAddress + "/extra/transfer";
             list.add(onlineTopicName);
             list.add(offlineTopicName);
             list.add(s3);

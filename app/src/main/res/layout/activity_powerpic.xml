@@ -49,6 +49,8 @@
         android:text="@string/my_power_s1"
         android:layout_alignTop="@+id/rcv_power"
         android:layout_centerHorizontal="true"
+        android:textSize="14sp"
+        android:textColor="#333333"
         />
     <TextView
         android:layout_width="wrap_content"
@@ -56,23 +58,33 @@
         android:text="@string/my_power_s3"
         android:layout_alignBottom="@+id/rcv_power"
         android:layout_centerHorizontal="true"
+        android:textSize="14sp"
+        android:textColor="#333333"
         />
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:gravity="center_vertical"
+        android:gravity="center"
+        android:layout_toLeftOf="@+id/rcv_power"
+        android:layout_marginRight="-20dp"
         android:text="@string/my_power_s4"
         android:layout_alignBottom="@+id/rcv_power"
-        android:layout_marginLeft="20dp"
+        android:textSize="14sp"
+        android:textColor="#333333"
+        android:layout_marginLeft="10dp"
         />
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:text="@string/my_power_s3"
+        android:layout_toRightOf="@+id/rcv_power"
+        android:layout_marginLeft="-20dp"
         android:layout_alignBottom="@+id/rcv_power"
-        android:layout_marginRight="30dp"
+        android:layout_marginRight="10dp"
         android:layout_alignParentRight="true"
+        android:textSize="14sp"
+        android:textColor="#333333"
         />
     <teabar.ph.com.teabar.view.RadarChart02View
         android:id="@+id/rcv_power"
@@ -83,6 +95,7 @@
         android:layout_marginTop="50dp"
         />
     <Button
+        android:id="@+id/bt_power_next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@mipmap/login_button"

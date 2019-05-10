@@ -153,17 +153,17 @@ public class AddDeviceActivity extends BaseActivity {
     public void onClick(View view){
         switch (view.getId()){
             case R.id.bt_device_add:
-                String ssid=et_add_name.getText().toString();
+                String ssid=et_add_name.getText().toString().trim();
                 String apBssid=mWifiAdmin.getWifiConnectedBssid();
                 String apPassword=et_add_pass.getText().toString();
                 String taskResultCountStr = "1";
                 if (apPassword.length()>0){
-//                    new EsptouchAsyncTask3().execute(ssid, apBssid, apPassword, taskResultCountStr);
-                    Map<String,Object> params = new HashMap<>();
-                    params.put("userId",userId);
-                    params.put("mac","123456789");
-                    showProgressDialog("请稍后。。。");
-                    new addDeviceAsyncTask().execute(params);
+                    new EsptouchAsyncTask3().execute(ssid, apBssid, apPassword, taskResultCountStr);
+//                    Map<String,Object> params = new HashMap<>();
+//                    params.put("userId",userId);
+//                    params.put("mac","123456789");
+//                    showProgressDialog("请稍后。。。");
+//                    new addDeviceAsyncTask().execute(params);
                 }else {
                     toast("请输入密码");
                 }
@@ -290,8 +290,8 @@ public class AddDeviceActivity extends BaseActivity {
 //                    JSONObject returnData = jsonObject.getJSONObject("returnData");
                     if ("200".equals(code)){
 
-                        String onlineTopicName = "Coffee/" + deviceMac + "/transfer";
-                        String offlineTopicName = "Coffee/" + deviceMac + "/lwt";
+                        String onlineTopicName = "tea/" + deviceMac + "/transfer";
+                        String offlineTopicName = "tea/" + deviceMac + "/lwt";
                         clcokservice.subscribe(onlineTopicName,1);
                         clcokservice.subscribe(offlineTopicName,1);
                         Equpment equpment =new Equpment();
@@ -326,7 +326,7 @@ public class AddDeviceActivity extends BaseActivity {
                 break;
 
                 case "200":
-                        toast(returnMsg1);
+                    toast(returnMsg1);
                     Map<String,Object> params = new HashMap<>();
                     params.put("userId",userId);
                     new  FindDeviceAsynTask().execute(params);
@@ -497,10 +497,11 @@ public class AddDeviceActivity extends BaseActivity {
                             String ssid = resultInList.getBssid();
                             sb.append("配置成功" + ssid);
                             if (!TextUtils.isEmpty(ssid)) {
-                                if (tipDialog!=null&&tipDialog.isShowing())
-                                    tipDialog.dismiss();
-//                                new addDeviceAsyncTask().execute();
-                                Toast.makeText(AddDeviceActivity.this, "配置成功,ssid=" + ssid, Toast.LENGTH_LONG).show();
+                                Map<String,Object> params = new HashMap<>();
+                                 params.put("userId",userId);
+                                 params.put("mac",et_add_name.getText().toString().trim()+ssid);
+                                new addDeviceAsyncTask().execute(params);
+                                Log.e(TAG, "onPostExecute: -->ssid"+ et_add_name.getText().toString().trim()+ssid );
                                 break;
                             }
                             count++;

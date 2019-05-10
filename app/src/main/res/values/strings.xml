@@ -52,6 +52,8 @@
 
     <string name="equ_xq_online">在線</string>
     <string name="equ_xq_outline">離線</string>
+    <string name="equ_xq_dg">休眠</string>
+    <string name="equ_xq_xm">待機</string>
     <string name="equ_xq_waterf">充足</string>
     <string name="equ_xq_waters">不足</string>
     <string name="equ_xq_ishot">已預熱</string>

@@ -57,6 +57,8 @@ public class EquipmentDetailsActivity extends BaseActivity {
     SharedPreferences preferences;
     QMUITipDialog tipDialog;
     int resultCode = 0;
+    List<Equpment> listEqu = new ArrayList<>();
+    Equpment FirstEqu;
     @Override
     public void initParms(Bundle parms) {
         equpment = (Equpment) parms.getSerializable("equment");
@@ -83,6 +85,12 @@ public class EquipmentDetailsActivity extends BaseActivity {
         userId = preferences.getLong("userId",0)+"";
         stringList = new ArrayList<>();
         equipmentDao = new EquipmentImpl(getApplicationContext());
+        listEqu= equipmentDao.findAll();
+        for (int j=0;j<listEqu.size();j++){
+            if (listEqu.get(j).getIsFirst()){
+                FirstEqu = listEqu.get(j);
+            }
+        }
         if (equpment.getIsFirst()){
             iv_equxq_xz.setImageResource(R.mipmap.equ_choose);
         }
@@ -167,7 +175,7 @@ public class EquipmentDetailsActivity extends BaseActivity {
     Dialog dialog;
     int position ;
     String equName="";
-    int Flag=-1;
+    int Flag=-1; //g更新  0 更新名字 1 更新默认设备
     private void customDialog( ) {
         dialog  = new Dialog(this, R.style.MyDialog);
         View view = View.inflate(this, R.layout.dialog_rename, null);
@@ -188,7 +196,6 @@ public class EquipmentDetailsActivity extends BaseActivity {
         tv_dialog_qx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
 
                 dialog.dismiss();
             }
@@ -358,8 +365,11 @@ public class EquipmentDetailsActivity extends BaseActivity {
                         }
                     }else {
                         equpment.setIsFirst(true);
+                        FirstEqu.setIsFirst(false);
+                        equipmentDao.update(FirstEqu);
                         equipmentDao.update(equpment);
-                    }
+                       List<Equpment>  equpments = equipmentDao.findAll();
+            }
                     Flag=-1;
                     toast( returnMsg1);
                     break;

@@ -51,7 +51,8 @@
 
     <string name="equ_xq_online">Online</string>
     <string name="equ_xq_outline">Outline</string>
-
+    <string name="equ_xq_dg">Dormant</string>
+    <string name="equ_xq_xm">Await</string>
     <string name="equ_xq_waterf">Enough water</string>
     <string name="equ_xq_waters">Water shortage</string>
     <string name="equ_xq_ishot">Heating</string>

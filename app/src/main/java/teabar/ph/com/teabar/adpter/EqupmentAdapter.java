@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -46,11 +45,9 @@ public class EqupmentAdapter extends RecyclerView.Adapter<EqupmentAdapter.MyView
     }
 
     public void setEqumentData1( List<Equpment> equpment){
-
+                this.mData.clear();
                this. mData =equpment;
                notifyDataSetChanged();
-
-
     }
     @NonNull
     @Override
@@ -74,12 +71,38 @@ public class EqupmentAdapter extends RecyclerView.Adapter<EqupmentAdapter.MyView
         if(!TextUtils.isEmpty(mData.get(position).getName())){
             holder.tv_equ_name.setText(mData.get(position).getName());
         }
-
-        if (mData.get(position).getMStage()==0){
-            Open = false;
-        }else {
-            Open =true;
+        switch (mData.get(position).getMStage()){
+            case 0:
+                Open = false;
+                holder.tv_equ_online.setText(context.getText(R.string.equ_xq_outline));
+                holder.tv_equ_online.setTextColor(context.getResources().getColor(R.color.social_gray));
+                break;
+            case 1:
+                Open =true;
+                holder.tv_equ_online.setText(context.getText(R.string.equ_xq_online));
+                holder.tv_equ_online.setTextColor(context.getResources().getColor(R.color.nomal_green));
+                break;
+            case 2:
+                Open =true;
+                holder.tv_equ_online.setText(context.getText(R.string.equ_xq_online));
+                holder.tv_equ_online.setTextColor(context.getResources().getColor(R.color.nomal_green));
+                break;
+            case 3:
+                Open =true;
+                holder.tv_equ_online.setText(context.getText(R.string.equ_xq_xm));
+                holder.tv_equ_online.setTextColor(context.getResources().getColor(R.color.social_gray));
+                break;
+            case 4:
+                Open =true;
+                holder.tv_equ_online.setText(context.getText(R.string.equ_xq_dg));
+                holder.tv_equ_online.setTextColor(context.getResources().getColor(R.color.nomal_green));
+                break;
+                default:
+                    Open=false;
+                    break;
         }
+
+
         final boolean isOpen[] ={Open};
         if (!isOpen[0]){
             holder.iv_equ_open.setImageResource(R.mipmap.equ_close);
@@ -90,7 +113,6 @@ public class EqupmentAdapter extends RecyclerView.Adapter<EqupmentAdapter.MyView
             holder.iv_equ_open.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     if (isOpen[0]){
                         holder.iv_equ_open.setImageResource(R.mipmap.equ_close);
                         mData.get(position).setMStage(0);
@@ -129,8 +151,6 @@ public class EqupmentAdapter extends RecyclerView.Adapter<EqupmentAdapter.MyView
                    blue = Integer.valueOf(aa[2]);
                 }
                 int color = Color.rgb(red, green, blue);
-                holder.tv_equ_online.setText("在线");
-                holder.tv_equ_online.setTextColor(context.getResources().getColor(R.color.nomal_green));
                 GradientDrawable myGrad = (GradientDrawable)holder.tv_light_bj.getBackground();
                 myGrad.setColor(color);
             }else {

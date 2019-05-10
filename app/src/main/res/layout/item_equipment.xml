@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="178dp"
-    android:layout_height="197dp">
+    android:layout_width="188dp"
+    android:layout_height="207dp"
+    android:padding="10dp"
+    >
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
+        android:layout_width="188dp"
+        android:layout_height="207dp"
         android:scaleType="fitXY"
         android:src="@drawable/teacard" />
     <ImageView

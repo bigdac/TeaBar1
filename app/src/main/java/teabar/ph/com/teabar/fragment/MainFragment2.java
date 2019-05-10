@@ -119,7 +119,7 @@ public class MainFragment2 extends BaseFragment  {
             new getTipsAsynTask().execute();//获取健康小知识
         }
         equipmentDao = new EquipmentImpl(getActivity().getApplicationContext());
-        equpments= equipmentDao.findAll();
+        firstMac = ((MainActivity)getActivity()).getFirstEqument().getMacAdress();
         preferences = getActivity().getSharedPreferences("my",Context.MODE_PRIVATE);
         String name = preferences.getString("userName","");
         userId = preferences.getLong("userId",0);
@@ -164,12 +164,10 @@ public class MainFragment2 extends BaseFragment  {
                 if (isOpen){
                     li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
                     firstEquipmentCtrl.open(1, firstMac );
-
                     isOpen=false;
                 }else {
                     li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
                     firstEquipmentCtrl.open(0, firstMac );
-
                     isOpen= true;
                 }
 
@@ -243,6 +241,19 @@ public class MainFragment2 extends BaseFragment  {
 
     }
 
+    /*兩個默認設備同步*/
+    public void  Synchronization(int type){
+        //0是开机 1是关机 这里是显示 0 为绿色
+        if (type==1){
+            isOpen = false;
+            li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
+
+        }else {
+            isOpen = true;
+            li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
+        }
+    }
+    /*刷新單個設備*/
     public void  RefrashFirstEqu(Equpment equpment){
 
          if ("2".equals(equpment.getErrorCode()) ){
@@ -256,10 +267,12 @@ public class MainFragment2 extends BaseFragment  {
          }else {
              tv_main_hot.setText(R.string.equ_xq_nohot);
          }
-        if (equpment.getMStage()==5){
+        if (equpment.getMStage()==0){
+             isOpen = false;
             li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
 
         }else {
+             isOpen = true;
             li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
         }
 
