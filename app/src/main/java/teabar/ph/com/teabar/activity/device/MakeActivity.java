@@ -1,9 +1,11 @@
 package teabar.ph.com.teabar.activity.device;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -92,6 +94,8 @@ public class MakeActivity extends BaseActivity {
     EquipmentImpl equipmentDao;
     List<Equpment> equpments;
     String firstMac;
+    Equpment Firstequpment;
+    public static boolean isRunning = false;
     Tea tea;
     long teaId= -1;
     long userId;
@@ -99,6 +103,7 @@ public class MakeActivity extends BaseActivity {
     QMUITipDialog tipDialog;
     String id ;
     long FirstId;
+    MessageReceiver receiver;
     @Override
     public void initParms(Bundle parms) {
 
@@ -144,6 +149,7 @@ public class MakeActivity extends BaseActivity {
             }
             for (int i = 0;i<equpments.size();i++){
                 if (equpments.get(i).getIsFirst()){
+                    Firstequpment = equpments.get(i);
                     firstMac = equpments.get(i).getMacAdress();
                     FirstId = equpments.get(i).getEqupmentId();
                 }
@@ -155,7 +161,9 @@ public class MakeActivity extends BaseActivity {
                 new getTeaAsyncTask().execute();
                 id = teaId+"";
             }
-
+        IntentFilter intentFilter = new IntentFilter("MakeActivity");
+        receiver = new MessageReceiver();
+        registerReceiver(receiver, intentFilter);
         //绑定services
         MQintent = new Intent(this, MQService.class);
         MQBound =  bindService(MQintent, MQconnection, Context.BIND_AUTO_CREATE);
@@ -195,68 +203,91 @@ public class MakeActivity extends BaseActivity {
     public void widgetClick(View v) {
 
     }
+
+
+
+    class MessageReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.e("qqqqqZZZZ???", "11111");
+            int nowStage = intent.getIntExtra("nowStage",-1);
+            int height = intent.getIntExtra("height",0);
+            int low = intent.getIntExtra("low",0);
+            int size = height*256 +low;
+            if (IsMakeing==1){
+                if (waterView!=null){
+                    float value = 100* size/tea.getWaterYield();
+                    waterView.setValue(value);
+                    tv_number.setText( (int) value+"");
+                    if (size ==tea.getWaterYield()){
+                    waterView.setValue(110f );
+                    tv_make_title.setText(R.string.equ_xq_cpwc);
+                    tv_number.setText(100+"");
+                    li_make_finish.setVisibility(View.VISIBLE);
+                    bt_view_stop.setVisibility(View.GONE);
+                    dialog1.setCanceledOnTouchOutside(true);
+                    }
+                }
+            }
+            Equpment msg1 =(Equpment)intent.getSerializableExtra("msg1");
+            if (msg1!=null){
+                Firstequpment = msg1;
+            }
+
+        }
+    }
+
+
     WaveProgress waterView;
     Dialog dialog;
-    int choose;
-  CountDownTimer countDownTimer;
+    Dialog dialog1;
+    CountDownTimer countDownTimer;
+    int IsMakeing = 0;
+    TextView tv_make_title;
+    TextView tv_number;
+    LinearLayout li_make_finish;
+     Button bt_view_stop;
     private void customDialog( ) {
-        choose=0;
-        dialog  = new Dialog(this, R.style.MyDialog);
+        IsMakeing =0;
+        dialog1  = new Dialog(this, R.style.MyDialog);
         View view = View.inflate(this, R.layout.view_make, null);
-        final Button bt_view_stop = view.findViewById(R.id.bt_view_stop);
-        final TextView tv_number = view.findViewById(R.id.tv_number);
+         bt_view_stop = view.findViewById(R.id.bt_view_stop);
+        tv_number = view.findViewById(R.id.tv_number);
         final TextView tv_units = view.findViewById(R.id.tv_units);
-        final TextView tv_make_title = view.findViewById(R.id.tv_make_title);
-        final LinearLayout li_make_finish = view.findViewById(R.id.li_make_finish);
+        tv_make_title = view.findViewById(R.id.tv_make_title);
+         li_make_finish = view.findViewById(R.id.li_make_finish);
         tv_make_title.setText(R.string.equ_xq_jpz);
         waterView = (WaveProgress) view.findViewById(R.id.waterView);
         waterView.setWaveColor(Color.parseColor("#37dbc2"), Color.parseColor("#81fbe6"));
         waterView.setMaxValue(100f);
-        waterView.setValue(100f );
-        MQservice.sendMakeMess(300,30,80,firstMac);
-         countDownTimer = new CountDownTimer(30000,1000) {
+//        waterView.setValue(100f );
+        MQservice.sendMakeMess(tea.getWaterYield(),tea.getSeconds(),tea.getTemperature(),firstMac);
+        waterView.setValue(50f);
+        long time =tea.getSeconds();
+         countDownTimer = new CountDownTimer(time*1000,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                if (choose==0){
-                    waterView.setValue(100*millisUntilFinished /30000 );
                     tv_number.setText(millisUntilFinished/1000+"");
                     Log.e("DDDDDD", "onTick: -->"+ (millisUntilFinished /1000));
-
-                }else {
-                    waterView.setValue(100f-100*millisUntilFinished /30000 );
-                    tv_number.setText((int)(100f-100*millisUntilFinished /30000)+"");
-                    Log.e("DDDDDD", "onTick: -->"+ (int)(100f-100*millisUntilFinished /30000));
-                }
 
             }
 
             @Override
             public void onFinish() {
-                if (choose==0){
+
                     waterView.setValue(-10f );
                     tv_units.setText("％");
-                    countDownTimer.start();
                     tv_make_title.setText(R.string.equ_xq_jpz);
-                    choose=1;
-                }else {
-                    waterView.setValue(110f );
-                    tv_make_title.setText(R.string.equ_xq_cpwc);
-                    waterView.setValue(100f);
-                    tv_number.setText(100+"");
-                    li_make_finish.setVisibility(View.VISIBLE);
-                    bt_view_stop.setVisibility(View.GONE);
-                    dialog.setCanceledOnTouchOutside(true);
-                }
-
+                    IsMakeing =1;
             }
         } ;
         countDownTimer.start();
-        dialog.setContentView(view);
+        dialog1.setContentView(view);
         //使得点击对话框外部不消失对话框
-        dialog.setCanceledOnTouchOutside(false);
+        dialog1.setCanceledOnTouchOutside(false);
         //设置对话框的大小
         view.setMinimumHeight((int) (ScreenSizeUtils.getInstance(this).getScreenHeight() * 0.23f));
-        Window dialogWindow = dialog.getWindow();
+        Window dialogWindow = dialog1.getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         lp.width = (int) (ScreenSizeUtils.getInstance(this).getScreenWidth() * 0.75f);
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
@@ -266,13 +297,13 @@ public class MakeActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 MQservice.sendStop(firstMac);
-                dialog.dismiss();
+                dialog1.dismiss();
                 if (countDownTimer!=null){
                     countDownTimer.cancel();
                 }
             }
         });
-        dialog.show();
+        dialog1.show();
 
     }
 
@@ -285,17 +316,25 @@ public class MakeActivity extends BaseActivity {
                 break;
 
             case R.id.iv_make_choose:
-                startActivity(MethodActivity.class);
+                Intent intent = new Intent(this,MethodActivity.class);
+                intent.putExtra("tea",tea);
+                startActivity(intent);
                 break;
 
             case R.id.bt_make_make:
-                customDialog();
-                Map<String,Object> params = new HashMap<>();
-                params.put("teaName",tea.getTeaNameEn());
-                params.put("userId",userId);
-                params.put("teaId",id);
-                params.put("deviceId",FirstId);
-                new AddTeaAsyncTask().execute(params);
+
+                if (Firstequpment!=null&&Firstequpment.getMStage()==1){
+                    customDialog();
+                    Map<String,Object> params = new HashMap<>();
+                    params.put("teaName",tea.getTeaNameEn());
+                    params.put("userId",userId);
+                    params.put("teaId",id);
+                    params.put("deviceId",FirstId);
+                    new AddTeaAsyncTask().execute(params);
+                }else {
+                    toast(getResources().getText(R.string.toast_make_make).toString());
+                }
+
                 break;
             case R.id.iv_make_love:
                 if (tea!=null){
@@ -577,5 +616,14 @@ public class MakeActivity extends BaseActivity {
         if(countDownTimer!=null){
             countDownTimer.cancel();
         }
+        if (receiver!=null)
+            unregisterReceiver(receiver);
+        isRunning = false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isRunning = true;
     }
 }

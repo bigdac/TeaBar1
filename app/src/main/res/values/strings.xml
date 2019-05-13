@@ -56,8 +56,8 @@
     <string name="equ_xq_xm">待機</string>
     <string name="equ_xq_waterf">充足</string>
     <string name="equ_xq_waters">不足</string>
-    <string name="equ_xq_ishot">已預熱</string>
-    <string name="equ_xq_nohot">未預熱</string>
+    <string name="equ_xq_ishot">預熱完成</string>
+    <string name="equ_xq_nohot">正在預熱</string>
     <string name="equ_xq_cp">沖泡</string>
 
     <string name="equ_xq_star">開始沖泡</string>
@@ -237,4 +237,12 @@
     <string name="dialog_love_title1">是否添加喜愛</string>
     <string name="dialog_love_deltitle1">是否刪除喜愛</string>
 
+
+    <!--toast-->
+
+    <string name="toast_make_make">請等到預熱完成后才可製作</string>
+    <string name="toast_equ_online">設備處於離綫狀態</string>
+    <string name="toast_equ_fast">請不要快速點擊</string>
+    <string name="toast_equ_add">請先添加設備</string>
+    <string name="toast_equ_error">請檢查機器</string>
 </resources>

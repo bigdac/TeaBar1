@@ -69,7 +69,7 @@
         <activity android:name=".activity.device.EquipmentDetailsActivity" />
         <activity android:name=".activity.device.EqupmentInformActivity" />
         <activity android:name=".activity.device.EqupmentLightActivity" />
-        <activity android:name=".activity.ChooseColorActvity" />
+        <activity android:name=".activity.device.ChooseColorActvity" />
         <activity android:name=".activity.device.EqupmentWashActivity" />
         <activity android:name=".activity.question.PowerpicActivity" />
         <activity android:name=".activity.my.MyPlanActivity" />

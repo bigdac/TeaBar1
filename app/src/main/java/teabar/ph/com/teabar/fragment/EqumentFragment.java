@@ -35,6 +35,7 @@ import teabar.ph.com.teabar.base.BaseFragment;
 import teabar.ph.com.teabar.pojo.Equpment;
 import teabar.ph.com.teabar.service.MQService;
 import teabar.ph.com.teabar.util.ToastUtil;
+import teabar.ph.com.teabar.util.Utils;
 
 public class EqumentFragment extends BaseFragment {
 //    @BindView(R.id.rv_equment)
@@ -55,7 +56,7 @@ protected static final int RESULT_SPEECH = 1;
     LinearLayout li_main_title ;
     EquipmentImpl equipmentDao;
     Equpment FirEqupment;
-    String firstMac;
+    String firstMac;/*需要处理 */
     boolean isOpen = false;
     private boolean MQBound;
     @Override
@@ -65,12 +66,14 @@ protected static final int RESULT_SPEECH = 1;
 
     @Override
     public void initView(View view) {
-
+        isRunning =true;
         RecyclerView rv_equment = view.findViewById(R.id.rv_equment);
         equipmentDao = new EquipmentImpl(getActivity().getApplicationContext());
         equpments = equipmentDao.findAll();
         FirEqupment = ((MainActivity)getActivity()).getFirstEqument() ;
-        firstMac = FirEqupment.getMacAdress();
+        if (FirEqupment!=null){
+            firstMac = FirEqupment.getMacAdress();
+        }
         equpmentAdapter = new EqupmentAdapter(getActivity(),equpments);
         rv_equment.setLayoutManager( new GridLayoutManager(getActivity(),2));
 //        rv_equment.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
@@ -92,24 +95,33 @@ protected static final int RESULT_SPEECH = 1;
         equpmentAdapter.SetopenItemClick(new EqupmentAdapter.OnopenClickListener() {
             @Override
             public void onItemClick(View view, int position, boolean b) {
-                String mac = equpmentAdapter.getmData().get(position).getMacAdress();
-                int type;
-                 if (equipmentCtrl!=null){
-                     if (b){
-                         type=0;
-                     }else {
-                         type=1;
-                     }
-                     /*開關機 0開 1 關*/
-                     equipmentCtrl.open1(type,mac);
-                 }
-                 if (equpmentAdapter.getmData().get(position).getIsFirst()){
-                     if (equpmentAdapter.getmData().get(position).getMStage()==0){
-                         li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
-                     }else {
-                         li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
-                     }
-                 }
+                if (equpmentAdapter.getmData().get(position).getOnLine()){
+                        String mac = equpmentAdapter.getmData().get(position).getMacAdress();
+                        int type;
+                        if (equipmentCtrl != null) {
+                            if (b) {
+                                type = 0;
+                            } else {
+                                type = 1;
+                            }
+                            /*開關機 0開 1 關*/
+                            equipmentCtrl.open1(type, mac);
+                        }
+                        if (equpmentAdapter.getmData().get(position).getIsFirst()) {
+                            if (equpmentAdapter.getmData().get(position).getMStage() == 0) {
+                                li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
+                            } else {
+                                li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
+                            }
+                        }
+
+                }
+            }
+        });
+        equpmentAdapter.SetlightItemClick(new EqupmentAdapter.OnlightClickListener() {
+            @Override
+            public void onItemClick(View view, int position, int b) {
+                    MQservice.sendLightOpen(equpmentAdapter.getmData().get(position).getMacAdress(),b);
             }
         });
 
@@ -177,6 +189,7 @@ protected static final int RESULT_SPEECH = 1;
             return null;
         }
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -195,6 +208,7 @@ protected static final int RESULT_SPEECH = 1;
             if (  equpments.get(i).getIsFirst()){
                 ((MainActivity)getActivity()).setFirstEqument(equpments.get(i));
                 FirEqupment = equpments.get(i);
+                firstMac = FirEqupment.getMacAdress();
             }
         }
         equpmentAdapter.setEqumentData1(equpments);
@@ -204,15 +218,15 @@ protected static final int RESULT_SPEECH = 1;
         Equpment equpment =  ((MainActivity)getActivity()).getFirstEqu();
         if (equpment!=null){
             if ("2".equals(equpment.getErrorCode()) ){
-                tv_main_water.setText("不足");
+                tv_main_water.setText(R.string.equ_xq_waters);
             }else {
-                tv_main_water.setText("充足");
+                tv_main_water.setText(R.string.equ_xq_waterf);
             }
-            tv_main_online.setText("在线");
+            tv_main_online.setText(R.string.equ_xq_online);
             if (equpment.getMStage()==1){
-                tv_main_hot.setText("已经预热");
+                tv_main_hot.setText(R.string.equ_xq_ishot);
             }else {
-                tv_main_hot.setText("未预热");
+                tv_main_hot.setText(R.string.equ_xq_nohot);
             }
             if (equpment.getMStage()==0){
                 li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
@@ -227,15 +241,15 @@ protected static final int RESULT_SPEECH = 1;
     public void  RefrashFirstEqu(Equpment equpment){
 
         if ("2".equals(equpment.getErrorCode()) ){
-            tv_main_water.setText("不足");
+            tv_main_water.setText(R.string.equ_xq_waters);
         }else {
-            tv_main_water.setText("充足");
+            tv_main_water.setText(R.string.equ_xq_waterf);
         }
-        tv_main_online.setText("在线");
+        tv_main_online.setText(R.string.equ_xq_online);
         if (equpment.getMStage()==1){
-            tv_main_hot.setText("已经预热");
+            tv_main_hot.setText(R.string.equ_xq_ishot);
         }else {
-            tv_main_hot.setText("未预热");
+            tv_main_hot.setText(R.string.equ_xq_nohot);
         }
         if (equpment.getMStage()==0){
             li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
@@ -255,20 +269,34 @@ protected static final int RESULT_SPEECH = 1;
                 break;
 
             case R.id.li_main_title:
-                if (isOpen) {
-                    li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
-                    equipmentCtrl.open1(1, firstMac);
-                    FirEqupment.setMStage(0);
-                    RefrashAllEqu(FirEqupment.getMacAdress(), FirEqupment);
-                    isOpen = false;
-                } else {
-                    li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
-                    equipmentCtrl.open1(0, firstMac);
+                if (FirEqupment!=null) {
+                    if (((MainActivity) getActivity()).getFirstEqument().getOnLine()) {
 
-                    FirEqupment.setMStage(2);
-                    RefrashAllEqu(FirEqupment.getMacAdress(), FirEqupment);
-                    isOpen = true;
+                        if (!Utils.isFastClick()) {
+                            if (isOpen) {
+                                li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
+                                equipmentCtrl.open1(1, firstMac);
+                                FirEqupment.setMStage(0);
+                                RefrashAllEqu(FirEqupment.getMacAdress(), FirEqupment);
+                                isOpen = false;
+                            } else {
+                                li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
+                                equipmentCtrl.open1(0, firstMac);
+                                FirEqupment.setMStage(2);
+                                RefrashAllEqu(FirEqupment.getMacAdress(), FirEqupment);
+                                isOpen = true;
+                            }
+                        }else {
+                            ToastUtil.showShort(getActivity(), getText(R.string.toast_equ_fast).toString());
+                        }
+                    }else {
+                        ToastUtil.showShort(getActivity(), getText(R.string.toast_equ_online).toString());
+                    }
+
+                }else {
+                    ToastUtil.showShort(getActivity(), getText(R.string.toast_equ_add).toString());
                 }
+
                 break;
 
             case R.id.iv_equ_yy:
@@ -294,6 +322,7 @@ protected static final int RESULT_SPEECH = 1;
     public void doBusiness(Context mContext) {
 
     }
+
 
     @Override
     public void widgetClick(View v) {

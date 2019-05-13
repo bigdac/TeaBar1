@@ -2,6 +2,7 @@ package teabar.ph.com.teabar.activity.device;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -113,15 +114,18 @@ public class EquipmentDetailsActivity extends BaseActivity {
 
                         break;
                     case 3:
-                        startActivity(EqupmentLightActivity.class);
+                        Intent intent =new Intent(EquipmentDetailsActivity.this,EqupmentLightActivity.class);
+                        intent.putExtra("equpment",equpment);
+                        startActivity(intent);
                         resultCode=2000;
                         break;
                     case 4:
-                        startActivity(EqupmentWashActivity.class);
+                        Intent intent1 =new Intent(EquipmentDetailsActivity.this,EqupmentWashActivity.class);
+                        intent1.putExtra("equpment",equpment);
+                        startActivity(intent1);
                         break;
                     case 5:
                         customDialog1();
-
                         break;
                 }
             }

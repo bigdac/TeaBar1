@@ -55,8 +55,8 @@
     <string name="equ_xq_xm">Await</string>
     <string name="equ_xq_waterf">Enough water</string>
     <string name="equ_xq_waters">Water shortage</string>
-    <string name="equ_xq_ishot">Heating</string>
-    <string name="equ_xq_nohot">No preheating</string>
+    <string name="equ_xq_ishot">Preheat finished</string>
+    <string name="equ_xq_nohot">Preheating</string>
     <string name="equ_xq_cp">Brew</string>
 
     <string name="equ_xq_star">Star Brew</string>
@@ -239,4 +239,13 @@
     <string name="dialog_love_deltitle">Delete favorite</string>
     <string name="dialog_love_title1">Whether to add favorites or not</string>
     <string name="dialog_love_deltitle1">Whether to Delete Favorites</string>
+
+
+    <!--toast-->
+
+    <string name="toast_make_make">Please wait until the preheating is completed before making</string>
+    <string name="toast_equ_online">The device is offline</string>
+    <string name="toast_equ_fast">Please don\'t click quickly</string>
+    <string name="toast_equ_add">Please add the device first</string>
+    <string name="toast_equ_error">Please check the machine</string>
 </resources>

@@ -131,7 +131,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
              msg1 = (Equpment) intent.getSerializableExtra("msg1");
              FirstEqument = msg1;
              if (MainFragment2.isRunning){
-                 mainFragment.RefrashFirstEqu(msg1);
+                 mainFragment.RefrashFirstEqu1();
              }
             if (EqumentFragment.isRunning){
                 equmentFragment.RefrashFirstEqu(msg1);

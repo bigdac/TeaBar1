@@ -30,24 +30,14 @@
         android:textColor="@color/login_black"
         />
 
-    <TextView
-        android:layout_below="@+id/tv_sbxq"
-        android:id="@+id/tv_title1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/equ_light_lightset"
-        android:layout_marginTop="29dp"
-        android:layout_marginLeft="17dp"
-        android:textColor="#999999"
-        android:textSize="18sp"
-        />
+
     <RelativeLayout
         android:id="@+id/container"
-        android:layout_below="@+id/tv_title1"
+        android:layout_below="@+id/tv_sbxq"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="10dp"
-        android:paddingTop="10dp"
+        android:paddingTop="30dp"
         android:paddingBottom="10dp"
         >
 
@@ -55,23 +45,13 @@
 
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/color_plate"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        >
-
-
-
-    </RelativeLayout>
         <ImageView
             android:id="@+id/img_hue"
             android:layout_width="@dimen/hue_alpha_width"
             android:layout_height="match_parent"
             android:layout_alignTop="@+id/color_plate"
             android:layout_alignBottom="@+id/color_plate"
-            android:layout_marginLeft="@dimen/space"
+            android:layout_marginLeft="40dp"
             android:layout_toRightOf="@+id/color_plate"
             android:scaleType="fitXY"
             android:src="@drawable/hue_list"
@@ -82,7 +62,7 @@
         android:layout_width="35dp"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/color_plate"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="35dp"
         android:src="@mipmap/light_choose"/>
 
 
@@ -91,7 +71,7 @@
         android:id="@+id/color_plate"
         android:layout_width="240dp"
         android:layout_height="240dp"
-        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="17dp"
         />
 
     <ImageView
@@ -100,18 +80,41 @@
         android:layout_height="15dp"
         android:scaleType="matrix"
         android:src="@drawable/img_plate_cursor"/>
+        <RelativeLayout
+            android:id="@+id/rl_equ_light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/color_plate"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="17dp"
+            >
+            <TextView
+                android:id="@+id/tv_light_bj"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/light_button"
+                />
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@mipmap/equ_light"
+                android:layout_centerInParent="true"
+                />
+
+        </RelativeLayout>
     <Button
         android:id="@+id/tv_color"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="26dp"
-        android:layout_marginRight="26dp"
-        android:textSize="14sp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="17dp"
+        android:layout_marginRight="17dp"
+        android:textSize="16sp"
         android:layout_alignParentBottom="true"
+        android:paddingBottom="10dp"
         android:text="@string/equ_dia_esure"
         android:textColor="@color/white"
-        android:background="@drawable/login_button"
-        android:layout_marginBottom="34dp"
+        android:background="@mipmap/login_button"
+        android:layout_marginBottom="20dp"
         />
 
     </RelativeLayout>

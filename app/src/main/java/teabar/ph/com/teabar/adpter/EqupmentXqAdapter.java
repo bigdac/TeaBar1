@@ -63,26 +63,23 @@ public class EqupmentXqAdapter extends RecyclerView.Adapter<EqupmentXqAdapter.My
                 holder.iv_equ_choose.setVisibility(View.GONE);
                 holder.tv_equ_xq.setVisibility(View.GONE);
                 holder.tv_equ_xq1.setVisibility(View.VISIBLE);
-
                 String s ="";
                 switch (equpment.getMStage()){
                     case 0:
-                        s="开机";
+                        s=context.getResources().getText(R.string.equ_xq_nohot).toString();
                         break;
                     case 1:
-                        s="已经预热";
+
+                        s=context.getResources().getText(R.string.equ_xq_ishot).toString();
                         break;
                     case 2:
-                        s="未预热";
+
+                        s=context.getResources().getText(R.string.equ_xq_dg).toString();
                         break;
                     case 3:
-                        s="休眠";
-                        break;
                     case 4:
-                        s="异常";
-                        break;
                     case 5:
-                        s="关机";
+                        s=context.getResources().getText(R.string.equ_xq_xm).toString();
                         break;
                 }
                 holder.tv_equ_xq1.setText(s);

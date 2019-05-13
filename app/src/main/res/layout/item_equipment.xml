@@ -24,18 +24,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="35dp"
         >
-        <TextView
-            android:id="@+id/tv_light_bj"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@drawable/light_button"
-            />
+
         <ImageView
+            android:id="@+id/iv_equ_equ"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/equ_light"
+            android:src="@mipmap/equ_off"
             android:layout_centerInParent="true"
             />
 
@@ -58,20 +54,20 @@
         android:scaleType="centerInside"
         android:src="@mipmap/equ_open"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="17dp"
+        android:layout_marginRight="13dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="10dp"
         />
-    <TextView
-        android:id="@+id/tv_equ_online"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/equ_xq_outline"
-        android:textSize="14sp"
-        android:layout_marginLeft="17dp"
+
+    <ImageView
+        android:id="@+id/iv_equ_light"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="26dp"
-        android:textColor="@color/social_gray"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        android:src="@mipmap/equ_light"
+        android:scaleType="centerInside"
         />
 
 </RelativeLayout>

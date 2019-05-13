@@ -1,10 +1,12 @@
 package teabar.ph.com.teabar.activity.device;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.os.IBinder;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +17,16 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.ChooseColorActvity;
-import teabar.ph.com.teabar.adpter.EqupmentInformAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
+import teabar.ph.com.teabar.pojo.Equpment;
+import teabar.ph.com.teabar.service.MQService;
 
 public class EqupmentLightActivity extends BaseActivity {
     MyApplication application;
@@ -33,9 +34,21 @@ public class EqupmentLightActivity extends BaseActivity {
     TextView tv_main_1;
     @BindView(R.id.iv_equ_fh)
     ImageView iv_equ_fh;
+    @BindView(R.id.tv_light_mode)
+    TextView tv_light_mode;
+    Equpment equpment;
+    EquipmentImpl equipmentDao;
+    private boolean MQBound;
+    /*
+    *   0: 呼吸
+        1：随机
+        2：常在
+        3：恢复默认
+        4：忽略
+    * */
     @Override
     public void initParms(Bundle parms) {
-
+        equpment = (Equpment) parms.getSerializable("equpment");
     }
 
     @Override
@@ -53,7 +66,50 @@ public class EqupmentLightActivity extends BaseActivity {
                 ScreenUtils.getStatusBarHeight());
         tv_main_1.setLayoutParams(params);
         application.addActivity(this);
+        equipmentDao = new EquipmentImpl(getApplicationContext());
+        if (equpment!=null){
+            String mode = "";
+            switch (equpment.getMode()){
+                case 0:
+                    mode= getText(R.string.equ_mode_1).toString() ;
+                    break;
+                case 1:
+                    mode= getText(R.string.equ_mode_2).toString() ;
+                    break;
+                case 2:
+                    mode= getText(R.string.equ_mode_3).toString() ;
+                    break;
+                    default:
 
+                        break;
+            }
+            tv_light_mode.setText(mode);
+        }
+        MQintent = new Intent(this, MQService.class);
+        MQBound =  bindService(MQintent, MQconnection, Context.BIND_AUTO_CREATE);
+    }
+    Intent MQintent;
+    MQService MQservice;
+    boolean boundservice;
+    ServiceConnection MQconnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MQService.LocalBinder binder = (MQService.LocalBinder) service;
+            MQservice = binder.getService();
+            boundservice = true;
+            Log.e("QQQQQQQQQQQDDDDDDD", "onServiceConnected: ------->");
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+        }
+    };
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (MQservice!=null)
+            unbindService(MQconnection);
     }
 
     @Override
@@ -73,7 +129,9 @@ public class EqupmentLightActivity extends BaseActivity {
                 break;
 
             case R.id.rl_light_1:
-                startActivity(ChooseColorActvity.class);
+                Intent intent = new Intent(this,ChooseColorActvity.class);
+                intent.putExtra("equpment",equpment);
+                startActivity(intent);
                 break;
 
             case R.id.rl_light_2:
@@ -85,6 +143,7 @@ public class EqupmentLightActivity extends BaseActivity {
                 break;
         }
     }
+    int modeChoose = 0;
     private PopupWindow popupWindow1;
     public void popupmenuWindow() {
         if (popupWindow1 != null && popupWindow1.isShowing()) {
@@ -126,6 +185,11 @@ public class EqupmentLightActivity extends BaseActivity {
 
                         break;
                     case R.id.tv_esure:
+                        if (equpment!=null){
+                            equpment.setMode(modeChoose);
+                            equipmentDao.update(equpment);
+                            MQservice.sendLightColor(equpment.getMacAdress(),1,0,0,0,modeChoose);
+                        }
 
                         popupWindow1.dismiss();
                         break;
@@ -134,16 +198,19 @@ public class EqupmentLightActivity extends BaseActivity {
                         iv_mode_1.setVisibility(View.VISIBLE);
                         iv_mode_2.setVisibility(View.INVISIBLE);
                         iv_mode_3.setVisibility(View.INVISIBLE);
+                        modeChoose = 0;
                         break;
                     case R.id.rl_mode_2:
                         iv_mode_1.setVisibility(View.INVISIBLE);
                         iv_mode_2.setVisibility(View.VISIBLE);
                         iv_mode_3.setVisibility(View.INVISIBLE);
+                        modeChoose =1;
                         break;
                     case R.id.rl_mode_3:
                         iv_mode_1.setVisibility(View.INVISIBLE);
                         iv_mode_2.setVisibility(View.INVISIBLE);
                         iv_mode_3.setVisibility(View.VISIBLE);
+                        modeChoose =2;
                         break;
                 }
             }

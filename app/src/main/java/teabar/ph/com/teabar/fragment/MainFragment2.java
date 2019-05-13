@@ -53,6 +53,7 @@ import teabar.ph.com.teabar.pojo.Tea;
 import teabar.ph.com.teabar.service.MQService;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
+import teabar.ph.com.teabar.util.Utils;
 import teabar.ph.com.teabar.util.zxing.android.CaptureActivity;
 import teabar.ph.com.teabar.view.WeatherLayoutManager;
 
@@ -106,6 +107,7 @@ public class MainFragment2 extends BaseFragment  {
     EquipmentImpl equipmentDao;
     List<Equpment> equpments;
     SharedPreferences preferences;
+     Equpment firstEqu;
     long userId;
     @Override
     public int bindLayout() {
@@ -119,7 +121,10 @@ public class MainFragment2 extends BaseFragment  {
             new getTipsAsynTask().execute();//获取健康小知识
         }
         equipmentDao = new EquipmentImpl(getActivity().getApplicationContext());
-        firstMac = ((MainActivity)getActivity()).getFirstEqument().getMacAdress();
+         firstEqu = ((MainActivity)getActivity()).getFirstEqument();
+        if (firstEqu!=null){
+            firstMac = firstEqu.getMacAdress();
+        }
         preferences = getActivity().getSharedPreferences("my",Context.MODE_PRIVATE);
         String name = preferences.getString("userName","");
         userId = preferences.getLong("userId",0);
@@ -161,16 +166,28 @@ public class MainFragment2 extends BaseFragment  {
         li_main_title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isOpen){
-                    li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
-                    firstEquipmentCtrl.open(1, firstMac );
-                    isOpen=false;
-                }else {
-                    li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
-                    firstEquipmentCtrl.open(0, firstMac );
-                    isOpen= true;
-                }
+                if (firstEqu!=null) {
+                    if (((MainActivity) getActivity()).getFirstEqument().getOnLine()) {
+                        if (!Utils.isFastClick()) {
+                            if (isOpen) {
+                                li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
+                                firstEquipmentCtrl.open(1, firstMac);
+                                isOpen = false;
+                            } else {
+                                li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
+                                firstEquipmentCtrl.open(0, firstMac);
+                                isOpen = true;
+                            }
+                        } else {
+                            ToastUtil.showShort(getActivity(), getText(R.string.toast_equ_fast).toString());
+                        }
+                    }else {
+                        ToastUtil.showShort(getActivity(), getText(R.string.toast_equ_online).toString());
+                    }
 
+                }else {
+                    ToastUtil.showShort(getActivity(), getText(R.string.toast_equ_add).toString());
+                }
             }
         });
 
@@ -203,20 +220,7 @@ public class MainFragment2 extends BaseFragment  {
         public void onServiceDisconnected(ComponentName name) {
         }
     };
-    class MessageReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.e("qqqqqZZZZ???", "11111");
-            String msg = intent.getStringExtra("msg");
-            Equpment msg1 =(Equpment)intent.getSerializableExtra("msg1");
-            if (msg1.getIsFirst()){
-                RefrashFirstEqu(msg1);
-            }
 
-
-
-        }
-    }
     public void  RefrashFirstEqu1(){
        Equpment equpment =  ((MainActivity)getActivity()).getFirstEqu();
        if (equpment!=null){
@@ -231,7 +235,7 @@ public class MainFragment2 extends BaseFragment  {
            }else {
                tv_main_hot.setText(R.string.equ_xq_nohot);
            }
-           if (equpment.getMStage()==5){
+           if (equpment.getMStage()==2){
                li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
            }else {
                li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
@@ -253,30 +257,7 @@ public class MainFragment2 extends BaseFragment  {
             li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
         }
     }
-    /*刷新單個設備*/
-    public void  RefrashFirstEqu(Equpment equpment){
 
-         if ("2".equals(equpment.getErrorCode()) ){
-             tv_main_water.setText(R.string.equ_xq_waters);
-         }else {
-             tv_main_water.setText(R.string.equ_xq_waterf);
-         }
-        tv_main_online.setText(R.string.equ_xq_online);
-         if (equpment.getMStage()==1){
-             tv_main_hot.setText(R.string.equ_xq_ishot);
-         }else {
-             tv_main_hot.setText(R.string.equ_xq_nohot);
-         }
-        if (equpment.getMStage()==0){
-             isOpen = false;
-            li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
-
-        }else {
-             isOpen = true;
-            li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
-        }
-
-    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

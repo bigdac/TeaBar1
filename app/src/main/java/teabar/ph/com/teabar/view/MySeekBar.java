@@ -15,7 +15,7 @@ import android.widget.SeekBar;
 import teabar.ph.com.teabar.R;
 
 
-public class MySeekBar extends android.support.v7.widget.AppCompatSeekBar {
+public class MySeekBar extends  SeekBar {
     /**
      * SeekBar数值文字颜色
      */

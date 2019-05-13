@@ -23,6 +23,27 @@ public class Equpment implements Serializable {
     boolean inform_isFull;// 通知废料已满
     boolean inform_isWashing;// 通知清洗周期
     String errorCode;
+    int Mode;//燈光模式
+    boolean onLine;//是否在线
+    int lightOpen ;//燈光開關
+    public int getLightOpen() {
+        return this.lightOpen;
+    }
+    public void setLightOpen(int lightOpen) {
+        this.lightOpen = lightOpen;
+    }
+    public boolean getOnLine() {
+        return this.onLine;
+    }
+    public void setOnLine(boolean onLine) {
+        this.onLine = onLine;
+    }
+    public int getMode() {
+        return this.Mode;
+    }
+    public void setMode(int Mode) {
+        this.Mode = Mode;
+    }
     public String getErrorCode() {
         return this.errorCode;
     }
@@ -107,12 +128,13 @@ public class Equpment implements Serializable {
     public void setEqupmentId(long equpmentId) {
         this.equpmentId = equpmentId;
     }
-    @Generated(hash = 175494689)
+    @Generated(hash = 2042419196)
     public Equpment(long equpmentId, String name, boolean isFirst,
             String macAdress, int mStage, String lightColor, String washTime,
             String hasWater, boolean inform_isFinish, boolean inform_isHot,
             boolean inform_noWater, boolean inform_isFull,
-            boolean inform_isWashing, String errorCode) {
+            boolean inform_isWashing, String errorCode, int Mode, boolean onLine,
+            int lightOpen) {
         this.equpmentId = equpmentId;
         this.name = name;
         this.isFirst = isFirst;
@@ -127,11 +149,14 @@ public class Equpment implements Serializable {
         this.inform_isFull = inform_isFull;
         this.inform_isWashing = inform_isWashing;
         this.errorCode = errorCode;
+        this.Mode = Mode;
+        this.onLine = onLine;
+        this.lightOpen = lightOpen;
     }
     @Generated(hash = 1019008802)
     public Equpment() {
     }
-   
+    
     
   
 

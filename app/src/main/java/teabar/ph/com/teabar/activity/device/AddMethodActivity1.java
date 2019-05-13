@@ -1,9 +1,11 @@
 package teabar.ph.com.teabar.activity.device;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -51,6 +53,7 @@ import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.pojo.Equpment;
 import teabar.ph.com.teabar.pojo.MakeMethod;
+import teabar.ph.com.teabar.pojo.Tea;
 import teabar.ph.com.teabar.service.MQService;
 import teabar.ph.com.teabar.util.DisplayUtil;
 import teabar.ph.com.teabar.util.HttpUtils;
@@ -93,11 +96,16 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
     private boolean MQBound;
     MakeMethod makeMethod;
     SharedPreferences preferences;
+    Equpment Firstequpment;
+    public static boolean isRunning = false;
     int type =-1;
     String userId;
+    Tea tea;
+    MessageReceiver receiver;
     @Override
     public void initParms(Bundle parms) {
         type = parms.getInt("type");
+        tea = (Tea) parms.getSerializable("tea");
         if (type==1){
             makeMethod = (MakeMethod) parms.getSerializable("method");
         }
@@ -135,8 +143,11 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
 
         }else {
             for (int i = 0;i<equpments.size();i++){
-                if (equpments.get(i).getIsFirst())
+                if (equpments.get(i).getIsFirst()){
                     firstMac = equpments.get(i).getMacAdress();
+                    Firstequpment = equpments.get(i);
+                }
+
             }
         }
         if (makeMethod!=null){
@@ -171,6 +182,9 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
 
         beautySeekBar.setOnSeekBarChangeListener(this);
         //绑定services
+        IntentFilter intentFilter = new IntentFilter("AddMethodActivity1");
+        receiver = new MessageReceiver();
+        registerReceiver(receiver, intentFilter);
         MQintent = new Intent(this, MQService.class);
         MQBound =  bindService(MQintent, MQconnection, Context.BIND_AUTO_CREATE);
     }
@@ -220,7 +234,18 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
                 break;
             case R.id.btn_make:
                 /*制作*/
+                if (Firstequpment!=null&&Firstequpment.getMStage()==1){
                 customDialog();
+                    Map<String,Object> params = new HashMap<>();
+                    params.put("teaName",tea.getTeaNameEn());
+                    params.put("userId",userId);
+                    params.put("teaId",tea.getTeaId());
+                    params.put("deviceId",Firstequpment.getEqupmentId());
+                    new AddTeaAsyncTask().execute(params);
+                }else {
+                    toast(getResources().getText(R.string.toast_make_make).toString());
+                }
+
                 break;
             case R.id.tv_add_save:
                 /*保存*/
@@ -424,7 +449,88 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
     }
 
 
+    /**
+     *  添加到喝茶記錄
+     *
+     */
 
+    class AddTeaAsyncTask extends AsyncTask<Map<String,Object>,Void,String> {
+
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+            String code = "";
+            String ip;
+            Map<String, Object> prarms = maps[0];
+            String result =   HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/app/addTeaDrink",prarms);
+            Log.e("back", "--->" + result);
+            if (!ToastUtil.isEmpty(result)) {
+                if (!"4000".equals(result)){
+                    try {
+                        JSONObject jsonObject = new JSONObject(result);
+                        code = jsonObject.getString("state");
+                        returnMsg1=jsonObject.getString("message1");
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    code="4000";
+                }
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            switch (s) {
+                case "200":
+
+                    break;
+
+                case "4000":
+//                    toast(  "连接超时，请重试");
+                    break;
+                default:
+//                   toast( returnMsg1);
+                    break;
+
+            }
+        }
+    }
+
+        /*廣播*/
+    class MessageReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.e("qqqqqZZZZ???", "11111");
+            int nowStage = intent.getIntExtra("nowStage",-1);
+            int height = intent.getIntExtra("height",0);
+            int low = intent.getIntExtra("low",0);
+            int size = height*256 +low;
+            if (IsMakeing==1){
+                if (waterView!=null){
+                    float value = 100* size/beautySeekBar.getProgress();
+                    waterView.setValue(value);
+                    tv_number.setText( (int) value+"");
+                    if (size ==beautySeekBar.getProgress()){
+                        waterView.setValue(110f );
+                        tv_make_title.setText(R.string.equ_xq_cpwc);
+                        tv_number.setText(100+"");
+                        li_make_finish.setVisibility(View.VISIBLE);
+                        bt_view_stop.setVisibility(View.GONE);
+                        dialog1.setCanceledOnTouchOutside(true);
+                    }
+                }
+            }
+            Equpment msg1 =(Equpment)intent.getSerializableExtra("msg1");
+            if (msg1!=null){
+                Firstequpment = msg1;
+            }
+
+        }
+    }
 
 
 
@@ -438,64 +544,53 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
     WaveProgress waterView;
     int choose;
     CountDownTimer countDownTimer;
+    Dialog dialog1;
+    int IsMakeing = 0;
+    TextView tv_make_title;
+    TextView tv_number;
+    LinearLayout li_make_finish;
+    Button bt_view_stop;
     private void customDialog( ) {
-        choose=0;
-        dialog  = new Dialog(this, R.style.MyDialog);
+        IsMakeing =0;
+        dialog1  = new Dialog(this, R.style.MyDialog);
         View view = View.inflate(this, R.layout.view_make, null);
-        final Button bt_view_stop = view.findViewById(R.id.bt_view_stop);
-        final TextView tv_number = view.findViewById(R.id.tv_number);
+        bt_view_stop = view.findViewById(R.id.bt_view_stop);
+        tv_number = view.findViewById(R.id.tv_number);
         final TextView tv_units = view.findViewById(R.id.tv_units);
-        final TextView tv_make_title = view.findViewById(R.id.tv_make_title);
-        final LinearLayout li_make_finish = view.findViewById(R.id.li_make_finish);
-        tv_make_title.setText("浸泡中");
+        tv_make_title = view.findViewById(R.id.tv_make_title);
+        li_make_finish = view.findViewById(R.id.li_make_finish);
+        tv_make_title.setText(R.string.equ_xq_jpz);
         waterView = (WaveProgress) view.findViewById(R.id.waterView);
         waterView.setWaveColor(Color.parseColor("#37dbc2"), Color.parseColor("#81fbe6"));
         waterView.setMaxValue(100f);
-        waterView.setValue(100f );
-        MQservice.sendMakeMess(300,30,80,firstMac);
-        countDownTimer = new CountDownTimer(30000,1000) {
+//        waterView.setValue(100f );
+
+        MQservice.sendMakeMess(beautySeekBar.getProgress(),Integer.valueOf(tv_add_time.getText().toString().trim()),Integer.valueOf(tv_add_temp.getText().toString().trim()),firstMac);
+        waterView.setValue(50f);
+        long time =Integer.valueOf(tv_add_time.getText().toString().trim());
+        countDownTimer = new CountDownTimer(time*1000,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                if (choose==0){
-                    waterView.setValue(100*millisUntilFinished /30000 );
-                    tv_number.setText(millisUntilFinished/1000+"");
-                    Log.e("DDDDDD", "onTick: -->"+ (millisUntilFinished /1000));
-
-                }else {
-                    waterView.setValue(100f-100*millisUntilFinished /30000 );
-                    tv_number.setText((int)(100f-100*millisUntilFinished /30000)+"");
-                    Log.e("DDDDDD", "onTick: -->"+ (int)(100f-100*millisUntilFinished /30000));
-                }
+                tv_number.setText(millisUntilFinished/1000+"");
+                Log.e("DDDDDD", "onTick: -->"+ (millisUntilFinished /1000));
 
             }
 
             @Override
             public void onFinish() {
-                if (choose==0){
-                    waterView.setValue(-10f );
-                    tv_units.setText("％");
-                    countDownTimer.start();
-                    tv_make_title.setText("冲泡中");
-                    choose=1;
-                }else {
-                    waterView.setValue(110f );
-                    tv_make_title.setText("冲泡完成");
-                    waterView.setValue(100f);
-                    tv_number.setText(100+"");
-                    li_make_finish.setVisibility(View.VISIBLE);
-                    bt_view_stop.setVisibility(View.GONE);
-                    dialog.setCanceledOnTouchOutside(true);
-                }
-
+                waterView.setValue(-10f );
+                tv_units.setText("％");
+                tv_make_title.setText(R.string.equ_xq_jpz);
+                IsMakeing =1;
             }
         } ;
         countDownTimer.start();
-        dialog.setContentView(view);
+        dialog1.setContentView(view);
         //使得点击对话框外部不消失对话框
-        dialog.setCanceledOnTouchOutside(false);
+        dialog1.setCanceledOnTouchOutside(false);
         //设置对话框的大小
         view.setMinimumHeight((int) (ScreenSizeUtils.getInstance(this).getScreenHeight() * 0.23f));
-        Window dialogWindow = dialog.getWindow();
+        Window dialogWindow = dialog1.getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         lp.width = (int) (ScreenSizeUtils.getInstance(this).getScreenWidth() * 0.75f);
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
@@ -505,13 +600,15 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
             @Override
             public void onClick(View view) {
                 MQservice.sendStop(firstMac);
-                dialog.dismiss();
+                dialog1.dismiss();
+                if (countDownTimer!=null){
+                    countDownTimer.cancel();
+                }
             }
         });
-        dialog.show();
+        dialog1.show();
 
     }
-
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -539,5 +636,25 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
         }else if ( seek<=100){
             beautySeekBar.setProgress(100);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (MQBound) {
+            unbindService(MQconnection);
+        }
+        if(countDownTimer!=null){
+            countDownTimer.cancel();
+        }
+        if (receiver!=null)
+            unregisterReceiver(receiver);
+        isRunning = false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isRunning= true;
     }
 }

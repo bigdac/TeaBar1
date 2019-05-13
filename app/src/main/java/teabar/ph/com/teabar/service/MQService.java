@@ -36,6 +36,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import teabar.ph.com.teabar.activity.MainActivity;
+import teabar.ph.com.teabar.activity.device.AddMethodActivity1;
+import teabar.ph.com.teabar.activity.device.MakeActivity;
 import teabar.ph.com.teabar.fragment.EqumentFragment;
 import teabar.ph.com.teabar.pojo.Equpment;
 import teabar.ph.com.teabar.util.HttpUtils;
@@ -177,10 +179,9 @@ public class MQService extends Service {
     /**
      * 发送开关机命令
      *1、type:0、1、2、3 。
-     * 0: 开机
-     * 1: 关机
-     * 2：休眠
-     * 3：待机
+     * 0: 待机
+     * 1: 休眠
+     *
      * @param
      */
     public void sendOpenEqu(int type ,String mac) {
@@ -198,7 +199,6 @@ public class MQService extends Service {
             jsonArray.put(3,type);
             jsonArray.put(4,checkCode);
             jsonObject.put("Coffee",jsonArray);
-
             String topicName = "tea/"+mac+"/operate/set";
             String payLoad =jsonObject.toString();
             boolean success = publish(topicName, 1, payLoad);
@@ -277,6 +277,111 @@ public class MQService extends Service {
         }
     }
 
+    /**
+     * 发送燈光顏色命令
+     *选择设置
+     * 0:  灯光设置
+     * 1：灯光模式设置
+     * @param
+     */
+    public void sendLightColor(String mac,int choose,int r,int g, int b ,int mode) {
+
+
+        try {
+            JSONObject jsonObject = new JSONObject();
+            JSONArray jsonArray = new JSONArray();
+            int ctrlCode = 0x06;
+            int length = 5;
+            int checkCode = (headCode + ctrlCode+length+choose+r+g+b+mode ) % 256;
+            jsonArray.put(0,headCode);
+            jsonArray.put(1,ctrlCode);
+            jsonArray.put(2,length);
+            jsonArray.put(3,choose);
+            jsonArray.put(4,r);
+            jsonArray.put(5,g);
+            jsonArray.put(6,b);
+            jsonArray.put(7,mode);
+            jsonArray.put(8,checkCode);
+            jsonObject.put("Coffee",jsonArray);
+            String topicName = "tea/"+mac+"/operate/set";
+            String payLoad =jsonObject.toString();
+            boolean success = publish(topicName, 1, payLoad);
+            Log.e("GGGGGTTTTTT", "open: --------------->"  +success );
+            if (!success)
+                success = publish(topicName, 1, payLoad);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 发送沖洗杯數
+     *选择设置
+     * 0:  灯光设置
+     * 1：灯光模式设置
+     * @param
+     */
+    public void sendWashNum(String mac, int number ) {
+
+
+        try {
+            JSONObject jsonObject = new JSONObject();
+            JSONArray jsonArray = new JSONArray();
+            int ctrlCode = 0x08;
+            int length = 1;
+            int checkCode = (headCode + ctrlCode+length+number ) % 256;
+            jsonArray.put(0,headCode);
+            jsonArray.put(1,ctrlCode);
+            jsonArray.put(2,length);
+            jsonArray.put(3,number);
+            jsonArray.put(4,checkCode);
+            jsonObject.put("Coffee",jsonArray);
+            String topicName = "tea/"+mac+"/operate/set";
+            String payLoad =jsonObject.toString();
+            boolean success = publish(topicName, 1, payLoad);
+            Log.e("GGGGGTTTTTT", "open: --------------->"  +success );
+            if (!success)
+                success = publish(topicName, 1, payLoad);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 发送燈光開關
+     *选择设置
+     * 0:  燈光開
+     * 1：燈光關
+     * @param
+     */
+    public void sendLightOpen(String mac, int number ) {
+
+
+        try {
+            JSONObject jsonObject = new JSONObject();
+            JSONArray jsonArray = new JSONArray();
+            int ctrlCode = 0x09;
+            int length = 1;
+            int checkCode = (headCode + ctrlCode+length+number ) % 256;
+            jsonArray.put(0,headCode);
+            jsonArray.put(1,ctrlCode);
+            jsonArray.put(2,length);
+            jsonArray.put(3,number);
+            jsonArray.put(4,checkCode);
+            jsonObject.put("Coffee",jsonArray);
+            String topicName = "tea/"+mac+"/operate/set";
+            String payLoad =jsonObject.toString();
+            boolean success = publish(topicName, 1, payLoad);
+            Log.e("GGGGGTTTTTT", "open: --------------->"  +success );
+            if (!success)
+                success = publish(topicName, 1, payLoad);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @SuppressLint("StaticFieldLeak")
     class LoadAsyncTask extends AsyncTask<String, Void, Object> {
@@ -316,16 +421,20 @@ public class MQService extends Service {
                         String lightColor;//灯光颜色
                         String washTime;//清洗周期
                         String errorCode;
-
+                        int mode; // 燈光模式
+                        int lightOpen;
                         errorCode = messageJsonArray.getString(3);
                         mStage = messageJsonArray.getInt(4);
                         lightColor = messageJsonArray.getString(5)+"/"+messageJsonArray.getString(6)+"/"+messageJsonArray.getString(7);
-
+                        mode = messageJsonArray.getInt(8);
+                        lightOpen = messageJsonArray.getInt(9);
                         equipment.setErrorCode(errorCode);
                         equipment.setMStage(mStage);
                         equipment.setLightColor(lightColor);
                         equipment.setMacAdress(macAddress);
-                        equipmentDao.update(equipment);
+                        equipment.setMode(mode);
+                        equipment.setOnLine(true);
+                        equipment.setLightOpen(lightOpen);
                         if (isFirst){
                             if (MainActivity.isRunning){
                                 Intent mqttIntent = new Intent("MainActivity");
@@ -333,6 +442,19 @@ public class MQService extends Service {
                                 mqttIntent.putExtra("msg1", equipment);
                                 sendBroadcast(mqttIntent);
                             }
+                            if (MakeActivity.isRunning){
+                                Intent mqttIntent = new Intent("MakeActivity");
+                                mqttIntent.putExtra("msg", macAddress);
+                                mqttIntent.putExtra("msg1", equipment);
+                                sendBroadcast(mqttIntent);
+                            }
+                            if (AddMethodActivity1.isRunning){
+                                Intent mqttIntent = new Intent("AddMethodActivity1");
+                                mqttIntent.putExtra("msg", macAddress);
+                                mqttIntent.putExtra("msg1", equipment);
+                                sendBroadcast(mqttIntent);
+                            }
+                            equipmentDao.update(equipment);
                         }
                             if (EqumentFragment.isRunning) {
                                 Intent mqttIntent = new Intent("EqumentFragment");
@@ -340,9 +462,27 @@ public class MQService extends Service {
                                 mqttIntent.putExtra("msg1", equipment);
                                 sendBroadcast(mqttIntent);
                             }
-                             }
+                        }
                     }else if (messageJsonArray != null && messageJsonArray.getInt(1) == 0xA2){
                             /*制作茶返回*/
+                            int nowStage = messageJsonArray.getInt(3);
+                            int height = messageJsonArray.getInt(4);
+                            int low = messageJsonArray.getInt(5);
+                        if (MakeActivity.isRunning) {
+                            Intent mqttIntent = new Intent("MakeActivity");
+                            mqttIntent.putExtra("nowStage", nowStage);
+                            mqttIntent.putExtra("height", height);
+                            mqttIntent.putExtra("low", low);
+                            sendBroadcast(mqttIntent);
+                        }
+                        if (AddMethodActivity1.isRunning) {
+                            Intent mqttIntent = new Intent("AddMethodActivity1");
+                            mqttIntent.putExtra("nowStage", nowStage);
+                            mqttIntent.putExtra("height", height);
+                            mqttIntent.putExtra("low", low);
+                            sendBroadcast(mqttIntent);
+                        }
+
                     }else if (messageJsonArray != null && messageJsonArray.getInt(1) == 0xA3){
                         /*终止操作返回*/
                     }else if (messageJsonArray != null && messageJsonArray.getInt(1) == 0xA4){
@@ -365,6 +505,7 @@ public class MQService extends Service {
                             sendBroadcast(mqttIntent);
                         }
 
+
                     }else if (messageJsonArray != null && messageJsonArray.getInt(1) == 0xA6){
                         /*机器灯光返回*/
                     }
@@ -379,6 +520,38 @@ public class MQService extends Service {
                         params.put("id", id);
                         params.put("userId",userId);
                         new DeleteDeviceAsyncTask().execute(params);
+                    }
+                    if ("lwt".equals(topic)){
+                        /*離綫主題*/
+                        boolean isFirst = equipment.getIsFirst()  ;//是否是默认设备
+                        equipment.setOnLine(false);
+                        if (isFirst){
+                            if (MainActivity.isRunning){
+                                Intent mqttIntent = new Intent("MainActivity");
+                                mqttIntent.putExtra("msg", macAddress);
+                                mqttIntent.putExtra("msg1", equipment);
+                                sendBroadcast(mqttIntent);
+                            }
+                            if (MakeActivity.isRunning){
+                                Intent mqttIntent = new Intent("MakeActivity");
+                                mqttIntent.putExtra("msg", macAddress);
+                                mqttIntent.putExtra("msg1", equipment);
+                                sendBroadcast(mqttIntent);
+                            }
+                            if (AddMethodActivity1.isRunning){
+                                Intent mqttIntent = new Intent("AddMethodActivity1");
+                                mqttIntent.putExtra("msg", macAddress);
+                                mqttIntent.putExtra("msg1", equipment);
+                                sendBroadcast(mqttIntent);
+                            }
+                            equipmentDao.update(equipment);
+                        }
+                        if (EqumentFragment.isRunning) {
+                            Intent mqttIntent = new Intent("EqumentFragment");
+                            mqttIntent.putExtra("msg", macAddress);
+                            mqttIntent.putExtra("msg1", equipment);
+                            sendBroadcast(mqttIntent);
+                        }
                     }
                 }
 
@@ -429,7 +602,16 @@ public class MQService extends Service {
                 case  "200":
 
                     equipmentDao.delete(delEqupment);
-                    delEqupment = null;
+                    if (delEqupment.getIsFirst()){
+                        delEqupment = null;
+                        if (MainActivity.isRunning){
+                            Intent mqttIntent = new Intent("MainActivity");
+                            Equpment equpment = new Equpment();
+                            mqttIntent.putExtra("msg", "");
+                            mqttIntent.putExtra("msg1",delEqupment);
+                            sendBroadcast(mqttIntent);
+                        }
+                    }
 
                     break;
 
@@ -456,10 +638,12 @@ public class MQService extends Service {
             offlineTopicName = "tea/" + macAddress + "/lwt";
             String s3 = "tea/" + macAddress + "/operate/transfer";
             String s4 = "tea/" + macAddress + "/extra/transfer";
+            String s5 ="tea/" + macAddress + "/reset/transfer";
             list.add(onlineTopicName);
             list.add(offlineTopicName);
             list.add(s3);
             list.add(s4);
+            list.add(s5);
         }
 
         return list;

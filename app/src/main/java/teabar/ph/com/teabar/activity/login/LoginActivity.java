@@ -658,6 +658,8 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                                     equpment.setMacAdress(jsonObject1.getString("mac"));
                                     equpment.setEqupmentId(jsonObject1.getLong("id"));
                                     equpment.setName(jsonObject1.getString("deviceName"));
+                                    equpment.setOnLine(false);
+                                    equpment.setMStage(-1);
                                     int flag = jsonObject1.getInt("flag");
                                     if (flag==1){
                                         equpment.setIsFirst(true);

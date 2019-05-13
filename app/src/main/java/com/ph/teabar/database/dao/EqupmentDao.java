@@ -38,6 +38,9 @@ public class EqupmentDao extends AbstractDao<Equpment, Long> {
         public final static Property Inform_isFull = new Property(11, boolean.class, "inform_isFull", false, "INFORM_IS_FULL");
         public final static Property Inform_isWashing = new Property(12, boolean.class, "inform_isWashing", false, "INFORM_IS_WASHING");
         public final static Property ErrorCode = new Property(13, String.class, "errorCode", false, "ERROR_CODE");
+        public final static Property Mode = new Property(14, int.class, "Mode", false, "MODE");
+        public final static Property OnLine = new Property(15, boolean.class, "onLine", false, "ON_LINE");
+        public final static Property LightOpen = new Property(16, int.class, "lightOpen", false, "LIGHT_OPEN");
     }
 
 
@@ -66,7 +69,10 @@ public class EqupmentDao extends AbstractDao<Equpment, Long> {
                 "\"INFORM_NO_WATER\" INTEGER NOT NULL ," + // 10: inform_noWater
                 "\"INFORM_IS_FULL\" INTEGER NOT NULL ," + // 11: inform_isFull
                 "\"INFORM_IS_WASHING\" INTEGER NOT NULL ," + // 12: inform_isWashing
-                "\"ERROR_CODE\" TEXT);"); // 13: errorCode
+                "\"ERROR_CODE\" TEXT," + // 13: errorCode
+                "\"MODE\" INTEGER NOT NULL ," + // 14: Mode
+                "\"ON_LINE\" INTEGER NOT NULL ," + // 15: onLine
+                "\"LIGHT_OPEN\" INTEGER NOT NULL );"); // 16: lightOpen
     }
 
     /** Drops the underlying database table. */
@@ -116,6 +122,9 @@ public class EqupmentDao extends AbstractDao<Equpment, Long> {
         if (errorCode != null) {
             stmt.bindString(14, errorCode);
         }
+        stmt.bindLong(15, entity.getMode());
+        stmt.bindLong(16, entity.getOnLine() ? 1L: 0L);
+        stmt.bindLong(17, entity.getLightOpen());
     }
 
     @Override
@@ -159,6 +168,9 @@ public class EqupmentDao extends AbstractDao<Equpment, Long> {
         if (errorCode != null) {
             stmt.bindString(14, errorCode);
         }
+        stmt.bindLong(15, entity.getMode());
+        stmt.bindLong(16, entity.getOnLine() ? 1L: 0L);
+        stmt.bindLong(17, entity.getLightOpen());
     }
 
     @Override
@@ -182,7 +194,10 @@ public class EqupmentDao extends AbstractDao<Equpment, Long> {
             cursor.getShort(offset + 10) != 0, // inform_noWater
             cursor.getShort(offset + 11) != 0, // inform_isFull
             cursor.getShort(offset + 12) != 0, // inform_isWashing
-            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13) // errorCode
+            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // errorCode
+            cursor.getInt(offset + 14), // Mode
+            cursor.getShort(offset + 15) != 0, // onLine
+            cursor.getInt(offset + 16) // lightOpen
         );
         return entity;
     }
@@ -203,6 +218,9 @@ public class EqupmentDao extends AbstractDao<Equpment, Long> {
         entity.setInform_isFull(cursor.getShort(offset + 11) != 0);
         entity.setInform_isWashing(cursor.getShort(offset + 12) != 0);
         entity.setErrorCode(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
+        entity.setMode(cursor.getInt(offset + 14));
+        entity.setOnLine(cursor.getShort(offset + 15) != 0);
+        entity.setLightOpen(cursor.getInt(offset + 16));
      }
     
     @Override

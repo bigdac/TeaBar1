@@ -290,10 +290,6 @@ public class AddDeviceActivity extends BaseActivity {
 //                    JSONObject returnData = jsonObject.getJSONObject("returnData");
                     if ("200".equals(code)){
 
-                        String onlineTopicName = "tea/" + deviceMac + "/transfer";
-                        String offlineTopicName = "tea/" + deviceMac + "/lwt";
-                        clcokservice.subscribe(onlineTopicName,1);
-                        clcokservice.subscribe(offlineTopicName,1);
                         Equpment equpment =new Equpment();
                         if (list.size()==0){
                             equpment.setIsFirst(true);
@@ -496,6 +492,17 @@ public class AddDeviceActivity extends BaseActivity {
                             //                String ssid=et_ssid.getText().toString();
                             String ssid = resultInList.getBssid();
                             sb.append("配置成功" + ssid);
+
+                            String onlineTopicName = "tea/" + ssid +"/status/transfer";
+                            String offlineTopicName = "tea/" + ssid + "/lwt";
+                            String operate = "tea/"+ssid+"/operate/transfer";
+                            String extra = "tea/"+ssid+"/extra/transfer";
+                            String reset = "tea/"+ssid+"/reset/transfer";
+                            clcokservice.subscribe(onlineTopicName,1);
+                            clcokservice.subscribe(offlineTopicName,1);
+                            clcokservice.subscribe(operate,1);
+                            clcokservice.subscribe(extra,1);
+                            clcokservice.subscribe(reset,1);
                             if (!TextUtils.isEmpty(ssid)) {
                                 Map<String,Object> params = new HashMap<>();
                                  params.put("userId",userId);

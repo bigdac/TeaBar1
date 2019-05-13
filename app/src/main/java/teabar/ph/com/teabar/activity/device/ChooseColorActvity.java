@@ -1,14 +1,19 @@
-package teabar.ph.com.teabar.activity;
+package teabar.ph.com.teabar.activity.device;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.os.IBinder;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,12 +25,16 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
+import teabar.ph.com.teabar.pojo.Equpment;
+import teabar.ph.com.teabar.service.MQService;
 import teabar.ph.com.teabar.view.ColorPickerDialog;
 import teabar.ph.com.teabar.view.ColorPlateView;
 import teabar.ph.com.teabar.view.OnActivityColorPickerListener;
@@ -48,14 +57,19 @@ public class ChooseColorActvity extends BaseActivity {
     RelativeLayout container;
     @BindView(R.id.tv_color)
     Button tv_color;
+    @BindView(R.id.tv_light_bj)
+    TextView tv_light_bj;
     private OnActivityColorPickerListener mListener;
     private ColorPickerDialog mColorPickerDialog;
     private boolean supportAlpha;//颜色是否支持透明度
     private final float[] mCurrentHSV = new float[3];
     private int mAlpha;
+    Equpment equpment;
+    private boolean MQBound;
+    EquipmentImpl equipmentDao;
     @Override
     public void initParms(Bundle parms) {
-
+        equpment = (Equpment) parms.getSerializable("equpment");
     }
 
     @Override
@@ -75,8 +89,27 @@ public class ChooseColorActvity extends BaseActivity {
                 ScreenUtils.getStatusBarHeight());
         tv_main_1.setLayoutParams(params);
         application.addActivity(this);
-       int defauleColor = getResources().getColor(R.color.colorPrimary);
+        equipmentDao = new EquipmentImpl(getApplicationContext());
+        int defauleColor = getResources().getColor(R.color.colorPrimary);
         defauleColor = defauleColor | 0xff000000;
+        if (equpment!=null){
+            if(!TextUtils.isEmpty(equpment.getLightColor())){
+                String[] aa =equpment.getLightColor().split("/");
+                int red =0;
+                int green=0;
+                int blue=0;
+                if (aa.length>=3){
+                    red = Integer.valueOf(aa[0]);
+                    green = Integer.valueOf(aa[1]);
+                    blue = Integer.valueOf(aa[2]);
+                }
+                defauleColor = Color.rgb(red, green, blue);
+                GradientDrawable myGrad = (GradientDrawable) tv_light_bj.getBackground();
+                myGrad.setColor(defauleColor);
+            }
+
+        }
+
         Color.colorToHSV(defauleColor,mCurrentHSV);
         mAlpha = Color.alpha(defauleColor);
         color_plate .setHue(getColorHue());
@@ -89,8 +122,28 @@ public class ChooseColorActvity extends BaseActivity {
 //                supportAlpha = !supportAlpha;
 //            }
 //        });
+        MQintent = new Intent(this, MQService.class);
+        MQBound =  bindService(MQintent, MQconnection, Context.BIND_AUTO_CREATE);
     }
 
+
+    Intent MQintent;
+    MQService MQservice;
+    boolean boundservice;
+    ServiceConnection MQconnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MQService.LocalBinder binder = (MQService.LocalBinder) service;
+            MQservice = binder.getService();
+            boundservice = true;
+            Log.e("QQQQQQQQQQQDDDDDDD", "onServiceConnected: ------->");
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+        }
+    };
     @Override
     public void doBusiness(Context mContext) {
 
@@ -101,6 +154,13 @@ public class ChooseColorActvity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (MQservice!=null)
+            unbindService(MQconnection);
+    }
+
     @OnClick({R.id.iv_equ_fh,R.id.tv_color})
     public void onClick(View view){
         switch (view.getId()){
@@ -109,6 +169,10 @@ public class ChooseColorActvity extends BaseActivity {
                 break;
 
             case R.id.tv_color:
+
+                 MQservice.sendLightColor(equpment.getMacAdress(),0,red,green,blue,4);
+                 equpment.setLightColor(red+"/"+green+"/"+blue);
+                 equipmentDao.update(equpment);
                 finish();
                 break;
         }
@@ -150,8 +214,15 @@ public class ChooseColorActvity extends BaseActivity {
     /**
      * 获取int颜色
      */
+    int red;
+    int green;
+    int blue;
     private int getColor(){
         final  int argb = Color.HSVToColor(mCurrentHSV);
+         red = ((argb & 0x00FF0000) >> 16);
+         green = ((argb & 0x0000FF00) >> 8);
+         blue = argb & 0x000000FF;
+        Log.e(TAG, "getColor: -->"+red+","+green+","+blue );
         return mAlpha << 24 | (argb & 0x00ffffff);
     }
 
@@ -220,6 +291,9 @@ public class ChooseColorActvity extends BaseActivity {
                     setColorVal(1.f - (1.f / color_plate.getMeasuredHeight() * y));//颜色明暗
                     movePlateCursor();
 //                    tv_color.setBackgroundColor(getColor());
+
+                    GradientDrawable myGrad = (GradientDrawable) tv_light_bj.getBackground();
+                    myGrad.setColor(getColor());
                     Log.e("DDDDDDDDDDDDDDDDDDDZ", "onTouch: -->"+getColor() );
                     if (mListener!=null){
                         mListener.onColorChange(ChooseColorActvity.this,getColor());

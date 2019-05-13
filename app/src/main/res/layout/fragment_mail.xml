@@ -7,7 +7,7 @@
         android:id="@+id/tv_mail_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="商城"
+        android:text="@string/menu_sc"
         android:textSize="30sp"
         android:textColor="@color/login_black"
         android:layout_marginTop="30sp"

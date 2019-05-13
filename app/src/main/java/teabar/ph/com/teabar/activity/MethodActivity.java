@@ -35,6 +35,7 @@ import teabar.ph.com.teabar.adpter.MethodAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.pojo.MakeMethod;
+import teabar.ph.com.teabar.pojo.Tea;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
 
@@ -53,9 +54,10 @@ public class MethodActivity extends BaseActivity {
     QMUITipDialog tipDialog;
     SharedPreferences preferences;
     String userId;
+    Tea tea;
     @Override
     public void initParms(Bundle parms) {
-
+        tea = (Tea) parms.getSerializable("tea");
     }
     //显示dialog
     public void showProgressDialog() {
@@ -98,6 +100,7 @@ public class MethodActivity extends BaseActivity {
                 Intent intent = new Intent(MethodActivity.this,AddMethodActivity1.class);
                 intent.putExtra("type",1);
                 intent.putExtra("method",makeMethod);
+                intent.putExtra("tea",tea);
                 startActivityForResult(intent,3000);
             }
         });
@@ -124,6 +127,7 @@ public class MethodActivity extends BaseActivity {
             case R.id.iv_method_add:
                 Intent intent = new Intent(MethodActivity.this,AddMethodActivity1.class);
                 intent.putExtra("type",0);
+                intent.putExtra("tea",tea);
                 startActivityForResult(intent,3000);
                 break;
 
