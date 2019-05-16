@@ -2,12 +2,16 @@ package teabar.ph.com.teabar.activity.login;
 
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -21,6 +25,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -42,6 +48,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.net.SocketTimeoutException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -141,6 +148,17 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                 LoginManager.getInstance()
                         .logInWithReadPermissions(LoginActivity.this,
                                 Arrays.asList("public_profile", "user_friends","email"));
+                CountDownTimer countDownTimer  = new CountDownTimer(6000,1000) {
+                    @Override
+                    public void onTick(long l) {
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+
+                    }
+                }.start();
             }
         });
 
@@ -167,6 +185,8 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                                         getFacebookUserImage(id,name);
                                     } catch (Exception e) {
                                         e.printStackTrace();
+//
+
                                     }
 //                                    AccessToken accessToken = loginResult.getAccessToken();
 //                                    fbuserId = accessToken.getUserId();
@@ -192,14 +212,21 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
 
             @Override
             public void onCancel() {
-                //  Toast.makeText(LoginActivity.this, "facebook_account_oauth_Cancel", Toast.LENGTH_SHORT).show();
+                  Toast.makeText(LoginActivity.this, "facebook_account_oauth_Cancel", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(FacebookException e) {
-                // Toast.makeText(LoginActivity.this, "facebook_account_oauth_Error", Toast.LENGTH_SHORT).show();
+                 Toast.makeText(LoginActivity.this, "facebook_account_oauth_Error", Toast.LENGTH_SHORT).show();
+                    //判断超时异
+                    LoginManager.getInstance().logOut();
+                    Message message = new Message();
+                    message.obj="timeout";
+                    handler.sendMessage(message);
 
             }
+
+
         });
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -220,6 +247,18 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
     }
 
 
+    @SuppressLint("HandlerLeak")
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.obj=="timeout"){
+                if (tipDialog!=null&&tipDialog.isShowing()){
+                    tipDialog.dismiss();
+                }
+            }
+        }
+    };
 
     private void getFacebookUserImage(final String facebookUserId, final String name) {
         FacebookHelper.getFacebookUserPictureAsync(facebookUserId, new FacebookHelper.FacebookUserImageCallback() {
@@ -367,7 +406,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
             params.put("photoUrl",acct.getPhotoUrl());
             params.put("userName",acct.getDisplayName());
             params.put("type1",3);//facebook 2 google 3
-                showProgressDialog();
+            showProgressDialog();
             new ThirdLoginAsynTask().execute(params);
             }
         }else{
@@ -411,7 +450,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
             handleSignInResult(result);
         }
         callbackManager.onActivityResult(requestCode, resultCode, data);
-        Log.e(TAG, "onActivityResult: -->"+requestCode+"......"+resultCode +data.toString() );
+//        Log.e(TAG, "onActivityResult: -->"+requestCode+"......"+resultCode +data.toString() );
     }
 
 
@@ -442,6 +481,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
         tipDialog = new QMUITipDialog.Builder(this)
                 .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
                 .setTipWord("正在登录，请稍后")
+
                 .create();
         tipDialog.show();
     }
@@ -503,7 +543,9 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
 //                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     LoginJM();
 //                    toast( "登录成功");
-
+                    Map<String,Object> params = new HashMap<>();
+                    params.put("userId",userId);
+                    new FindDeviceAsynTask().execute(params);
                     break;
                 case "4000":
                     if (tipDialog!=null&&tipDialog.isShowing()){
@@ -576,8 +618,9 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
 
 //                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     LoginJM();
-                    toast( "登录成功");
-
+                    Map<String,Object> params = new HashMap<>();
+                    params.put("userId",userId);
+                    new FindDeviceAsynTask().execute(params);
                     break;
                 case "4000":
                     if (tipDialog!=null&&tipDialog.isShowing()){
@@ -621,9 +664,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                         userEntryDao.insert(user);
                     }
 
-                    Map<String,Object> params = new HashMap<>();
-                    params.put("userId",userId);
-                    new FindDeviceAsynTask().execute(params);
+                    Log.e(TAG, "gotResult: -->"+"JM登录成功" );
 
                 } else {
                     toast(  "登陆失败" + responseMessage);

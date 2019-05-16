@@ -14,11 +14,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         >
-        <TextView
-            android:id="@+id/tv_main_1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -26,7 +22,7 @@
             <ImageView
                 android:id="@+id/iv_buy_head"
                 android:layout_width="match_parent"
-                android:layout_height="220dp"
+                android:layout_height="240dp"
                 android:scaleType="centerCrop"
                 />
             <ImageView
@@ -35,6 +31,7 @@
                 android:layout_height="50dp"
                 android:scaleType="centerInside"
                 android:src="@mipmap/login_back"
+                android:layout_marginTop="20dp"
                 />
         </RelativeLayout>
         <LinearLayout

@@ -118,6 +118,8 @@ public class EqupmentWashActivity extends BaseActivity {
 
             case R.id.bt_wash_esure:
                 MQservice.sendWashNum(equpment.getMacAdress(),number);
+                toast(getText(R.string.toast_equ_wash).toString());
+                finish();
                 break;
 
         }

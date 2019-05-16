@@ -12,14 +12,15 @@ import android.widget.TextView;
 import java.util.List;
 
 import teabar.ph.com.teabar.R;
+import teabar.ph.com.teabar.pojo.ScoreRecords;
 
 public class MyquestionAdapter extends RecyclerView.Adapter<MyquestionAdapter.MyviewHolder> {
 
-    private List<String> mData;
+    private List<ScoreRecords> mData;
     private Context context;
     private EqupmentInformAdapter.OnItemClickListener onItemClickListener;
 
-    public MyquestionAdapter(Context context , List<String> list ) {
+    public MyquestionAdapter(Context context , List<ScoreRecords> list ) {
         this.context = context;
         this.mData = list;
 
@@ -36,6 +37,10 @@ public class MyquestionAdapter extends RecyclerView.Adapter<MyquestionAdapter.My
     public void onBindViewHolder(@NonNull final MyviewHolder myviewHolder, int position) {
 
 
+    }
+
+    public  void setmDatas (List<ScoreRecords> scoreRecords){
+         this.mData = scoreRecords;
     }
 
     @Override

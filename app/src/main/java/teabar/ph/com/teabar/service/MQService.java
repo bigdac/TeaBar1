@@ -167,7 +167,7 @@ public class MQService extends Service {
             String topicName = "tea/"+mac+"/status/set";
             String payLoad =jsonObject.toString();
             boolean success = publish(topicName, 1, payLoad);
-            Log.e("GGGGGTTTTTT", "open: --------------->"+ success );
+            Log.e("GGGGGTTTTTT", "open: --------------->"+ success+"...."+mac );
             if (!success)
                 success = publish(topicName, 1, payLoad);
         } catch (Exception e) {
@@ -381,7 +381,34 @@ public class MQService extends Service {
             e.printStackTrace();
         }
     }
+    /**
+     * 发送製作查詢命令
+     * @param
+     */
+    public void sendSearchML(String mac ) {
 
+
+        try {
+            JSONObject jsonObject = new JSONObject();
+            JSONArray jsonArray = new JSONArray();
+            int ctrlCode = 0x0A;
+            int length = 0;
+            int checkCode = (headCode + ctrlCode+length ) % 256;
+            jsonArray.put(0,headCode);
+            jsonArray.put(1,ctrlCode);
+            jsonArray.put(2,length);
+            jsonArray.put(3,checkCode);
+            jsonObject.put("Coffee",jsonArray);
+            String topicName = "tea/"+mac+"/status/set";
+            String payLoad =jsonObject.toString();
+            boolean success = publish(topicName, 1, payLoad);
+            Log.e("GGGGGTTTTTT", "open: --------------->"  +success );
+            if (!success)
+                success = publish(topicName, 1, payLoad);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @SuppressLint("StaticFieldLeak")
     class LoadAsyncTask extends AsyncTask<String, Void, Object> {
@@ -721,6 +748,7 @@ public class MQService extends Service {
 
                 client.subscribe(topicName, 1);
                 flag = true;
+                Log.e("SSXCCCCCCC", "subscribe: -->"+topicName );
             } catch (MqttException e) {
                 e.printStackTrace();
             }

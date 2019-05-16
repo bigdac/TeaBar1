@@ -20,7 +20,7 @@ import teabar.ph.com.teabar.activity.DrinkNumActivity;
 import teabar.ph.com.teabar.activity.my.FavoriteActivity;
 import teabar.ph.com.teabar.activity.MyIssueActivity;
 import teabar.ph.com.teabar.activity.my.MyPlanActivity;
-import teabar.ph.com.teabar.activity.MyQuestionActivity;
+import teabar.ph.com.teabar.activity.question.MyQuestionActivity;
 import teabar.ph.com.teabar.activity.my.NearestActivity;
 import teabar.ph.com.teabar.activity.my.PersonnalActivity;
 import teabar.ph.com.teabar.activity.my.SettingActivity;

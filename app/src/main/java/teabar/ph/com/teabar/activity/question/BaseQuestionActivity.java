@@ -8,8 +8,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -18,6 +20,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import teabar.ph.com.teabar.R;
+import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.BaseFragment;
 import teabar.ph.com.teabar.base.MyApplication;
@@ -188,4 +191,25 @@ public class BaseQuestionActivity extends BaseActivity {
             }
         }
     }
+
+    //记录用户首次点击返回键的时间
+    private long firstTime=0;
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch (keyCode){
+            case KeyEvent.KEYCODE_BACK:
+                long secondTime=System.currentTimeMillis();
+                if(secondTime-firstTime>2000){
+                    Toast.makeText(BaseQuestionActivity.this,"再按一次退出程序",Toast.LENGTH_SHORT).show();
+                    firstTime=secondTime;
+                    return true;
+                }else{
+                    application.removeAllActivity();
+                }
+                break;
+        }
+        return super.onKeyUp(keyCode, event);
+    }
+
 }

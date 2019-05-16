@@ -20,10 +20,10 @@
             android:id="@+id/iv_plan_pic"
             android:layout_width="match_parent"
             android:layout_height="160dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="15dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginRight="7dp"
             android:scaleType="centerCrop"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="7dp"
             />
 
         <TextView

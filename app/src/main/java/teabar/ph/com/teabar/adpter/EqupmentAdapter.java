@@ -3,16 +3,14 @@ package teabar.ph.com.teabar.adpter;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import java.util.List;
 import teabar.ph.com.teabar.R;
@@ -39,7 +37,7 @@ public class EqupmentAdapter extends RecyclerView.Adapter<EqupmentAdapter.MyView
 
     public void setEqumentData(String macAddress,Equpment equpment){
         for (int i = 0;i<mData.size();i++){
-            Equpment equpment1 = mData.get(i);
+                Equpment equpment1 = mData.get(i);
             if ((macAddress).equals(equpment1.getMacAdress()) ){
                 mData.set(i,equpment);
                 notifyItemChanged(i);
@@ -106,6 +104,7 @@ public class EqupmentAdapter extends RecyclerView.Adapter<EqupmentAdapter.MyView
                 public void onClick(View view) {
                     if (mData.get(position).getOnLine()) {
                         if (!Utils.isFastClick()) {
+                            Log.e("TTTTT", "onClick: -->"+isOpen[0] );
                             if (isOpen[0]) {
                                 holder.iv_equ_open.setImageResource(R.mipmap.equ_close);
                                 mData.get(position).setMStage(0);

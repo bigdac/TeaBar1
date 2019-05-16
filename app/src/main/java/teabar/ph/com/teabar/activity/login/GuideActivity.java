@@ -15,11 +15,13 @@ import java.util.List;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.adpter.TabFragmentPagerAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
+import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.fragment.GuideFragment;
 
 public class GuideActivity extends BaseActivity {
     ViewPager viewPager;
     List<Fragment> guildList;
+    MyApplication application;
     @Override
     public void initParms(Bundle parms) {
 
@@ -33,6 +35,10 @@ public class GuideActivity extends BaseActivity {
 
     @Override
     public void initView(View view) {
+        if (application == null) {
+            application = (MyApplication) getApplication();
+        }
+        application.addActivity(this);
         viewPager = (ViewPager) findViewById(R.id.guild_viewpager);
         guildList = new ArrayList<>();
         Bundle bundle = new Bundle();

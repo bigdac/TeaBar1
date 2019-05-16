@@ -24,8 +24,7 @@ import teabar.ph.com.teabar.util.GlideCircleTransform;
 public class BuyPlanActivity extends BaseActivity {
 
     MyApplication application;
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     @BindView(R.id.iv_buy_head)
     ImageView iv_buy_head;
     @BindView(R.id.tv_buy_des)
@@ -58,9 +57,7 @@ public class BuyPlanActivity extends BaseActivity {
             application = (MyApplication) getApplication();
         }
 
-        LinearLayout.LayoutParams params = new LinearLayout .LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
+
         application.addActivity(this);
         if (plan!=null){
             Glide.with(this).load(plan.getPlanPhoto()).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.color.white).into( iv_buy_head);

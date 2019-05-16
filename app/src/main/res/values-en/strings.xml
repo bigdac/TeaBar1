@@ -248,4 +248,5 @@
     <string name="toast_equ_fast">Please don\'t click quickly</string>
     <string name="toast_equ_add">Please add the device first</string>
     <string name="toast_equ_error">Please check the machine</string>
+    <string name="toast_equ_wash">Successfully set</string>
 </resources>

@@ -40,10 +40,10 @@ public class XhsEmoticonsKeyBoard extends AutoHeightLayout implements View.OnCli
     protected ImageView mBtnVoiceOrText;
     protected RecordVoiceButton mBtnVoice;
     protected EmoticonsEditText mEtChat;
-    protected ImageView mBtnFace;
+//    protected ImageView mBtnFace;
     protected RelativeLayout mRlInput;
     protected ImageView mBtnMultimedia;
-    protected Button mBtnSend;
+//    protected Button mBtnSend;
     protected FuncLayout mLyKvml;
 
     protected EmoticonsFuncView mEmoticonsFuncView;
@@ -69,17 +69,17 @@ public class XhsEmoticonsKeyBoard extends AutoHeightLayout implements View.OnCli
     }
 
     protected void initView() {
-        mBtnVoiceOrText = ((ImageView) findViewById(R.id.btn_voice_or_text));
+//        mBtnVoiceOrText = ((ImageView) findViewById(R.id.btn_voice_or_text));
         mBtnVoice = ((RecordVoiceButton) findViewById(R.id.btn_voice));
         mEtChat = ((EmoticonsEditText) findViewById(R.id.et_chat));
-        mBtnFace = ((ImageView) findViewById(R.id.btn_face));
+//        mBtnFace = ((ImageView) findViewById(R.id.btn_face));
         mRlInput = ((RelativeLayout) findViewById(R.id.rl_input));
         mBtnMultimedia = ((ImageView) findViewById(R.id.btn_multimedia));
-        mBtnSend = ((Button) findViewById(R.id.btn_send));
+//        mBtnSend = ((Button) findViewById(R.id.btn_send));
         mLyKvml = ((FuncLayout) findViewById(R.id.ly_kvml));
 
 //        mBtnVoiceOrText.setOnClickListener(this);
-        mBtnFace.setOnClickListener(this);
+//        mBtnFace.setOnClickListener(this);
         mBtnMultimedia.setOnClickListener(this);
         mEtChat.setOnBackKeyClickListener(this);
     }
@@ -124,12 +124,12 @@ public class XhsEmoticonsKeyBoard extends AutoHeightLayout implements View.OnCli
             @Override
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s)) {
-                    mBtnSend.setVisibility(VISIBLE);
-                    mBtnMultimedia.setVisibility(GONE);
-                    mBtnSend.setBackgroundResource(R.drawable.btn_send_bg);
+//                    mBtnSend.setVisibility(VISIBLE);
+//                    mBtnMultimedia.setVisibility(GONE);
+//                    mBtnSend.setBackgroundResource(R.drawable.btn_send_bg);
                 } else {
-                    mBtnMultimedia.setVisibility(VISIBLE);
-                    mBtnSend.setVisibility(GONE);
+//                    mBtnMultimedia.setVisibility(VISIBLE);
+//                    mBtnSend.setVisibility(GONE);
                 }
             }
         });
@@ -154,7 +154,7 @@ public class XhsEmoticonsKeyBoard extends AutoHeightLayout implements View.OnCli
     public void reset() {
         EmoticonsKeyboardUtils.closeSoftKeyboard(this);
         mLyKvml.hideAllFuncView();
-        mBtnFace.setImageResource(R.drawable.icon_face_nomal);
+//        mBtnFace.setImageResource(R.drawable.icon_face_nomal);
     }
 
     protected void showVoice() {
@@ -185,11 +185,11 @@ public class XhsEmoticonsKeyBoard extends AutoHeightLayout implements View.OnCli
     @Override
     public void onFuncChange(int key) {
         if (FUNC_TYPE_EMOTION == key) {
-            mBtnFace.setImageResource(R.drawable.icon_face_nomal);
+//            mBtnFace.setImageResource(R.drawable.icon_face_nomal);
         } else {
-            mBtnFace.setImageResource(R.drawable.icon_face_nomal);
+//            mBtnFace.setImageResource(R.drawable.icon_face_nomal);
         }
-        checkVoice();
+//        checkVoice();修改
     }
 
     protected void setFuncViewHeight(int height) {
@@ -251,9 +251,9 @@ public class XhsEmoticonsKeyBoard extends AutoHeightLayout implements View.OnCli
                 mBtnVoiceOrText.setImageResource(R.drawable.btn_voice_or_text);
                 EmoticonsKeyboardUtils.openSoftKeyboard(mEtChat);
             }
-        } else*/ if (i == R.id.btn_face) {
+        } else*/ /*if (i == R.id.btn_face) {
             toggleFuncView(FUNC_TYPE_EMOTION);
-        } else if (i == R.id.btn_multimedia) {
+        }*/ /*else*/ if (i == R.id.btn_multimedia) {
             toggleFuncView(FUNC_TYPE_APPPS);
         }
     }
@@ -354,8 +354,8 @@ public class XhsEmoticonsKeyBoard extends AutoHeightLayout implements View.OnCli
         return mBtnVoice;
     }
 
-    public Button getBtnSend() {
-        return mBtnSend;
+    public ImageView getBtnSend() {
+        return mBtnMultimedia;
     }
 
     public EmoticonsFuncView getEmoticonsFuncView() {

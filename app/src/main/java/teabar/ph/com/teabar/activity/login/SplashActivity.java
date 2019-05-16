@@ -11,6 +11,7 @@ import android.view.View;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.EncourageActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
+import teabar.ph.com.teabar.base.MyApplication;
 
 public class SplashActivity extends BaseActivity {
     SharedPreferences preferences;
@@ -19,7 +20,7 @@ public class SplashActivity extends BaseActivity {
     private static final int GO_GUIDE = 1001;
     private boolean mIsFirst = false;
     private static final String START_KEY = "isFirst";
-
+    MyApplication application;
     @Override
     public void initParms(Bundle parms) {
 
@@ -33,6 +34,10 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     public void initView(View view) {
+        if (application == null) {
+            application = (MyApplication) getApplication();
+        }
+        application.addActivity(this);
         preferences = getSharedPreferences("my", MODE_PRIVATE);
         init();
     }

@@ -15,13 +15,14 @@
         android:paddingTop="8dp">
 
         <!-- 语音/文字切换-->
-        <ImageView
-            android:id="@+id/btn_voice_or_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="12dp"
-            android:src="@mipmap/loign_unsee"/>
+        <!--<ImageView-->
+            <!--android:id="@+id/btn_voice_or_text"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginLeft="12dp"-->
+            <!--android:visibility="invisible"-->
+            <!--android:src=""/>-->
 
         <!--语音输入-->
         <teabar.ph.com.teabar.util.chat.view.RecordVoiceButton
@@ -31,7 +32,6 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="8dp"
             android:layout_toLeftOf="@+id/rl_multi_and_send"
-            android:layout_toRightOf="@+id/btn_voice_or_text"
             android:text="按住录音"
             android:textColor="#727272"
             android:visibility="gone"/>
@@ -41,10 +41,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="17dp"
             android:layout_toLeftOf="@+id/rl_multi_and_send"
-            android:layout_toRightOf="@+id/btn_voice_or_text"
-            android:background="@color/social_gray"
             android:orientation="horizontal"
             android:paddingBottom="5dp"
             android:paddingTop="5dp">
@@ -53,14 +51,16 @@
             <teabar.ph.com.teabar.util.chat.widget.EmoticonsEditText
                 android:id="@+id/et_chat"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
                 android:layout_centerVertical="true"
-                android:background="@null"
+                android:background="@drawable/chat_talkbj"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:lineSpacingExtra="4dp"
+                android:gravity="center_vertical"
                 android:maxLines="4"
-                android:paddingLeft="8dp"
+                android:paddingLeft="13dp"
+                android:paddingRight="13dp"
                 android:textSize="16sp"/>
 
         </RelativeLayout>
@@ -68,7 +68,7 @@
 
         <RelativeLayout
             android:id="@+id/rl_multi_and_send"
-            android:layout_width="98dp"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
@@ -76,35 +76,36 @@
             android:orientation="horizontal">
 
             <!--表情-->
-            <ImageView
-                android:id="@+id/btn_face"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="7dp"
-                android:src="@mipmap/loign_unsee"/>
+            <!--<ImageView-->
+                <!--android:id="@+id/btn_face"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_marginLeft="7dp"-->
+                <!--android:visibility="invisible"-->
+                <!--android:src="@mipmap/loign_unsee"/>-->
 
             <!--apps 功能-->
             <ImageView
                 android:id="@+id/btn_multimedia"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="14dp"
                 android:src="@drawable/selector_send"/>
 
             <!--发送-->
-            <Button
-                android:id="@+id/btn_send"
-                android:layout_width="50dp"
-                android:layout_height="30dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="9dp"
-                android:background="#2DD0CF"
-                android:text="发送"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:visibility="gone"/>
+            <!--<Button-->
+                <!--android:id="@+id/btn_send"-->
+                <!--android:layout_width="50dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_marginRight="9dp"-->
+                <!--android:background="#2DD0CF"-->
+                <!--android:text="发送"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:textSize="16sp"-->
+                <!--android:visibility="gone"/>-->
         </RelativeLayout>
     </RelativeLayout>
 

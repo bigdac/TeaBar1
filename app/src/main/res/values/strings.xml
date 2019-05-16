@@ -245,4 +245,5 @@
     <string name="toast_equ_fast">請不要快速點擊</string>
     <string name="toast_equ_add">請先添加設備</string>
     <string name="toast_equ_error">請檢查機器</string>
+    <string name="toast_equ_wash">設置成功</string>
 </resources>

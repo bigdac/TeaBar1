@@ -135,6 +135,7 @@ public class FriendFragment extends BaseFragment {
                 intent.setClass(getActivity(),ChatActivity.class);
                 intent.putExtra("targetId",  friendAdapter.getmDate().get(position).getTargetId());
                 intent.putExtra("targetAppKey",friendAdapter.getmDate().get(position).getTargetAppKey());
+                intent.putExtra("name",friendAdapter.getmDate().get(position).getTitle());
                 friendAdapter.getmDate().get(position).setUnReadMessageCnt(0);
                 friendAdapter.notifyDataSetChanged();
                 startActivity(intent);

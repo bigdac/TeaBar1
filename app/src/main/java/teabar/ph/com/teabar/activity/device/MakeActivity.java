@@ -214,12 +214,16 @@ public class MakeActivity extends BaseActivity {
             int height = intent.getIntExtra("height",0);
             int low = intent.getIntExtra("low",0);
             int size = height*256 +low;
+            Log.e(TAG, "onReceive: -->"+nowStage );
             if (IsMakeing==1){
                 if (waterView!=null){
                     float value = 100* size/tea.getWaterYield();
-                    waterView.setValue(value);
-                    tv_number.setText( (int) value+"");
-                    if (size ==tea.getWaterYield()){
+                    if ((int) value!=0){
+                        waterView.setValue(value);
+                        tv_number.setText( (int) value+"");
+                    }
+                    if (nowStage ==2){
+                    searchThread.stopThread();
                     waterView.setValue(110f );
                     tv_make_title.setText(R.string.equ_xq_cpwc);
                     tv_number.setText(100+"");
@@ -274,11 +278,18 @@ public class MakeActivity extends BaseActivity {
 
             @Override
             public void onFinish() {
-
                     waterView.setValue(-10f );
                     tv_units.setText("％");
                     tv_make_title.setText(R.string.equ_xq_jpz);
                     IsMakeing =1;
+                    if (searchThread==null){
+                        searchThread = new SearchThread();
+                        searchThread.start();
+                    }else {
+                        searchThread.starThread();
+                    }
+
+
             }
         } ;
         countDownTimer.start();
@@ -297,6 +308,9 @@ public class MakeActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 MQservice.sendStop(firstMac);
+                if (searchThread!=null&&Running){
+                    searchThread.stopThread();
+                }
                 dialog1.dismiss();
                 if (countDownTimer!=null){
                     countDownTimer.cancel();
@@ -306,7 +320,31 @@ public class MakeActivity extends BaseActivity {
         dialog1.show();
 
     }
-
+    SearchThread searchThread;
+    boolean  Running = true;
+    class SearchThread extends  Thread{
+        @Override
+        public void run() {
+            super.run();
+            while (true) {
+            try {
+                    if (Running) {
+                        sleep(3000);
+                        Log.e(TAG, "run: -->+++++++++++");
+                        MQservice.sendSearchML(Firstequpment.getMacAdress());
+                    }
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        public void stopThread(){
+             Running=false;
+        }
+        public void starThread(){
+            Running=true;
+        }
+    }
 
     @OnClick({R.id.iv_equ_fh,R.id.iv_make_choose,R.id.bt_make_make,R.id.iv_make_love})
     public void onClick(View view){

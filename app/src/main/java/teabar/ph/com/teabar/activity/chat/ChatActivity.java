@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lzy.imagepicker.bean.ImageItem;
@@ -76,6 +77,7 @@ public class ChatActivity extends BaseActivity implements FuncLayout.OnFuncKeyBo
     DropDownListView lvChat;
     @BindView(R.id.ek_bar)
     XhsEmoticonsKeyBoard ekBar;
+
     public static final String JPG = ".jpg";
     private static String MsgIDs = "msgIDs";
 
@@ -163,18 +165,19 @@ public class ChatActivity extends BaseActivity implements FuncLayout.OnFuncKeyBo
 
     }
 
-
+    String name="" ;
     private void initData() {
         
         Intent intent = getIntent();
         mTargetId = intent.getStringExtra(TARGET_ID);
         mTargetAppKey = intent.getStringExtra(TARGET_APP_KEY);
-        mTitle = intent.getStringExtra("conv_title");
+        name = intent.getStringExtra("name");
+
         mMyInfo = JMessageClient.getMyInfo();
         if (!TextUtils.isEmpty(mTargetId)) {
             //单聊
             mIsSingle = true;
-            mChatView.setChatTitle(mTitle);
+            mChatView.setChatTitle(name);
             mConv = JMessageClient.getSingleConversation(mTargetId, mTargetAppKey);
             if (mConv == null) {
                 mConv = Conversation.createSingleConversation(mTargetId, mTargetAppKey);

@@ -14,7 +14,6 @@
         android:id="@+id/rl_weather_xq"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@mipmap/main_weather"
         >
 
 

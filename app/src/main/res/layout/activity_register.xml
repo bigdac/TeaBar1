@@ -55,24 +55,14 @@
         android:layout_below="@+id/rl_regist_title"
         android:layout_marginTop="40dp"
         />
-    <TextView
-        android:id="@+id/tv_regist_welcom"
-        android:layout_below="@+id/iv_login_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/login_tv_welcom"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:textColor="@color/login_black"
-        android:textSize="18sp"
-        />
+
     <EditText
         android:id="@+id/et_regist_nick"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_below="@+id/tv_regist_welcom"
+        android:layout_below="@+id/iv_login_logo"
         android:layout_marginLeft="26dp"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="67dp"
         android:layout_marginRight="26dp"
         android:background="@drawable/login_edtext"
         android:hint="@string/regist_et_nick"

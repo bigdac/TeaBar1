@@ -75,7 +75,7 @@
         <activity android:name=".activity.my.MyPlanActivity" />
         <activity android:name=".activity.PlanInformActivity" />
         <activity android:name=".activity.MyIssueActivity" />
-        <activity android:name=".activity.MyQuestionActivity" />
+        <activity android:name=".activity.question.MyQuestionActivity" />
         <activity android:name=".activity.my.SettingActivity" />
         <activity android:name=".activity.ChangePassActivity" />
         <activity android:name=".activity.FeedbackActivity" />

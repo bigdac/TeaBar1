@@ -166,17 +166,18 @@ public class MainFragment2 extends BaseFragment  {
         li_main_title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (firstEqu!=null) {
+                if (((MainActivity) getActivity()).getFirstEqument()!=null) {
                     if (((MainActivity) getActivity()).getFirstEqument().getOnLine()) {
                         if (!Utils.isFastClick()) {
-                            if (isOpen) {
+                               firstEqu = ((MainActivity) getActivity()).getFirstEqument();
+                            if (firstEqu.getMStage()!=2) {
                                 li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
                                 firstEquipmentCtrl.open(1, firstMac);
-                                isOpen = false;
+                                firstEqu.setMStage(2);
                             } else {
                                 li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
                                 firstEquipmentCtrl.open(0, firstMac);
-                                isOpen = true;
+                                firstEqu.setMStage(0);
                             }
                         } else {
                             ToastUtil.showShort(getActivity(), getText(R.string.toast_equ_fast).toString());
@@ -187,6 +188,7 @@ public class MainFragment2 extends BaseFragment  {
 
                 }else {
                     ToastUtil.showShort(getActivity(), getText(R.string.toast_equ_add).toString());
+
                 }
             }
         });
@@ -222,26 +224,28 @@ public class MainFragment2 extends BaseFragment  {
     };
 
     public void  RefrashFirstEqu1(){
-       Equpment equpment =  ((MainActivity)getActivity()).getFirstEqu();
-       if (equpment!=null){
-           if ("2".equals(equpment.getErrorCode()) ){
-               tv_main_water.setText(R.string.equ_xq_waters);
-           }else {
-               tv_main_water.setText(R.string.equ_xq_waterf);
-           }
-           tv_main_online.setText(R.string.equ_xq_online);
-           if (equpment.getMStage()==1){
-               tv_main_hot.setText(R.string.equ_xq_ishot);
-           }else {
-               tv_main_hot.setText(R.string.equ_xq_nohot);
-           }
-           if (equpment.getMStage()==2){
-               li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
-           }else {
-               li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
-           }
+        if ( ((MainActivity)getActivity()).getFirstEqu()!=null) {
+            Equpment equpment = ((MainActivity) getActivity()).getFirstEqu();
+            if (equpment != null) {
+                if ("2".equals(equpment.getErrorCode())) {
+                    tv_main_water.setText(R.string.equ_xq_waters);
+                } else {
+                    tv_main_water.setText(R.string.equ_xq_waterf);
+                }
+                tv_main_online.setText(R.string.equ_xq_online);
+                if (equpment.getMStage() == 1) {
+                    tv_main_hot.setText(R.string.equ_xq_ishot);
+                } else {
+                    tv_main_hot.setText(R.string.equ_xq_nohot);
+                }
+                if (equpment.getMStage() == 2 || equpment.getMStage() == -1) {
+                    li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
+                } else {
+                    li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
+                }
 
-       }
+            }
+        }
 
     }
 
@@ -249,11 +253,11 @@ public class MainFragment2 extends BaseFragment  {
     public void  Synchronization(int type){
         //0是开机 1是关机 这里是显示 0 为绿色
         if (type==1){
-            isOpen = false;
+            firstEqu.setMStage(0);
             li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
 
         }else {
-            isOpen = true;
+            firstEqu.setMStage(2);
             li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
         }
     }

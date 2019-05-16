@@ -16,22 +16,34 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
+import com.ph.teabar.database.dao.DaoImp.UserEntryImpl;
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.model.UserInfo;
+import cn.jpush.im.api.BasicCallback;
 import me.jessyan.autosize.AutoSizeCompat;
 import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.MainActivity;
+import teabar.ph.com.teabar.activity.question.BaseQuestionActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
+import teabar.ph.com.teabar.pojo.Equpment;
+import teabar.ph.com.teabar.pojo.UserEntry;
+import teabar.ph.com.teabar.service.MQService;
 import teabar.ph.com.teabar.util.HttpUtils;
+import teabar.ph.com.teabar.util.SharePreferenceManager;
 import teabar.ph.com.teabar.util.ToastUtil;
 
 public class RegisterActivity extends BaseActivity {
@@ -52,6 +64,8 @@ public class RegisterActivity extends BaseActivity {
     QMUITipDialog tipDialog;//dialog
     String user;
     String password;
+    UserEntryImpl userEntryDao;
+    EquipmentImpl equipmentDao;
     @Override
     public void initParms(Bundle parms) {
 
@@ -73,6 +87,8 @@ public class RegisterActivity extends BaseActivity {
                 ScreenUtils.getStatusBarHeight());
         tv_main_1.setLayoutParams(params);
         application.addActivity(this);
+        userEntryDao = new UserEntryImpl(getApplicationContext());
+        equipmentDao = new EquipmentImpl(getApplicationContext());
         preferences = getSharedPreferences("my", MODE_PRIVATE);
         tipDialog = new QMUITipDialog.Builder(this)
                 .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
@@ -174,6 +190,8 @@ public class RegisterActivity extends BaseActivity {
      *  注册
      *
      */
+    int type;
+    long userId;
     String returnMsg1,returnMsg2;
     class RegistAsyncTask extends AsyncTask<Map<String,Object>,Void,String> {
 
@@ -192,10 +210,10 @@ public class RegisterActivity extends BaseActivity {
                         returnMsg1=jsonObject.getString("message1");
                         if ("200".equals(code)) {
                             JSONObject returnData = jsonObject.getJSONObject("data");
-                            long userId = returnData.getLong("userId");
+                             userId = returnData.getLong("userId");
                             String userName = returnData.getString("userName");
                             String token = returnData.getString("token");
-                            int type = returnData.getInt("type");
+                             type = returnData.getInt("type");
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putString("user",user);
                             editor.putString("password",password);
@@ -225,7 +243,8 @@ public class RegisterActivity extends BaseActivity {
                     if (tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                    LoginJM();
+//                    startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                     toast( "登录成功");
 
                     break;
@@ -245,6 +264,44 @@ public class RegisterActivity extends BaseActivity {
             }
         }
     }
+
+
+
+    public void LoginJM(){
+        JMessageClient.login(userId+"", "123456", new BasicCallback() {
+            @Override
+            public void gotResult(int responseCode, String responseMessage) {
+
+                if (responseCode == 0) {
+                    SharePreferenceManager.setCachedPsw(password);
+                    UserInfo myInfo = JMessageClient.getMyInfo();
+                    File avatarFile = myInfo.getAvatarFile();
+                    //登陆成功,如果用户有头像就把头像存起来,没有就设置null
+                    if (avatarFile != null) {
+                        SharePreferenceManager.setCachedAvatarPath(avatarFile.getAbsolutePath());
+                    } else {
+                        SharePreferenceManager.setCachedAvatarPath(null);
+                    }
+                    String username = myInfo.getUserName();
+                    String appKey = myInfo.getAppKey();
+
+                    UserEntry user = userEntryDao.findById(userId);
+                    if (null == user) {
+                        user = new UserEntry(userId,username, appKey);
+                        userEntryDao.insert(user);
+                    }
+                    Intent intent = new Intent(RegisterActivity.this, MQService.class);
+                    startService(intent);// 启动服务
+                    startActivity( BaseQuestionActivity.class);
+
+                } else {
+                    toast(  "登陆失败" + responseMessage);
+                }
+            }
+        });
+    }
+
+
     /**
      *  获取验证码
      *

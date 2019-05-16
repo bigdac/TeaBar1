@@ -2,12 +2,18 @@ package teabar.ph.com.teabar.activity.device;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -60,6 +66,7 @@ import teabar.ph.com.teabar.esptouch.IEsptouchTask;
 import teabar.ph.com.teabar.pojo.Equpment;
 import teabar.ph.com.teabar.service.MQService;
 import teabar.ph.com.teabar.util.HttpUtils;
+import teabar.ph.com.teabar.util.IsChinese;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 
@@ -115,6 +122,8 @@ public class AddDeviceActivity extends BaseActivity {
         //绑定services
         clockintent = new Intent(AddDeviceActivity.this, MQService.class);
         clockisBound = bindService(clockintent, clockconnection, Context.BIND_AUTO_CREATE);
+        registerBroadcastReceiver();
+        et_add_name.setEnabled(false);
     }
     Intent clockintent;
     MQService clcokservice;
@@ -144,10 +153,152 @@ public class AddDeviceActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        String ssid=mWifiAdmin.getWifiConnectedSsid();
-        et_add_name.setText(ssid);
-        et_add_name.setEnabled(false);
+//        String ssid=mWifiAdmin.getWifiConnectedSsid();
+//        et_add_name.setText(ssid);
+//        et_add_name.setEnabled(false);
     }
+    private boolean mReceiverRegistered = false;
+
+    private boolean isSDKAtLeastP() {
+        return Build.VERSION.SDK_INT >= 28;
+    }
+    private void registerBroadcastReceiver() {
+        IntentFilter filter = new IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+        if (isSDKAtLeastP()) {
+            filter.addAction(LocationManager.PROVIDERS_CHANGED_ACTION);
+        }
+        registerReceiver(mReceiver, filter);
+        mReceiverRegistered = true;
+    }
+
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action == null) {
+                return;
+            }
+            WifiManager wifiManager = (WifiManager) context.getApplicationContext()
+                    .getSystemService(WIFI_SERVICE);
+            assert wifiManager != null;
+            switch (action) {
+                case WifiManager.NETWORK_STATE_CHANGED_ACTION:
+                    WifiInfo wifiInfo;
+                    if (intent.hasExtra(WifiManager.EXTRA_WIFI_INFO)) {
+                        wifiInfo = intent.getParcelableExtra(WifiManager.EXTRA_WIFI_INFO);
+                    } else {
+                        wifiInfo = wifiManager.getConnectionInfo();
+                    }
+                    onWifiChanged(wifiInfo);
+                    break;
+                case LocationManager.PROVIDERS_CHANGED_ACTION:
+                    onWifiChanged(wifiManager.getConnectionInfo());
+                    break;
+            }
+        }
+    };
+    String bSsid;
+
+    private void onWifiChanged(WifiInfo info) {
+
+        if (info == null) {
+            et_add_name.setText("");
+            et_add_pass.setText("");
+            ToastUtil.showShort(AddDeviceActivity.this, "WiFi已中断，请连接WiFi重新配置");
+            if (mEsptouchTask != null) {
+                mEsptouchTask.interrupt();
+            }
+            if (tipDialog != null && tipDialog.isShowing()) {
+          
+                et_add_name.setEnabled(true);
+                et_add_pass.setEnabled(true);
+                bt_device_add.setEnabled(true);
+                tipDialog.dismiss();
+
+            }
+        } else {
+            String apSsid = info.getSSID();
+            bSsid = info.getBSSID();
+            if (apSsid.startsWith("\"") && apSsid.endsWith("\"")) {
+                apSsid = apSsid.substring(1, apSsid.length() - 1);
+                if ("<unknown ssid>".equals(apSsid)) {
+                    et_add_name.setText("");
+                    et_add_pass.setText("");
+                }
+            }
+            SharedPreferences wifi = getSharedPreferences("wifi", MODE_PRIVATE);
+            if (wifi.contains(apSsid)) {
+                et_add_name.setText(apSsid);
+                String pswd = wifi.getString(apSsid, "");
+                et_add_pass.setText(pswd);
+            } else {
+                et_add_name.setText(apSsid);
+                et_add_pass.setText("");
+                if ("<unknown ssid>".equals(apSsid)) {
+                    et_add_name.setText("");
+                    et_add_pass.setText("");
+                }
+            }
+            if (!TextUtils.isEmpty(apSsid)) {
+                if (apSsid.contains("+") || apSsid.contains("/") || apSsid.contains("#")) {
+                    et_add_name.setText("");
+                    ToastUtil.showShort(AddDeviceActivity.this, "WiFi名称为不含有+/#特殊符号的英文");
+                } else {
+                    char[] chars = apSsid.toCharArray();
+                    et_add_name.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ToastUtil.showShort(AddDeviceActivity.this, "WiFi名称不可编辑");
+                        }
+                    });
+
+                    for (char c : chars) {
+                        if (IsChinese.isChinese(c)) {
+                            ToastUtil.showShort(AddDeviceActivity.this, "WiFi名称不能是中文");
+                            et_add_name.setText("");
+                            et_add_pass.setText("");
+                            break;
+                        }
+                    }
+                }
+            } else {
+                et_add_name.setText("");
+                et_add_name.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ToastUtil.showShort(AddDeviceActivity.this, "请连接英文名称的wifi");
+                    }
+                });
+                et_add_pass.setText("");
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                int frequence = info.getFrequency();
+                if (frequence > 4900 && frequence < 5900) {
+                    // Connected 5G wifi. Device does not support 5G
+                    et_add_name.setText("");
+                    et_add_name.setHint("不支持5G WiFi");
+                    et_add_pass.setText("");
+                }
+            }
+            if (isMatching && !TextUtils.isEmpty(wifiName) && !wifiName.equals(apSsid)) {
+                isMatching = false;
+                wifiName = "";
+               ToastUtil.showShort(AddDeviceActivity.this, "WiFi已切换,请重新配置");
+                if (mEsptouchTask != null) {
+                    mEsptouchTask.interrupt();
+                }
+                if (tipDialog != null && tipDialog.isShowing()) {
+                    et_add_name.setEnabled(true);
+                    et_add_pass.setEnabled(true);
+                    bt_device_add.setEnabled(true);
+                    tipDialog.dismiss();
+
+                }
+            }
+        }
+    }
+    boolean isMatching =false;
+    String wifiName ="";
 
     @OnClick({R.id.bt_device_add,R.id.li_device_ask,R.id.iv_power_fh })
     public void onClick(View view){
@@ -158,6 +309,8 @@ public class AddDeviceActivity extends BaseActivity {
                 String apPassword=et_add_pass.getText().toString();
                 String taskResultCountStr = "1";
                 if (apPassword.length()>0){
+                    isMatching = true;
+                    wifiName = ssid;
                     new EsptouchAsyncTask3().execute(ssid, apBssid, apPassword, taskResultCountStr);
 //                    Map<String,Object> params = new HashMap<>();
 //                    params.put("userId",userId);
@@ -276,7 +429,7 @@ public class AddDeviceActivity extends BaseActivity {
 
         @Override
         protected String doInBackground(Map<String, Object>... maps) {
-            deviceMac= "123456789";
+
             String code = "";
             Map<String ,Object> prarms = maps[0];
             String result = HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/app/addDevice",prarms);
@@ -290,14 +443,6 @@ public class AddDeviceActivity extends BaseActivity {
 //                    JSONObject returnData = jsonObject.getJSONObject("returnData");
                     if ("200".equals(code)){
 
-                        Equpment equpment =new Equpment();
-                        if (list.size()==0){
-                            equpment.setIsFirst(true);
-                        }else {
-                            equpment.setIsFirst(false);
-                        }
-                        equpment.setMacAdress(deviceMac);
-                        equipmentDao.insert(equpment);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -372,6 +517,8 @@ public class AddDeviceActivity extends BaseActivity {
                                     }else {
                                         equpment.setIsFirst(false);
                                     }
+                                    equpment.setOnLine(false);
+                                    equpment.setMStage(-1);
                                     equipmentDao.insert(equpment);
                                 }
                             }
@@ -489,26 +636,28 @@ public class AddDeviceActivity extends BaseActivity {
                         Thread.sleep(300);
                         Log.i("IEsptouchResult", "-->" + result.size());
                         for (IEsptouchResult resultInList : result) {
-                            //                String ssid=et_ssid.getText().toString();
+                            //                String ssid=et_add_name.getText().toString();
                             String ssid = resultInList.getBssid();
                             sb.append("配置成功" + ssid);
 
-                            String onlineTopicName = "tea/" + ssid +"/status/transfer";
-                            String offlineTopicName = "tea/" + ssid + "/lwt";
-                            String operate = "tea/"+ssid+"/operate/transfer";
-                            String extra = "tea/"+ssid+"/extra/transfer";
-                            String reset = "tea/"+ssid+"/reset/transfer";
+                            String onlineTopicName = "tea/" +wifiName+ ssid +"/status/transfer";
+                            String offlineTopicName = "tea/" + wifiName+ssid + "/lwt";
+                            String operate = "tea/"+wifiName+ssid+"/operate/transfer";
+                            String extra = "tea/"+wifiName+ssid+"/extra/transfer";
+                            String reset = "tea/"+wifiName+ssid+"/reset/transfer";
                             clcokservice.subscribe(onlineTopicName,1);
                             clcokservice.subscribe(offlineTopicName,1);
                             clcokservice.subscribe(operate,1);
                             clcokservice.subscribe(extra,1);
                             clcokservice.subscribe(reset,1);
+                            clcokservice.sendFindEqu(wifiName+ssid);
+                            deviceMac = wifiName+ssid;
                             if (!TextUtils.isEmpty(ssid)) {
                                 Map<String,Object> params = new HashMap<>();
                                  params.put("userId",userId);
-                                 params.put("mac",et_add_name.getText().toString().trim()+ssid);
+                                 params.put("mac",deviceMac);
                                 new addDeviceAsyncTask().execute(params);
-                                Log.e(TAG, "onPostExecute: -->ssid"+ et_add_name.getText().toString().trim()+ssid );
+                                Log.e(TAG, "onPostExecute: -->ssid"+ deviceMac );
                                 break;
                             }
                             count++;
@@ -525,8 +674,9 @@ public class AddDeviceActivity extends BaseActivity {
                                 + " more result(s) without showing\n");
                     }
                 } else {
-                    if (tipDialog!=null&&tipDialog.isShowing())
+                    if (tipDialog!=null&&tipDialog.isShowing()){
                         tipDialog.dismiss();
+                    }
                     Toast.makeText(AddDeviceActivity.this, "配置失败", Toast.LENGTH_LONG).show();
                 }
             }
@@ -561,6 +711,9 @@ public class AddDeviceActivity extends BaseActivity {
             handler.removeCallbacksAndMessages(null);
         if (clockisBound)
             unbindService(clockconnection);
+        if (mReceiver!=null){
+            unregisterReceiver(mReceiver);
+        }
     }
 
 }

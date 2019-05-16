@@ -86,6 +86,7 @@ public class FriendListActivity extends BaseActivity {
                 Intent intent = new Intent(FriendListActivity.this,ChatActivity.class);
                 intent.putExtra("targetId",friendListAdapter.getmData().get(position).getUserName());
                 intent.putExtra("targetAppKey",friendListAdapter.getmData().get(position).getAppKey());
+                intent.putExtra("name",friendListAdapter.getmData().get(position).getUserName());
                 delfriend=1000;
                 startActivity(intent);
             }

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,10 +26,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
+import com.ph.teabar.database.dao.DaoImp.UserEntryImpl;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -43,6 +46,8 @@ import cn.jpush.im.android.api.event.OfflineMessageEvent;
 import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.android.api.model.UserInfo;
+import cn.jpush.im.api.BasicCallback;
+import me.jessyan.autosize.AutoSizeCompat;
 import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.adpter.ClickViewPageAdapter;
@@ -57,7 +62,9 @@ import teabar.ph.com.teabar.fragment.MainFragment2;
 import teabar.ph.com.teabar.fragment.MyselfFragment;
 import teabar.ph.com.teabar.fragment.SocialFragment;
 import teabar.ph.com.teabar.pojo.Equpment;
+import teabar.ph.com.teabar.pojo.UserEntry;
 import teabar.ph.com.teabar.service.MQService;
+import teabar.ph.com.teabar.util.SharePreferenceManager;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.view.NoSrcollViewPage;
 
@@ -81,15 +88,24 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
     List<Equpment> equpments;
     public static boolean isRunning = false;
     Equpment FirstEqument;
+    UserEntryImpl userEntryDao;
+    SharedPreferences preferences;
+    long userId;
     @Override
     public void initParms(Bundle parms) {
 
     }
+    @Override
+    public Resources getResources() {
+        //需要升级到 v1.1.2 及以上版本才能使用 AutoSizeCompat
+//        AutoSizeCompat.autoConvertDensityOfGlobal((super.getResources()));//如果没有自定义需求用这个方法
+        AutoSizeCompat.autoConvertDensity((super.getResources()), 667, false);//如果有自定义需求就用这个方法
+        return super.getResources();
 
+    }
     @Override
     public int bindLayout() {
         setSteepStatusBar(true);
-
         return R.layout.activity_main;
     }
 
@@ -101,6 +117,8 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
             application = (MyApplication) getApplication();
         }
         application.addActivity(this);
+        preferences = getSharedPreferences("my", MODE_PRIVATE);
+        userId = preferences.getLong("userId",0) ;
         mainFragment=new MainFragment2();
         equmentFragment=new EqumentFragment();
         socialFragment=new SocialFragment();
@@ -121,6 +139,41 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
         IntentFilter intentFilter = new IntentFilter("MainActivity");
         receiver = new  MessageReceiver();
         registerReceiver(receiver, intentFilter);
+        userEntryDao = new UserEntryImpl(getApplicationContext());
+
+    }
+
+    public void LoginJM(){
+        JMessageClient.login(userId+"", "123456", new BasicCallback() {
+            @Override
+            public void gotResult(int responseCode, String responseMessage) {
+
+                if (responseCode == 0) {
+                    SharePreferenceManager.setCachedPsw("123456");
+                    UserInfo myInfo = JMessageClient.getMyInfo();
+                    File avatarFile = myInfo.getAvatarFile();
+                    //登陆成功,如果用户有头像就把头像存起来,没有就设置null
+                    if (avatarFile != null) {
+                        SharePreferenceManager.setCachedAvatarPath(avatarFile.getAbsolutePath());
+                    } else {
+                        SharePreferenceManager.setCachedAvatarPath(null);
+                    }
+                    String username = myInfo.getUserName();
+                    String appKey = myInfo.getAppKey();
+
+                    UserEntry user = userEntryDao.findById(userId);
+                    if (null == user) {
+                        user = new UserEntry(userId,username, appKey);
+                        userEntryDao.insert(user);
+                    }
+
+
+
+                } else {
+                    toast(  "登陆失败" + responseMessage);
+                }
+            }
+        });
     }
     Equpment msg1;
     class MessageReceiver extends BroadcastReceiver {
@@ -140,8 +193,8 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
     }
 
     public Equpment getFirstEqu(){
-        if (msg1!=null){
-            return  msg1;
+        if (FirstEqument!=null){
+            return  FirstEqument;
         }
          return null;
     }
@@ -218,12 +271,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
-                    case 4:
 
-                        break;
-                        default:
-
-                            break;
 
                 }
             }
@@ -320,6 +368,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
     }
 
     public void setFirstEqument(Equpment firstEqument){
+        this.FirstEqument= null;
         this.FirstEqument = firstEqument;
     }
 

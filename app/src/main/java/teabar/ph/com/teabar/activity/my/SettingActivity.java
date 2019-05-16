@@ -10,6 +10,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
+import com.ph.teabar.database.dao.DaoImp.FriendInforImpl;
+import com.ph.teabar.database.dao.DaoImp.UserEntryImpl;
+import com.ph.teabar.database.dao.UserEntryDao;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import me.jessyan.autosize.AutoSizeCompat;
@@ -17,6 +22,7 @@ import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.ChangePassActivity;
 import teabar.ph.com.teabar.activity.FeedbackActivity;
+import teabar.ph.com.teabar.activity.login.LoginActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
 
@@ -30,6 +36,9 @@ public class SettingActivity extends BaseActivity {
     TextView tv_set_id;
     boolean isOpen = true;
     SharedPreferences preferences;
+    EquipmentImpl equipmentDao;
+    FriendInforImpl friendInforDao;
+    UserEntryImpl userEntryDao;
     @Override
     public void initParms(Bundle parms) {
 
@@ -53,6 +62,9 @@ public class SettingActivity extends BaseActivity {
         preferences =  getSharedPreferences("my",Context.MODE_PRIVATE);
         long id = preferences.getLong("userId",0);
         tv_set_id.setText(id+"");
+        equipmentDao = new EquipmentImpl(getApplicationContext());
+        friendInforDao = new FriendInforImpl(getApplicationContext());
+        userEntryDao = new UserEntryImpl(getApplicationContext());
     }
 
     @Override
@@ -72,7 +84,7 @@ public class SettingActivity extends BaseActivity {
     public void widgetClick(View v) {
 
     }
-    @OnClick({R.id.iv_set_fh,R.id.rl_set_password,R.id.rl_set_mess,R.id.rl_set_user,R.id.bt_set_exsit})
+    @OnClick({R.id.iv_set_fh,R.id.rl_set_password,R.id.rl_set_mess,R.id.rl_set_user,R.id.bt_set_exsit })
     public void onClick(View view){
         switch (view.getId()){
             case R.id.iv_set_fh:
@@ -94,6 +106,14 @@ public class SettingActivity extends BaseActivity {
                 break;
             case R.id.rl_set_user:
                 startActivity(FeedbackActivity.class);
+                break;
+
+            case R.id.bt_set_exsit:
+                equipmentDao.deleteAll();
+                friendInforDao.deleteAll();
+                userEntryDao.deleteAll();
+                application.removeAllActivity();
+                startActivity(LoginActivity.class);
                 break;
 
         }

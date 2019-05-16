@@ -13,18 +13,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-import com.ph.teabar.database.dao.DaoImp.FriendImpl;
+
 import com.ph.teabar.database.dao.DaoImp.FriendInforImpl;
-import com.ph.teabar.database.dao.DaoImp.UserEntryImpl;
-import com.ph.teabar.database.dao.FriendDao;
-import com.ph.teabar.database.dao.FriendInforDao;
-
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.jpush.im.android.api.ContactManager;

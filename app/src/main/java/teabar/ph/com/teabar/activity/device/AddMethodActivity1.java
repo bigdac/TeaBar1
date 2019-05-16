@@ -512,9 +512,12 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
             if (IsMakeing==1){
                 if (waterView!=null){
                     float value = 100* size/beautySeekBar.getProgress();
-                    waterView.setValue(value);
-                    tv_number.setText( (int) value+"");
-                    if (size ==beautySeekBar.getProgress()){
+                    if ((int) value!=0){
+                        waterView.setValue(value);
+                        tv_number.setText( (int) value+"");
+                    }
+                    if (nowStage ==2){
+                        searchThread.stopThread();
                         waterView.setValue(110f );
                         tv_make_title.setText(R.string.equ_xq_cpwc);
                         tv_number.setText(100+"");
@@ -567,7 +570,7 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
 
         MQservice.sendMakeMess(beautySeekBar.getProgress(),Integer.valueOf(tv_add_time.getText().toString().trim()),Integer.valueOf(tv_add_temp.getText().toString().trim()),firstMac);
         waterView.setValue(50f);
-        long time =Integer.valueOf(tv_add_time.getText().toString().trim());
+        final long time =Integer.valueOf(tv_add_time.getText().toString().trim());
         countDownTimer = new CountDownTimer(time*1000,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -582,6 +585,12 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
                 tv_units.setText("％");
                 tv_make_title.setText(R.string.equ_xq_jpz);
                 IsMakeing =1;
+                if (searchThread==null){
+                    searchThread = new SearchThread();
+                    searchThread.start();
+                }else {
+                    searchThread.starThread();
+                }
             }
         } ;
         countDownTimer.start();
@@ -600,6 +609,9 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
             @Override
             public void onClick(View view) {
                 MQservice.sendStop(firstMac);
+                if (searchThread!=null&&Running){
+                    searchThread.stopThread();
+                }
                 dialog1.dismiss();
                 if (countDownTimer!=null){
                     countDownTimer.cancel();
@@ -609,7 +621,31 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
         dialog1.show();
 
     }
-
+    SearchThread searchThread;
+    boolean  Running = true;
+    class SearchThread extends  Thread{
+        @Override
+        public void run() {
+            super.run();
+            while (true) {
+                try {
+                    if (Running) {
+                        sleep(5000);
+                        Log.e(TAG, "run: -->+++++++++++");
+                        MQservice.sendSearchML(Firstequpment.getMacAdress());
+                    }
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        public void stopThread(){
+            Running=false;
+        }
+        public void starThread(){
+            Running=true;
+        }
+    }
     @Override
     public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
 
