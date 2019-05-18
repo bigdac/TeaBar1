@@ -33,8 +33,8 @@ import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 public class FavoriteAdpter extends RecyclerView.Adapter< FavoriteAdpter.MyViewHolder> {
     Context context;
     List<Tea> mData;
-    long userId;
-    public FavoriteAdpter(Context context, List<Tea> list ,long usetId) {
+    String userId;
+    public FavoriteAdpter(Context context, List<Tea> list ,String usetId) {
         this.context = context;
         this.mData = list;
         this.userId =usetId;

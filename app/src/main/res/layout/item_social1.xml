@@ -186,7 +186,7 @@
             android:id="@+id/tv_all_mess"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="全部评论>>>"
+            android:text="@string/social_friend_all"
             android:layout_below="@+id/digCommentBody"
             android:layout_alignLeft="@+id/digCommentBody"
             android:layout_marginLeft="15dp"

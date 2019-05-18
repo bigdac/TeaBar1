@@ -4,14 +4,20 @@ package teabar.ph.com.teabar.service;
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Binder;
+import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.WindowManager;
 
 import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
 
@@ -41,6 +47,8 @@ import teabar.ph.com.teabar.activity.device.MakeActivity;
 import teabar.ph.com.teabar.fragment.EqumentFragment;
 import teabar.ph.com.teabar.pojo.Equpment;
 import teabar.ph.com.teabar.util.HttpUtils;
+import teabar.ph.com.teabar.util.TenTwoUtil;
+import teabar.ph.com.teabar.view.AlermDialog4;
 
 public class MQService extends Service {
 
@@ -63,9 +71,11 @@ public class MQService extends Service {
     String clientId = "";
     LocalBinder binder = new LocalBinder();
     int headCode = 0x32;
+    int ctrlCode2 = 0xF0;
+    int length = 27;
    EquipmentImpl equipmentDao;
    SharedPreferences preferences;
-
+    public static int reset = 0;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -156,7 +166,7 @@ public class MQService extends Service {
         try {
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
-            int ctrlCode = 0x01;
+            int ctrlCode = 0xA1;
             int length = 0;
             int checkCode = (headCode + ctrlCode+length ) % 256;
             jsonArray.put(0,headCode);
@@ -167,7 +177,7 @@ public class MQService extends Service {
             String topicName = "tea/"+mac+"/status/set";
             String payLoad =jsonObject.toString();
             boolean success = publish(topicName, 1, payLoad);
-            Log.e("GGGGGTTTTTT", "open: --------------->"+ success+"...."+mac );
+            Log.e("GGGGGTTTTTT", "open: -------->"  +success+jsonArray.toString()+"...."+jsonArray.length() );
             if (!success)
                 success = publish(topicName, 1, payLoad);
         } catch (Exception e) {
@@ -186,23 +196,25 @@ public class MQService extends Service {
      */
     public void sendOpenEqu(int type ,String mac) {
 
-
         try {
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
             int ctrlCode = 0x04;
-            int length = 1;
-            int checkCode = (headCode + ctrlCode+length+type) % 256;
+            int checkCode = (headCode + ctrlCode+length+type+ctrlCode2) % 256;
             jsonArray.put(0,headCode);
             jsonArray.put(1,ctrlCode);
             jsonArray.put(2,length);
             jsonArray.put(3,type);
-            jsonArray.put(4,checkCode);
+            jsonArray.put(4,ctrlCode2);
+            for (int i=5;i<34;i++){
+                jsonArray.put(i,0);
+            }
+            jsonArray.put(34,checkCode);
             jsonObject.put("Coffee",jsonArray);
             String topicName = "tea/"+mac+"/operate/set";
             String payLoad =jsonObject.toString();
             boolean success = publish(topicName, 1, payLoad);
-            Log.e("GGGGGTTTTTT", "open: --------------->"+type+">>>>>>"+mac+"...."+success );
+            Log.e("GGGGGTTTTTT", "open: -------->"  +success+jsonArray.toString()+"...."+jsonArray.length() );
             if (!success)
                 success = publish(topicName, 1, payLoad);
         } catch (Exception e) {
@@ -222,25 +234,34 @@ public class MQService extends Service {
         try {
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
-            int ctrlCode = 0x02;
-            int length = 4;
-            int checkCode = (headCode + ctrlCode+length+time+temp+size) % 256;
+            int ctrlCode = 0x01;
+            int stage = 0xc2;
             int height = size/256;
             int low = size%256;
+            int checkCode = (headCode + ctrlCode+length+stage+ctrlCode2+height+length+time+temp) % 256;
             jsonArray.put(0,headCode);
             jsonArray.put(1,ctrlCode);
             jsonArray.put(2,length);
-            jsonArray.put(3,height);
-            jsonArray.put(4,low);
-            jsonArray.put(5,time);
-            jsonArray.put(6,temp);
-            jsonArray.put(7,checkCode);
+            jsonArray.put(3,stage);
+            jsonArray.put(4,ctrlCode2);
+            for (int i=5;i<15;i++){
+                jsonArray.put(i,0);
+            }
+            jsonArray.put(15,height);
+            jsonArray.put(16,low);
+            jsonArray.put(17,0);
+            jsonArray.put(18,temp);
+            jsonArray.put(19,time);
+            for (int j=20;j<34;j++){
+                jsonArray.put(j,0);
+            }
+            jsonArray.put(34,checkCode);
             jsonObject.put("Coffee",jsonArray);
 
             String topicName = "tea/"+mac+"/operate/set";
             String payLoad =jsonObject.toString();
             boolean success = publish(topicName, 1, payLoad);
-            Log.e("GGGGGTTTTTT", "open: --------------->"  +success );
+            Log.e("GGGGGTTTTTT", "open: -------->"  +success+jsonArray.toString()+"...."+jsonArray.length() );
             if (!success)
                 success = publish(topicName, 1, payLoad);
         } catch (Exception e) {
@@ -259,17 +280,22 @@ public class MQService extends Service {
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
             int ctrlCode = 0x03;
-            int length = 0;
-            int checkCode = (headCode + ctrlCode+length ) % 256;
+            int stage = 0xc1;
+            int checkCode = (headCode + ctrlCode+length+stage+ctrlCode2 ) % 256;
             jsonArray.put(0,headCode);
             jsonArray.put(1,ctrlCode);
             jsonArray.put(2,length);
-            jsonArray.put(3,checkCode);
+            jsonArray.put(3,stage);
+            jsonArray.put(4,ctrlCode2);
+            for (int i=5;i<34;i++){
+                jsonArray.put(i,0);
+            }
+            jsonArray.put(34,checkCode);
             jsonObject.put("Coffee",jsonArray);
             String topicName = "tea/"+mac+"/operate/set";
             String payLoad =jsonObject.toString();
             boolean success = publish(topicName, 1, payLoad);
-            Log.e("GGGGGTTTTTT", "open: --------------->"  +success );
+            Log.e("GGGGGTTTTTT", "open: -------->"  +success+jsonArray.toString()+"...."+jsonArray.length() );
             if (!success)
                 success = publish(topicName, 1, payLoad);
         } catch (Exception e) {
@@ -280,8 +306,6 @@ public class MQService extends Service {
     /**
      * 发送燈光顏色命令
      *选择设置
-     * 0:  灯光设置
-     * 1：灯光模式设置
      * @param
      */
     public void sendLightColor(String mac,int choose,int r,int g, int b ,int mode) {
@@ -290,23 +314,34 @@ public class MQService extends Service {
         try {
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
-            int ctrlCode = 0x06;
-            int length = 5;
-            int checkCode = (headCode + ctrlCode+length+choose+r+g+b+mode ) % 256;
+            int ctrlCode;
+            if (choose==0){
+                 ctrlCode = 0x02;
+            }else {
+                ctrlCode = 0x05;
+            }
+            int checkCode = (headCode + ctrlCode+length+ctrlCode2+r+g+b+mode  ) % 256;
             jsonArray.put(0,headCode);
             jsonArray.put(1,ctrlCode);
             jsonArray.put(2,length);
-            jsonArray.put(3,choose);
-            jsonArray.put(4,r);
-            jsonArray.put(5,g);
-            jsonArray.put(6,b);
-            jsonArray.put(7,mode);
-            jsonArray.put(8,checkCode);
+            jsonArray.put(3,0);
+            jsonArray.put(4,ctrlCode2);
+            jsonArray.put(5,mode);
+            jsonArray.put(6,0);
+            jsonArray.put(7,0);
+            jsonArray.put(8,0);
+            jsonArray.put(9,r);
+            jsonArray.put(10,g);
+            jsonArray.put(11,b);
+            for (int i = 12;i<34;i++){
+                jsonArray.put(i,0);
+            }
+            jsonArray.put(34,checkCode);
             jsonObject.put("Coffee",jsonArray);
             String topicName = "tea/"+mac+"/operate/set";
             String payLoad =jsonObject.toString();
             boolean success = publish(topicName, 1, payLoad);
-            Log.e("GGGGGTTTTTT", "open: --------------->"  +success );
+            Log.e("GGGGGTTTTTT", "open: -------->"  +success+jsonArray.toString()+"...."+jsonArray.length() );
             if (!success)
                 success = publish(topicName, 1, payLoad);
         } catch (Exception e) {
@@ -318,8 +353,7 @@ public class MQService extends Service {
     /**
      * 发送沖洗杯數
      *选择设置
-     * 0:  灯光设置
-     * 1：灯光模式设置
+
      * @param
      */
     public void sendWashNum(String mac, int number ) {
@@ -329,18 +363,26 @@ public class MQService extends Service {
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
             int ctrlCode = 0x08;
-            int length = 1;
-            int checkCode = (headCode + ctrlCode+length+number ) % 256;
+            int checkCode = (headCode + ctrlCode+length+ctrlCode2+number ) % 256;
             jsonArray.put(0,headCode);
             jsonArray.put(1,ctrlCode);
             jsonArray.put(2,length);
-            jsonArray.put(3,number);
-            jsonArray.put(4,checkCode);
+            jsonArray.put(3,0);
+            jsonArray.put(4,ctrlCode2);
+            jsonArray.put(5,0);
+            for (int i = 6;i<25;i++){
+                jsonArray.put(i,0);
+            }
+            jsonArray.put(25,number);
+            for (int i = 26;i<34;i++){
+                jsonArray.put(i,0);
+            }
+            jsonArray.put(34,checkCode);
             jsonObject.put("Coffee",jsonArray);
             String topicName = "tea/"+mac+"/operate/set";
             String payLoad =jsonObject.toString();
             boolean success = publish(topicName, 1, payLoad);
-            Log.e("GGGGGTTTTTT", "open: --------------->"  +success );
+            Log.e("GGGGGTTTTTT", "open: -------->"  +success+jsonArray.toString()+"...."+jsonArray.length() );
             if (!success)
                 success = publish(topicName, 1, payLoad);
         } catch (Exception e) {
@@ -352,8 +394,8 @@ public class MQService extends Service {
     /**
      * 发送燈光開關
      *选择设置
-     * 0:  燈光開
-     * 1：燈光關
+     * 128:  燈光開
+     * 0：燈光關
      * @param
      */
     public void sendLightOpen(String mac, int number ) {
@@ -362,19 +404,23 @@ public class MQService extends Service {
         try {
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
-            int ctrlCode = 0x09;
-            int length = 1;
-            int checkCode = (headCode + ctrlCode+length+number ) % 256;
+            int ctrlCode = 0x06;
+            int checkCode = (headCode + ctrlCode+length+ctrlCode2+number ) % 256;
             jsonArray.put(0,headCode);
             jsonArray.put(1,ctrlCode);
             jsonArray.put(2,length);
-            jsonArray.put(3,number);
-            jsonArray.put(4,checkCode);
+            jsonArray.put(3,0);
+            jsonArray.put(4,ctrlCode2);
+            jsonArray.put(5,number);
+            for (int i=6;i<34;i++){
+                jsonArray.put(i,0);
+            }
+            jsonArray.put(34,checkCode);
             jsonObject.put("Coffee",jsonArray);
             String topicName = "tea/"+mac+"/operate/set";
             String payLoad =jsonObject.toString();
             boolean success = publish(topicName, 1, payLoad);
-            Log.e("GGGGGTTTTTT", "open: --------------->"  +success );
+            Log.e("GGGGGTTTTTT", "open: -------->"  +success+jsonArray.toString()+"...."+jsonArray.length() );
             if (!success)
                 success = publish(topicName, 1, payLoad);
         } catch (Exception e) {
@@ -391,18 +437,22 @@ public class MQService extends Service {
         try {
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
-            int ctrlCode = 0x0A;
-            int length = 0;
-            int checkCode = (headCode + ctrlCode+length ) % 256;
+            int ctrlCode = 0x0C;
+            int checkCode = (headCode + ctrlCode+length+ctrlCode2 ) % 256;
             jsonArray.put(0,headCode);
             jsonArray.put(1,ctrlCode);
             jsonArray.put(2,length);
-            jsonArray.put(3,checkCode);
+            jsonArray.put(3,0);
+            jsonArray.put(4,ctrlCode2);
+            for (int i=5;i<34;i++){
+                jsonArray.put(i,0);
+            }
+            jsonArray.put(34,checkCode);
             jsonObject.put("Coffee",jsonArray);
-            String topicName = "tea/"+mac+"/status/set";
+            String topicName = "tea/"+mac+"/operate/set";
             String payLoad =jsonObject.toString();
             boolean success = publish(topicName, 1, payLoad);
-            Log.e("GGGGGTTTTTT", "open: --------------->"  +success );
+            Log.e("GGGGGTTTTTT", "open: -------->"  +success+jsonArray.toString()+"...."+jsonArray.length() );
             if (!success)
                 success = publish(topicName, 1, payLoad);
         } catch (Exception e) {
@@ -410,6 +460,16 @@ public class MQService extends Service {
         }
     }
 
+    private String ArrayTransformString(int[] SafetyMeasure) {
+        StringBuffer sb = new StringBuffer();
+        for(int i=0;i<SafetyMeasure.length;i++){
+            sb.append(SafetyMeasure[i]+",");
+        }
+        return sb.toString();
+    }
+
+    static boolean hasError = false;
+    String errorCode = "";
     @SuppressLint("StaticFieldLeak")
     class LoadAsyncTask extends AsyncTask<String, Void, Object> {
 
@@ -431,6 +491,16 @@ public class MQService extends Service {
             JSONArray messageJsonArray = null;
             JSONObject messageJsonObject = null;
             Equpment equipment = equipmentDao.findDeviceByMacAddress2(macAddress);
+//            errorCode = "1,1,1,1,1,1,1";
+//            /*方法是倒叙的 可直bit0 是数字第一位*/
+//            hasError=true;
+//            if (hasError){
+//                hasError =false;
+//                Message message1= handler.obtainMessage();
+//                message1.obj=errorCode;
+//                message1.what=1;
+//                handler.sendMessage(message1);
+//            }
             try {
                 if (!TextUtils.isEmpty(message) && message.startsWith("{") && message.endsWith("}")) {
                     messageJsonObject = new JSONObject(message);
@@ -439,7 +509,7 @@ public class MQService extends Service {
                     messageJsonArray = messageJsonObject.getJSONArray("Coffee");
                 }
                 if (topicName.contains("transfer")){
-                    if ( messageJsonArray != null && messageJsonArray.getInt(1) == 0xA1) {
+                    if ( messageJsonArray != null  ) {
                         Log.e("hasData", "getDate: -->");
                         if (equipment!=null){
                         boolean isFirst = equipment.getIsFirst()  ;//是否是默认设备
@@ -447,21 +517,42 @@ public class MQService extends Service {
                         int mStage;//机器状态
                         String lightColor;//灯光颜色
                         String washTime;//清洗周期
-                        String errorCode;
+
                         int mode; // 燈光模式
-                        int lightOpen;
-                        errorCode = messageJsonArray.getString(3);
-                        mStage = messageJsonArray.getInt(4);
-                        lightColor = messageJsonArray.getString(5)+"/"+messageJsonArray.getString(6)+"/"+messageJsonArray.getString(7);
-                        mode = messageJsonArray.getInt(8);
-                        lightOpen = messageJsonArray.getInt(9);
+                        int lightOpen1;
+                        mStage = messageJsonArray.getInt(2);
+                        int code = messageJsonArray.getInt(3);
+                        int wrongCode [] = TenTwoUtil.changeToTwo(code);
+                        errorCode = ArrayTransformString(wrongCode);
+//                        errorCode = "1,1,1,1,1,1,1";
+                        /*方法是倒叙的 可直bit0 是数字第一位*/
+                        for (int i =0;i<wrongCode.length;i++){
+                            if (wrongCode[i]==1){
+                                hasError =true;
+                            }
+                        }
+                        if (hasError){
+                            hasError =false;
+                           Message message1= handler.obtainMessage();
+                           message1.obj=errorCode;
+                           message1.what=1;
+                           handler.sendMessage(message1);
+                        }
+                        int  lightMes= messageJsonArray.getInt(4);
+                        lightOpen1 = TenTwoUtil.changeToTwo(lightMes)[7];
+                        lightColor = messageJsonArray.getString(8)+"/"+messageJsonArray.getString(9)+"/"+messageJsonArray.getString(10);
+                        int height = messageJsonArray.getInt(21);/*水位查看制作水位*/
+                        int low = messageJsonArray.getInt(22);
+                        washTime = messageJsonArray.getString(27);
+//                        mode = messageJsonArray.getInt(8);
                         equipment.setErrorCode(errorCode);
                         equipment.setMStage(mStage);
+                        equipment.setWashTime(washTime);
                         equipment.setLightColor(lightColor);
-                        equipment.setMacAdress(macAddress);
-                        equipment.setMode(mode);
+//                        equipment.setMode(mode);
+                        equipment.setLightOpen(lightOpen1);
                         equipment.setOnLine(true);
-                        equipment.setLightOpen(lightOpen);
+                        errorCode="";
                         if (isFirst){
                             if (MainActivity.isRunning){
                                 Intent mqttIntent = new Intent("MainActivity");
@@ -483,6 +574,78 @@ public class MQService extends Service {
                             }
                             equipmentDao.update(equipment);
                         }
+
+                       if (EqumentFragment.isRunning) {
+                                Intent mqttIntent = new Intent("EqumentFragment");
+                                mqttIntent.putExtra("msg", macAddress);
+                                mqttIntent.putExtra("msg1", equipment);
+                                sendBroadcast(mqttIntent);
+                            }
+
+                       if (mStage==0xb4||mStage==0xb3||mStage==0xb5){
+                                if (MakeActivity.isRunning) {
+                                    Intent mqttIntent = new Intent("MakeActivity");
+                                    mqttIntent.putExtra("nowStage", mStage);
+                                    mqttIntent.putExtra("height", height);
+                                    mqttIntent.putExtra("low", low);
+                                    sendBroadcast(mqttIntent);
+                                }
+                                if (AddMethodActivity1.isRunning) {
+                                    Intent mqttIntent = new Intent("AddMethodActivity1");
+                                    mqttIntent.putExtra("nowStage", mStage);
+                                    mqttIntent.putExtra("height", height);
+                                    mqttIntent.putExtra("low", low);
+                                    sendBroadcast(mqttIntent);
+                                }
+                       }
+
+
+                    }
+
+                        if ("reset".equals(topic)){
+                            if (equipment!=null){
+                                if (equipment.getIsFirst()){
+                                    reset=1;
+                                    if (MainActivity.isRunning){
+                                        Intent mqttIntent = new Intent("MainActivity");
+                                        mqttIntent.putExtra("reset", 1);
+                                    }
+                                }else {
+                                    reset =2;
+                                    if (EqumentFragment.isRunning){
+                                        Intent mqttIntent = new Intent("EqumentFragment");
+                                        mqttIntent.putExtra("reset", 2);
+                                    }
+                                }
+                                equipmentDao.delete(equipment);
+                            }
+
+                        }
+                        if ("lwt".equals(topic)){
+                            /*離綫主題*/
+                            boolean isFirst = equipment.getIsFirst()  ;//是否是默认设备
+                            equipment.setOnLine(false);
+                            if (isFirst){
+                                if (MainActivity.isRunning){
+                                    Intent mqttIntent = new Intent("MainActivity");
+                                    mqttIntent.putExtra("msg", macAddress);
+                                    mqttIntent.putExtra("msg1", equipment);
+                                    sendBroadcast(mqttIntent);
+                                }
+                                if (MakeActivity.isRunning){
+                                    Intent mqttIntent = new Intent("MakeActivity");
+                                    mqttIntent.putExtra("msg", macAddress);
+                                    mqttIntent.putExtra("msg1", equipment);
+                                    sendBroadcast(mqttIntent);
+                                }
+                                if (AddMethodActivity1.isRunning){
+                                    Intent mqttIntent = new Intent("AddMethodActivity1");
+                                    mqttIntent.putExtra("msg", macAddress);
+                                    mqttIntent.putExtra("msg1", equipment);
+                                    sendBroadcast(mqttIntent);
+                                }
+                                equipmentDao.update(equipment);
+                            }
                             if (EqumentFragment.isRunning) {
                                 Intent mqttIntent = new Intent("EqumentFragment");
                                 mqttIntent.putExtra("msg", macAddress);
@@ -490,169 +653,91 @@ public class MQService extends Service {
                                 sendBroadcast(mqttIntent);
                             }
                         }
-                    }else if (messageJsonArray != null && messageJsonArray.getInt(1) == 0xA2){
-                            /*制作茶返回*/
-                            int nowStage = messageJsonArray.getInt(3);
-                            int height = messageJsonArray.getInt(4);
-                            int low = messageJsonArray.getInt(5);
-                        if (MakeActivity.isRunning) {
-                            Intent mqttIntent = new Intent("MakeActivity");
-                            mqttIntent.putExtra("nowStage", nowStage);
-                            mqttIntent.putExtra("height", height);
-                            mqttIntent.putExtra("low", low);
-                            sendBroadcast(mqttIntent);
-                        }
-                        if (AddMethodActivity1.isRunning) {
-                            Intent mqttIntent = new Intent("AddMethodActivity1");
-                            mqttIntent.putExtra("nowStage", nowStage);
-                            mqttIntent.putExtra("height", height);
-                            mqttIntent.putExtra("low", low);
-                            sendBroadcast(mqttIntent);
-                        }
 
-                    }else if (messageJsonArray != null && messageJsonArray.getInt(1) == 0xA3){
-                        /*终止操作返回*/
-                    }else if (messageJsonArray != null && messageJsonArray.getInt(1) == 0xA4){
-                        /*开关机返回*/
-                        boolean isFirst = equipment.getIsFirst()  ;//是否是默认设备
-                        int mStage  = messageJsonArray.getInt(3);
-                        equipment.setMStage(mStage);
-                        if (isFirst){
-                            if (MainActivity.isRunning){
-                                Intent mqttIntent = new Intent("MainActivity");
-                                mqttIntent.putExtra("msg", macAddress);
-                                mqttIntent.putExtra("msg1", equipment);
-                                sendBroadcast(mqttIntent);
-                            }
-                        }
-                        if (EqumentFragment.isRunning) {
-                            Intent mqttIntent = new Intent("EqumentFragment");
-                            mqttIntent.putExtra("msg", macAddress);
-                            mqttIntent.putExtra("msg1", equipment);
-                            sendBroadcast(mqttIntent);
-                        }
-
-
-                    }else if (messageJsonArray != null && messageJsonArray.getInt(1) == 0xA6){
-                        /*机器灯光返回*/
-                    }
-                    if ("reset".equals(topic)){
-                        long  userId = preferences.getLong("userId",0) ;
-                        Map<String,Object> params = new HashMap<>();
-                        long id = -1;
-                        if (equipment!=null){
-                             id = equipment.getEqupmentId();
-                             delEqupment = equipment;
-                        }
-                        params.put("id", id);
-                        params.put("userId",userId);
-                        new DeleteDeviceAsyncTask().execute(params);
-                    }
-                    if ("lwt".equals(topic)){
-                        /*離綫主題*/
-                        boolean isFirst = equipment.getIsFirst()  ;//是否是默认设备
-                        equipment.setOnLine(false);
-                        if (isFirst){
-                            if (MainActivity.isRunning){
-                                Intent mqttIntent = new Intent("MainActivity");
-                                mqttIntent.putExtra("msg", macAddress);
-                                mqttIntent.putExtra("msg1", equipment);
-                                sendBroadcast(mqttIntent);
-                            }
-                            if (MakeActivity.isRunning){
-                                Intent mqttIntent = new Intent("MakeActivity");
-                                mqttIntent.putExtra("msg", macAddress);
-                                mqttIntent.putExtra("msg1", equipment);
-                                sendBroadcast(mqttIntent);
-                            }
-                            if (AddMethodActivity1.isRunning){
-                                Intent mqttIntent = new Intent("AddMethodActivity1");
-                                mqttIntent.putExtra("msg", macAddress);
-                                mqttIntent.putExtra("msg1", equipment);
-                                sendBroadcast(mqttIntent);
-                            }
-                            equipmentDao.update(equipment);
-                        }
-                        if (EqumentFragment.isRunning) {
-                            Intent mqttIntent = new Intent("EqumentFragment");
-                            mqttIntent.putExtra("msg", macAddress);
-                            mqttIntent.putExtra("msg1", equipment);
-                            sendBroadcast(mqttIntent);
-                        }
-                    }
                 }
 
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
+
+
+
+        } catch (JSONException e) {
+                e.printStackTrace();
+                 }
             return null;
         }
 
     }
 
-    /*
-     *
-     *删除设备
-     * */
-    Equpment delEqupment = null;
-    class DeleteDeviceAsyncTask extends AsyncTask<Map<String,Object>,Void,String>{
-
+    @SuppressLint("HandlerLeak")
+    Handler handler = new Handler(){
         @Override
-        protected String doInBackground(Map<String, Object>... maps) {
-            String code = "";
-            Map<String,Object> params = maps[0];
-            String result = HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/app/deleteDevice",params);
-            Log.e("GGGG", "doInBackground: -->"+result );
-            if (!TextUtils.isEmpty(result)){
-                if (!"4000".equals(result)){
-                    try {
-                        JSONObject jsonObject = new JSONObject(result);
-                        code = jsonObject.getString("state");
-
-                    } catch (JSONException e) {
-
-                    }
-
-                }else{
-                    code="4000";
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what==1){
+                String errorCode = (String) msg.obj;
+                if (alermDialog4!=null&&alermDialog4.isShowing()){
+                    alermDialog4.dismiss();
                 }
+                setAlermDialog(0,errorCode);
             }
-            return code;
         }
+    };
+     AlermDialog4 alermDialog4;
+    private void setAlermDialog(int mode, String line) {
+        try {
+            alermDialog4 = new AlermDialog4(MQService.this);
+            alermDialog4.setLine(line);
+            alermDialog4.setMode(mode);
+            if (Build.VERSION.SDK_INT >= 26) {//8.0新特性
+                WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+                params.screenOrientation = Configuration.ORIENTATION_PORTRAIT;
+                params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+                params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                        | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                        | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                        | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                        | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
 
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            switch (s){
-                case  "200":
-
-                    equipmentDao.delete(delEqupment);
-                    if (delEqupment.getIsFirst()){
-                        delEqupment = null;
-                        if (MainActivity.isRunning){
-                            Intent mqttIntent = new Intent("MainActivity");
-                            Equpment equpment = new Equpment();
-                            mqttIntent.putExtra("msg", "");
-                            mqttIntent.putExtra("msg1",delEqupment);
-                            sendBroadcast(mqttIntent);
-                        }
-                    }
-
-                    break;
-
-                case  "4000":
-
-                    break;
-
-                default:
-
-                    break;
+                alermDialog4.getWindow().setAttributes(params);
+            } else {
+//                WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+//                params.screenOrientation = Configuration.ORIENTATION_PORTRAIT;
+//                params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+//                params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+//                        | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+//                        | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+//                        | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+//                        | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
+                alermDialog4.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
             }
+            alermDialog4.setCanceledOnTouchOutside(false);
+            alermDialog4.setOnNegativeClickListener(new AlermDialog4.OnNegativeClickListener() {
+                @Override
+                public void onNegativeClick() {
+                    alermDialog4.dismiss();
+                }
+            });
+            alermDialog4.setOnPositiveClickListener(new AlermDialog4.OnPositiveClickListener() {
+                @Override
+                public void onPositiveClick() {
+                    alermDialog4.dismiss();
+
+                }
+            });
+
+            if (alermDialog4 != null) {
+                alermDialog4.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+
+                    }
+                });
+            }
+            alermDialog4.show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
-
     public List<String> getTopicNames() {
         List<String> list = new ArrayList<>();
         List<Equpment> equpments = equipmentDao.findAll();

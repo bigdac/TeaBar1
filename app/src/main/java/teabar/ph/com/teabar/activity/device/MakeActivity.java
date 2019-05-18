@@ -98,7 +98,7 @@ public class MakeActivity extends BaseActivity {
     public static boolean isRunning = false;
     Tea tea;
     long teaId= -1;
-    long userId;
+    String userId;
     SharedPreferences preferences;
     QMUITipDialog tipDialog;
     String id ;
@@ -134,7 +134,7 @@ public class MakeActivity extends BaseActivity {
                 ScreenUtils.getStatusBarHeight());
         tv_main_1.setLayoutParams(params);
         preferences = getSharedPreferences("my",MODE_PRIVATE);
-        userId = preferences.getLong("userId",0);
+        userId = preferences.getString("userId","");
         equipmentDao = new EquipmentImpl(getApplicationContext());
         equpments= equipmentDao.findAll();
         bt_make_make.setVisibility(View.VISIBLE);
@@ -361,7 +361,7 @@ public class MakeActivity extends BaseActivity {
 
             case R.id.bt_make_make:
 
-                if (Firstequpment!=null&&Firstequpment.getMStage()==1){
+                if (Firstequpment!=null&&Firstequpment.getMStage()==0xb1){
                     customDialog();
                     Map<String,Object> params = new HashMap<>();
                     params.put("teaName",tea.getTeaNameEn());

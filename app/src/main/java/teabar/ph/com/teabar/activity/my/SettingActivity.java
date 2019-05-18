@@ -60,7 +60,7 @@ public class SettingActivity extends BaseActivity {
                 ScreenUtils.getStatusBarHeight());
         tv_main_1.setLayoutParams(params);
         preferences =  getSharedPreferences("my",Context.MODE_PRIVATE);
-        long id = preferences.getLong("userId",0);
+        String id = preferences.getString("userId","");
         tv_set_id.setText(id+"");
         equipmentDao = new EquipmentImpl(getApplicationContext());
         friendInforDao = new FriendInforImpl(getApplicationContext());

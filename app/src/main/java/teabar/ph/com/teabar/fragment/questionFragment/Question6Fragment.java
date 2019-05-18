@@ -43,7 +43,7 @@ public class Question6Fragment extends BaseFragment {
     TextView tv_question_name;
     List <String> stringList = new ArrayList<>();
     SharedPreferences preferences;
-    long userId;
+    String userId;
     List<Tea> listA = new ArrayList<>();
     List<Tea> listB = new ArrayList<>();
     List<Tea> listC = new ArrayList<>();
@@ -55,8 +55,8 @@ public class Question6Fragment extends BaseFragment {
 
     @Override
     public void initView(View view) {
-//        preferences = getActivity().getSharedPreferences("my",Context.MODE_PRIVATE);
-//        userId = preferences.getLong("userId",0);
+        preferences = getActivity().getSharedPreferences("my",Context.MODE_PRIVATE);
+        userId = preferences.getString("userId","");
         basicExamAdapter = new BasicExamAdapter(getActivity(),R.layout.item_basicexam);
         fv_message.setAdapter(basicExamAdapter);
         new getTeaListAsynTask().execute();
@@ -85,7 +85,7 @@ public class Question6Fragment extends BaseFragment {
             case R.id.bt_question1_esure:
                 answer = Utils.listToString(stringList);
                 Map<String ,Object> params = new HashMap<>();
-                params.put("userId",1322);
+                params.put("userId",userId);
                 params.put("answer",answer);
                 new setBasicTeaAsynctask().execute(params);
                 Log.e(TAG, "onClick: --》"+Utils.listToString(stringList)+stringList.size()+"..." );
@@ -149,12 +149,12 @@ public class Question6Fragment extends BaseFragment {
                     break;
                 case "4000":
 
-                    ToastUtil.showShort(getActivity(), "连接超时，请重试");
+                    ToastUtil.showShort(getActivity(), getActivity().getText(R.string.toast_all_cs).toString());
 
                     break;
                 default:
 
-                    ToastUtil.showShort(getActivity(), returnMsg1);
+                    ToastUtil.showShort(getActivity(), getActivity().getText(R.string.toast_all_cs).toString());
                     break;
 
             }
@@ -263,12 +263,11 @@ public class Question6Fragment extends BaseFragment {
                     break;
                 case "4000":
 
-                    ToastUtil.showShort(getActivity(), "连接超时，请重试");
+                    ToastUtil.showShort(getActivity(), getActivity().getText(R.string.toast_all_cs).toString());
 
                     break;
                 default:
-
-                    ToastUtil.showShort(getActivity(), returnMsg1);
+                    ToastUtil.showShort(getActivity(), getActivity().getText(R.string.toast_all_cs).toString());
                     break;
 
             }

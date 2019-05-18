@@ -8,26 +8,26 @@
     <string name="facebook_app_id">630899240681105</string>
 
     <string name="login_tv_login">Login</string>
-    <string name="login_tv_regist">Register</string>
+    <string name="login_tv_regist">Sign Up</string>
     <string name="login_tv_welcom">Hello! Welcome to LIFY</string>
-    <string name="login_et_user">Phone number or email address</string>
-    <string name="login_tv_forget">Forgot Password</string>
+    <string name="login_et_user">Phone Number or Email Address</string>
+    <string name="login_tv_forget">Forgot Your Password?</string>
      <string name="login_et_pass">Password</string>
     <string name="login_et_pass1">Confirm Password</string>
-    <string name="login_tv_clause1">By logging in you agree to Lify terms</string>
-    <string name="login_tv_clause2">《Privacy policy and terms》</string>
-    <string name="login_tv_third">Three parties login</string>
+    <string name="login_tv_clause1">By signing up, you agree to our Terms of Use and Cookies&#038;Privacy Policy.</string>
+
+    <string name="login_tv_third">Log In With</string>
 
     <!--register-->
     <string name="regist_tv_welcom">现在创建您的LIFY账号</string>
     <string name="regist_et_nick">Name</string>
-    <string name="login_et_code">Verification code</string>
-    <string name="login_bt_getcode">Get code</string>
+    <string name="login_et_code">Enter Verification Code</string>
+    <string name="login_bt_getcode">Verification Code</string>
     <string name="login_bt_regist">Register</string>
 
     <!--menu-->
     <string name="menu_tea">Brew</string>
-    <string name="menu_equ">Machine</string>
+    <string name="menu_equ">Device</string>
     <string name="menu_sq">Community</string>
     <string name="menu_sc">Shop</string>
     <string name="menu_wd">Profile</string>
@@ -36,8 +36,8 @@
     <string name="encourage_bt_in">IN</string>
 
     <!--equipment-->
-    <string name="equ_xq_title">Machine Details</string>
-    <string name="equ_xq_name">Machine Name</string>
+    <string name="equ_xq_title">Device Details</string>
+    <string name="equ_xq_name">Device Name</string>
     <string name="equ_xq_inform">Notification</string>
     <string name="equ_xq_state">Status</string>
     <string name="equ_xq_light">Light Setting</string>
@@ -45,9 +45,9 @@
     <string name="equ_xq_delt">Delete</string>
 
     <string name="equ_dia_del">Cancel</string>
-    <string name="equ_dia_esure">Ensure</string>
-    <string name="equ_xq_deltitle">Remove equipment</string>
-    <string name="equ_xq_tistitle">Whether to delete the equipment</string>
+    <string name="equ_dia_esure">Confirm</string>
+    <string name="equ_xq_deltitle">Erase Device</string>
+    <string name="equ_xq_tistitle">Confirm to Erase Device?</string>
 
     <string name="equ_xq_online">Online</string>
     <string name="equ_xq_outline">Outline</string>
@@ -55,34 +55,38 @@
     <string name="equ_xq_xm">Await</string>
     <string name="equ_xq_waterf">Enough water</string>
     <string name="equ_xq_waters">Water shortage</string>
-    <string name="equ_xq_ishot">Preheat finished</string>
-    <string name="equ_xq_nohot">Preheating</string>
+    <string name="equ_xq_ishot">Pre-heat Complete</string>
+    <string name="equ_xq_nohot">Pre-heating</string>
+    <string name="equ_xq_hot1">Pre-heat Incomplete</string>
     <string name="equ_xq_cp">Brew</string>
 
     <string name="equ_xq_star">Star Brew</string>
     <string name="equ_xq_buy">Shop Now</string>
     <string name="equ_xq_method">Brewing Method</string>
-    <string name="equ_xq_yc">Advantage</string>
-    <string name="equ_xq_pl">Dosing:</string>
-    <string name="equ_xq_kw">Series</string>
-
+    <string name="equ_xq_yc">Benefits</string>
+    <string name="equ_xq_pl">Ingredients:</string>
+    <string name="equ_xq_kw">Flavour</string>
+    <string name="equ_add_xq">Setup Guide</string>
+    <string name="equ_add_wifi">Enter WiFi Name</string>
+    <string name="equ_add_wifipass">Enter WiFi Password</string>
+    <string name="equ_add_add">Pair Now</string>
     <!--inform-->
-    <string name="equ_xq_informs">Enable or disable notifications</string>
-    <string name="equ_xq_finish">Brewing complete</string>
-    <string name="equ_xq_yrfinish">Preheat</string>
-    <string name="equ_xq_water">Under water</string>
-    <string name="equ_xq_full">The capsule waste box is full</string>
-    <string name="equ_xq_wash">The cleaning cycle is over</string>
+    <string name="equ_xq_informs">Notification Setting</string>
+    <string name="equ_xq_finish">Pre-heating in Process</string>
+    <string name="equ_xq_yrfinish">Pre-heating Completed</string>
+    <string name="equ_xq_water">Insufficient Water Level</string>
+    <string name="equ_xq_full">Device Drawer is Full</string>
+    <string name="equ_xq_wash">Cleaning Cycle</string>
     <string name="equ_xq_jpz">Infusion Process</string>
     <string name="equ_xq_stopjp">Stop</string>
     <string name="equ_xq_cpwc">Finish</string>
-    <string name="equ_xq_sc">Collect</string>
+    <string name="equ_xq_sc">Save</string>
     <string name="equ_xq_fx">Share</string>
     <string name="equ_xq_xg">Modification</string>
-    <string name="equ_xq_hdmr">Back default</string>
+    <string name="equ_xq_hdmr">Back to Default</string>
     <string name="equ_xq_temp">Temp</string>
     <string name="equ_xq_time">Soak time</string>
-    <string name="equ_xq_mr">Set as the default brewing machine</string>
+    <string name="equ_xq_mr">Set as Default Device</string>
     <!--light-->
     <string name="equ_light_light">Lighting Colour</string>
     <string name="equ_light_mode">Mode</string>
@@ -112,17 +116,25 @@
     <string name="social_friend_search">Search nickname or ID number</string>
     <string name="social_friend_add1">Add</string>
     <string name="social_friend_publish">Publish</string>
-    <string name="social_friend_star">Start typing your content here</string>
+    <string name="social_friend_star">Type in Your Content</string>
+    <string name="social_friend_talk">Type in Your Content</string>
+    <string name="social_friend_addmes">Send Friend Request</string>
+    <string name="social_friend_js">Confirm</string>
+    <string name="social_friend_ytj">Added</string>
+    <string name="social_friend_send">Send Verification Code</string>
+    <string name="social_friend_send1">Send</string>
+    <string name="social_friend_all">All Posts>>></string>
     <!--power-->
-    <string name="my_power_title">Your body score</string>
+    <string name="my_power_title">Your Lify Score</string>
     <string name="my_power_title1">Your body is not balanced, I hope you love your body</string>
-    <string name="my_power_s1">Physical Condition</string>
-    <string name="my_power_s2">Living Habit </string>
-    <string name="my_power_s3">Dietary Habit </string>
-    <string name="my_power_s4">Emotion Management </string>
+    <string name="my_power_s1">Body Conditions</string>
+    <string name="my_power_s2">Lifestyle Behaviors</string>
+    <string name="my_power_s3">Diet Habits</string>
+    <string name="my_power_s4">Emotional Health</string>
     <string name="my_power_day">Day</string>
     <string name="my_power_week">Week</string>
     <string name="my_power_month">Month</string>
+    <string name="my_power_dw">Unit</string>
     <!--homepage-->
     <string name="main_home_page">Home Page</string>
     <string name="main_home_hello">Hello</string>
@@ -158,6 +170,17 @@
     <!--setting-->
     <string name="set_name">Account ID</string>
     <string name="set_pass">Change Password </string>
+    <string name="set_pass_y">Current Password</string>
+    <string name="set_pass_x">New Password </string>
+    <string name="set_pass_q">Confirm New Password</string>
+    <string name="set_pass_ynull">Current Password Cannot be null</string>
+    <string name="set_pass_xnull">New Password Cannot be null</string>
+    <string name="set_pass_qnull">Confirm New Password Cannot be null</string>
+    <string name="set_pass_notsame">The two passwords are not the same</string>
+    <string name="set_pass_addy">Enter Current Password</string>
+    <string name="set_pass_addx">Enter New Password</string>
+    <string name="set_pass_addq">Enter Again New Password</string>
+    <string name="set_out">Sign Out</string>
     <string name="set_mess">Notifications </string>
     <string name="set_person">Users Feedback</string>
     <string name="set_update">Version Updates</string>
@@ -167,7 +190,7 @@
     <!--drink-->
     <string name="drink_unit">Cup</string>
     <string name="drink_units">Unit (cup)</string>
-    <string name="drink_set">Set a goal</string>
+    <string name="drink_set">Set goal</string>
     <string name="drink_reminder">Reminder time</string>
     <string name="drink_num">Number of brewing</string>
     <string name="drink_cup1">A cup of volume</string>
@@ -178,34 +201,38 @@
     <string name="drink_save">Save</string>
     <string name="drink_method">Brew list</string>
     <string name="drink_makemethod">Brewing method</string>
-
+    <string name="set_tk">Terms and Conditions</string>
     <!--personal center-->
-    <string name="personal_center">Personal center</string>
-    <string name="personal_pic">Head portrait</string>
+    <string name="personal_center">Profile Setting</string>
+    <string name="personal_pic">Profile Picture</string>
     <string name="personal_nick">Nickname</string>
     <string name="personal_id">ID</string>
-    <string name="personal_mess">Basic information Settings</string>
+    <string name="personal_mess">Basic Personal Data</string>
 
 
     <!--person set-->
+    <string name="personal_set_xb">Gender</string>
     <string name="personal_set_man">Male</string>
     <string name="personal_set_women">Female</string>
     <string name="personal_set_baby">Whether pregnant</string>
     <string name="personal_set_yes">Yes</string>
     <string name="personal_set_no">No</string>
-    <string name="personal_set_old">Age</string>
+    <string name="personal_set_old">date of birth</string>
     <string name="personal_set_tall">Height</string>
     <string name="personal_set_weight">Weight</string>
     <string name="personal_set_place">Region</string>
     <string name="personal_set_mystyle">My physical condition</string>
-
+    <string name="personal_set_oldnull">The date of birth cannot be blank</string>
+    <string name="personal_set_tallnull">Height cannot be empty</string>
+    <string name="personal_set_weightnull">The weight cannot be empty</string>
+    <string name="personal_set_placenull">Region cannot be empty</string>
 
     <!--search-->
     <string name="search_title">Search</string>
     <string name="search_taste">Taste</string>
     <string name="search_function">Function</string>
     <string name="search_aim">Aim</string>
-    <string name="search_history">History</string>
+    <string name="search_history">My Lify Score Recrods</string>
 
     <!--question-->
     <string name="question_button">Next</string>
@@ -220,8 +247,9 @@
     <string name="tea_kouwei_sg">Fruit Tea Series</string>
     <string name="tea_kouwei_gn">Healing Tea Series</string>
     <string name="tea_kouwei_tj">Recommend tea</string>
-    <string name="tea_kouwei_tjti">We recommend it to you:</string>
-    <string name="tea_kouwei_xa">One click to add favorite</string>
+    <string name="tea_kouwei_tjti">Recommended Drinks:</string>
+    <string name="tea_kouwei_tjti1">Based on your basic health data, we recommend the following drinks:</string>
+    <string name="tea_kouwei_xa">Add to My Favourite</string>
     <string name="tea_kouwei_tg">Skip</string>
     <!--adress-->
     <string name="adress_xz">Select Address</string>
@@ -239,14 +267,36 @@
     <string name="dialog_love_deltitle">Delete favorite</string>
     <string name="dialog_love_title1">Whether to add favorites or not</string>
     <string name="dialog_love_deltitle1">Whether to Delete Favorites</string>
-
-
+    <string name="dialog_add_qx">Hint</string>
+    <string name="dialog_add_qx1">Please click "Settings" to open the location permission.</string>
+    <string name="dialog_add_qx2">Set</string>
+    <string name="dialog_add_qx3">Cancel</string>
+    <string name="dialog_add_qx4">Confirm</string>
     <!--toast-->
 
     <string name="toast_make_make">Please wait until the preheating is completed before making</string>
     <string name="toast_equ_online">The device is offline</string>
     <string name="toast_equ_fast">Please don\'t click quickly</string>
     <string name="toast_equ_add">Please add the device first</string>
-    <string name="toast_equ_error">Please check the machine</string>
+    <string name="toast_equ_error">Please check the Device</string>
     <string name="toast_equ_wash">Successfully set</string>
+    <string name="toast_all_cs">Please open suspension window permission connection timeout, please try again</string>
+
+    <!--alarm-->
+    <string name="alarm_equ_wrong">Failure warning</string>
+    <string name="alarm_equ_water">No flow signal</string>
+    <string name="alarm_equ_open">The sliding cover of the tea Device  is not closed</string>
+    <string name="alarm_equ_lg">Garbage box alarm</string>
+    <string name="alarm_equ_50">Accumulative brewing mark of 50 cups</string>
+    <string name="alarm_equ_hot">Temperature is too high</string>
+    <string name="alarm_equ_low">Less than 70 degrees</string>
+    <string name="alarm_equ_nowater">The water level of the water tank is too low</string>
+    <string name="alarm_equ_NTC">NTC open short circuit</string>
+    <string name="alarm_qxsq">Apply for permission</string>
+    <string name="alarm_dkxfc">Please open the permission of suspension window</string>
+    <string name="location">Location permissions</string>
+
+    <!--search-->
+    <string name="search_mess">Type In Keywords</string>
+    <string name="search_qsh">Please later。。。</string>
 </resources>

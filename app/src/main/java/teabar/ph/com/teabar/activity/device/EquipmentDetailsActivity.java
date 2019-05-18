@@ -83,7 +83,7 @@ public class EquipmentDetailsActivity extends BaseActivity {
         tv_main_1.setLayoutParams(params);
         application.addActivity(this);
         preferences = getSharedPreferences("my", MODE_PRIVATE);
-        userId = preferences.getLong("userId",0)+"";
+        userId = preferences.getString("userId","");
         stringList = new ArrayList<>();
         equipmentDao = new EquipmentImpl(getApplicationContext());
         listEqu= equipmentDao.findAll();

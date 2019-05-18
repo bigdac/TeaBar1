@@ -55,7 +55,7 @@ public class NearestActivity extends BaseActivity {
     QMUITipDialog tipDialog;
     List<Tea> list = new ArrayList<>();
     NearestAdpter nearestAdpter ;
-    long userId;
+    String userId;
     @Override
     public void initParms(Bundle parms) {
 
@@ -78,7 +78,7 @@ public class NearestActivity extends BaseActivity {
         }
         application.addActivity(this);
         preferences = getSharedPreferences("my",MODE_PRIVATE);
-        userId = preferences.getLong("userId",0);
+        userId = preferences.getString("userId","");
         nearestAdpter = new NearestAdpter(this,list);
         rv_nearest.setLayoutManager(new LinearLayoutManager(this));
         rv_nearest.setAdapter(nearestAdpter);

@@ -156,8 +156,8 @@ public class Equpment implements Serializable {
     @Generated(hash = 1019008802)
     public Equpment() {
     }
-    
-    
-  
+
+
+
 
 }

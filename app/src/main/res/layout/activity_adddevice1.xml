@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+    android:id="@+id/tv_main_1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    />
+
+    <TextView
+        android:id="@+id/tv_power"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="WIFI添加"
+        android:layout_below="@+id/tv_main_1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="25dp"
+        android:textSize="30sp"
+        android:textColor="@color/login_black"
+        />
+    <Button
+        android:id="@+id/bt_add_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/answer_button1"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tv_main_1"
+        android:layout_marginTop="25dp"
+        android:text="跳过"
+        android:layout_marginRight="20dp"
+
+        />
+
+    <EditText
+        android:id="@+id/et_add_name"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/tv_power"
+        android:background="@color/white"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:hint="wifi名称"
+        android:paddingLeft="20dp"
+        android:textSize="14sp"
+        android:textColorHint="#333333"
+        />
+
+    <EditText
+        android:id="@+id/et_add_pass"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/et_add_name"
+        android:background="@color/white"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:hint="输入wifi密码"
+        android:paddingLeft="20dp"
+        android:textSize="14sp"
+        android:textColorHint="#333333"
+        />
+    <LinearLayout
+        android:id="@+id/li_device_ask"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_below="@+id/et_add_pass"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal"
+        >
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/device_ask"
+        android:layout_gravity="center"
+        />
+    <TextView
+        android:id="@+id/tv_wifi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="配对教程"
+        android:layout_gravity="center"
+        android:textSize="14sp"
+        android:textColor="#333333"
+        android:layout_marginLeft="10dp"
+        />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/bt_device_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/login_button"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="60dp"
+        android:text="配对"
+        android:textColor="@color/white"
+        android:paddingBottom="11dp"
+        android:textSize="16sp"
+        />
+
+</RelativeLayout>

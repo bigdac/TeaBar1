@@ -7,7 +7,8 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class UserEntry {
     @Id(autoincrement = false)
-    private long userId;
+    private  long id ;
+    private String userId;
     public String userName;
     public String appKey;
     public String getAppKey() {
@@ -22,14 +23,21 @@ public class UserEntry {
     public void setUserName(String userName) {
         this.userName = userName;
     }
-    public long getUserId() {
+    public String getUserId() {
         return this.userId;
     }
-    public void setUserId(long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
-    @Generated(hash = 626996541)
-    public UserEntry(long userId, String userName, String appKey) {
+    public long getId() {
+        return this.id;
+    }
+    public void setId(long id) {
+        this.id = id;
+    }
+    @Generated(hash = 279504359)
+    public UserEntry(long id, String userId, String userName, String appKey) {
+        this.id = id;
         this.userId = userId;
         this.userName = userName;
         this.appKey = appKey;
@@ -37,5 +45,5 @@ public class UserEntry {
     @Generated(hash = 1412082065)
     public UserEntry() {
     }
-    
+
 }

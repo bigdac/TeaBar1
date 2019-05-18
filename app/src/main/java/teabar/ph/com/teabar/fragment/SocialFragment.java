@@ -15,9 +15,9 @@ import butterknife.BindView;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.model.Conversation;
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.AddSocialActivity;
-import teabar.ph.com.teabar.activity.FriendListActivity;
-import teabar.ph.com.teabar.activity.SocialInformActivity;
+import teabar.ph.com.teabar.activity.social.AddSocialActivity;
+import teabar.ph.com.teabar.activity.chat.FriendListActivity;
+import teabar.ph.com.teabar.activity.social.SocialInformActivity;
 import teabar.ph.com.teabar.base.BaseFragment;
 
 

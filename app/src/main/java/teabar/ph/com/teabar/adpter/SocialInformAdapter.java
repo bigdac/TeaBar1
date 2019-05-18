@@ -37,6 +37,7 @@ public class SocialInformAdapter extends RecyclerView.Adapter<SocialInformAdapte
     public void onBindViewHolder(@NonNull final MyviewHolder myviewHolder, final int position) {
 
          myviewHolder.tv_talk_name.setText(mData.get(position).getUseName());
+//         myviewHolder.tv_message.setText(mData.get(position).);
          myviewHolder.bt_addFriend.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
@@ -47,7 +48,7 @@ public class SocialInformAdapter extends RecyclerView.Adapter<SocialInformAdapte
          });
          if (mData.get(position).getAddNum()==1){
             myviewHolder. bt_addFriend .setText("已同意");
-             myviewHolder. bt_addFriend .setTextColor( context.getResources().getColor(R.color.login_gray));
+            myviewHolder. bt_addFriend .setTextColor( context.getResources().getColor(R.color.login_gray));
             myviewHolder.bt_addFriend.setClickable(false);
             myviewHolder.bt_addFriend.setBackground(context.getDrawable( R.drawable.answer_button1) );
          }
@@ -71,13 +72,14 @@ public class SocialInformAdapter extends RecyclerView.Adapter<SocialInformAdapte
 
     class MyviewHolder extends RecyclerView.ViewHolder{
         ImageView iv_inform_pic;
-        TextView tv_talk_name;
+        TextView tv_talk_name,tv_message;
         Button bt_addFriend;
         public MyviewHolder(View itemView){
             super(itemView);
             tv_talk_name = itemView.findViewById(R.id.tv_talk_name);
             iv_inform_pic = itemView.findViewById(R.id.iv_inform_pic);
             bt_addFriend = itemView.findViewById(R.id.bt_addFriend);
+            tv_message = itemView.findViewById(R.id.tv_message);
         }
     }
 }

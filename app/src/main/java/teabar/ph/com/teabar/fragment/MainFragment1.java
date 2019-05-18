@@ -236,13 +236,13 @@ public class MainFragment1 extends BaseFragment  {
         //初始化ViewPager项布局
         views1 = new ArrayList<>();
         for (int i = 0; i < mTabItemBeanArrayList1.size(); i++) {
-            View view1 = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_weatherlist, null);
-            final MyRecyclerView recycler_view2 = view1.findViewById(R.id.rv_weatherlist);
-            recyclerViewAdapter2 = new RecyclerViewAdapter(getActivity(), R.layout.item_weather, twoDataList);
-            final WeatherLayoutManager weatherLayoutManager=new WeatherLayoutManager(getActivity());
-            recycler_view2.setLayoutManager(weatherLayoutManager);
-            recycler_view2.setAdapter(recyclerViewAdapter2);
-            views1.add(view1);
+//            View view1 = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_weatherlist, null);
+//            final MyRecyclerView recycler_view2 = view1.findViewById(R.id.rv_weatherlist);
+//            recyclerViewAdapter2 = new RecyclerViewAdapter(getActivity(), R.layout.item_weather, twoDataList);
+//            final WeatherLayoutManager weatherLayoutManager=new WeatherLayoutManager(getActivity());
+//            recycler_view2.setLayoutManager(weatherLayoutManager);
+//            recycler_view2.setAdapter(recyclerViewAdapter2);
+//            views1.add(view1);
         }
         pagerAdapter1 = new MyViewPagerAdapter(views1);
         view_pager_weather.setAdapter(pagerAdapter1);

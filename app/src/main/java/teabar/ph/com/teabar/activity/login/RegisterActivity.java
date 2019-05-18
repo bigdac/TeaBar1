@@ -191,7 +191,7 @@ public class RegisterActivity extends BaseActivity {
      *
      */
     int type;
-    long userId;
+    String userId;
     String returnMsg1,returnMsg2;
     class RegistAsyncTask extends AsyncTask<Map<String,Object>,Void,String> {
 
@@ -210,14 +210,14 @@ public class RegisterActivity extends BaseActivity {
                         returnMsg1=jsonObject.getString("message1");
                         if ("200".equals(code)) {
                             JSONObject returnData = jsonObject.getJSONObject("data");
-                             userId = returnData.getLong("userId");
+                             userId = returnData.getString("userId");
                             String userName = returnData.getString("userName");
                             String token = returnData.getString("token");
                              type = returnData.getInt("type");
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putString("user",user);
                             editor.putString("password",password);
-                            editor.putLong("userId", userId);
+                            editor.putString("userId", userId);
                             editor.putString("token",token);
                             editor.putString("userName",userName);
                             editor.putInt("type",type);
@@ -285,9 +285,9 @@ public class RegisterActivity extends BaseActivity {
                     String username = myInfo.getUserName();
                     String appKey = myInfo.getAppKey();
 
-                    UserEntry user = userEntryDao.findById(userId);
+                    UserEntry user = userEntryDao.findById(1);
                     if (null == user) {
-                        user = new UserEntry(userId,username, appKey);
+                        user = new UserEntry(1,userId,username, appKey);
                         userEntryDao.insert(user);
                     }
                     Intent intent = new Intent(RegisterActivity.this, MQService.class);

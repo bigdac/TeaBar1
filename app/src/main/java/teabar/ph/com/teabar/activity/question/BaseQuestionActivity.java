@@ -48,7 +48,7 @@ public class BaseQuestionActivity extends BaseActivity {
     int  conceive=0; //懷孕  1 懷孕 0 沒懷孕
     SharedPreferences preferences;
     MyApplication application;
-    long userId;
+    String userId;
     @Override
     public void initParms(Bundle parms) {
 
@@ -67,7 +67,7 @@ public class BaseQuestionActivity extends BaseActivity {
         }
         application.addActivity(this);
         preferences = getSharedPreferences("my",MODE_PRIVATE);
-         userId = preferences.getLong("userId",0);
+         userId = preferences.getString("userId","");
          question1Fragment = new Question1Fragment();
          question2Fragment = new Question2Fragment();
          question3Fragment = new Question3Fragment();
@@ -105,6 +105,9 @@ public class BaseQuestionActivity extends BaseActivity {
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.li_question,baseFragments[type]).commit();
 
+    }
+    public int getNunber(){
+       return application.IsEnglish();
     }
 
     public void setMesssage(  String sex ,String birthday  ){

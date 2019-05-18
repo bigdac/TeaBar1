@@ -30,7 +30,8 @@ public class Question5Fragment extends BaseFragment {
 
     @Override
     public void initView(View view) {
-
+        et_ques_weight.setHint(getText(R.string.my_power_dw)+"： kg");
+        et_ques_tall.setHint(getText(R.string.my_power_dw)+"： cm");
     }
     @OnClick({R.id.bt_question1_esure})
     public void onClick(View view){

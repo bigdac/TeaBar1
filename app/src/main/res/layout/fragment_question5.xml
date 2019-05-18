@@ -44,7 +44,7 @@
         android:layout_marginTop="10dp"
         android:paddingLeft="6dp"
         android:inputType="number|numberDecimal"
-        android:hint="单位：kg"
+        android:hint="@string/my_power_dw"
         android:textSize="15sp"
         />
     <TextView
@@ -68,7 +68,7 @@
         android:layout_marginTop="10dp"
         android:inputType="number|numberDecimal"
         android:paddingLeft="6dp"
-        android:hint="单位：cm"
+        android:hint="@string/my_power_dw"
         android:textColorHint="@color/social_gray"
         android:textSize="15sp"
         />

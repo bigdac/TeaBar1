@@ -72,5 +72,14 @@ public class Utils{
         return flag;
     }
 
+    public static String deleteString0(String str, char delChar){
+        String delStr = "";
+        for (int i = 0; i < str.length(); i++) {
+            if(str.charAt(i) != delChar){
+                delStr += str.charAt(i);
+            }
+        }
+        return delStr;
+    }
 
 }

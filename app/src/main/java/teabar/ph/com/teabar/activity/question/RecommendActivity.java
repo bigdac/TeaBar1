@@ -31,6 +31,7 @@ import butterknife.OnClick;
 import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.MainActivity;
+import teabar.ph.com.teabar.activity.device.AddDeviceActivity1;
 import teabar.ph.com.teabar.adpter.RecommendAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
@@ -73,7 +74,7 @@ public class RecommendActivity extends BaseActivity {
         application.addActivity(this);
         preferences = getSharedPreferences("my",MODE_PRIVATE);
 
-         userId = preferences.getLong("userId",0)+"";
+         userId = preferences.getString("userId","" )+"";
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 ScreenUtils.getStatusBarHeight());
         tv_main_1.setLayoutParams(params);
@@ -86,7 +87,8 @@ public class RecommendActivity extends BaseActivity {
     public void onClick(View view){
         switch (view.getId()){
             case R.id.tv_recom_skip:
-                startActivity(MainActivity.class);
+                application.removeActivity(this);
+                startActivity(AddDeviceActivity1.class);
                 break;
 
             case R.id.bt_device_add:
@@ -155,7 +157,7 @@ public class RecommendActivity extends BaseActivity {
      *  添加喜愛
      *
      */
-    String returnMsg1;
+    String returnMsg1,returnMsg2;
     class CollectTeaAsyncTask extends AsyncTask<Map<String,Object>,Void,String> {
 
         @Override
@@ -171,8 +173,8 @@ public class RecommendActivity extends BaseActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(result);
                         code = jsonObject.getString("state");
-                        returnMsg1=jsonObject.getString("message1");
-
+                        returnMsg1=jsonObject.getString("message2");
+                        returnMsg2=jsonObject.getString("message3");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -189,16 +191,24 @@ public class RecommendActivity extends BaseActivity {
 
             switch (s) {
                 case "200":
-                    toast(  returnMsg1);
-                    startActivity(MainActivity.class);
+                    if (application.IsEnglish()==0){
+                        toast(  returnMsg1);
+                    }else {
+                        toast(returnMsg2);
+                    }
+                    application.removeActivity(RecommendActivity.this);
+                    startActivity(AddDeviceActivity1.class);
                     break;
 
                 case "4000":
-                    toast(  "连接超时，请重试");
+                    toast( getText(R.string.toast_all_cs).toString());
                     break;
                 default:
-                     toast(  returnMsg1);
-
+                    if (application.IsEnglish()==0){
+                        toast(  returnMsg1);
+                    }else {
+                        toast(returnMsg2);
+                    }
                     break;
 
             }

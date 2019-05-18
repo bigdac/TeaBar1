@@ -93,6 +93,7 @@ public class LocalManageUtil {
         DisplayMetrics dm = resources.getDisplayMetrics();
         Configuration config = resources.getConfiguration();
         Locale locale = getSetLanguageLocale(context);
+        Log.e("DDDDDDDDFFFFFFFF", "setApplicationLanguage: -->"+locale.toLanguageTag()+"...."+locale.toString()+"...."+locale.getDisplayLanguage() );
         config.locale = locale;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             LocaleList localeList = new LocaleList(locale);

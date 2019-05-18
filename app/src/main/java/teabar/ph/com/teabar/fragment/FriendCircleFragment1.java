@@ -3,7 +3,6 @@ package teabar.ph.com.teabar.fragment;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.AsyncTask;
@@ -39,7 +38,7 @@ import java.util.Map;
 import me.jessyan.autosize.utils.ScreenUtils;
 import pub.devrel.easypermissions.EasyPermissions;
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.AddSocialActivity;
+import teabar.ph.com.teabar.activity.social.AddSocialActivity;
 import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.adpter.CircleAdapter;
 import teabar.ph.com.teabar.base.BaseFragment;
@@ -52,7 +51,6 @@ import teabar.ph.com.teabar.bean.User;
 import teabar.ph.com.teabar.mvp.contract.CircleContract;
 import teabar.ph.com.teabar.mvp.presenter.CirclePresenter;
 import teabar.ph.com.teabar.util.CommonUtils;
-import teabar.ph.com.teabar.util.DisplayUtil;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.widgets.CommentListView;
@@ -84,7 +82,7 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
     private List<CircleItem> circleItemList = new ArrayList<>();
     private List<CircleItem> circleItemList1 = new ArrayList<>();
     SharedPreferences preferences;
-    long id ;
+    String id ;
     int currentPage = 1;
     int  Type = 0;
     Context context;
@@ -99,7 +97,7 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
         presenter = new CirclePresenter( this);
         context= getActivity();
         preferences = getActivity().getSharedPreferences("my",Context.MODE_PRIVATE);
-        id = preferences.getLong("userId",0);
+        id = preferences.getString("userId","");
         tipDialog = new QMUITipDialog.Builder(getActivity())
                 .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
                 .setTipWord("请稍后...")

@@ -1,10 +1,8 @@
-package teabar.ph.com.teabar.activity;
+package teabar.ph.com.teabar.activity.social;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -39,8 +37,6 @@ import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.adpter.ImagePickerAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
-import teabar.ph.com.teabar.fragment.FriendCircleFragment1;
-import teabar.ph.com.teabar.util.BitmapCompressUtils;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.view.GlideImageLoader;
@@ -87,7 +83,7 @@ public class AddSocialActivity extends BaseActivity implements ImagePickerAdapte
         tv_main_1.setLayoutParams(params);
         initImagePicker();
         preferences = getSharedPreferences("my",MODE_PRIVATE);
-        userId = preferences.getLong("userId",0)+"";
+        userId = preferences.getString("userId","")+"";
         selImageList = new ArrayList<>();
         adapter = new ImagePickerAdapter(this, selImageList, maxImgCount);
         adapter.setOnItemClickListener(this);

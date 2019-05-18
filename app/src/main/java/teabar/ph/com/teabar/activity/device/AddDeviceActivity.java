@@ -1,6 +1,8 @@
 package teabar.ph.com.teabar.activity.device;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -18,6 +20,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -55,6 +58,9 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import me.jessyan.autosize.utils.ScreenUtils;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
@@ -71,7 +77,7 @@ import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 
 
-public class AddDeviceActivity extends BaseActivity {
+public class AddDeviceActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks{
     MyApplication application;
     Unbinder unbinder;
     @BindView(R.id.et_add_name)
@@ -118,7 +124,7 @@ public class AddDeviceActivity extends BaseActivity {
         tv_main_1.setLayoutParams(params);
 
         preferences = getSharedPreferences("my", MODE_PRIVATE);
-        userId = preferences.getLong("userId",0)+"";
+        userId = preferences.getString("userId","") ;
         //绑定services
         clockintent = new Intent(AddDeviceActivity.this, MQService.class);
         clockisBound = bindService(clockintent, clockconnection, Context.BIND_AUTO_CREATE);
@@ -156,8 +162,53 @@ public class AddDeviceActivity extends BaseActivity {
 //        String ssid=mWifiAdmin.getWifiConnectedSsid();
 //        et_add_name.setText(ssid);
 //        et_add_name.setEnabled(false);
+        permissionGrantedSuccess();
     }
     private boolean mReceiverRegistered = false;
+
+    @TargetApi(23)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // 把执行结果的操作给EasyPermissions
+        System.out.println(requestCode);
+        if (isNeedCheck) {
+            EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+        }
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+
+    }
+    private static final int RC_CAMERA_AND_LOCATION = 0;
+    @AfterPermissionGranted(RC_CAMERA_AND_LOCATION)
+    private void permissionGrantedSuccess() {
+        String[] perms = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
+        if (EasyPermissions.hasPermissions(this, perms)) {
+
+        } else {
+//             没有申请过权限，现在去申请
+            EasyPermissions.requestPermissions(this, getString(R.string.location),
+                    RC_CAMERA_AND_LOCATION, perms);
+        }
+    }
+
+    boolean isNeedCheck=true;
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            new AppSettingsDialog
+                    .Builder(this)
+                    .setTitle(getText(R.string.dialog_add_qx).toString())
+                    .setRationale( getText(R.string.dialog_add_qx1).toString())
+                    .setPositiveButton(getText(R.string.dialog_add_qx2).toString())
+                    .setNegativeButton(getText(R.string.dialog_add_qx3).toString())
+                    .build()
+                    .show();
+            isNeedCheck = false;
+        }
+    }
 
     private boolean isSDKAtLeastP() {
         return Build.VERSION.SDK_INT >= 28;
@@ -711,7 +762,7 @@ public class AddDeviceActivity extends BaseActivity {
             handler.removeCallbacksAndMessages(null);
         if (clockisBound)
             unbindService(clockconnection);
-        if (mReceiver!=null){
+        if (mReceiver!=null&mReceiverRegistered){
             unregisterReceiver(mReceiver);
         }
     }

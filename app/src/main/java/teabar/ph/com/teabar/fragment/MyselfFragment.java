@@ -47,7 +47,7 @@ public class MyselfFragment extends BaseFragment {
     public void initView(View view) {
         preferences = getActivity().getSharedPreferences("my",Context.MODE_PRIVATE);
         String name = preferences.getString("userName","");
-        long id = preferences.getLong("userId",0);
+        String id = preferences.getString("userId","");
         String photoUrl = preferences.getString("photoUrl","");
         if (!TextUtils.isEmpty(photoUrl)){
             Glide.with(getActivity()).load(photoUrl).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.my_pic).transform(new GlideCircleTransform(getActivity())).into(iv_my_pic);

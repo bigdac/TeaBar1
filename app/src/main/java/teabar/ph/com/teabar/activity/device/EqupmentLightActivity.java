@@ -198,19 +198,19 @@ public class EqupmentLightActivity extends BaseActivity {
                         iv_mode_1.setVisibility(View.VISIBLE);
                         iv_mode_2.setVisibility(View.INVISIBLE);
                         iv_mode_3.setVisibility(View.INVISIBLE);
-                        modeChoose = 0;
+                        modeChoose = 64;
                         break;
                     case R.id.rl_mode_2:
                         iv_mode_1.setVisibility(View.INVISIBLE);
                         iv_mode_2.setVisibility(View.VISIBLE);
                         iv_mode_3.setVisibility(View.INVISIBLE);
-                        modeChoose =1;
+                        modeChoose =32;
                         break;
                     case R.id.rl_mode_3:
                         iv_mode_1.setVisibility(View.INVISIBLE);
                         iv_mode_2.setVisibility(View.INVISIBLE);
                         iv_mode_3.setVisibility(View.VISIBLE);
-                        modeChoose =2;
+                        modeChoose =16;
                         break;
                 }
             }

@@ -35,7 +35,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.adpter.CircleAdapter;
+import teabar.ph.com.teabar.activity.social.AddSocialActivity;
 import teabar.ph.com.teabar.adpter.CircleAdapter1;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
@@ -45,7 +45,6 @@ import teabar.ph.com.teabar.bean.CommentItem;
 import teabar.ph.com.teabar.bean.FavortItem;
 import teabar.ph.com.teabar.bean.PhotoInfo;
 import teabar.ph.com.teabar.bean.User;
-import teabar.ph.com.teabar.fragment.FriendCircleFragment1;
 import teabar.ph.com.teabar.mvp.contract.CircleContract;
 import teabar.ph.com.teabar.mvp.presenter.CirclePresenter;
 import teabar.ph.com.teabar.util.HttpUtils;
@@ -70,7 +69,7 @@ public class MyIssueActivity extends BaseActivity implements CircleContract.View
     int  Type = 0;
     SharedPreferences preferences;
     private CirclePresenter presenter;
-    long id ;
+    String id ;
     @Override
     public void initParms(Bundle parms) {
 
@@ -92,7 +91,7 @@ public class MyIssueActivity extends BaseActivity implements CircleContract.View
                 ScreenUtils.getStatusBarHeight());
         tv_main_1.setLayoutParams(params);
         preferences =  getSharedPreferences("my",Context.MODE_PRIVATE);
-        id = preferences.getLong("userId",0);
+        id = preferences.getString("userId","");
         tipDialog = new QMUITipDialog.Builder(this)
                 .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
                 .setTipWord("请稍后...")

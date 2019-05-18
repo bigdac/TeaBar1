@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 
 import com.facebook.FacebookSdk;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -62,6 +63,8 @@ public class MyApplication extends Application {
         JMessageClient.setDebugMode(true);
         JMessageClient.init(getApplicationContext());
         LocalManageUtil.setApplicationLanguage(this);
+        Log.e("ZZZZZZZZZZZZZZZ", "onCreate: -->"+ LocalManageUtil.getSetLanguageLocale(this) );
+
 //        SMSSDK.initSDK(this,"257a640199764","125aced6309709d59520e466e078ba15");
         //设置Notification的模式
         JMessageClient.setNotificationFlag(JMessageClient.FLAG_NOTIFY_WITH_SOUND | JMessageClient.FLAG_NOTIFY_WITH_LED | JMessageClient.FLAG_NOTIFY_WITH_VIBRATE);
@@ -177,12 +180,20 @@ public class MyApplication extends Application {
             return false;
         }
     }
-
+    /*0中文1 英文*/
+    public int IsEnglish(){
+        if ("en_US".equals(LocalManageUtil.getSetLanguageLocale(this))){
+            return 1;
+        }else {
+            return 0;
+        }
+    }
     @Override
     protected void attachBaseContext(Context base) {
         //保存系统选择语言
         LocalManageUtil.saveSystemCurrentLanguage(base);
         super.attachBaseContext(LocalManageUtil.setLocal(base));
+
     }
 
     @Override
@@ -190,6 +201,7 @@ public class MyApplication extends Application {
         super.onConfigurationChanged(newConfig);
         //保存系统选择语言
         LocalManageUtil.onConfigurationChanged(getApplicationContext());
+
     }
 
 

@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="teabar.ph.com.teabar">
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 用于进行网络定位 -->
@@ -11,10 +10,20 @@
     <!-- 用于访问GPS定位 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
+    <!--弹窗-->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
         tools:ignore="ProtectedPermissions" />
-
+    <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /> <!-- 不是SDK需要的权限，是示例中的后台唤醒定位需要的权限 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- 需要运行时注册的权限 -->
+    <!-- 用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 用于提高GPS定位速度 -->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
 
     <application
         android:name=".base.MyApplication"
@@ -95,8 +104,8 @@
         <activity android:name=".activity.BuyPlanActivity" />
         <activity android:name=".activity.MethodActivity" />
         <activity android:name=".activity.device.AddMethodActivity" />
-        <activity android:name=".activity.SocialInformActivity" />
-        <activity android:name=".activity.FriendListActivity" />
+        <activity android:name=".activity.social.SocialInformActivity" />
+        <activity android:name=".activity.chat.FriendListActivity" />
         <activity android:name=".activity.chat.AddFriendActivity" />
         <activity android:name=".util.zxing.android.CaptureActivity" />
         <activity android:name=".activity.ImagePagerActivity"
@@ -104,7 +113,7 @@
             />
         <activity android:name=".activity.YWActivity" />
         <activity android:name=".activity.login.ForgetActivity" />
-        <activity android:name=".activity.AddSocialActivity" />
+        <activity android:name=".activity.social.AddSocialActivity" />
         <activity android:name=".activity.chat.AddFriendActivity1" />
         <activity android:name=".activity.chat.ChatActivity" />
         <activity android:name=".activity.login.GuideActivity" />
@@ -112,11 +121,12 @@
         <activity android:name=".activity.my.FavoriteActivity" />
         <activity android:name=".activity.device.AddDeviceActivity" />
         <activity android:name=".activity.device.AddMethodActivity1" />
-        <activity android:name=".activity.AllCommentActivity" />
+        <activity android:name=".activity.social.AllCommentActivity" />
         <activity android:name=".activity.EncourageActivity" />
         <activity android:name=".activity.question.RecommendActivity" />
         <activity android:name=".activity.question.BaseQuestionActivity" />
         <activity android:name=".activity.question.Recommend1Activity" />
+        <activity android:name=".activity.device.AddDeviceActivity1" />
     </application>
 
 </manifest>

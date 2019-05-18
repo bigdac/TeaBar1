@@ -41,6 +41,7 @@
             android:orientation="vertical"
             >
             <TextView
+                android:id="@+id/tv_buy_planname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/buyplan_health"
@@ -57,7 +58,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="17dp"
                 android:textSize="14sp"
-                android:textColor="@color/social_gray"
+                android:textColor="#777777"
                 android:layout_marginTop="7dp"
                 android:paddingBottom="8dp"
                 />
@@ -90,7 +91,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="17dp"
                 android:textSize="14sp"
-                android:textColor="@color/social_gray"
+                android:textColor="#777777"
                 android:paddingBottom="16dp"
                 />
 
@@ -120,7 +121,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="17dp"
                 android:textSize="14sp"
-                android:textColor="@color/social_gray"
+                android:textColor="#777777"
                 android:paddingBottom="16dp"
                 />
 
@@ -169,7 +170,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Dr.W. Christopher Winter是美国睡眠医学委员会和美国内科学委员会认证的睡眠医学委员会成员，也是美国精神病学和神经病学委员会认证的神经学委员会成员。他是夏洛茨维尔神经和睡眠医学公司的老板，也是玛莎·杰斐逊医院睡眠医学中心的医疗主任。他目前的研究重点是睡眠和运动表现，"
-                android:textColor="@color/social_gray"
+                android:textColor="#777777"
                 android:layout_marginTop="14dp"
                 android:layout_marginLeft="20dp"
                 android:textSize="14sp"
@@ -185,18 +186,9 @@
         android:layout_width="match_parent"
         android:background="@color/white"
         android:layout_height="70dp">
+
         <TextView
-            android:id="@+id/tv_buy_tc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="It is expected to take 15 days"
-            android:layout_marginTop="13dp"
-            android:layout_marginLeft="20dp"
-            android:textColor="#333333"
-            android:textSize="14sp"
-            />
-        <TextView
-            android:layout_below="@+id/tv_buy_tc"
+            android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="¥300"
@@ -206,13 +198,13 @@
             android:textSize="18sp"
             />
         <Button
-            android:layout_width="130dp"
-            android:layout_height="40dp"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
             android:text="@string/equ_xq_buy"
             android:textSize="14sp"
             android:paddingBottom="10dp"
             android:textColor="@color/white"
-            android:background="@mipmap/login_button"
+            android:background="@mipmap/make_brew"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"

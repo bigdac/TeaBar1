@@ -79,7 +79,7 @@ public class PersonnalActivity extends BaseActivity  {
     TextView tv_person_id;
     SharedPreferences preferences;
     MyApplication application;
-    long id;
+    String id;
 
     @Override
     public void initParms(Bundle parms) {
@@ -104,7 +104,7 @@ public class PersonnalActivity extends BaseActivity  {
         application.addActivity(this);
         preferences = getSharedPreferences("my",MODE_PRIVATE);
         String name = preferences.getString("userName","");
-        id = preferences.getLong("userId",0);
+        id = preferences.getString("userId","");
         String photoUrl = preferences.getString("photoUrl","");
         if (!TextUtils.isEmpty(photoUrl)){
             Glide.with(this).load(photoUrl).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.my_pic).transform(new teabar.ph.com.teabar.util.GlideCircleTransform(this)).into(iv_person_pic);

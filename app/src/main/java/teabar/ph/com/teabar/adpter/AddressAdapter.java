@@ -16,10 +16,12 @@ import teabar.ph.com.teabar.pojo.Adress;
 public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHolder>  {
     private Context mContext;
     private List<Adress> mData;
+    private int num;/* 0 中文 1 英文*/
 
-    public AddressAdapter(Context context, List<Adress>list){
+    public AddressAdapter(Context context, List<Adress>list,int num){
         this.mContext = context;
         this.mData = list;
+        this.num = num;
     }
     @NonNull
     @Override
@@ -30,7 +32,12 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, final int position) {
-        myViewHolder.tv_address_place.setText(mData.get(position).getCname());
+        if (num==0){
+            myViewHolder.tv_address_place.setText(mData.get(position).getCname());
+        }else {
+            myViewHolder.tv_address_place.setText(mData.get(position).getEname());
+        }
+
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

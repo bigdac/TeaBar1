@@ -86,7 +86,7 @@ public class MethodActivity extends BaseActivity {
         application.addActivity(this);
         showProgressDialog();
         preferences = getSharedPreferences("my", MODE_PRIVATE);
-        userId = preferences.getLong("userId",0)+"";
+        userId = preferences.getString("userId","")+"";
         Map<String,Object> params1 = new HashMap<>();
         params1.put("userId",userId);
         new FindMethordAsynTask().execute(params1);

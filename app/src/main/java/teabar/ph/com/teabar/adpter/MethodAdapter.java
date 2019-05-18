@@ -150,7 +150,7 @@ public class MethodAdapter extends RecyclerView.Adapter<MethodAdapter.MyviewHold
                     try {
                         JSONObject jsonObject = new JSONObject(result);
                         code = jsonObject.getString("state");
-                        returnMsg1=jsonObject.getString("message1");
+                        returnMsg1=jsonObject.getString("message2");
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -181,7 +181,7 @@ public class MethodAdapter extends RecyclerView.Adapter<MethodAdapter.MyviewHold
                     if (tipDialog!=null&&tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    ToastUtil.showShort(context,  "连接超时，请重试");
+                    ToastUtil.showShort(context,context.getText(R.string.toast_all_cs).toString());
 
                     break;
                 default:

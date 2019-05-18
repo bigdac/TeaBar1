@@ -40,7 +40,7 @@ public class MyQuestionActivity extends BaseActivity {
     MyquestionAdapter myquestionAdapter;
     List<ScoreRecords> mList = new ArrayList<>();
     MyApplication application;
-    long userId;
+    String userId;
     SharedPreferences preferences;
     @Override
     public void initParms(Bundle parms) {
@@ -63,7 +63,7 @@ public class MyQuestionActivity extends BaseActivity {
                 ScreenUtils.getStatusBarHeight());
         tv_main_1.setLayoutParams(params);
         preferences = getSharedPreferences("my",MODE_PRIVATE);
-        userId = preferences.getLong("userId",0);
+        userId = preferences.getString("userId","");
         myquestionAdapter = new MyquestionAdapter(this,mList);
         rv_myquestion.setLayoutManager(new LinearLayoutManager(this));
         rv_myquestion.setAdapter(myquestionAdapter);

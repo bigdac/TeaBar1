@@ -39,6 +39,8 @@ public class BuyPlanActivity extends BaseActivity {
     TextView tv_buy_name;
     @BindView(R.id.iv_buy_pic)
     ImageView iv_buy_pic;
+    @BindView(R.id.tv_buy_planname)
+    TextView tv_buy_planname;
     Plan plan;
     @Override
     public void initParms(Bundle parms) {
@@ -66,6 +68,7 @@ public class BuyPlanActivity extends BaseActivity {
             tv_buy_td.setText(plan.getFeaturesEn());
             tv_buy_js.setText(plan.getDietitianDescribeEn());
             tv_buy_name.setText(plan.getDietitianDescribeCn());
+            tv_buy_planname.setText(plan.getPlanNameEn());
             Glide.with(this).load(plan.getDietitianPhoto()).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.my_pic).transform(new GlideCircleTransform(this)).into(iv_buy_pic);
         }
     }

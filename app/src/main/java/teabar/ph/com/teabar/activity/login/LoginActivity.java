@@ -506,7 +506,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                     returnMsg1=jsonObject.getString("message1");
                     if ("200".equals(code)) {
                         JSONObject returnData = jsonObject.getJSONObject("data");
-                       userId = returnData.getLong("userId");
+                       userId = returnData.getString("userId");
                         String userName = returnData.getString("userName");
                         String token = returnData.getString("token");
                         String photoUrl = returnData.getString("photoUrl");
@@ -514,7 +514,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putString("user",user);
                         editor.putString("password",password);
-                        editor.putLong("userId", userId);
+                        editor.putString("userId", userId);
                         editor.putString("token",token);
                         editor.putString("userName",userName);
                         editor.putString("photoUrl",photoUrl);
@@ -563,7 +563,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
             }
         }
     }
-    long userId;
+    String userId;
     int type;
     class ThirdLoginAsynTask extends AsyncTask<Map<String,Object>,Void,String> {
 
@@ -582,7 +582,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                         returnMsg1=jsonObject.getString("message1");
                         if ("200".equals(code)) {
                             JSONObject returnData = jsonObject.getJSONObject("data");
-                             userId = returnData.getLong("userId");
+                             userId = returnData.getString("userId");
                             String userName = returnData.getString("userName");
                             String token = returnData.getString("token");
                              type = returnData.getInt("type");
@@ -590,7 +590,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putString("user",user);
                             editor.putString("password",password);
-                            editor.putLong("userId", userId);
+                            editor.putString("userId", userId);
                             editor.putString("token",token);
                             editor.putString("photoUrl",photoUrl);
                             editor.putString("userName",userName);
@@ -658,9 +658,9 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                     String username = myInfo.getUserName();
                     String appKey = myInfo.getAppKey();
 
-                    UserEntry user = userEntryDao.findById(userId);
+                    UserEntry user = userEntryDao.findById(1);
                     if (null == user) {
-                        user = new UserEntry(userId,username, appKey);
+                        user = new UserEntry(1,userId,username, appKey);
                         userEntryDao.insert(user);
                     }
 
@@ -688,7 +688,6 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                     try {
                         JSONObject jsonObject = new JSONObject(result);
                         code = jsonObject.getString("state");
-                        returnMsg1=jsonObject.getString("message1");
                         if ("200".equals(code)) {
                             equipmentDao.deleteAll();
                             JSONArray returnData = jsonObject.getJSONArray("data");
@@ -742,7 +741,8 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                         startService(intent);// 启动服务
                         startActivity( MainActivity.class);
                     }
-                    toast( "登录成功");
+
+                        toast( returnMsg1);
                     break;
                 case "4000":
                     if (tipDialog!=null&&tipDialog.isShowing()){

@@ -68,7 +68,7 @@ public class Question3Fragment extends BaseFragment {
     @Override
     public void initView(View view) {
 
-        addressAdapter = new AddressAdapter(getActivity(),list);
+        addressAdapter = new AddressAdapter(getActivity(),list, ((BaseQuestionActivity)getActivity()).getNunber());
         new getCountryAsynTask().execute();
         initCustomTimePicker();
     }
@@ -79,11 +79,11 @@ public class Question3Fragment extends BaseFragment {
             case R.id.bt_question1_esure:
 
                     if (TextUtils.isEmpty(et_question_birthday.getText())){
-                        ToastUtil.showShort(getActivity(),"生日不能為空");
+                        ToastUtil.showShort(getActivity(),getText(R.string.personal_set_oldnull).toString());
                         return;
                     }
                     if (TextUtils.isEmpty(et_question_place.getText())){
-                        ToastUtil.showShort(getActivity(),"地區不能為空");
+                        ToastUtil.showShort(getActivity(),getText(R.string.personal_set_placenull).toString());
                         return;
                     }
                     if ("1".equals(sex)){
@@ -115,8 +115,8 @@ public class Question3Fragment extends BaseFragment {
                 break;
         }
     }
-    /*  获取問題*/
-    String returnMsg1;
+    /*  地址*/
+    String returnMsg1,returnMsg2;
     long examId = 1 ;
     class getCountryAsynTask extends AsyncTask<Void,Void,String> {
 
@@ -131,7 +131,7 @@ public class Question3Fragment extends BaseFragment {
                         list.clear();
                         JSONObject jsonObject = new JSONObject(result);
                         code = jsonObject.getString("state");
-                        returnMsg1=jsonObject.getString("message1");
+                        returnMsg1=jsonObject.getString("message2");
                         JSONArray jsonArray =  jsonObject.getJSONArray("data");
                         if ("200".equals(code)) {
 
@@ -179,7 +179,7 @@ public class Question3Fragment extends BaseFragment {
                     break;
                 case "4000":
 
-                    ToastUtil.showShort(getActivity(), "连接超时，请重试");
+                    ToastUtil.showShort(getActivity(), getText(R.string.toast_all_cs).toString());
 
                     break;
                 default:

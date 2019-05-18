@@ -3,9 +3,12 @@ package teabar.ph.com.teabar.util;
 public class TenTwoUtil {
 
 	public static int[] changeToTwo (int x){
-
+		/*
+		* 反序       【0 1 2 3 4 5 6 7】
+		*
+		* */
 		int[] result = new int[8];
-		result[7]=x/128;
+		result[7]=x/128;//bit7
 		result[6]=(x%128)/64;
 		result[5]=(x%64)/32;
 		result[4]=(x%32)/16;

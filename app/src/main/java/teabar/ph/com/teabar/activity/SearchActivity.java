@@ -32,12 +32,12 @@ public class SearchActivity extends BaseActivity {
     TextView tv_main_1;
     @BindView(R.id.fv_history)
     FlowTagView fv_history;
-    @BindView(R.id.fv_teste)
-    FlowTagView fv_teste;
-    @BindView(R.id.fv_function)
-    FlowTagView fv_function;
-    @BindView(R.id.fv_aim)
-    FlowTagView fv_aim;
+//    @BindView(R.id.fv_teste)
+//    FlowTagView fv_teste;
+//    @BindView(R.id.fv_function)
+//    FlowTagView fv_function;
+//    @BindView(R.id.fv_aim)
+//    FlowTagView fv_aim;
     @BindView(R.id.li_search_old)
     LinearLayout li_search_old;
     @BindView(R.id.et_search_search)
@@ -133,19 +133,19 @@ public class SearchActivity extends BaseActivity {
     }
 
     private void initView() {
-        /*口味*/
-        adapter_teste = new EvaluateAdapter(this, R.layout.item_search);
-        fv_teste.setAdapter(adapter_teste);
-        fv_teste.setItemClickListener(new FlowTagView.TagItemClickListener() {
-            @Override
-            public void itemClick(int position) {
-                String e = adapter_teste.getItem(position).toString();
-//                Intent intent = new Intent( this, ShopSearchResultActivity.class);
-//                intent.putExtra("goodsName", e);
-//                setHistory(e);
-//                startActivity(intent);
-            }
-        });
+//        /*口味*/
+//        adapter_teste = new EvaluateAdapter(this, R.layout.item_search);
+//        fv_teste.setAdapter(adapter_teste);
+//        fv_teste.setItemClickListener(new FlowTagView.TagItemClickListener() {
+//            @Override
+//            public void itemClick(int position) {
+//                String e = adapter_teste.getItem(position).toString();
+////                Intent intent = new Intent( this, ShopSearchResultActivity.class);
+////                intent.putExtra("goodsName", e);
+////                setHistory(e);
+////                startActivity(intent);
+//            }
+//        });
         /*历史*/
         adapter_his = new EvaluateAdapter(this, R.layout.item_search);
         fv_history.setAdapter(adapter_his);
@@ -159,26 +159,26 @@ public class SearchActivity extends BaseActivity {
             }
         });
 
-        /*功能*/
-        adapter_function = new EvaluateAdapter(this, R.layout.item_search);
-        fv_function.setAdapter(adapter_function);
-        fv_function.setItemClickListener(new FlowTagView.TagItemClickListener() {
-            @Override
-            public void itemClick(int position) {
+//        /*功能*/
+//        adapter_function = new EvaluateAdapter(this, R.layout.item_search);
+//        fv_function.setAdapter(adapter_function);
+//        fv_function.setItemClickListener(new FlowTagView.TagItemClickListener() {
+//            @Override
+//            public void itemClick(int position) {
+//
+//            }
+//        });
 
-            }
-        });
 
-
-        /*目标*/
-        adapter_aim = new EvaluateAdapter(this, R.layout.item_search);
-        fv_aim.setAdapter(adapter_aim);
-        fv_aim.setItemClickListener(new FlowTagView.TagItemClickListener() {
-            @Override
-            public void itemClick(int position) {
-
-            }
-        });
+//        /*目标*/
+//        adapter_aim = new EvaluateAdapter(this, R.layout.item_search);
+//        fv_aim.setAdapter(adapter_aim);
+//        fv_aim.setItemClickListener(new FlowTagView.TagItemClickListener() {
+//            @Override
+//            public void itemClick(int position) {
+//
+//            }
+//        });
     }
 
     //将搜索记录保存到历史记录

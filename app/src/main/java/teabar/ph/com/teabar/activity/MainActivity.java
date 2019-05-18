@@ -1,18 +1,23 @@
 package teabar.ph.com.teabar.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -21,6 +26,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,6 +72,7 @@ import teabar.ph.com.teabar.pojo.UserEntry;
 import teabar.ph.com.teabar.service.MQService;
 import teabar.ph.com.teabar.util.SharePreferenceManager;
 import teabar.ph.com.teabar.util.ToastUtil;
+import teabar.ph.com.teabar.view.ChangeDialog;
 import teabar.ph.com.teabar.view.NoSrcollViewPage;
 
 public class MainActivity extends BaseActivity implements FriendCircleFragment1.hidenShowView ,EqumentFragment.EquipmentCtrl,MainFragment2.FirstEquipmentCtrl {
@@ -90,7 +97,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
     Equpment FirstEqument;
     UserEntryImpl userEntryDao;
     SharedPreferences preferences;
-    long userId;
+    String userId;
     @Override
     public void initParms(Bundle parms) {
 
@@ -105,7 +112,10 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
     }
     @Override
     public int bindLayout() {
-        setSteepStatusBar(true);
+//        setSteepStatusBar(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
+        }
         return R.layout.activity_main;
     }
 
@@ -118,7 +128,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
         }
         application.addActivity(this);
         preferences = getSharedPreferences("my", MODE_PRIVATE);
-        userId = preferences.getLong("userId",0) ;
+        userId = preferences.getString("userId","") ;
         mainFragment=new MainFragment2();
         equmentFragment=new EqumentFragment();
         socialFragment=new SocialFragment();
@@ -140,7 +150,8 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
         receiver = new  MessageReceiver();
         registerReceiver(receiver, intentFilter);
         userEntryDao = new UserEntryImpl(getApplicationContext());
-
+        LoginJM();
+        requestOverlayPermission();
     }
 
     public void LoginJM(){
@@ -161,20 +172,80 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
                     String username = myInfo.getUserName();
                     String appKey = myInfo.getAppKey();
 
-                    UserEntry user = userEntryDao.findById(userId);
+                    UserEntry user = userEntryDao.findById(1);
                     if (null == user) {
-                        user = new UserEntry(userId,username, appKey);
+                        user = new UserEntry(1,userId,username, appKey);
                         userEntryDao.insert(user);
                     }
 
-
-
-                } else {
-                    toast(  "登陆失败" + responseMessage);
                 }
             }
         });
     }
+
+    private static final int REQUEST_OVERLAY = 4444;
+
+    private void requestOverlayPermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (!Settings.canDrawOverlays(this)) {
+                changeDialog();
+            }
+        }
+    }
+
+
+    ChangeDialog dialog ;
+    private void changeDialog() {
+        if (dialog != null && dialog.isShowing()) {
+            return;
+        }
+        dialog = new ChangeDialog(this);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setMode(1);
+        dialog.setTitle(R.string.alarm_qxsq);
+        dialog.setTips(getText(R.string.alarm_dkxfc).toString());
+
+        backgroundAlpha(0.4f);
+        dialog.setOnNegativeClickListener(new ChangeDialog.OnNegativeClickListener() {
+            @Override
+            public void onNegativeClick() {
+                dialog.dismiss();
+            }
+        });
+        dialog.setOnPositiveClickListener(new ChangeDialog.OnPositiveClickListener() {
+            @Override
+            public void onPositiveClick() {
+                dialog.dismiss();
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:" + getPackageName()));
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivityForResult(intent, REQUEST_OVERLAY);
+            }
+        });
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                backgroundAlpha(1.0f);
+            }
+        });
+        dialog.show();
+    }
+
+    //设置蒙版
+    private void backgroundAlpha(float f) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = f;
+        getWindow().setAttributes(lp);
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (MQService.reset==1){
+            FirstEqument = null;
+            MQService.reset=0;
+        }
+    }
+
     Equpment msg1;
     class MessageReceiver extends BroadcastReceiver {
         @Override
@@ -183,12 +254,17 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
             String msg = intent.getStringExtra("msg");
              msg1 = (Equpment) intent.getSerializableExtra("msg1");
              FirstEqument = msg1;
+            int reset =  intent.getIntExtra("reset",0);
+            if (reset==1){
+                FirstEqument = null;
+            }
              if (MainFragment2.isRunning){
                  mainFragment.RefrashFirstEqu1();
              }
             if (EqumentFragment.isRunning){
                 equmentFragment.RefrashFirstEqu(msg1);
             }
+
         }
     }
 
@@ -263,22 +339,77 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
             tab.setCustomView(tabAdapter.getCustomView(i));
 
             //这里是初始化时，默认item0被选中，setSelected（true）是为了给图片和文字设置选中效果，代码在文章最后贴出
-//                ((ImageView) tab.getCustomView().findViewById(R.id.tab_iv)).setSelected(true);
-//                ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(Color.parseColor("#33c62b"));
+            if (i == 0) {
+                ((ImageView) tab.getCustomView().findViewById(R.id.tab_iv)).setSelected(true);
+                ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.nomal_green));
+            }
         }
 
         main_tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                ((ImageView) tab.getCustomView().findViewById(R.id.tab_iv)).setSelected(true);
                 switch (tab.getPosition()) {
+                    case 0:
+                        ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.nomal_green));
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                            getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
+                        }
+                        break;
+                    case 1:
+                        ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.nomal_green));
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                            getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
+                        }
+                        break;
+                    case 2:
+                        ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.nomal_green));
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                            getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
+                        }
+                        break;
+                    case 3:
+                        ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.nomal_green));
+                      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                          getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                             getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
+        }
+                        break;
+                    case 4:
+                        ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.nomal_green));
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                            getWindow().addFlags(
+                                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                        }
 
-
+                        break;
                 }
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
                 //没有选择时候调用
+                ((ImageView) tab.getCustomView().findViewById(R.id.tab_iv)).setSelected(false);
+                switch (tab.getPosition()) {
+                    case 0:
+                        ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.social_gray));
+                        break;
+                    case 1:
+                        ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.social_gray));
+                        break;
+                    case 2:
+                        ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.social_gray));
+                        break;
+                    case 3:
+                        ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.social_gray));
+                        break;
+                    case 4:
+                        ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.social_gray));
+                        break;
+                }
             }
 
             @Override
@@ -375,7 +506,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
     @Override
     public void open(int type,String mac) {
             MQservice.sendOpenEqu(type,mac);
-            equmentFragment.Synchronization(type);//设备同步
+            equmentFragment.Synchronization(type);//设备同步    0Xc1:正在预热 0Xc0：休眠（关闭预热发一条
         Log.e(TAG, "open: --------------->"+type+">>>>>>"+mac );
     }
     @Override

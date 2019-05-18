@@ -73,38 +73,8 @@
         android:background="@drawable/my_bg"
         android:orientation="horizontal"
         >
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:layout_height="match_parent">
-            <TextView
-                android:id="@+id/tv_my_teasize"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="30"
-                android:textColor="@color/nomal_green"
-                android:textSize="20sp"
-               android:layout_centerHorizontal="true"
-                />
-            <TextView
-                android:layout_below="@+id/tv_my_teasize"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/my_teanum"
-                android:layout_marginTop="6dp"
-                android:textSize="12sp"
-                android:textColor="@color/nomal_green"
-                android:layout_centerHorizontal="true"
-                />
 
-        </RelativeLayout>
-        <TextView
-            android:layout_width="1dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:background="@color/nomal_green"
-            />
+
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_weight="1"

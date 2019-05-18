@@ -40,6 +40,7 @@ import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.activity.question.QusetionActivity;
 import teabar.ph.com.teabar.activity.SearchActivity;
+import teabar.ph.com.teabar.adpter.BaseRecyclerAdapter;
 import teabar.ph.com.teabar.adpter.MyViewPagerAdapter;
 import teabar.ph.com.teabar.adpter.MyplanAdapter;
 import teabar.ph.com.teabar.adpter.RecyclerViewAdapter;
@@ -50,6 +51,7 @@ import teabar.ph.com.teabar.base.TabItemBean;
 import teabar.ph.com.teabar.pojo.Equpment;
 import teabar.ph.com.teabar.pojo.Plan;
 import teabar.ph.com.teabar.pojo.Tea;
+import teabar.ph.com.teabar.pojo.Weather;
 import teabar.ph.com.teabar.service.MQService;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
@@ -74,11 +76,11 @@ public class MainFragment2 extends BaseFragment  {
     private RecyclerView tv_tab_bz,rv_main_tealist;
     private ScrollView scrollView;
     RecyclerView rv_main_jh;
-    RecyclerViewAdapter  recyclerViewAdapter2;
+    RecyclerViewAdapter  recyclerViewAdapter1;
     private MyViewPagerAdapter pagerAdapter1;
     private ArrayList<TabItemBean> mTabItemBeanArrayList1;
     private WetherAdapter mWetherAdapter;
-    private List<String> twoDataList;
+    private List<Weather> twoDataList;
     LinearLayout li_main_title ;
     TeaListAdapter teaListAdapter ;
     MyplanAdapter myplanAdapter ;
@@ -108,7 +110,7 @@ public class MainFragment2 extends BaseFragment  {
     List<Equpment> equpments;
     SharedPreferences preferences;
      Equpment firstEqu;
-    long userId;
+    String userId;
     @Override
     public int bindLayout() {
         return R.layout.fragment_main2;
@@ -127,7 +129,7 @@ public class MainFragment2 extends BaseFragment  {
         }
         preferences = getActivity().getSharedPreferences("my",Context.MODE_PRIVATE);
         String name = preferences.getString("userName","");
-        userId = preferences.getLong("userId",0);
+        userId = preferences.getString("userId","");
         tv_main_name.setText(name);
         scrollView =view. findViewById(R.id.scrollView);
         rv_main_jh = view.findViewById(R.id.rv_main_jh);
@@ -170,14 +172,14 @@ public class MainFragment2 extends BaseFragment  {
                     if (((MainActivity) getActivity()).getFirstEqument().getOnLine()) {
                         if (!Utils.isFastClick()) {
                                firstEqu = ((MainActivity) getActivity()).getFirstEqument();
-                            if (firstEqu.getMStage()!=2) {
+                            if (firstEqu.getMStage()!=0xb2) {
                                 li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
-                                firstEquipmentCtrl.open(1, firstMac);
-                                firstEqu.setMStage(2);
+                                firstEquipmentCtrl.open(0Xc0, firstMac);
+                                firstEqu.setMStage(0xb2);
                             } else {
                                 li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
-                                firstEquipmentCtrl.open(0, firstMac);
-                                firstEqu.setMStage(0);
+                                firstEquipmentCtrl.open(0Xc1, firstMac);
+                                firstEqu.setMStage(0xb0);
                             }
                         } else {
                             ToastUtil.showShort(getActivity(), getText(R.string.toast_equ_fast).toString());
@@ -198,7 +200,8 @@ public class MainFragment2 extends BaseFragment  {
         RefrashFirstEqu1();
 
         //获取数据
-        getData();
+        twoDataList = new ArrayList<>();
+        twoDataList.add(new Weather());
         initView1();
         initView2();
         //绑定services
@@ -227,24 +230,32 @@ public class MainFragment2 extends BaseFragment  {
         if ( ((MainActivity)getActivity()).getFirstEqu()!=null) {
             Equpment equpment = ((MainActivity) getActivity()).getFirstEqu();
             if (equpment != null) {
-                if ("2".equals(equpment.getErrorCode())) {
-                    tv_main_water.setText(R.string.equ_xq_waters);
-                } else {
-                    tv_main_water.setText(R.string.equ_xq_waterf);
+                String error = equpment.getErrorCode();
+                if (!TextUtils.isEmpty(error)) {
+                    String[] aa = error.split(",");
+                    if ("1".equals(aa[6])) {
+                        tv_main_water.setText(R.string.equ_xq_waters);
+                    } else {
+                        tv_main_water.setText(R.string.equ_xq_waterf);
+                    }
                 }
                 tv_main_online.setText(R.string.equ_xq_online);
-                if (equpment.getMStage() == 1) {
+                if (equpment.getMStage() == 0xb1) {
                     tv_main_hot.setText(R.string.equ_xq_ishot);
                 } else {
                     tv_main_hot.setText(R.string.equ_xq_nohot);
                 }
-                if (equpment.getMStage() == 2 || equpment.getMStage() == -1) {
+                if (equpment.getMStage() == 0xb2 || equpment.getMStage() == -1) {
                     li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
                 } else {
                     li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
                 }
 
             }
+        }else {
+            li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
+            firstEqu = null;
+            firstMac = "";
         }
 
     }
@@ -252,12 +263,12 @@ public class MainFragment2 extends BaseFragment  {
     /*兩個默認設備同步*/
     public void  Synchronization(int type){
         //0是开机 1是关机 这里是显示 0 为绿色
-        if (type==1){
-            firstEqu.setMStage(0);
+        if (type==0xb2){
+            firstEqu.setMStage(0xb0);
             li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
 
         }else {
-            firstEqu.setMStage(2);
+            firstEqu.setMStage(0xb2);
             li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
         }
     }
@@ -329,7 +340,8 @@ public class MainFragment2 extends BaseFragment  {
 
 
     }
-
+    RecyclerViewAdapter recyclerViewAdapter2;
+    RecyclerViewAdapter recyclerViewAdapter3;
     //添加天气预报图
     private void initView2() {
         mTabItemBeanArrayList1 = new ArrayList<TabItemBean>();
@@ -349,18 +361,37 @@ public class MainFragment2 extends BaseFragment  {
             tv_tab_bz.setSelected(true);
 //
 
-
+        baseLists.clear();
         //初始化ViewPager项布局
         views1 = new ArrayList<>();
-        for (int i = 0; i < mTabItemBeanArrayList1.size(); i++) {
+//        for (int i = 0; i < mTabItemBeanArrayList1.size(); i++) {
             View view1 = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_weatherlist, null);
-            final RecyclerView recycler_view2 = view1.findViewById(R.id.rv_weatherlist);
-            recyclerViewAdapter2 = new RecyclerViewAdapter(getActivity(), R.layout.item_weather, twoDataList);
-            final WeatherLayoutManager weatherLayoutManager=new WeatherLayoutManager(getActivity());
-            recycler_view2.setLayoutManager(weatherLayoutManager);
-            recycler_view2.setAdapter(recyclerViewAdapter2);
+             RecyclerView recycler_view1 = view1.findViewById(R.id.rv_weatherlist);
+            recyclerViewAdapter1 = new RecyclerViewAdapter(getActivity(), R.layout.item_weather, twoDataList);
+             WeatherLayoutManager weatherLayoutManager1=new WeatherLayoutManager(getActivity());
+            recycler_view1.setLayoutManager(weatherLayoutManager1);
+            recycler_view1.setAdapter(recyclerViewAdapter1);
+//
+        View view2  = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_weatherlist, null);
+         RecyclerView recycler_view2  = view2.findViewById(R.id.rv_weatherlist);
+         recyclerViewAdapter2  = new RecyclerViewAdapter(getActivity(), R.layout.item_weather, twoDataList);
+        WeatherLayoutManager weatherLayoutManager2=new WeatherLayoutManager(getActivity());
+        recycler_view2.setLayoutManager(weatherLayoutManager2);
+        recycler_view2.setAdapter(recyclerViewAdapter2);
+
+        View view3  = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_weatherlist, null);
+        RecyclerView recycler_view3  = view3.findViewById(R.id.rv_weatherlist);
+        recyclerViewAdapter3  = new RecyclerViewAdapter(getActivity(), R.layout.item_weather, twoDataList);
+        WeatherLayoutManager weatherLayoutManager3=new WeatherLayoutManager(getActivity());
+        recycler_view3.setLayoutManager(weatherLayoutManager3);
+        recycler_view3.setAdapter(recyclerViewAdapter3);
+        baseLists.add(recyclerViewAdapter1);
+        baseLists.add(recyclerViewAdapter2);
+        baseLists.add(recyclerViewAdapter3);
             views1.add(view1);
-        }
+            views1.add(view2);
+            views1.add(view3);
+//        }
         pagerAdapter1 = new MyViewPagerAdapter(views1);
         view_pager_weather.setAdapter(pagerAdapter1);
 //列表适配器的点击监听事件
@@ -397,8 +428,85 @@ public class MainFragment2 extends BaseFragment  {
         if(list1.size()==0){
             new getTeaListAsynTask().execute();
         }
-
+        new searchWeatherAsynTask().execute();
     }
+    List<RecyclerViewAdapter> baseLists  = new ArrayList<>();
+    List<Weather> weathers = new ArrayList<>();
+    /*  获取天气预报*/
+    class searchWeatherAsynTask extends AsyncTask<Void,Void,String> {
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            String code = "";
+            String result =   HttpUtils.getOkHpptRequest("https://www.tianqiapi.com/api/?version=v1&city=香港" );
+            Log.e("back", "--->" + result);
+            if (!ToastUtil.isEmpty(result)) {
+                if (!"4000".equals(result)){
+                    try {
+                        JSONObject jsonObject = new JSONObject(result);
+                        code = "200";
+                        JSONArray jsonArray = jsonObject.getJSONArray("data");
+                        for (int i =0;i<3;i++){
+                            JSONObject jsonObject1  = jsonArray.getJSONObject(i);
+                            Weather weather = new Weather();
+                            String weak = jsonObject1.getString("week");
+                            String wea = jsonObject1.getString("wea");
+//                            String humidity = jsonObject1.getString("humidity");
+                            String tem = jsonObject1.getString("tem");
+//                            String air_level = jsonObject1.getString("air_level");
+//                            weather.setAir_level(air_level);
+                            tem = tem.replaceAll("℃","");
+                            weather.setTem(tem);
+//                            weather.setHumidity(humidity);
+                            weather.setWea(wea);
+                            weather.setWeek(weak);
+                            weathers.add(weather);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    code="4000";
+                }
+            }
+            return code;
+        }
+
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            switch (s) {
+
+                case "200":
+                    for (int i =0;i<weathers.size();i++){
+                        List<Weather> list = new ArrayList<>();
+                        list.add(weathers.get(i));
+                        if (i==0)
+                         recyclerViewAdapter1.refrashData(list);
+                        if (i==1)
+                            recyclerViewAdapter2.refrashData(list);
+                            if (i==2)
+                                recyclerViewAdapter3.refrashData(list);
+                    }
+
+                    break;
+                case "4000":
+
+                    ToastUtil.showShort(getActivity(), "连接超时，请重试");
+
+                    break;
+                default:
+
+
+                    break;
+
+            }
+        }
+    }
+
 
     String returnMsg1,returnMsg2;
     /*  获取茶列表*/
@@ -630,11 +738,6 @@ public class MainFragment2 extends BaseFragment  {
     }
 
 
-    private void getData() {
-
-        twoDataList = new ArrayList<>();
-        twoDataList.add("B项目:");
-    }
 
 //    @OnClick({R.id.iv_main_search})
 //    public void onClick(View view){

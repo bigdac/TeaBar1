@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/white"
               android:orientation="vertical">
@@ -21,27 +22,45 @@
         android:scaleType="centerInside"
         android:src="@mipmap/login_back"
         />
-    <TextView
-        android:id="@+id/tv_addfs"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:text="发送"
-        android:gravity="center"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp"
-        android:layout_below="@+id/tv_main_1"
-        />
+
 
     </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/social_friend_send"
+        android:textColor="@color/login_black"
+        android:textSize="30sp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="20dp"
+        />
     <EditText
         android:id="@+id/et_reason"
         android:layout_width="match_parent"
-        android:layout_height="47dp"
-        android:background="@color/social_gray"
+        android:layout_height="107dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/addfriend_bj"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
         android:ellipsize="end"
         android:imeOptions="actionSend"
+        android:layout_gravity="top"
         android:maxLines="1"
         android:paddingLeft="14dp"
         android:textColor="#2C2C2C"
         android:textSize="16sp"/>
+    <TextView
+        android:id="@+id/tv_addfs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/social_friend_send1"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:background="@mipmap/login_button"
+        android:layout_marginTop="130dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        />
 </LinearLayout>

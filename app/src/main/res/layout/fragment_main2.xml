@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="#f7f7f7"
     android:scrollbars="none"
+    android:overScrollMode="never"
     android:orientation="vertical">
 
         <ScrollView
@@ -106,7 +107,7 @@
                         android:text="@string/main_home_page"
                         android:textSize="30sp"
                         android:textColor="#101010"
-                        android:layout_marginLeft="12dp"
+                        android:layout_marginLeft="15dp"
 
                         />
                     <ImageView
@@ -117,7 +118,7 @@
                         android:src="@mipmap/main_search"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="12dp"
+                        android:layout_marginRight="15dp"
                         />
                     <ImageView
                         android:id="@+id/iv_main_sm"
@@ -140,7 +141,7 @@
                         android:text="@string/main_home_hello"
                         android:textSize="20sp"
                         android:textColor="#606060"
-                        android:layout_marginLeft="14dp"
+                        android:layout_marginLeft="15dp"
                         android:layout_marginTop="16dp"
                         />
                     <TextView
@@ -161,7 +162,7 @@
                         android:src="@mipmap/main_ask"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="14dp"
+                        android:layout_marginRight="15dp"
                         android:layout_marginTop="15sp"
                         />
                 </RelativeLayout>
@@ -169,8 +170,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/main_home_title"
-                    android:layout_marginLeft="14dp"
-                    android:layout_marginRight="14dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:layout_marginTop="10dp"
                     android:textColor="@color/social_gray"
                     android:textSize="13sp"
@@ -191,8 +192,8 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="14dp"
-                    android:layout_marginRight="14dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/main_messagecard"
                     android:paddingBottom="42dp"
@@ -247,7 +248,7 @@
                         android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:src="@mipmap/logo"
-                        android:layout_marginLeft="13dp"
+                        android:layout_marginLeft="15dp"
                         />
                     <TextView
                         android:id="@+id/tv_tea_name"
@@ -266,7 +267,7 @@
                     android:id="@+id/rv_main_jh"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:paddingBottom="20dp"
                     />
 

@@ -13,6 +13,7 @@ import android.os.IBinder;
 import android.speech.RecognizerIntent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -100,16 +101,16 @@ protected static final int RESULT_SPEECH = 1;
                         int type;
                         if (equipmentCtrl != null) {
                             if (b) {
-                                type = 0;
+                                type = 0xb0;
                             } else {
-                                type = 1;
+                                type = 0xb2;
                             }
                             /*開關機 0開 1 關*/
                             equipmentCtrl.open1(type, mac);
                         }
                         if (equpmentAdapter.getmData().get(position).getIsFirst()) {
                            /*正逻辑 0操作是关闭的*/
-                            if (equpmentAdapter.getmData().get(position).getMStage() == 0) {
+                            if (equpmentAdapter.getmData().get(position).getMStage() == 0xb0) {
                                 li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
                             } else {
                                 li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
@@ -161,13 +162,13 @@ protected static final int RESULT_SPEECH = 1;
     /*兩個默認設備同步*/
     public void  Synchronization(int type){
         //0是开机 1是关机 这里是显示 0 为绿色
-        if (type==1){
+        if (type==0xb2){
 
             li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
-            FirEqupment.setMStage(0);
+            FirEqupment.setMStage(0xb0);
             RefrashAllEqu(FirEqupment.getMacAdress(), FirEqupment);
         }else {
-            FirEqupment.setMStage(2);
+            FirEqupment.setMStage(0xb2);
             RefrashAllEqu(FirEqupment.getMacAdress(), FirEqupment);
             li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
         }
@@ -211,7 +212,7 @@ protected static final int RESULT_SPEECH = 1;
                 FirEqupment = equpments.get(i);
                 firstMac = FirEqupment.getMacAdress();
                 switch (FirEqupment.getMStage()){
-                    case 2:
+                    case 0xb2:
                         Open = false;
 
                         break;
@@ -237,10 +238,14 @@ protected static final int RESULT_SPEECH = 1;
     public void  RefrashFirstEqu1(){
         Equpment equpment =  ((MainActivity)getActivity()).getFirstEqu();
         if (equpment!=null){
-            if ("2".equals(equpment.getErrorCode()) ){
-                tv_main_water.setText(R.string.equ_xq_waters);
-            }else {
-                tv_main_water.setText(R.string.equ_xq_waterf);
+            String error = equpment.getErrorCode();
+            if (!TextUtils.isEmpty(error)) {
+                String[] aa = error.split(",");
+                if ("1".equals(aa[6])) {
+                    tv_main_water.setText(R.string.equ_xq_waters);
+                } else {
+                    tv_main_water.setText(R.string.equ_xq_waterf);
+                }
             }
             tv_main_online.setText(R.string.equ_xq_online);
             if (equpment.getMStage()==1){
@@ -248,7 +253,7 @@ protected static final int RESULT_SPEECH = 1;
             }else {
                 tv_main_hot.setText(R.string.equ_xq_nohot);
             }
-            if (equpment.getMStage()==2||equpment.getMStage()==-1){
+            if (equpment.getMStage()==0xb2||equpment.getMStage()==-1){
                 li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
             }else {
                 li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
@@ -260,22 +265,28 @@ protected static final int RESULT_SPEECH = 1;
 
     public void  RefrashFirstEqu(Equpment equpment){
         if (equpment!=null){
-        if ("2".equals(equpment.getErrorCode()) ){
+            String error = equpment.getErrorCode();
+            String[] aa = error.split(",");
+            if ("1".equals(aa[6])) {
             tv_main_water.setText(R.string.equ_xq_waters);
-        }else {
+              }else {
             tv_main_water.setText(R.string.equ_xq_waterf);
-        }
+              }
         tv_main_online.setText(R.string.equ_xq_online);
-        if (equpment.getMStage()==1){
+        if (equpment.getMStage()==0xb1){
             tv_main_hot.setText(R.string.equ_xq_ishot);
         }else {
             tv_main_hot.setText(R.string.equ_xq_nohot);
         }
-        if (equpment.getMStage()==2){
+        if (equpment.getMStage()==0xb2){
             li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
         }else {
             li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
         }
+        }else {
+            li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
+            FirEqupment =null;
+
         }
 
     }
@@ -294,15 +305,15 @@ protected static final int RESULT_SPEECH = 1;
                     if (((MainActivity) getActivity()).getFirstEqument().getOnLine()) {
                         if (!Utils.isFastClick()) {
                             FirEqupment = ((MainActivity) getActivity()).getFirstEqu();
-                            if (FirEqupment.getMStage()!=2) {
+                            if (FirEqupment.getMStage()!=0xb2) {
                                 li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
-                                equipmentCtrl.open1(1, firstMac);
-                                FirEqupment.setMStage(2);
+                                equipmentCtrl.open1(0Xc0, firstMac);
+                                FirEqupment.setMStage(0xb2);
                                 RefrashAllEqu(FirEqupment.getMacAdress(), FirEqupment);
                             } else {
                                 li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
-                                equipmentCtrl.open1(0, firstMac);
-                                FirEqupment.setMStage(0);
+                                equipmentCtrl.open1(0Xc1, firstMac);
+                                FirEqupment.setMStage(0xb0);
                                 RefrashAllEqu(FirEqupment.getMacAdress(), FirEqupment);
 
                             }
@@ -366,6 +377,11 @@ protected static final int RESULT_SPEECH = 1;
             Log.e("qqqqqZZZZ???", "11111");
             String msg = intent.getStringExtra("msg");
             Equpment msg1 =(Equpment)intent.getSerializableExtra("msg1");
+            int reset =  intent.getIntExtra("reset",0);
+            if (reset==2){
+                equpments = equipmentDao.findAll();
+                equpmentAdapter.setEqumentData1(equpments);
+            }
             if (msg1.getMacAdress().equals(FirEqupment.getMacAdress())){
                 FirEqupment = msg1;
             }

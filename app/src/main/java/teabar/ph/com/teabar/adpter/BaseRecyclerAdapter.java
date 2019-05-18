@@ -98,6 +98,11 @@ public abstract class BaseRecyclerAdapter<E> extends RecyclerView.Adapter<BaseVi
                 break;
         }
     }
+    public void refrasData(List<E> mDataList){
+        this.mDataList = mDataList;
+        notifyDataSetChanged();
+    }
+
 
     @Override
     public int getItemViewType(int position) {

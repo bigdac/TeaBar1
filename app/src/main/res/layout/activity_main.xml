@@ -7,13 +7,14 @@
     tools:context=".activity.MainActivity"
     android:id="@+id/li_main"
     android:orientation="vertical"
-    android:fitsSystemWindows="true"
+
     android:clipToPadding="false"
     >    <!--android:windowSoftInputMode="adjustResize|stateHidden"-->
     <!--<TextView-->
         <!--android:id="@+id/tv_main_1"-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content"-->
+    <!---->
         <!--android:background="#ffffff"-->
         <!--/>-->
 

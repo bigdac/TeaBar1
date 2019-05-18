@@ -136,7 +136,7 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
         application.addActivity(this);
 
         preferences = getSharedPreferences("my", MODE_PRIVATE);
-        userId = preferences.getLong("userId",0)+"";
+        userId = preferences.getString("userId","")+"";
         equipmentDao = new EquipmentImpl(getApplicationContext());
         equpments= equipmentDao.findAll();
         if (equpments.size()==0){
@@ -234,7 +234,7 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
                 break;
             case R.id.btn_make:
                 /*制作*/
-                if (Firstequpment!=null&&Firstequpment.getMStage()==1){
+                if (Firstequpment!=null&&Firstequpment.getMStage()==0xb1){
                 customDialog();
                     Map<String,Object> params = new HashMap<>();
                     params.put("teaName",tea.getTeaNameEn());

@@ -42,7 +42,7 @@ public class FeedbackActivity extends BaseActivity implements ImagePickerAdapter
     public static final int REQUEST_CODE_SELECT = 100;
     public static final int REQUEST_CODE_PREVIEW = 101;
     private ArrayList<ImageItem> selImageList; //当前选择的所有图片
-    private int maxImgCount = 1;               //允许选择图片最大数
+    private int maxImgCount = 3;               //允许选择图片最大数
     boolean isOpen = true;
     @Override
     public void initParms(Bundle parms) {

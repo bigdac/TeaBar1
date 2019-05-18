@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.AllCommentActivity;
+import teabar.ph.com.teabar.activity.social.AllCommentActivity;
 import teabar.ph.com.teabar.activity.ImagePagerActivity;
 import teabar.ph.com.teabar.adpter.viewholder.CircleViewHolder;
 import teabar.ph.com.teabar.adpter.viewholder.ImageViewHolder;

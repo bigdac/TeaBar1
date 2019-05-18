@@ -53,7 +53,7 @@ public class FavoriteActivity extends BaseActivity {
     QMUITipDialog tipDialog;
     List<Tea> list = new ArrayList<>();
     FavoriteAdpter favoriteAdpter ;
-    long userId;
+    String userId;
     @Override
     public void initParms(Bundle parms) {
 
@@ -76,7 +76,7 @@ public class FavoriteActivity extends BaseActivity {
         }
         application.addActivity(this);
         preferences = getSharedPreferences("my",MODE_PRIVATE);
-        userId = preferences.getLong("userId",0);
+        userId = preferences.getString("userId","");
         favoriteAdpter = new FavoriteAdpter(this,list,userId);
         rv_nearest.setLayoutManager(new LinearLayoutManager(this));
         rv_nearest.setAdapter(favoriteAdpter);

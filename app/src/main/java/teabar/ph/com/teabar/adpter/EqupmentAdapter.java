@@ -131,7 +131,7 @@ public class EqupmentAdapter extends RecyclerView.Adapter<EqupmentAdapter.MyView
                     if (!Utils.isFastClick()) {
                         Equpment equpment = mData.get(position);
                         if ( equpment.getLightOpen()==0) {
-                             equpment.setLightOpen(1);
+                             equpment.setLightOpen(128);
                              mData.set(position,equpment);
                             holder.iv_equ_light .setImageTintList(ColorStateList.valueOf(Color.parseColor("#bbbbbb")));
                         } else {

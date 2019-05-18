@@ -41,7 +41,7 @@ public class ChangePassActivity extends BaseActivity {
     EditText et_newPassword2;
 
     SharedPreferences preferences;
-    long id ;
+    String id ;
     @Override
     public void initParms(Bundle parms) {
 
@@ -63,7 +63,7 @@ public class ChangePassActivity extends BaseActivity {
                 ScreenUtils.getStatusBarHeight());
         tv_main_1.setLayoutParams(params);
         preferences = getSharedPreferences("my", MODE_PRIVATE);
-        id = preferences.getLong("userId",0);
+        id = preferences.getString("userId","");
     }
 
     @Override
@@ -87,15 +87,15 @@ public class ChangePassActivity extends BaseActivity {
                 String newPassword1 = et_newPassword1.getText().toString().trim();
                 String newPassword2 = et_newPassword2.getText().toString().trim();
                 if (TextUtils.isEmpty(oldPassword)){
-                    toast("原密码不能为空");
+                    toast(getText(R.string.set_pass_ynull).toString());
                     break;
                 }
                 if (TextUtils.isEmpty(newPassword1)){
-                    toast("新密码不能为空");
+                    toast(getText(R.string.set_pass_xnull).toString());
                     break;
                 }
                 if (TextUtils.isEmpty(newPassword2)){
-                    toast("新密码不能为空");
+                    toast(getText(R.string.set_pass_qnull).toString());
                     break;
                 }
                 if (newPassword1.equals(newPassword2)){
@@ -106,7 +106,7 @@ public class ChangePassActivity extends BaseActivity {
                     params.put("newPassword",newPassword1);
                     new ChangePassAsyncTask().execute(params);
                 }else {
-                    toast("两次密码输入不相同");
+                    toast(getText(R.string.set_pass_notsame).toString());
                 }
 
 
@@ -117,7 +117,7 @@ public class ChangePassActivity extends BaseActivity {
 
         tipDialog = new QMUITipDialog.Builder(this)
                 .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
-                .setTipWord("正在修改密码，请稍后")
+                .setTipWord(getText(R.string.search_qsh).toString())
                 .create();
         tipDialog.show();
     }

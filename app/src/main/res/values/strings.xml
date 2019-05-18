@@ -16,14 +16,13 @@
     <string name="login_tv_forget">忘記密碼</string>
     <string name="login_et_pass">密碼</string>
     <string name="login_et_pass1">確認密碼</string>
-    <string name="login_tv_clause1">通過登錄你同意Lify的</string>
-    <string name="login_tv_clause2">《隱私政策和條款》</string>
+    <string name="login_tv_clause1">通過登錄你同意Lify的《隱私政策和條款》</string>
     <string name="login_tv_third">三方登錄</string>
 
     <!--register-->
     <string name="regist_tv_welcom">現在創建您的LIFY賬號</string>
     <string name="regist_et_nick">名稱</string>
-    <string name="login_et_code">驗證碼</string>
+    <string name="login_et_code">輸入驗證碼</string>
     <string name="login_bt_getcode">獲取驗證碼</string>
     <string name="login_bt_regist">注冊</string>
 
@@ -58,6 +57,7 @@
     <string name="equ_xq_waters">不足</string>
     <string name="equ_xq_ishot">預熱完成</string>
     <string name="equ_xq_nohot">正在預熱</string>
+    <string name="equ_xq_hot1">未預熱</string>
     <string name="equ_xq_cp">沖泡</string>
 
     <string name="equ_xq_star">開始沖泡</string>
@@ -66,6 +66,11 @@
     <string name="equ_xq_yc">益處</string>
     <string name="equ_xq_pl">配料:</string>
     <string name="equ_xq_kw">口味</string>
+    <string name="equ_add_xq">配對教程</string>
+    <string name="equ_add_wifi">WiFi名稱</string>
+    <string name="equ_add_wifipass">輸入WiFi密碼</string>
+    <string name="equ_add_add">配置</string>
+
     <!--inform-->
     <string name="equ_xq_informs">啟用或禁用通知</string>
     <string name="equ_xq_finish">沖泡完成</string>
@@ -108,12 +113,19 @@
     <string name="social_inform_esure">接受</string>
     <string name="social_friend_list">好友列表</string>
     <string name="social_friend_add">添加好友</string>
-    <string name="social_friend_search">搜索昵稱或ID號</string>
+    <string name="social_friend_search">搜索昵稱或ID</string>
     <string name="social_friend_add1">添加</string>
     <string name="social_friend_publish">發佈</string>
-    <string name="social_friend_star">開始在這裡輸入您的內容</string>
+    <string name="social_friend_star">輸入想要發佈的內容</string>
+    <string name="social_friend_talk">輸入想說的內容</string>
+    <string name="social_friend_addmes">請求添加你為好友</string>
+    <string name="social_friend_js">接受</string>
+    <string name="social_friend_ytj">已添加</string>
+    <string name="social_friend_send">發送驗證</string>
+    <string name="social_friend_send1">發送</string>
+    <string name="social_friend_all">全部評論>>></string>
     <!--power-->
-    <string name="my_power_title">你的身體分數</string>
+    <string name="my_power_title">您的健康分数</string>
     <string name="my_power_title1">你的身體是不平衡的，希望你愛護自己的身體</string>
     <string name="my_power_s1">身體狀況</string>
     <string name="my_power_s2">生活習慣</string>
@@ -122,6 +134,7 @@
     <string name="my_power_day">日</string>
     <string name="my_power_week">周</string>
     <string name="my_power_month">月</string>
+    <string name="my_power_dw">單位</string>
     <!--homepage-->
     <string name="main_home_page">首頁</string>
     <string name="main_home_hello">您好!</string>
@@ -157,11 +170,23 @@
     <!--setting-->
     <string name="set_name">賬號</string>
     <string name="set_pass">更改密碼</string>
+    <string name="set_pass_y">原密碼</string>
+    <string name="set_pass_x">新密碼</string>
+    <string name="set_pass_q">確認密碼</string>
+    <string name="set_pass_ynull">原密碼不能為空</string>
+    <string name="set_pass_xnull">新密碼不能為空</string>
+    <string name="set_pass_qnull">確認密碼不能為空</string>
+    <string name="set_pass_notsame">兩次密碼不能為空</string>
+    <string name="set_pass_addy">填寫原密碼</string>
+    <string name="set_pass_addx">填寫新密碼</string>
+    <string name="set_pass_addq">再次確認確認</string>
+    <string name="set_out">退出登錄</string>
     <string name="set_mess">消息提醒</string>
     <string name="set_person">用戶反饋</string>
     <string name="set_update">版本更新</string>
     <string name="set_clean">清除緩存</string>
     <string name="set_now">當前版本：</string>
+    <string name="set_tk">條款及細則</string>
 
     <!--drink-->
     <string name="drink_unit">杯</string>
@@ -185,17 +210,21 @@
     <string name="personal_mess">基本信息設置</string>
 
     <!--person set-->
+    <string name="personal_set_xb">性別</string>
     <string name="personal_set_man">男</string>
     <string name="personal_set_women">女</string>
     <string name="personal_set_baby">是否懷孕</string>
     <string name="personal_set_yes">是</string>
     <string name="personal_set_no">否</string>
-    <string name="personal_set_old">年齡</string>
+    <string name="personal_set_old">出生日期</string>
     <string name="personal_set_tall">身高</string>
     <string name="personal_set_weight">體重</string>
     <string name="personal_set_place">地區</string>
     <string name="personal_set_mystyle">我的身體狀況</string>
-
+    <string name="personal_set_oldnull">出生日期不能為空</string>
+    <string name="personal_set_tallnull">身高不能為空</string>
+    <string name="personal_set_weightnull">體重不能為空</string>
+    <string name="personal_set_placenull">地區不能為空</string>
     <!--search-->
     <string name="search_title">搜索</string>
     <string name="search_taste">口味</string>
@@ -218,6 +247,7 @@
     <string name="tea_kouwei_gn">功能茶</string>
     <string name="tea_kouwei_tj">推薦茶</string>
     <string name="tea_kouwei_tjti">推薦结果：</string>
+    <string name="tea_kouwei_tjti1">根據你的健康數據，我們為你推薦：</string>
     <string name="tea_kouwei_xa">一鍵加入喜愛</string>
     <string name="tea_kouwei_tg">跳過</string>
     <!--adress-->
@@ -236,8 +266,11 @@
     <string name="dialog_love_deltitle">刪除喜愛</string>
     <string name="dialog_love_title1">是否添加喜愛</string>
     <string name="dialog_love_deltitle1">是否刪除喜愛</string>
-
-
+    <string name="dialog_add_qx">提示</string>
+    <string name="dialog_add_qx1">请点击"设置"打开定位权限。</string>
+    <string name="dialog_add_qx2">设置</string>
+    <string name="dialog_add_qx3">取消</string>
+    <string name="dialog_add_qx4">提交</string>
     <!--toast-->
 
     <string name="toast_make_make">請等到預熱完成后才可製作</string>
@@ -246,4 +279,23 @@
     <string name="toast_equ_add">請先添加設備</string>
     <string name="toast_equ_error">請檢查機器</string>
     <string name="toast_equ_wash">設置成功</string>
+    <string name="toast_all_cs"> 连接超时，请重试</string>
+
+    <!--alarm-->
+    <string name="alarm_equ_wrong">故障报警</string>
+    <string name="alarm_equ_water">无流量信号</string>
+    <string name="alarm_equ_open">茶饮机滑动盖未关闭</string>
+    <string name="alarm_equ_lg">垃圾盒报警</string>
+    <string name="alarm_equ_50">累计冲泡50杯标志</string>
+    <string name="alarm_equ_hot">炉温过高</string>
+    <string name="alarm_equ_low">小于70度</string>
+    <string name="alarm_equ_nowater">水箱水位过低</string>
+    <string name="alarm_equ_NTC">NTC开短路</string>
+    <string name="alarm_qxsq">权限申请</string>
+    <string name="alarm_dkxfc">请打开悬浮窗权限</string>
+    <string name="location">定位权限</string>
+
+    <!--search-->
+    <string name="search_mess">搜索你想要的</string>
+    <string name="search_qsh">請稍後。。。</string>
 </resources>

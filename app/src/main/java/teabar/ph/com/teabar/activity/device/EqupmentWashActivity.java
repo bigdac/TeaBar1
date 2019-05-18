@@ -59,6 +59,7 @@ public class EqupmentWashActivity extends BaseActivity {
         application.addActivity(this);
         seekbar1 = findViewById(R.id.seekbar1);
         seekbar1.setValue(18);
+        number = 18;
         seekbar1.setOnRangeChangedListener(new OnRangeChangedListener() {
             @Override
             public void onRangeChanged(RangeSeekBar view, float leftValue, float rightValue, boolean isFromUser) {

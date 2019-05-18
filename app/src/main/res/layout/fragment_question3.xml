@@ -21,7 +21,7 @@
         android:layout_marginLeft="18dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="你的性别"
+        android:text="@string/personal_set_xb"
         />
     <LinearLayout
         android:id="@+id/li_question_man"
@@ -75,7 +75,7 @@
         android:layout_marginLeft="18dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="出生日期"
+        android:text="@string/personal_set_old"
         />
     <TextView
         android:id="@+id/et_question_birthday"
@@ -96,7 +96,7 @@
         android:layout_marginLeft="18dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="居住地区"
+        android:text="@string/personal_set_place"
         />
     <TextView
         android:id="@+id/et_question_place"
@@ -114,7 +114,7 @@
         android:id="@+id/bt_question1_esure"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="好的"
+        android:text="@string/equ_dia_esure"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/et_question_place"
         android:layout_marginRight="20dp"

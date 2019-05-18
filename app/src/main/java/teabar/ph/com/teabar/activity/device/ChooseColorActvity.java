@@ -170,7 +170,7 @@ public class ChooseColorActvity extends BaseActivity {
 
             case R.id.tv_color:
 
-                 MQservice.sendLightColor(equpment.getMacAdress(),0,red,green,blue,4);
+                 MQservice.sendLightColor(equpment.getMacAdress(),0,red,green,blue,0);
                  equpment.setLightColor(red+"/"+green+"/"+blue);
                  equipmentDao.update(equpment);
                 finish();

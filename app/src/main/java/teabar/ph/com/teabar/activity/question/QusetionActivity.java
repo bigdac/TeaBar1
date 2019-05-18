@@ -56,7 +56,7 @@ public class QusetionActivity extends BaseActivity {
     List<examOptions> optionsList=new ArrayList<>();
     com.alibaba.fastjson.JSONArray jsonArray;
     com.alibaba.fastjson.JSONObject jsonObject;
-    long userId;
+    String userId;
     SharedPreferences preferences;
     QMUITipDialog tipDialog;
     boolean choose = false;//是否选择
@@ -82,7 +82,7 @@ public class QusetionActivity extends BaseActivity {
         tv_main_1.setLayoutParams(params);
         application.addActivity(this);
         preferences = getSharedPreferences("my",MODE_PRIVATE);
-        userId = preferences.getLong("userId",0);
+        userId = preferences.getString("userId","");
         answerAdpter = new AnswerAdpter(this,optionsList);
         rv_question_da.setLayoutManager(new LinearLayoutManager(this));
         rv_question_da.setAdapter(answerAdpter);

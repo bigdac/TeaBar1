@@ -238,7 +238,7 @@ public class AddFriendActivity extends BaseActivity {
                     break;
 
                 case "4000":
-                    toast("请求超时，请重试");
+                    toast(getText(R.string.toast_all_cs).toString());
                     if (tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }

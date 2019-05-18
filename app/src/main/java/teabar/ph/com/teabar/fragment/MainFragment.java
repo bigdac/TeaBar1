@@ -186,7 +186,7 @@ public class MainFragment extends BaseFragment  {
         for (int i = 0; i < mTabItemBeanArrayList.size(); i++) {
             View view1 = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_tealist, null);
             recycler_view = view1.findViewById(R.id.rv_tealist);
-            recyclerViewAdapter = new RecyclerViewAdapter(getActivity(), R.layout.item_mailpic, i % 2 == 0 ? oneDataList : twoDataList);
+//            recyclerViewAdapter = new RecyclerViewAdapter(getActivity(), R.layout.item_mailpic, i % 2 == 0 ? oneDataList : twoDataList);
             final MyLayoutManager layoutManager=new MyLayoutManager(getActivity(),2);
             recycler_view.setLayoutManager(layoutManager);
             recycler_view.setAdapter(recyclerViewAdapter);
@@ -332,7 +332,7 @@ public class MainFragment extends BaseFragment  {
         for (int i = 0; i < mTabItemBeanArrayList1.size(); i++) {
             View view1 = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_weatherlist, null);
             final MyRecyclerView recycler_view2 = view1.findViewById(R.id.rv_weatherlist);
-            recyclerViewAdapter2 = new RecyclerViewAdapter(getActivity(), R.layout.item_weather, twoDataList);
+//            recyclerViewAdapter2 = new RecyclerViewAdapter(getActivity(), R.layout.item_weather, twoDataList);
             final WeatherLayoutManager weatherLayoutManager=new WeatherLayoutManager(getActivity());
             recycler_view2.setLayoutManager(weatherLayoutManager);
             recycler_view2.setAdapter(recyclerViewAdapter2);

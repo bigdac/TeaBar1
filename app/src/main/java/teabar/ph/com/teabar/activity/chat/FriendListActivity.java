@@ -1,4 +1,4 @@
-package teabar.ph.com.teabar.activity;
+package teabar.ph.com.teabar.activity.chat;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -30,8 +30,6 @@ import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
 import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.chat.AddFriendActivity;
-import teabar.ph.com.teabar.activity.chat.ChatActivity;
 import teabar.ph.com.teabar.adpter.FriendListAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
