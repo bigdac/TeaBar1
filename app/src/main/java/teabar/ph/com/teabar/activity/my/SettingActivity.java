@@ -39,6 +39,7 @@ public class SettingActivity extends BaseActivity {
     EquipmentImpl equipmentDao;
     FriendInforImpl friendInforDao;
     UserEntryImpl userEntryDao;
+
     @Override
     public void initParms(Bundle parms) {
 
@@ -49,13 +50,14 @@ public class SettingActivity extends BaseActivity {
         setSteepStatusBar(true);
         return R.layout.activity_setting;
     }
-
+    SharedPreferences alermPreferences;
     @Override
     public void initView(View view) {
         if (application == null) {
             application = (MyApplication) getApplication();
         }
         application.addActivity(this);
+        alermPreferences=getSharedPreferences("alerm",MODE_PRIVATE);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 ScreenUtils.getStatusBarHeight());
         tv_main_1.setLayoutParams(params);
@@ -109,6 +111,8 @@ public class SettingActivity extends BaseActivity {
                 break;
 
             case R.id.bt_set_exsit:
+                SharedPreferences.Editor editor=alermPreferences.edit();
+                editor.clear();
                 equipmentDao.deleteAll();
                 friendInforDao.deleteAll();
                 userEntryDao.deleteAll();
