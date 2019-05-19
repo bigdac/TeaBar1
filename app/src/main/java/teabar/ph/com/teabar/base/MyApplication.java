@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.facebook.FacebookSdk;
+import com.peihou.daemonservice.DaemonHolder;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.cookie.CookieJarImpl;
 import com.zhy.http.okhttp.cookie.store.PersistentCookieStore;
@@ -24,6 +25,7 @@ import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.android.api.model.UserInfo;
 import okhttp3.OkHttpClient;
+import teabar.ph.com.teabar.service.MQService;
 import teabar.ph.com.teabar.service.NotificationClickEventReceiver;
 import teabar.ph.com.teabar.util.language.LocalManageUtil;
 
@@ -54,6 +56,8 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        DaemonHolder.init(this, MQService.class);
+
         fragments=new ArrayList<>();
         app = this;
         mContext=getApplicationContext();

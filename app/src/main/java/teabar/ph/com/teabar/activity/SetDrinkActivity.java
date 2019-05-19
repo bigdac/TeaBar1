@@ -1,17 +1,32 @@
 package teabar.ph.com.teabar.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.CustomListener;
@@ -35,6 +50,8 @@ import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
+import teabar.ph.com.teabar.service.MQService;
+import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.view.BarChartManager;
 
 
@@ -54,6 +71,7 @@ public class SetDrinkActivity extends BaseActivity {
     boolean isOpen = true;
     private RangeSeekBar seekbar1;
     private TimePickerView pvCustomTime;
+    SharedPreferences alermPreferences;
     @Override
     public void initParms(Bundle parms) {
 
@@ -73,6 +91,17 @@ public class SetDrinkActivity extends BaseActivity {
 
         if (application == null) {
             application = (MyApplication) getApplication();
+        }
+        alermPreferences=getSharedPreferences("alerm",MODE_PRIVATE);
+        if (alermPreferences.contains("time")){
+            String time = alermPreferences.getString("time", "");
+            tv_drink_time.setText(time);
+            isOpen=alermPreferences.getBoolean("open", false);
+            if (isOpen){
+                iv_drink_open.setImageResource(R.mipmap.equ_open);
+            }else {
+                iv_drink_open.setImageResource(R.mipmap.equ_close);
+            }
         }
         application.addActivity(this);
         initCustomTimePicker();
@@ -120,7 +149,7 @@ public class SetDrinkActivity extends BaseActivity {
 
     }
 
-    @OnClick({ R.id.iv_power_fh ,R.id.rl_drin_remind, R.id.tv_drink_time})
+    @OnClick({ R.id.iv_power_fh ,R.id.rl_drin_remind, R.id.tv_drink_time,R.id.btn_submit})
     public void onClick(View view){
         switch (view.getId()){
 
@@ -137,14 +166,32 @@ public class SetDrinkActivity extends BaseActivity {
                     iv_drink_open.setImageResource(R.mipmap.equ_open);
                     isOpen=true;
                 }
+                if (alermPreferences.contains("open")){
+                    SharedPreferences.Editor editor=alermPreferences.edit();
+                    editor.putBoolean("open",isOpen);
+                    editor.commit();
+                }
                 break;
 
             case R.id.tv_drink_time:
                 pvCustomTime.show();
                 break;
+            case R.id.btn_submit:
+                String time=tv_drink_time.getText().toString();
+                SharedPreferences.Editor editor=alermPreferences.edit();
+                editor.clear();
+                if (!TextUtils.isEmpty(time)){
+                    editor.putString("time",time);
+                    editor.putBoolean("open",isOpen);
+                    if (editor.commit()){
+                        ToastUtil.showShort(this,"设置成功");
+                    }
+                }
+                break;
 
         }
     }
+
 
 
     private void initCustomTimePicker() {
@@ -169,8 +216,6 @@ public class SetDrinkActivity extends BaseActivity {
             public void onTimeSelect(Date date, View v) {//选中事件回调
                 String time = getTime(date);
                 tv_drink_time.setText(time);
-
-
             }
         })
                 /*.setType(TimePickerView.Type.ALL)//default is all
@@ -231,4 +276,8 @@ public class SetDrinkActivity extends BaseActivity {
         return format.format(date);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

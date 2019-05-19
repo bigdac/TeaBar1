@@ -60,13 +60,12 @@
         android:id="@+id/tv_drink_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/nomal_green"
-        android:text="8：00"
-        android:textSize="36sp"
         android:layout_below="@+id/tv_power"
-        android:layout_marginTop="33dp"
         android:layout_marginLeft="16dp"
-        />
+        android:layout_marginTop="35dp"
+        android:text="8:00"
+        android:textColor="@color/nomal_green"
+        android:textSize="36sp" />
 
 
     <TextView
@@ -134,6 +133,7 @@
 
 
     <Button
+        android:id="@+id/btn_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

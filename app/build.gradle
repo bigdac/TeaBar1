@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'com.android.application'
 greendao {
-    schemaVersion 2
+    schemaVersion 3
     daoPackage 'com.ph.teabar.database.dao'
     targetGenDir 'src/main/java'
 }
@@ -41,6 +41,10 @@ android {
         ]
 
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']
@@ -65,7 +69,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:27.1.0'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -103,7 +107,8 @@ dependencies {
     implementation 'com.malinskiy:superrecyclerview:1.1.3'
     implementation 'com.google.code.gson:gson:2.7'
 //    implementation 'com.malinskiy:superrecyclerview:$version'
-    implementation 'com.github.w446108264:AndroidEmoji:1.0.0'
-//    implementation 'com.github.w446108264:AndroidEmoji:1.3'
+//    implementation 'com.github.w446108264:AndroidEmoji:1.0.0'
+    implementation 'com.github.w446108264:AndroidEmoji:1.3'
     implementation 'pub.devrel:easypermissions:1.0.1'
+    implementation project(':daemonservice')
 }

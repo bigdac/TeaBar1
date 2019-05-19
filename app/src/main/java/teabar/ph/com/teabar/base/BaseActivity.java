@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -16,6 +18,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 
+import com.peihou.daemonservice.DaemonHolder;
 import com.ph.teabar.database.dao.DaoImp.FriendInforImpl;
 
 import java.io.File;
@@ -109,6 +112,29 @@ public abstract class BaseActivity extends FragmentActivity implements
 //            SharePreferenceManager.setCachedAvatarPath(path);
             JMessageClient.logout();
         }
+
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        DaemonHolder.startService();
+//        NotificationManagerCompat notification = NotificationManagerCompat.from(this);
+//        boolean isEnabled = notification.areNotificationsEnabled();
+//        Log.i("notification","通知权限-->"+isEnabled);
+//        if (!isEnabled){
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BASE) {
+//                // 进入设置系统应用权限界面
+//                Intent intent = new Intent(Settings.ACTION_SETTINGS);
+//                startActivity(intent);
+//                return;
+//            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {// 运行系统在5.x环境使用
+//                // 进入设置系统应用权限界面
+//                Intent intent = new Intent(Settings.ACTION_SETTINGS);
+//                startActivity(intent);
+//            }
+//        }
 
     }
 
