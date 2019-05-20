@@ -86,7 +86,9 @@ public class SettingActivity extends BaseActivity {
     public void widgetClick(View v) {
 
     }
-    @OnClick({R.id.iv_set_fh,R.id.rl_set_password,R.id.rl_set_mess,R.id.rl_set_user,R.id.bt_set_exsit })
+    @OnClick({R.id.iv_set_fh,R.id.rl_set_password,R.id.rl_set_mess,R.id.rl_set_user,R.id.bt_set_exsit,
+            R.id.rl_set_update
+    })
     public void onClick(View view){
         switch (view.getId()){
             case R.id.iv_set_fh:
@@ -118,6 +120,9 @@ public class SettingActivity extends BaseActivity {
                 userEntryDao.deleteAll();
                 application.removeAllActivity();
                 startActivity(LoginActivity.class);
+                break;
+            case R.id.rl_set_update:
+                toast(getText(R.string.toast_update_zx).toString());
                 break;
 
         }

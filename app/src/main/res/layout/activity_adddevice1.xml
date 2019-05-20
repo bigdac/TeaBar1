@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <TextView
@@ -14,7 +13,7 @@
         android:id="@+id/tv_power"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="WIFI添加"
+        android:text="@string/equ_add_wifi1"
         android:layout_below="@+id/tv_main_1"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="25dp"
@@ -24,13 +23,13 @@
     <Button
         android:id="@+id/bt_add_main"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/answer_button1"
+        android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/tv_main_1"
         android:layout_marginTop="25dp"
-        android:text="跳过"
-        android:layout_marginRight="20dp"
+        android:background="@drawable/answer_button2"
+        android:text="@string/tea_kouwei_tg"
+        android:layout_marginRight="18dp"
 
         />
 
@@ -40,13 +39,13 @@
         android:layout_height="40dp"
         android:layout_below="@+id/tv_power"
         android:background="@color/white"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:hint="wifi名称"
         android:paddingLeft="20dp"
         android:textSize="14sp"
-        android:textColorHint="#333333"
+        android:textColorHint="#777777"
         />
 
     <EditText
@@ -58,10 +57,10 @@
         android:layout_marginTop="15dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:hint="输入wifi密码"
+        android:hint="@string/equ_add_wifipass"
         android:paddingLeft="20dp"
         android:textSize="14sp"
-        android:textColorHint="#333333"
+        android:textColorHint="#777777"
         />
     <LinearLayout
         android:id="@+id/li_device_ask"
@@ -101,7 +100,7 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="60dp"
-        android:text="配对"
+        android:text="@string/equ_add_add"
         android:textColor="@color/white"
         android:paddingBottom="11dp"
         android:textSize="16sp"

@@ -206,6 +206,7 @@
         android:src="@mipmap/google"
         />
     <LinearLayout
+        android:id="@+id/li_login_ty"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="30dp"
         android:layout_width="match_parent"
@@ -216,6 +217,7 @@
         android:gravity="center"
         >
         <ImageView
+            android:id="@+id/iv_login_ty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/login_esure"

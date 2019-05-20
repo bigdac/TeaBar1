@@ -74,7 +74,7 @@
         android:id="@+id/bt_question1_esure"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="好的"
+        android:text="@string/question_qued"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/li_question_women"
         android:layout_marginRight="20dp"

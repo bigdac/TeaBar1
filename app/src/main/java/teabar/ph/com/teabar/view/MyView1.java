@@ -143,9 +143,9 @@ int width1 = 0;
         mView_y0=height/2;
         String str = "5";
         canvas.drawText(str, mViewPadding+50, mView_y0+15, mTextPaint);
-        String s = getResources().getText(R.string.equ_xq_time).toString();
+//        String s = getResources().getText(R.string.equ_xq_time).toString();
         canvas.drawText("30", width-mViewPadding-50- getTextWidth("30",mTextPaint), mView_y0+15, mTextPaint);
-        canvas.drawText(s,mView_x0-mViewPadding/2- (int)(getTextWidth("侵泡时间",mTextPaint)/2.5),height-130,mTextPaint);
+//        canvas.drawText(s,mView_x0-mViewPadding/2- (int)(getTextWidth("侵泡时间",mTextPaint)/2.5),height-130,mTextPaint);
 //        canvas.drawText(temp,mView_x0-mViewPadding/2- getTextWidth(temp,mTextPaint1)/2,mView_y0-50,mTextPaint1);
 //        Log.i(TAG, (float) (mArcRadius + bDistance) - 2 * (mTextPaint.descent() + mTextPaint.ascent()) + "");
 

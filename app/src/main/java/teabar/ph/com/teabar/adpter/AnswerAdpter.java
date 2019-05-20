@@ -25,11 +25,11 @@ public class AnswerAdpter extends RecyclerView.Adapter< AnswerAdpter.MyViewHolde
     Context context;
     List<examOptions> mData;
     String multiple,selectnum;
-
-    public AnswerAdpter(Context context, List<examOptions> list  ) {
+    int number;
+    public AnswerAdpter(Context context, List<examOptions> list ,int number ) {
         this.context = context;
         this.mData = list;
-
+        this.number = number;
     }
 
 
@@ -45,6 +45,7 @@ public class AnswerAdpter extends RecyclerView.Adapter< AnswerAdpter.MyViewHolde
     List<String> answerList = new ArrayList<>();
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int position) {
+
         myViewHolder.tv_search.setText(mData.get(position).getOptionTxt());
         Open = mData.get(position).isIsselect();
         final boolean isOpen[] ={Open};
@@ -58,7 +59,7 @@ public class AnswerAdpter extends RecyclerView.Adapter< AnswerAdpter.MyViewHolde
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (TextUtils.isEmpty(multiple)){
+                if (TextUtils.isEmpty(multiple)|| "0".equals(multiple)){
                     answerList.clear();
                     String answer = mData.get(position).getOptionNum();
                     answerList.add(answer);

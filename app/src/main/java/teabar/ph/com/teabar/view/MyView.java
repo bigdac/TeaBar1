@@ -151,9 +151,9 @@ int width1 = 0;
         mView_y0=height/2;
         String str = "65";
         canvas.drawText(str, mViewPadding+50, mView_y0+15, mTextPaint);
-         String s = getResources().getText(R.string.equ_xq_temp).toString();
+//         String s = getResources().getText(R.string.equ_xq_temp).toString();
         canvas.drawText("95", width-mViewPadding-50- getTextWidth(str,mTextPaint), mView_y0+15, mTextPaint);
-        canvas.drawText(s ,mView_x0-mViewPadding/2- getTextWidth(str,mTextPaint)/2,mView_y0-20,mTextPaint);
+//        canvas.drawText(s ,mView_x0-mViewPadding/2- getTextWidth(str,mTextPaint)/2,mView_y0-20,mTextPaint);
 //        canvas.drawText(temp,mView_x0-mViewPadding/2- getTextWidth(temp,mTextPaint1)/2,mView_y0-50,mTextPaint1);
 //        Log.i(TAG, (float) (mArcRadius + bDistance) - 2 * (mTextPaint.descent() + mTextPaint.ascent()) + "");
 

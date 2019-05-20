@@ -352,7 +352,7 @@ public class AddDeviceActivity1 extends BaseActivity implements  EasyPermissions
     boolean isMatching =false;
     String wifiName ="";
 
-    @OnClick({R.id.bt_device_add,R.id.li_device_ask,R.id.iv_power_fh ,R.id.bt_add_main})
+    @OnClick({R.id.bt_device_add,R.id.li_device_ask  ,R.id.bt_add_main})
     public void onClick(View view){
         switch (view.getId()){
             case R.id.bt_device_add:
@@ -376,10 +376,6 @@ public class AddDeviceActivity1 extends BaseActivity implements  EasyPermissions
 
             case R.id.li_device_ask:
                 customDialog();
-                break;
-
-            case R.id.iv_power_fh:
-                finish();
                 break;
 
             case R.id.bt_add_main:
@@ -619,7 +615,7 @@ public class AddDeviceActivity1 extends BaseActivity implements  EasyPermissions
                     if (tipDialog!=null&&tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    toast( returnMsg1);
+//                    toast( returnMsg1);
                     break;
 
             }

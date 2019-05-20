@@ -74,7 +74,7 @@ public class EqupmentAdapter extends RecyclerView.Adapter<EqupmentAdapter.MyView
             holder.tv_equ_name.setText(mData.get(position).getName());
         }
         switch (mData.get(position).getMStage()){
-            case 2:
+            case 0xb2:
                 Open = false;
 
                 break;
@@ -107,11 +107,11 @@ public class EqupmentAdapter extends RecyclerView.Adapter<EqupmentAdapter.MyView
                             Log.e("TTTTT", "onClick: -->"+isOpen[0] );
                             if (isOpen[0]) {
                                 holder.iv_equ_open.setImageResource(R.mipmap.equ_close);
-                                mData.get(position).setMStage(0);
+                                mData.get(position).setMStage(0xb2);
                                 isOpen[0] = false;
                             } else {
                                 holder.iv_equ_open.setImageResource(R.mipmap.equ_open);
-                                mData.get(position).setMStage(2);
+                                mData.get(position).setMStage(0xb0);
                                 isOpen[0] = true;
                             }
                             onopenClickListener.onItemClick(view, position, isOpen[0]);
@@ -133,11 +133,12 @@ public class EqupmentAdapter extends RecyclerView.Adapter<EqupmentAdapter.MyView
                         if ( equpment.getLightOpen()==0) {
                              equpment.setLightOpen(128);
                              mData.set(position,equpment);
-                            holder.iv_equ_light .setImageTintList(ColorStateList.valueOf(Color.parseColor("#bbbbbb")));
+                            holder.iv_equ_light .setImageTintList(ColorStateList.valueOf(color));
+
                         } else {
                             equpment.setLightOpen(0);
                             mData.set(position,equpment);
-                            holder.iv_equ_light .setImageTintList(ColorStateList.valueOf(color));
+                            holder.iv_equ_light .setImageTintList(ColorStateList.valueOf(Color.parseColor("#bbbbbb")));
                         }
                         onlightClickListener.onItemClick(view, position,  equpment.getLightOpen());
                     } else {

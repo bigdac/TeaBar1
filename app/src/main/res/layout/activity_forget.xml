@@ -55,6 +55,7 @@
         android:layout_alignRight="@+id/et_regist_user"
         android:layout_marginRight="5dp"
         />
+
     <EditText
         android:id="@+id/et_regist_code"
         android:layout_width="match_parent"
@@ -63,6 +64,7 @@
         android:layout_marginLeft="26dp"
         android:layout_marginTop="14dp"
         android:layout_marginRight="26dp"
+        android:layout_toLeftOf="@+id/bt_register_code"
         android:background="@drawable/login_edtext"
         android:hint="@string/login_et_code"
         android:paddingLeft="15dp"
@@ -77,7 +79,7 @@
         android:textColor="#28db9f"
         android:text="@string/login_bt_getcode"
         android:layout_alignTop="@+id/et_regist_code"
-        android:layout_alignRight="@+id/et_regist_code"
+        android:layout_alignRight="@+id/et_regist_pasw"
         />
 
     <EditText
@@ -138,6 +140,6 @@
         android:paddingBottom="10dp"
         android:textColor="@color/white"
         android:textSize="16sp"
-        android:text="@string/login_bt_regist"
+        android:text="@string/dialog_add_qx5"
         />
 </RelativeLayout>

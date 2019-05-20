@@ -114,9 +114,9 @@ public class RadarChart02View extends DemoView {
 			
 			
 			//数据轴最大值
-			chart.getDataAxis().setAxisMax(50);
+			chart.getDataAxis().setAxisMax(30);
 			//数据轴刻度间隔
-			chart.getDataAxis().setAxisSteps(10);
+			chart.getDataAxis().setAxisSteps(6);
 			//主轴标签偏移50，以便留出空间用于显示点和标签
 			chart.getDataAxis().setTickLabelMargin(40);
 			

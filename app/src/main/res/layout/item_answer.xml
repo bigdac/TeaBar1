@@ -18,10 +18,10 @@
        android:id="@+id/tv_search"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       android:textSize="12sp"
+       android:textSize="14sp"
        android:textColor="@color/login_black"
        android:layout_gravity="center_vertical"
-       android:layout_marginLeft="20dp"
+       android:layout_marginLeft="15dp"
        android:layout_marginRight="10dp"
        android:text="手冰冷"/>
 

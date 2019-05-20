@@ -99,7 +99,7 @@ public class MyQuestionActivity extends BaseActivity {
         @Override
         protected String doInBackground(Void... voids) {
             String code = "";
-            String result =   HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/exam/getUserExam?userId"+userId+"&currentPage=1&pageSize=1000" );
+            String result =   HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/web/getUserExam?userId="+userId  );
             Log.e("back", "--->" + result);
             if (!ToastUtil.isEmpty(result)) {
                 if (!"4000".equals(result)){
@@ -110,14 +110,12 @@ public class MyQuestionActivity extends BaseActivity {
                         JSONObject jsonObject1 =  jsonObject.getJSONObject("data");
                         if ("200".equals(code)) {
                             mList.clear();
-                            JSONArray jsonArray  = jsonObject1.getJSONArray("items");
+                            JSONArray jsonArray  = jsonObject1.getJSONArray("examTea");
                             Gson gson = new Gson();
                                 for (int i =0;i<jsonArray.length();i++){
                                     ScoreRecords scoreRecords = gson.fromJson(jsonArray.get(i).toString(),ScoreRecords.class);
                                     mList.add(scoreRecords);
                                 }
-
-
 
                         }
                     } catch (Exception e) {

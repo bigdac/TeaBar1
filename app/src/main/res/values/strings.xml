@@ -27,7 +27,7 @@
     <string name="login_bt_regist">注冊</string>
 
     <!--menu-->
-    <string name="menu_tea">茶飲</string>
+    <string name="menu_tea">首頁</string>
     <string name="menu_equ">設備</string>
     <string name="menu_sq">社區</string>
     <string name="menu_sc">商城</string>
@@ -48,7 +48,8 @@
     <string name="equ_dia_esure">確定</string>
     <string name="equ_xq_deltitle">刪除設備</string>
     <string name="equ_xq_tistitle">是否刪除該設備</string>
-
+    <string name="equ_xq_delmethod">刪除方法</string>
+    <string name="equ_xq_methodtitle">是否刪除該方法</string>
     <string name="equ_xq_online">在線</string>
     <string name="equ_xq_outline">離線</string>
     <string name="equ_xq_dg">休眠</string>
@@ -70,6 +71,7 @@
     <string name="equ_add_wifi">WiFi名稱</string>
     <string name="equ_add_wifipass">輸入WiFi密碼</string>
     <string name="equ_add_add">配置</string>
+    <string name="equ_add_wifi1">Wi-Fi添加</string>
 
     <!--inform-->
     <string name="equ_xq_informs">啟用或禁用通知</string>
@@ -125,7 +127,7 @@
     <string name="social_friend_send1">發送</string>
     <string name="social_friend_all">全部評論>>></string>
     <!--power-->
-    <string name="my_power_title">您的健康分数</string>
+    <string name="my_power_title">您的Lify分数</string>
     <string name="my_power_title1">你的身體是不平衡的，希望你愛護自己的身體</string>
     <string name="my_power_s1">身體狀況</string>
     <string name="my_power_s2">生活習慣</string>
@@ -133,6 +135,7 @@
     <string name="my_power_s4">情緒管理</string>
     <string name="my_power_day">日</string>
     <string name="my_power_week">周</string>
+    <string name="my_power_weeks">周</string>
     <string name="my_power_month">月</string>
     <string name="my_power_dw">單位</string>
     <!--homepage-->
@@ -234,10 +237,14 @@
 
     <!--question-->
     <string name="question_button">下一步</string>
-
-
-
-
+    <string name="question_title">問卷</string>
+    <string name="question_score_title">推薦茶記錄</string>
+    <string name="question_base1">嗨！歡迎來到LIfy，</string>
+    <string name="question_base2">讓我們幫你養成健康的生活習慣吧！</string>
+    <string name="question_base3">太棒了！他是這樣工作的，你告訴我越多，我越聰明，能更好的幫助你。首先讓我們從基礎開始</string>
+    <string name="question_base4">你懷孕了嗎？</string>
+    <string name="question_base5">你的體重和身高是多少？</string>
+    <string name="question_qued">好的</string>
     <!--talk-->
     <string name="somebody_at_me">[有人@我]</string>
     <string name="talk_nomes">暫無聊天內容</string>
@@ -250,6 +257,8 @@
     <string name="tea_kouwei_tjti1">根據你的健康數據，我們為你推薦：</string>
     <string name="tea_kouwei_xa">一鍵加入喜愛</string>
     <string name="tea_kouwei_tg">跳過</string>
+    <string name="tea_kouwei_yc">益處：</string>
+    <string name="tea_kouwei_kw">口味：</string>
     <!--adress-->
     <string name="adress_xz">選擇地址</string>
     <string name="adress_hot">熱門國家/地區</string>
@@ -257,10 +266,12 @@
     <string name="adress_hot_1">中國</string>
     <string name="adress_hot_2">美國</string>
     <string name="adress_hot_4">中國香港</string>
+    <string name="adress_hot_41">香港</string>
     <string name="adress_hot_7">中國澳門</string>
+    <string name="adress_hot_71">澳門</string>
     <string name="adress_hot_8">英國</string>
     <string name="adress_hot_10">中國台灣</string>
-
+    <string name="adress_hot_101">台灣</string>
     <!--dialog-->
     <string name="dialog_love_title">添加喜愛</string>
     <string name="dialog_love_deltitle">刪除喜愛</string>
@@ -271,6 +282,7 @@
     <string name="dialog_add_qx2">设置</string>
     <string name="dialog_add_qx3">取消</string>
     <string name="dialog_add_qx4">提交</string>
+    <string name="dialog_add_qx5">完成</string>
     <!--toast-->
 
     <string name="toast_make_make">請等到預熱完成后才可製作</string>
@@ -280,7 +292,21 @@
     <string name="toast_equ_error">請檢查機器</string>
     <string name="toast_equ_wash">設置成功</string>
     <string name="toast_all_cs"> 连接超时，请重试</string>
-
+    <string name="toast_base_nv">男性無法選擇</string>
+    <string name="toast_update_cg">上傳成功</string>
+    <string name="toast_update_zx">已經是最新版本</string>
+    <string name="toast_update_base">有未填寫的基本信息</string>
+    <string name="toast_social_null">內容不能都為空</string>
+    <string name="toast_wifi_addfial">參數有誤，請修改后再試</string>
+    <string name="toast_wifi_5G">不支持5G WiFi</string>
+    <string name="toast_equ_mr">當前設備為默認設備</string>
+    <string name="toast_mess_null">評論內容不能為空</string>
+    <string name="toast_forget_code">請輸入驗證碼</string>
+    <string name="toast_forget_pass">請輸入密碼</string>
+    <string name="toast_forget_phone">請輸入手機號或郵箱</string>
+    <string name="toast_forget_passl">密碼位數應該大於6小於16</string>
+    <string name="toast_forget_passsame">兩次密碼輸入不同</string>
+    <string name="toast_login_canlogin">請允許協議后才可登錄</string>
     <!--alarm-->
     <string name="alarm_equ_wrong">故障报警</string>
     <string name="alarm_equ_water">无流量信号</string>
@@ -298,4 +324,14 @@
     <!--search-->
     <string name="search_mess">搜索你想要的</string>
     <string name="search_qsh">請稍後。。。</string>
+
+    <!--week-->
+    <string name="weather_week_1">星期一</string>
+    <string name="weather_week_2">星期二</string>
+    <string name="weather_week_3">星期三</string>
+    <string name="weather_week_4">星期四</string>
+    <string name="weather_week_5">星期五</string>
+    <string name="weather_week_6">星期六</string>
+    <string name="weather_week_7">星期日</string>
+    <string name="weather_foryou">為你推薦</string>
 </resources>

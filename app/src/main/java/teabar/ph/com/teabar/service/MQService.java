@@ -2,17 +2,13 @@ package teabar.ph.com.teabar.service;
 
 
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -23,7 +19,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
@@ -31,7 +26,6 @@ import android.util.Log;
 import android.view.WindowManager;
 
 import com.peihou.daemonservice.AbsHeartBeatService;
-import com.peihou.daemonservice.DaemonHolder;
 import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -59,7 +53,6 @@ import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.activity.device.AddMethodActivity1;
 import teabar.ph.com.teabar.activity.device.MakeActivity;
-import teabar.ph.com.teabar.activity.login.LoginActivity;
 import teabar.ph.com.teabar.fragment.EqumentFragment;
 import teabar.ph.com.teabar.pojo.Equpment;
 import teabar.ph.com.teabar.util.HttpUtils;
@@ -88,9 +81,9 @@ public class MQService extends AbsHeartBeatService {
     LocalBinder binder = new LocalBinder();
     int headCode = 0x32;
     int ctrlCode2 = 0xF0;
-    int length = 27;
-    EquipmentImpl equipmentDao;
-    SharedPreferences preferences;
+    int length = 31;
+   EquipmentImpl equipmentDao;
+   SharedPreferences preferences;
     public static int reset = 0;
     SharedPreferences alermPreferences;
     @Override
@@ -283,26 +276,25 @@ public class MQService extends AbsHeartBeatService {
 
     /**
      * 发送查询机器
-     *
      * @param
      */
-    public void sendFindEqu(String mac) {
+    public void sendFindEqu( String mac) {
 
         try {
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
             int ctrlCode = 0xA1;
             int length = 0;
-            int checkCode = (headCode + ctrlCode + length) % 256;
-            jsonArray.put(0, headCode);
-            jsonArray.put(1, ctrlCode);
-            jsonArray.put(2, length);
-            jsonArray.put(3, checkCode);
-            jsonObject.put("Coffee", jsonArray);
-            String topicName = "tea/" + mac + "/status/set";
-            String payLoad = jsonObject.toString();
+            int checkCode = (headCode + ctrlCode+length ) % 256;
+            jsonArray.put(0,headCode);
+            jsonArray.put(1,ctrlCode);
+            jsonArray.put(2,length);
+            jsonArray.put(3,checkCode);
+            jsonObject.put("Coffee",jsonArray);
+            String topicName = "tea/"+mac+"/status/set";
+            String payLoad =jsonObject.toString();
             boolean success = publish(topicName, 1, payLoad);
-            Log.e("GGGGGTTTTTT", "open: -------->" + success + jsonArray.toString() + "...." + jsonArray.length());
+            Log.e("GGGGGTTTTTT", "open: -------->"  +success+jsonArray.toString()+"...."+jsonArray.length() );
             if (!success)
                 success = publish(topicName, 1, payLoad);
         } catch (Exception e) {
@@ -313,33 +305,33 @@ public class MQService extends AbsHeartBeatService {
 
     /**
      * 发送开关机命令
-     * 1、type:0、1、2、3 。
+     *1、type:0、1、2、3 。
      * 0: 待机
      * 1: 休眠
      *
      * @param
      */
-    public void sendOpenEqu(int type, String mac) {
+    public void sendOpenEqu(int type ,String mac) {
 
         try {
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
             int ctrlCode = 0x04;
-            int checkCode = (headCode + ctrlCode + length + type + ctrlCode2) % 256;
-            jsonArray.put(0, headCode);
-            jsonArray.put(1, ctrlCode);
-            jsonArray.put(2, length);
-            jsonArray.put(3, type);
-            jsonArray.put(4, ctrlCode2);
-            for (int i = 5; i < 34; i++) {
-                jsonArray.put(i, 0);
+            int checkCode = (headCode + ctrlCode+length+type+ctrlCode2) % 256;
+            jsonArray.put(0,headCode);
+            jsonArray.put(1,ctrlCode);
+            jsonArray.put(2,length);
+            jsonArray.put(3,type);
+            jsonArray.put(4,ctrlCode2);
+            for (int i=5;i<34;i++){
+                jsonArray.put(i,0);
             }
-            jsonArray.put(34, checkCode);
-            jsonObject.put("Coffee", jsonArray);
-            String topicName = "tea/" + mac + "/operate/set";
-            String payLoad = jsonObject.toString();
+            jsonArray.put(34,checkCode);
+            jsonObject.put("Coffee",jsonArray);
+            String topicName = "tea/"+mac+"/operate/set";
+            String payLoad =jsonObject.toString();
             boolean success = publish(topicName, 1, payLoad);
-            Log.e("GGGGGTTTTTT", "open: -------->" + success + jsonArray.toString() + "...." + jsonArray.length());
+            Log.e("GGGGGTTTTTT", "open: -------->"  +success+jsonArray.toString()+"...."+jsonArray.length() );
             if (!success)
                 success = publish(topicName, 1, payLoad);
         } catch (Exception e) {
@@ -351,48 +343,48 @@ public class MQService extends AbsHeartBeatService {
     /**
      * 发送z制作命令
      *
+     *
      * @param
      */
-    public void sendMakeMess(int size, int time, int temp, String mac) {
+    public void sendMakeMess(int size,int time,int temp, String mac) {
 
         try {
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
             int ctrlCode = 0x01;
             int stage = 0xc2;
-            int height = size / 256;
-            int low = size % 256;
-            int checkCode = (headCode + ctrlCode + length + stage + ctrlCode2 + height + length + time + temp) % 256;
-            jsonArray.put(0, headCode);
-            jsonArray.put(1, ctrlCode);
-            jsonArray.put(2, length);
-            jsonArray.put(3, stage);
-            jsonArray.put(4, ctrlCode2);
-            for (int i = 5; i < 15; i++) {
-                jsonArray.put(i, 0);
+            int height = size/256;
+            int low = size%256;
+            int checkCode = (headCode + ctrlCode+length+stage+ctrlCode2+height+length+time+temp) % 256;
+            jsonArray.put(0,headCode);
+            jsonArray.put(1,ctrlCode);
+            jsonArray.put(2,length);
+            jsonArray.put(3,stage);
+            jsonArray.put(4,ctrlCode2);
+            for (int i=5;i<15;i++){
+                jsonArray.put(i,0);
             }
-            jsonArray.put(15, height);
-            jsonArray.put(16, low);
-            jsonArray.put(17, 0);
-            jsonArray.put(18, temp);
-            jsonArray.put(19, time);
-            for (int j = 20; j < 34; j++) {
-                jsonArray.put(j, 0);
+            jsonArray.put(15,height);
+            jsonArray.put(16,low);
+            jsonArray.put(17,0);
+            jsonArray.put(18,temp);
+            jsonArray.put(19,time);
+            for (int j=20;j<34;j++){
+                jsonArray.put(j,0);
             }
-            jsonArray.put(34, checkCode);
-            jsonObject.put("Coffee", jsonArray);
+            jsonArray.put(34,checkCode);
+            jsonObject.put("Coffee",jsonArray);
 
-            String topicName = "tea/" + mac + "/operate/set";
-            String payLoad = jsonObject.toString();
+            String topicName = "tea/"+mac+"/operate/set";
+            String payLoad =jsonObject.toString();
             boolean success = publish(topicName, 1, payLoad);
-            Log.e("GGGGGTTTTTT", "open: -------->" + success + jsonArray.toString() + "...." + jsonArray.length());
+            Log.e("GGGGGTTTTTT", "open: -------->"  +success+jsonArray.toString()+"...."+jsonArray.length() );
             if (!success)
                 success = publish(topicName, 1, payLoad);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
     /**
      * 发送停止冲泡功能
      *
@@ -406,21 +398,21 @@ public class MQService extends AbsHeartBeatService {
             JSONArray jsonArray = new JSONArray();
             int ctrlCode = 0x03;
             int stage = 0xc1;
-            int checkCode = (headCode + ctrlCode + length + stage + ctrlCode2) % 256;
-            jsonArray.put(0, headCode);
-            jsonArray.put(1, ctrlCode);
-            jsonArray.put(2, length);
-            jsonArray.put(3, stage);
-            jsonArray.put(4, ctrlCode2);
-            for (int i = 5; i < 34; i++) {
-                jsonArray.put(i, 0);
+            int checkCode = (headCode + ctrlCode+length+stage+ctrlCode2 ) % 256;
+            jsonArray.put(0,headCode);
+            jsonArray.put(1,ctrlCode);
+            jsonArray.put(2,length);
+            jsonArray.put(3,stage);
+            jsonArray.put(4,ctrlCode2);
+            for (int i=5;i<34;i++){
+                jsonArray.put(i,0);
             }
-            jsonArray.put(34, checkCode);
-            jsonObject.put("Coffee", jsonArray);
-            String topicName = "tea/" + mac + "/operate/set";
-            String payLoad = jsonObject.toString();
+            jsonArray.put(34,checkCode);
+            jsonObject.put("Coffee",jsonArray);
+            String topicName = "tea/"+mac+"/operate/set";
+            String payLoad =jsonObject.toString();
             boolean success = publish(topicName, 1, payLoad);
-            Log.e("GGGGGTTTTTT", "open: -------->" + success + jsonArray.toString() + "...." + jsonArray.length());
+            Log.e("GGGGGTTTTTT", "open: -------->"  +success+jsonArray.toString()+"...."+jsonArray.length() );
             if (!success)
                 success = publish(topicName, 1, payLoad);
         } catch (Exception e) {
@@ -430,44 +422,43 @@ public class MQService extends AbsHeartBeatService {
 
     /**
      * 发送燈光顏色命令
-     * 选择设置
-     *
+     *选择设置
      * @param
      */
-    public void sendLightColor(String mac, int choose, int r, int g, int b, int mode) {
+    public void sendLightColor(String mac,int choose,int r,int g, int b ,int mode) {
 
 
         try {
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
             int ctrlCode;
-            if (choose == 0) {
-                ctrlCode = 0x02;
-            } else {
+            if (choose==0){
+                 ctrlCode = 0x02;
+            }else {
                 ctrlCode = 0x05;
             }
-            int checkCode = (headCode + ctrlCode + length + ctrlCode2 + r + g + b + mode) % 256;
-            jsonArray.put(0, headCode);
-            jsonArray.put(1, ctrlCode);
-            jsonArray.put(2, length);
-            jsonArray.put(3, 0);
-            jsonArray.put(4, ctrlCode2);
-            jsonArray.put(5, mode);
-            jsonArray.put(6, 0);
-            jsonArray.put(7, 0);
-            jsonArray.put(8, 0);
-            jsonArray.put(9, r);
-            jsonArray.put(10, g);
-            jsonArray.put(11, b);
-            for (int i = 12; i < 34; i++) {
-                jsonArray.put(i, 0);
+            int checkCode = (headCode + ctrlCode+length+ctrlCode2+r+g+b+mode  ) % 256;
+            jsonArray.put(0,headCode);
+            jsonArray.put(1,ctrlCode);
+            jsonArray.put(2,length);
+            jsonArray.put(3,0);
+            jsonArray.put(4,ctrlCode2);
+            jsonArray.put(5,mode);
+            jsonArray.put(6,0);
+            jsonArray.put(7,0);
+            jsonArray.put(8,0);
+            jsonArray.put(9,r);
+            jsonArray.put(10,g);
+            jsonArray.put(11,b);
+            for (int i = 12;i<34;i++){
+                jsonArray.put(i,0);
             }
-            jsonArray.put(34, checkCode);
-            jsonObject.put("Coffee", jsonArray);
-            String topicName = "tea/" + mac + "/operate/set";
-            String payLoad = jsonObject.toString();
+            jsonArray.put(34,checkCode);
+            jsonObject.put("Coffee",jsonArray);
+            String topicName = "tea/"+mac+"/operate/set";
+            String payLoad =jsonObject.toString();
             boolean success = publish(topicName, 1, payLoad);
-            Log.e("GGGGGTTTTTT", "open: -------->" + success + jsonArray.toString() + "...." + jsonArray.length());
+            Log.e("GGGGGTTTTTT", "open: -------->"  +success+jsonArray.toString()+"...."+jsonArray.length() );
             if (!success)
                 success = publish(topicName, 1, payLoad);
         } catch (Exception e) {
@@ -478,37 +469,37 @@ public class MQService extends AbsHeartBeatService {
 
     /**
      * 发送沖洗杯數
-     * 选择设置
-     *
+     *选择设置
+
      * @param
      */
-    public void sendWashNum(String mac, int number) {
+    public void sendWashNum(String mac, int number ) {
 
 
         try {
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
             int ctrlCode = 0x08;
-            int checkCode = (headCode + ctrlCode + length + ctrlCode2 + number) % 256;
-            jsonArray.put(0, headCode);
-            jsonArray.put(1, ctrlCode);
-            jsonArray.put(2, length);
-            jsonArray.put(3, 0);
-            jsonArray.put(4, ctrlCode2);
-            jsonArray.put(5, 0);
-            for (int i = 6; i < 25; i++) {
-                jsonArray.put(i, 0);
+            int checkCode = (headCode + ctrlCode+length+ctrlCode2+number ) % 256;
+            jsonArray.put(0,headCode);
+            jsonArray.put(1,ctrlCode);
+            jsonArray.put(2,length);
+            jsonArray.put(3,0);
+            jsonArray.put(4,ctrlCode2);
+            jsonArray.put(5,0);
+            for (int i = 6;i<25;i++){
+                jsonArray.put(i,0);
             }
-            jsonArray.put(25, number);
-            for (int i = 26; i < 34; i++) {
-                jsonArray.put(i, 0);
+            jsonArray.put(25,number);
+            for (int i = 26;i<34;i++){
+                jsonArray.put(i,0);
             }
-            jsonArray.put(34, checkCode);
-            jsonObject.put("Coffee", jsonArray);
-            String topicName = "tea/" + mac + "/operate/set";
-            String payLoad = jsonObject.toString();
+            jsonArray.put(34,checkCode);
+            jsonObject.put("Coffee",jsonArray);
+            String topicName = "tea/"+mac+"/operate/set";
+            String payLoad =jsonObject.toString();
             boolean success = publish(topicName, 1, payLoad);
-            Log.e("GGGGGTTTTTT", "open: -------->" + success + jsonArray.toString() + "...." + jsonArray.length());
+            Log.e("GGGGGTTTTTT", "open: -------->"  +success+jsonArray.toString()+"...."+jsonArray.length() );
             if (!success)
                 success = publish(topicName, 1, payLoad);
         } catch (Exception e) {
@@ -519,69 +510,66 @@ public class MQService extends AbsHeartBeatService {
 
     /**
      * 发送燈光開關
-     * 选择设置
+     *选择设置
      * 128:  燈光開
      * 0：燈光關
-     *
      * @param
      */
-    public void sendLightOpen(String mac, int number) {
+    public void sendLightOpen(String mac, int number ) {
 
 
         try {
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
             int ctrlCode = 0x06;
-            int checkCode = (headCode + ctrlCode + length + ctrlCode2 + number) % 256;
-            jsonArray.put(0, headCode);
-            jsonArray.put(1, ctrlCode);
-            jsonArray.put(2, length);
-            jsonArray.put(3, 0);
-            jsonArray.put(4, ctrlCode2);
-            jsonArray.put(5, number);
-            for (int i = 6; i < 34; i++) {
-                jsonArray.put(i, 0);
+            int checkCode = (headCode + ctrlCode+length+ctrlCode2+number ) % 256;
+            jsonArray.put(0,headCode);
+            jsonArray.put(1,ctrlCode);
+            jsonArray.put(2,length);
+            jsonArray.put(3,0);
+            jsonArray.put(4,ctrlCode2);
+            jsonArray.put(5,number);
+            for (int i=6;i<34;i++){
+                jsonArray.put(i,0);
             }
-            jsonArray.put(34, checkCode);
-            jsonObject.put("Coffee", jsonArray);
-            String topicName = "tea/" + mac + "/operate/set";
-            String payLoad = jsonObject.toString();
+            jsonArray.put(34,checkCode);
+            jsonObject.put("Coffee",jsonArray);
+            String topicName = "tea/"+mac+"/operate/set";
+            String payLoad =jsonObject.toString();
             boolean success = publish(topicName, 1, payLoad);
-            Log.e("GGGGGTTTTTT", "open: -------->" + success + jsonArray.toString() + "...." + jsonArray.length());
+            Log.e("GGGGGTTTTTT", "open: -------->"  +success+jsonArray.toString()+"...."+jsonArray.length() );
             if (!success)
                 success = publish(topicName, 1, payLoad);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
     /**
      * 发送製作查詢命令
-     *
      * @param
      */
-    public void sendSearchML(String mac) {
+    public void sendSearchML(String mac ) {
 
 
         try {
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
             int ctrlCode = 0x0C;
-            int checkCode = (headCode + ctrlCode + length + ctrlCode2) % 256;
-            jsonArray.put(0, headCode);
-            jsonArray.put(1, ctrlCode);
-            jsonArray.put(2, length);
-            jsonArray.put(3, 0);
-            jsonArray.put(4, ctrlCode2);
-            for (int i = 5; i < 34; i++) {
-                jsonArray.put(i, 0);
+            int checkCode = (headCode + ctrlCode+length+ctrlCode2 ) % 256;
+            jsonArray.put(0,headCode);
+            jsonArray.put(1,ctrlCode);
+            jsonArray.put(2,length);
+            jsonArray.put(3,0);
+            jsonArray.put(4,ctrlCode2);
+            for (int i=5;i<34;i++){
+                jsonArray.put(i,0);
             }
-            jsonArray.put(34, checkCode);
-            jsonObject.put("Coffee", jsonArray);
-            String topicName = "tea/" + mac + "/operate/set";
-            String payLoad = jsonObject.toString();
+            jsonArray.put(34,checkCode);
+            jsonObject.put("Coffee",jsonArray);
+            String topicName = "tea/"+mac+"/operate/set";
+            String payLoad =jsonObject.toString();
             boolean success = publish(topicName, 1, payLoad);
-            Log.e("GGGGGTTTTTT", "open: -------->" + success + jsonArray.toString() + "...." + jsonArray.length());
+            Log.e("GGGGGTTTTTT", "open: -------->"  +success+jsonArray.toString()+"...."+jsonArray.length() );
             if (!success)
                 success = publish(topicName, 1, payLoad);
         } catch (Exception e) {
@@ -591,15 +579,14 @@ public class MQService extends AbsHeartBeatService {
 
     private String ArrayTransformString(int[] SafetyMeasure) {
         StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < SafetyMeasure.length; i++) {
-            sb.append(SafetyMeasure[i] + ",");
+        for(int i=0;i<SafetyMeasure.length;i++){
+            sb.append(SafetyMeasure[i]+",");
         }
         return sb.toString();
     }
 
     static boolean hasError = false;
     String errorCode = "";
-
     @SuppressLint("StaticFieldLeak")
     class LoadAsyncTask extends AsyncTask<String, Void, Object> {
 
@@ -613,7 +600,7 @@ public class MQService extends AbsHeartBeatService {
             String topic = null;
             if (topicName.startsWith("tea")) {
                 String[] aa = topicName.split("/");
-                if (aa.length > 2) {
+                if (aa.length>2){
                     macAddress = aa[1];
                     topic = aa[2];
                 }
@@ -632,87 +619,113 @@ public class MQService extends AbsHeartBeatService {
 //                handler.sendMessage(message1);
 //            }
             try {
+                if ("reset".equals(topic)){
+                    if (equipment!=null){
+                        if (equipment.getIsFirst()){
+                            reset=1;
+                            if (MainActivity.isRunning){
+                                Intent mqttIntent = new Intent("MainActivity");
+                                mqttIntent.putExtra("reset", 1);
+                                sendBroadcast(mqttIntent);
+                            }
+                        }else {
+                            reset =2;
+                            if (EqumentFragment.isRunning){
+                                Intent mqttIntent = new Intent("EqumentFragment");
+                                mqttIntent.putExtra("reset", 2);
+                                sendBroadcast(mqttIntent);
+                            }
+                        }
+                        equipmentDao.delete(equipment);
+                    }
+
+                }
                 if (!TextUtils.isEmpty(message) && message.startsWith("{") && message.endsWith("}")) {
                     messageJsonObject = new JSONObject(message);
                 }
                 if (messageJsonObject != null && messageJsonObject.has("Coffee")) {
                     messageJsonArray = messageJsonObject.getJSONArray("Coffee");
                 }
-                if (topicName.contains("transfer")) {
-                    if (messageJsonArray != null) {
+                if (topicName.contains("transfer")){
+                    if ( messageJsonArray != null  ) {
                         Log.e("hasData", "getDate: -->");
-                        if (equipment != null) {
-                            boolean isFirst = equipment.getIsFirst();//是否是默认设备
+                        if (equipment!=null){
+                        boolean isFirst = equipment.getIsFirst()  ;//是否是默认设备
 
-                            int mStage;//机器状态
-                            String lightColor;//灯光颜色
-                            String washTime;//清洗周期
-
-                            int mode; // 燈光模式
-                            int lightOpen1;
-                            mStage = messageJsonArray.getInt(2);
-                            int code = messageJsonArray.getInt(3);
-                            int wrongCode[] = TenTwoUtil.changeToTwo(code);
-                            errorCode = ArrayTransformString(wrongCode);
+                        int mStage;//机器状态
+                        String lightColor;//灯光颜色
+                        String washTime;//清洗周期
+                        int mode=4; // 燈光模式4564常在  随机 呼吸
+                        int lightOpen1;
+                        mStage = messageJsonArray.getInt(2);
+                        int code = messageJsonArray.getInt(3);
+                        int wrongCode [] = TenTwoUtil.changeToTwo(code);
+                        errorCode = ArrayTransformString(wrongCode);
 //                        errorCode = "1,1,1,1,1,1,1";
-                            /*方法是倒叙的 可直bit0 是数字第一位*/
-                            for (int i = 0; i < wrongCode.length; i++) {
-                                if (wrongCode[i] == 1) {
-                                    hasError = true;
-                                }
+                        /*方法是倒叙的 可直bit0 是数字第一位*/
+                        for (int i =0;i<wrongCode.length;i++){
+                            if (wrongCode[i]==1){
+                                hasError =true;
                             }
-                            if (hasError) {
-                                hasError = false;
-                                Message message1 = handler.obtainMessage();
-                                message1.obj = errorCode;
-                                message1.what = 1;
-                                handler.sendMessage(message1);
+                        }
+                        if (hasError){
+                            hasError =false;
+                           Message message1= handler.obtainMessage();
+                           message1.obj=errorCode;
+                           message1.what=1;
+                           handler.sendMessage(message1);
+                        }
+                        int  lightMes= messageJsonArray.getInt(4);
+                        for (int i=4;i<7;i++){
+                            if (TenTwoUtil.changeToTwo(lightMes)[i]==1){
+                                mode= i;
                             }
-                            int lightMes = messageJsonArray.getInt(4);
-                            lightOpen1 = TenTwoUtil.changeToTwo(lightMes)[7];
-                            lightColor = messageJsonArray.getString(8) + "/" + messageJsonArray.getString(9) + "/" + messageJsonArray.getString(10);
-                            int height = messageJsonArray.getInt(21);/*水位查看制作水位*/
-                            int low = messageJsonArray.getInt(22);
-                            washTime = messageJsonArray.getString(27);
-//                        mode = messageJsonArray.getInt(8);
-                            equipment.setErrorCode(errorCode);
-                            equipment.setMStage(mStage);
-                            equipment.setWashTime(washTime);
-                            equipment.setLightColor(lightColor);
-//                        equipment.setMode(mode);
-                            equipment.setLightOpen(lightOpen1);
-                            equipment.setOnLine(true);
-                            errorCode = "";
-                            if (isFirst) {
-                                if (MainActivity.isRunning) {
-                                    Intent mqttIntent = new Intent("MainActivity");
-                                    mqttIntent.putExtra("msg", macAddress);
-                                    mqttIntent.putExtra("msg1", equipment);
-                                    sendBroadcast(mqttIntent);
-                                }
-                                if (MakeActivity.isRunning) {
-                                    Intent mqttIntent = new Intent("MakeActivity");
-                                    mqttIntent.putExtra("msg", macAddress);
-                                    mqttIntent.putExtra("msg1", equipment);
-                                    sendBroadcast(mqttIntent);
-                                }
-                                if (AddMethodActivity1.isRunning) {
-                                    Intent mqttIntent = new Intent("AddMethodActivity1");
-                                    mqttIntent.putExtra("msg", macAddress);
-                                    mqttIntent.putExtra("msg1", equipment);
-                                    sendBroadcast(mqttIntent);
-                                }
-                                equipmentDao.update(equipment);
-                            }
+                        }
 
-                            if (EqumentFragment.isRunning) {
+                        lightOpen1 = TenTwoUtil.changeToTwo(lightMes)[7];
+                        lightColor = messageJsonArray.getString(8)+"/"+messageJsonArray.getString(9)+"/"+messageJsonArray.getString(10);
+                        int height = messageJsonArray.getInt(21);/*水位查看制作水位*/
+                        int low = messageJsonArray.getInt(22);
+                        washTime = messageJsonArray.getString(23);
+//                        mode = messageJsonArray.getInt(8);
+                        equipment.setErrorCode(errorCode);
+                        equipment.setMStage(mStage);
+                        equipment.setWashTime(washTime);
+                        equipment.setLightColor(lightColor);
+                        equipment.setMode(mode);
+                        equipment.setLightOpen(lightOpen1);
+                        equipment.setOnLine(true);
+                        errorCode="";
+                        if (isFirst){
+                            if (MainActivity.isRunning){
+                                Intent mqttIntent = new Intent("MainActivity");
+                                mqttIntent.putExtra("msg", macAddress);
+                                mqttIntent.putExtra("msg1", equipment);
+                                sendBroadcast(mqttIntent);
+                            }
+                            if (MakeActivity.isRunning){
+                                Intent mqttIntent = new Intent("MakeActivity");
+                                mqttIntent.putExtra("msg", macAddress);
+                                mqttIntent.putExtra("msg1", equipment);
+                                sendBroadcast(mqttIntent);
+                            }
+                            if (AddMethodActivity1.isRunning){
+                                Intent mqttIntent = new Intent("AddMethodActivity1");
+                                mqttIntent.putExtra("msg", macAddress);
+                                mqttIntent.putExtra("msg1", equipment);
+                                sendBroadcast(mqttIntent);
+                            }
+                            equipmentDao.update(equipment);
+                        }
+
+                       if (EqumentFragment.isRunning) {
                                 Intent mqttIntent = new Intent("EqumentFragment");
                                 mqttIntent.putExtra("msg", macAddress);
                                 mqttIntent.putExtra("msg1", equipment);
                                 sendBroadcast(mqttIntent);
                             }
 
-                            if (mStage == 0xb4 || mStage == 0xb3 || mStage == 0xb5) {
+                       if (mStage==0xb4||mStage==0xb3||mStage==0xb5){
                                 if (MakeActivity.isRunning) {
                                     Intent mqttIntent = new Intent("MakeActivity");
                                     mqttIntent.putExtra("nowStage", mStage);
@@ -727,22 +740,22 @@ public class MQService extends AbsHeartBeatService {
                                     mqttIntent.putExtra("low", low);
                                     sendBroadcast(mqttIntent);
                                 }
-                            }
+                       }
 
 
-                        }
+                    }
 
-                        if ("reset".equals(topic)) {
-                            if (equipment != null) {
-                                if (equipment.getIsFirst()) {
-                                    reset = 1;
-                                    if (MainActivity.isRunning) {
+                        if ("reset".equals(topic)){
+                            if (equipment!=null){
+                                if (equipment.getIsFirst()){
+                                    reset=1;
+                                    if (MainActivity.isRunning){
                                         Intent mqttIntent = new Intent("MainActivity");
                                         mqttIntent.putExtra("reset", 1);
                                     }
-                                } else {
-                                    reset = 2;
-                                    if (EqumentFragment.isRunning) {
+                                }else {
+                                    reset =2;
+                                    if (EqumentFragment.isRunning){
                                         Intent mqttIntent = new Intent("EqumentFragment");
                                         mqttIntent.putExtra("reset", 2);
                                     }
@@ -751,24 +764,24 @@ public class MQService extends AbsHeartBeatService {
                             }
 
                         }
-                        if ("lwt".equals(topic)) {
+                        if ("lwt".equals(topic)){
                             /*離綫主題*/
-                            boolean isFirst = equipment.getIsFirst();//是否是默认设备
+                            boolean isFirst = equipment.getIsFirst()  ;//是否是默认设备
                             equipment.setOnLine(false);
-                            if (isFirst) {
-                                if (MainActivity.isRunning) {
+                            if (isFirst){
+                                if (MainActivity.isRunning){
                                     Intent mqttIntent = new Intent("MainActivity");
                                     mqttIntent.putExtra("msg", macAddress);
                                     mqttIntent.putExtra("msg1", equipment);
                                     sendBroadcast(mqttIntent);
                                 }
-                                if (MakeActivity.isRunning) {
+                                if (MakeActivity.isRunning){
                                     Intent mqttIntent = new Intent("MakeActivity");
                                     mqttIntent.putExtra("msg", macAddress);
                                     mqttIntent.putExtra("msg1", equipment);
                                     sendBroadcast(mqttIntent);
                                 }
-                                if (AddMethodActivity1.isRunning) {
+                                if (AddMethodActivity1.isRunning){
                                     Intent mqttIntent = new Intent("AddMethodActivity1");
                                     mqttIntent.putExtra("msg", macAddress);
                                     mqttIntent.putExtra("msg1", equipment);
@@ -784,35 +797,35 @@ public class MQService extends AbsHeartBeatService {
                             }
                         }
 
-                    }
-
                 }
 
-
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
+
+
+
+        } catch (JSONException e) {
+                e.printStackTrace();
+                 }
             return null;
         }
 
     }
 
     @SuppressLint("HandlerLeak")
-    Handler handler = new Handler() {
+    Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (msg.what == 1) {
+            if (msg.what==1){
                 String errorCode = (String) msg.obj;
-                if (alermDialog4 != null && alermDialog4.isShowing()) {
+                if (alermDialog4!=null&&alermDialog4.isShowing()){
                     alermDialog4.dismiss();
                 }
-                setAlermDialog(0, errorCode);
+                setAlermDialog(0,errorCode);
             }
         }
     };
-    AlermDialog4 alermDialog4;
-
+     AlermDialog4 alermDialog4;
     private void setAlermDialog(int mode, String line) {
         try {
             alermDialog4 = new AlermDialog4(MQService.this);
@@ -868,12 +881,11 @@ public class MQService extends AbsHeartBeatService {
             e.printStackTrace();
         }
     }
-
     public List<String> getTopicNames() {
         List<String> list = new ArrayList<>();
         List<Equpment> equpments = equipmentDao.findAll();
 
-        for (Equpment equpment : equpments) {
+        for (Equpment equpment : equpments){
             String macAddress = equpment.getMacAdress();
             String onlineTopicName = "";
             String offlineTopicName = "";
@@ -881,7 +893,7 @@ public class MQService extends AbsHeartBeatService {
             offlineTopicName = "tea/" + macAddress + "/lwt";
             String s3 = "tea/" + macAddress + "/operate/transfer";
             String s4 = "tea/" + macAddress + "/extra/transfer";
-            String s5 = "tea/" + macAddress + "/reset/transfer";
+            String s5 ="tea/" + macAddress + "/reset/transfer";
             list.add(onlineTopicName);
             list.add(offlineTopicName);
             list.add(s3);
@@ -964,7 +976,7 @@ public class MQService extends AbsHeartBeatService {
 
                 client.subscribe(topicName, 1);
                 flag = true;
-                Log.e("SSXCCCCCCC", "subscribe: -->" + topicName);
+                Log.e("SSXCCCCCCC", "subscribe: -->"+topicName );
             } catch (MqttException e) {
                 e.printStackTrace();
             }

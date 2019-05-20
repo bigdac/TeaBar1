@@ -84,6 +84,10 @@ public class BaseQuestionActivity extends BaseActivity {
 
     }
 
+    public int getLanguage (){
+        return application.IsEnglish();
+    }
+
     public void  rePlaceFragment (int type){
         if (type==5){
             Map<String,Object> params = new HashMap<>();

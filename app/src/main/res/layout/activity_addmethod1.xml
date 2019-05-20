@@ -62,6 +62,7 @@
         android:layout_marginTop="10dp"
       />
     <LinearLayout
+        android:id="@+id/li_make_temp"
         android:layout_alignTop="@+id/arcprogressBar"
         android:layout_marginTop="60dp"
         android:layout_width="wrap_content"
@@ -86,6 +87,17 @@
         />
 
     </LinearLayout>
+    <TextView
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:text="@string/equ_xq_temp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/li_make_temp"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/social_gray"
+        android:gravity="center"
+        android:textSize="16sp"
+        />
     <teabar.ph.com.teabar.view.MyView1
         android:id="@+id/arcprogressBar1"
         android:layout_width="240dp"
@@ -96,6 +108,7 @@
         android:layout_marginTop="-70dp"
         />
     <LinearLayout
+        android:id="@+id/li_make_time"
         android:layout_alignTop="@+id/arcprogressBar1"
         android:layout_marginTop="120dp"
         android:layout_width="wrap_content"
@@ -121,6 +134,17 @@
             />
 
     </LinearLayout>
+    <TextView
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:text="@string/equ_xq_time"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/li_make_time"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/social_gray"
+        android:gravity="center"
+        android:textSize="16sp"
+        />
    <!--<teabar.ph.com.teabar.view.VerticalProgressBar1-->
        <!--android:id="@+id/verticalProgressBar1"-->
        <!--android:layout_width="100dp"-->
@@ -139,8 +163,8 @@
         android:layout_height="120dp"
         android:layout_below="@+id/arcprogressBar"
         android:layout_alignLeft="@+id/arcprogressBar"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="-100dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="-90dp"
         android:rotation="270"
         android:max="350"
         android:min="100"
@@ -160,12 +184,12 @@
         >
         <Button
             android:id="@+id/btn_back"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
             android:text="@string/equ_xq_hdmr"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:background="@drawable/answer_button2"
+            android:layout_toLeftOf="@+id/btn_make"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/answer_button3"
             android:textColor="@color/login_black"
             android:layout_gravity="center"
             android:layout_marginLeft="26dp"

@@ -55,11 +55,11 @@
         android:layout_height="wrap_content"
         android:text="@string/equ_wash_4"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/tv_wash_title"
         android:layout_marginRight="28dp"
-        android:layout_marginTop="50dp"
+        android:layout_alignBottom="@+id/tv_wash_number"
+        android:paddingBottom="2dp"
         android:textColor="#424242"
-        android:textSize="20sp"
+        android:textSize="12sp"
         />
     <TextView
         android:id="@+id/tv_wash_number"

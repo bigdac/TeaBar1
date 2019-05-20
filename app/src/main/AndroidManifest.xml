@@ -28,9 +28,9 @@
     <application
         android:name=".base.MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/app_name"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
@@ -127,6 +127,8 @@
         <activity android:name=".activity.question.BaseQuestionActivity" />
         <activity android:name=".activity.question.Recommend1Activity" />
         <activity android:name=".activity.device.AddDeviceActivity1" />
+        <activity android:name=".activity.question.QuestionScoreActivity" />
+        <activity android:name=".activity.SearchFinishActivity" />
     </application>
 
 </manifest>

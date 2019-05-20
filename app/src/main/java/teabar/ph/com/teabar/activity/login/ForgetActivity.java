@@ -94,7 +94,7 @@ public class ForgetActivity extends BaseActivity {
         public void widgetClick(View v) {
 
         }
-        @OnClick({R.id.iv_forget_back,R.id.bt_register_code,R.id.et_regist_nick,R.id.bt_regist_ensure})
+        @OnClick({R.id.iv_forget_back,R.id.bt_register_code,R.id.bt_regist_ensure})
         public void onClick(View view){
             switch (view.getId()){
                 case R.id.iv_forget_back:
@@ -125,20 +125,20 @@ public class ForgetActivity extends BaseActivity {
                     user = et_regist_user.getText().toString().trim();
                     String password2 = et_regist_pasw2.getText().toString().trim();
                     if (TextUtils.isEmpty(code)){
-                        toast( "请输入验证码");
+                        toast( getText(R.string.toast_forget_code).toString());
                         break;
                     }
                     if (TextUtils.isEmpty(password)){
-                        toast( "请输入密码");
+                        toast( getText(R.string.toast_forget_pass).toString());
                         break;
                     }
                     if (TextUtils.isEmpty(user)){
-                        toast( "请输入手机号或邮箱");
+                        toast( getText(R.string.toast_forget_phone).toString());
                         break;
                     }
 
-                    if (password.length()<6||password.length()>18){
-                        toast( "密码位数应该大于6小于18");
+                    if (password.length()<6||password.length()>16){
+                        toast( getText(R.string.toast_forget_passl).toString());
                     }else {
                         if (password2.equals(password)) {
                             Map<String, Object> params = new HashMap<>();
@@ -152,7 +152,7 @@ public class ForgetActivity extends BaseActivity {
                             showProgressDialog();
                             new ForgetAsyncTask().execute(params);
                         }else {
-                            toast("两次密码输入不同");
+                            toast( getText(R.string.toast_forget_passsame).toString());
                         }
                     }
                     break;
@@ -190,19 +190,20 @@ public class ForgetActivity extends BaseActivity {
                         code = jsonObject.getString("state");
                         returnMsg1=jsonObject.getString("message1");
                         if ("200".equals(code)) {
-                            JSONObject returnData = jsonObject.getJSONObject("data");
-                            long userId = returnData.getLong("userId");
-                            String userName = returnData.getString("userName");
-                            String token = returnData.getString("token");
-                            int type = returnData.getInt("type");
-                            SharedPreferences.Editor editor = preferences.edit();
-                            editor.putString("user",user);
-                            editor.putString("password",password);
-                            editor.putLong("userId", userId);
-                            editor.putString("token",token);
-                            editor.putString("userName",userName);
-                            editor.putInt("type",type);
-                            editor.commit();
+//                            JSONObject returnData = jsonObject.getJSONObject("data");
+//                            long userId = returnData.getLong("userId");
+//                            String userName = returnData.getString("userName");
+//                            String token = returnData.getString("token");
+//                            int type = returnData.getInt("type");
+//                            SharedPreferences.Editor editor = preferences.edit();
+//                            editor.putString("user",user);
+//                            editor.putString("password",password);
+//                            editor.putLong("userId", userId);
+//                            editor.putString("token",token);
+//                            editor.putString("userName",userName);
+//                            editor.putInt("type",type);
+//
+//                            editor.commit();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -224,15 +225,15 @@ public class ForgetActivity extends BaseActivity {
                     if (tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    startActivity(new Intent(ForgetActivity.this, MainActivity.class));
-                    toast( "登录成功");
+                    startActivity(new Intent(ForgetActivity.this, LoginActivity.class));
+                    toast( getText(R.string.toast_equ_wash).toString());
 
                     break;
                 case "4000":
                     if (tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    toast( "连接超时，请重试");
+                    toast( getText(R.string.toast_all_cs).toString());
                     break;
                 default:
                     if (tipDialog.isShowing()){

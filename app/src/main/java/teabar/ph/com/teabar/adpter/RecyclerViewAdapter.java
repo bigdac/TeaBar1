@@ -10,7 +10,9 @@ import android.widget.TextView;
 import java.util.List;
 
 import teabar.ph.com.teabar.R;
+import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.activity.device.MakeActivity;
+import teabar.ph.com.teabar.pojo.Tea;
 import teabar.ph.com.teabar.pojo.Weather;
 
 
@@ -20,9 +22,11 @@ import teabar.ph.com.teabar.pojo.Weather;
 
 public class RecyclerViewAdapter extends BaseRecyclerAdapter<Weather> {
     Context context;
-    public RecyclerViewAdapter(Context mContext, int layoutResId, List<Weather> dataList) {
+    Tea tea;
+    public RecyclerViewAdapter(Context mContext, int layoutResId, List<Weather> dataList, Tea tea) {
         super(mContext, layoutResId, dataList);
         this.context = mContext;
+        this.tea = tea;
     }
 
 
@@ -50,10 +54,18 @@ public class RecyclerViewAdapter extends BaseRecyclerAdapter<Weather> {
         tv_weather_zl.setText(data.getAir_level());
         TextView tv_weather_tq = holder.getView(R.id.tv_weather_tq);
         tv_weather_tq.setText(data.getWea());
+        TextView tv_weather_name = holder.getView(R.id.tv_weather_name);
+        if (tea!=null){
+            tv_weather_name.setText(tea.getProductNameEn());
+        }
         bt_make.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context,MakeActivity.class));
+                Intent intent = new Intent(context,MakeActivity.class);
+                if (tea!=null){
+                    intent.putExtra("teaId",tea.getId());
+                }
+                context.startActivity(intent);
             }
         });
     }
@@ -61,5 +73,8 @@ public class RecyclerViewAdapter extends BaseRecyclerAdapter<Weather> {
     public void  refrashData(List<Weather> weathers){
         this.refrasData(weathers);
     }
-
+    public void  refrashTeaData(Tea tea ){
+        this.tea = tea;
+        notifyDataSetChanged();
+    }
 }

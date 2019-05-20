@@ -86,6 +86,7 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
     int currentPage = 1;
     int  Type = 0;
     Context context;
+    LinearLayout li_main_la;
     @Override
     public int bindLayout() {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -100,8 +101,9 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
         id = preferences.getString("userId","");
         tipDialog = new QMUITipDialog.Builder(getActivity())
                 .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
-                .setTipWord("请稍后...")
+                .setTipWord(getText(R.string.search_qsh).toString())
                 .create();
+         li_main_la = view.findViewById(R.id.li_main_la);
         initView1(view);
         initPermission();
         //实现自动下拉刷新功能
@@ -110,7 +112,6 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
             public void run() {
                 recyclerView.setRefreshing(true);//执行下拉刷新的动画
                 refreshListener.onRefresh();//执行数据加载操作
-
             }
         });
 
@@ -153,7 +154,6 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
             showProgressDialog();
             Type = TYPE_PULLREFRESH;
             currentPage=1;
-            circleItemList.clear();
             Map<String ,Object> params = new HashMap<>();
             params.put("id",id);
             params.put("currentPage",currentPage);
@@ -184,34 +184,42 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
         recyclerView.addItemDecoration(new DivItemDecoration(2, true));
         recyclerView.getMoreProgressView().getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
 
-        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+        recyclerView.getRecyclerView().setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (edittextbody.getVisibility() == View.VISIBLE) {
-                    updateEditTextBodyVisible(View.GONE, null);
-                    return true;
-                }
-                return false;
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
             }
         });
+
+//        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if (edittextbody.getVisibility() == View.VISIBLE) {
+//                    updateEditTextBodyVisible(View.GONE, null);
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
 
         refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
+                new Handler().post(new Runnable() {
                     @Override
                     public void run() {
 //                        presenter.loadData(TYPE_PULLREFRESH);
+                        tipDialog.show();
                         Type = TYPE_PULLREFRESH;
                         currentPage=1;
-                        circleItemList.clear();
                         Map<String ,Object> params = new HashMap<>();
                         params.put("id",id);
                         params.put("currentPage",currentPage);
                         params.put("pageSize",10);
-                        new ShowContentAsynctask().execute(params);
+                        showContentAsynctask = new ShowContentAsynctask();
+                        showContentAsynctask.execute(params);
                     }
-                }, 2000);
+                });
             }
         };
         recyclerView.setRefreshListener(refreshListener);
@@ -234,7 +242,7 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
             }
         });
 
-        circleAdapter = new CircleAdapter(getActivity());
+        circleAdapter = new CircleAdapter(getActivity(),circleItemList);
         circleAdapter.setCirclePresenter(presenter);
         recyclerView.setAdapter(circleAdapter);
 
@@ -273,7 +281,7 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
                     //发布评论
                     String content =  editText.getText().toString().trim();
                     if(TextUtils.isEmpty(content)){
-                        Toast.makeText(getActivity(), "评论内容不能为空...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getText(R.string.toast_mess_null).toString(), Toast.LENGTH_SHORT).show();
                         return;
                     }
 //                    presenter.addComment(content, commentConfig);
@@ -328,12 +336,18 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
     /*
     茶吧查看发布*/
     String returnMsg1;
+    ShowContentAsynctask showContentAsynctask ;
     class ShowContentAsynctask extends AsyncTask<Map<String,Object>,Void,String>{
 
         @Override
         protected String doInBackground(Map<String, Object>... maps) {
             String code = "";
             Map<String,Object> param = maps[0];
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             String result = HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/content/showContent",param);
             Log.e(TAG, "doInBackground: -->"+result );
             if (!TextUtils.isEmpty(result)){
@@ -343,7 +357,9 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
                         code = jsonObject.getString("state");
                         returnMsg1=jsonObject.getString("message1");
                         if ("200".equals(code)){
-//                            circleItemList.clear();
+                            if ( Type == TYPE_PULLREFRESH) {
+                                circleItemList.clear();
+                            }
                             circleItemList1.clear();
                             JSONObject data = jsonObject.getJSONObject("data");
                             JSONArray items = data.getJSONArray("items");
@@ -426,7 +442,6 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
             switch (s){
                 case "200":
                     currentPage++;
-                    Log.e(TAG, "onPostExecute: -->"+circleItemList.size()+"...."+currentPage+"...."+Type );
                     update2loadData(Type,circleItemList);
                     if (tipDialog.isShowing()){
                         tipDialog.dismiss();
@@ -706,18 +721,21 @@ public class FriendCircleFragment1 extends BaseFragment  implements CircleContra
      public  interface hidenShowView{
         void hiden(boolean b);
      }
+
     @Override
     public void update2loadData(int loadType, List<CircleItem> datas) {
         if (loadType == TYPE_PULLREFRESH){
             recyclerView.setRefreshing(false);
-            circleAdapter.setDatas(datas);
+            circleAdapter.setData(datas);
+
         }else if(loadType == TYPE_UPLOADREFRESH){
             Log.e(TAG, "update2loadData222: -->"+circleAdapter.getDatas().size() );
 //            circleAdapter.getDatas().addAll(datas);
             circleAdapter.setDatas(datas);
+            circleAdapter.notifyDataSetChanged();
             Log.e(TAG, "update2loadData333: -->"+circleAdapter.getDatas().size() );
         }
-        circleAdapter.notifyDataSetChanged();
+
         if(circleItemList1.size()==10){
             recyclerView.setupMoreListener(new OnMoreListener() {
                 @Override

@@ -55,9 +55,10 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
     public void setCirclePresenter(CirclePresenter presenter){
         this.presenter = presenter;
     }
-
-    public CircleAdapter(Context context){
+    List<CircleItem> mDatas;
+    public CircleAdapter(Context context , List <CircleItem> list){
         this.context = context;
+        this.mDatas = list;
     }
 
     @Override
@@ -68,6 +69,12 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
         int itemType = 0;
          itemType = CircleViewHolder.TYPE_IMAGE;
         return itemType;
+    }
+
+
+    public void setData(List mDatas) {
+        this.mDatas = mDatas;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -100,7 +107,7 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
 
             final int circlePosition = position - HEADVIEW_SIZE;
             final CircleViewHolder holder = (CircleViewHolder) viewHolder;
-            final CircleItem circleItem = (CircleItem) datas.get(circlePosition);
+            final CircleItem circleItem = (CircleItem) mDatas.get(circlePosition);
             final String circleId = circleItem.getId();
             String name = circleItem.getUser().getName();
             String headImg = circleItem.getUser().getHeadUrl();
@@ -169,7 +176,7 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
                                 }
                                 Log.e("DDDD", "onClick: -->"+circleItem.isOpen() );
                                 circleItem.setOpen(false);
-                                datas.set(position,circleItem);
+                                mDatas.set(position,circleItem);
                             }else {
                                 holder.iv_social_no.setImageResource(R.mipmap.social_yes);
                                 isOpen[0]=true;
@@ -177,7 +184,7 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
                                 holder.tv_social_num.setText(ThumbsUp[0]+1+"");
                                 ThumbsUp[0] = ThumbsUp[0]+1;
                                 Log.e("DDDD", "onClick: -->"+circleItem.isOpen() );
-                                datas.set(position,circleItem);
+                                mDatas.set(position,circleItem);
                             }
                         }
 
@@ -277,7 +284,7 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
     }
     @Override
     public int getItemCount() {
-        return datas.size()+1;//有head需要加1
+        return mDatas.size()+1;//有head需要加1
     }
 
     @Override
@@ -285,7 +292,7 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
         super.onViewAttachedToWindow(holder);
     }
     public List<CircleItem> getDates1(){
-        return datas;
+        return mDatas;
     }
 
     public class HeaderViewHolder extends RecyclerView.ViewHolder{

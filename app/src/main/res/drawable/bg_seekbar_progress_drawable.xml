@@ -9,7 +9,7 @@
         <shape>
             <corners android:bottomLeftRadius="15dp"
                 android:topLeftRadius="15dp"/>
-            <size android:height="150dp"
+            <size android:height="110dp"
                 />
             <solid android:color="#f1f1f1"/>
         </shape>
@@ -21,7 +21,7 @@
             <shape>
                 <corners android:bottomLeftRadius="15dp"
                     android:topLeftRadius="15dp"/>
-                <size android:height="150dp"
+                <size android:height="110dp"
                     />
                 <!--<solid android:color="@color/nomal_green"/>-->
                 <gradient

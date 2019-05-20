@@ -158,7 +158,7 @@ public class MySeekBar extends  SeekBar {
 
         canvas.drawBitmap(mBackgroundBitmap, bgX, bgY, mPaint);
 //        canvas.drawText(mText, textX, textY, mPaint);
-        drawText(canvas,mText, textX+13 , textY-45, mPaint,90);
+        drawText(canvas,mText, textX+13 , textY-55, mPaint,90);
     }
     void drawText(Canvas canvas ,String text , float x ,float y,Paint paint ,float angle){
         if(angle != 0){

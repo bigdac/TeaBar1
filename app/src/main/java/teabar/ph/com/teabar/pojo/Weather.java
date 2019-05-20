@@ -2,8 +2,8 @@ package teabar.ph.com.teabar.pojo;
 
 public class Weather {
     String week;
-    String wea;
-    String air_level;
+    String wea;//天气
+    String air_level;//风速
     String humidity;
     String tem;
 

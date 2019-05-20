@@ -67,7 +67,7 @@ public class Question3Fragment extends BaseFragment {
 
     @Override
     public void initView(View view) {
-
+        language = ((BaseQuestionActivity)getActivity()).getNunber();
         addressAdapter = new AddressAdapter(getActivity(),list, ((BaseQuestionActivity)getActivity()).getNunber());
         new getCountryAsynTask().execute();
         initCustomTimePicker();
@@ -190,7 +190,7 @@ public class Question3Fragment extends BaseFragment {
             }
         }
     }
-
+    int language;
     private PopupWindow mPopWindow;
     private View contentViewSign;
     int number = 0 ;
@@ -225,8 +225,8 @@ public class Question3Fragment extends BaseFragment {
                 province1 =null;
                 city1 =null;
                 area1 =null;
-                country = "中国";
-                province = "澳门";
+                country = getText(R.string.adress_hot_1).toString();
+                province = getText(R.string.adress_hot_71).toString();
                 country1 = "130";
                 province1 = "655";
                 number=2;
@@ -247,7 +247,7 @@ public class Question3Fragment extends BaseFragment {
                 province1 =null;
                 city1 =null;
                 area1 =null;
-                country = "英国";
+                country = getText(R.string.adress_hot_8).toString();
                 country1 = "3482";
                 number=1;
                 examId = 3482;
@@ -267,8 +267,8 @@ public class Question3Fragment extends BaseFragment {
                 province1 =null;
                 city1 =null;
                 area1 =null;
-                country = "中国";
-                province = "台湾";
+                country = getText(R.string.adress_hot_1).toString();
+                province = getText(R.string.adress_hot_101).toString();
                 country1 = "130";
                 province1 = "612";
                 number=2;
@@ -289,7 +289,7 @@ public class Question3Fragment extends BaseFragment {
                 province1 =null;
                 city1 =null;
                 area1 =null;
-                country = "中国";
+                country = getText(R.string.adress_hot_1).toString();
                 country1 = "130";
                 number=1;
                 examId = 130;
@@ -309,7 +309,7 @@ public class Question3Fragment extends BaseFragment {
                 province1 =null;
                 city1 =null;
                 area1 =null;
-                country = "美国";
+                country =getText(R.string.adress_hot_2).toString();
                 country1 = "2141";
                 number=1;
                 examId = 2141;
@@ -329,8 +329,8 @@ public class Question3Fragment extends BaseFragment {
                 province1 =null;
                 city1 =null;
                 area1 =null;
-                country = "中国";
-                province = "香港";
+                country = getText(R.string.adress_hot_1).toString();
+                province = getText(R.string.adress_hot_41).toString();
                 country1 = "130";
                 province1 = "636";
                 number=2;
@@ -357,21 +357,41 @@ public class Question3Fragment extends BaseFragment {
                 number++;
 
                 if (number==1){
-                    country = adress.getCname();
-                    country1 = adress.getId()+"";
+                    if (language==0){
+                        country = adress.getCname();
+                        country1 = adress.getId()+"";
+                    }else {
+                        country = adress.getEname();
+                        country1 = adress.getId()+"";
+                    }
                 }else if (number==2){
-                    province = adress.getCname();
-                    province1 = adress.getId()+"";
+                    if (language==0) {
+                        province = adress.getCname();
+                        province1 = adress.getId() + "";
+                    }else {
+                        province = adress.getEname();
+                        province1 = adress.getId() + "";
+                    }
                     city=null;
                     area=null;
                     city1=null;
                     area1=null;
                 }else if (number==3){
-                    city =  adress.getCname();
-                    city1 = adress.getId()+"";
+                    if (language==0) {
+                        city = adress.getCname();
+                        city1 = adress.getId() + "";
+                    }else {
+                        city = adress.getEname();
+                        city1 = adress.getId() + "";
+                    }
                 }else if (number==4){
-                    area = adress.getCname();
-                    area1 = adress.getId()+"";
+                    if (language==0) {
+                        area = adress.getCname();
+                        area1 = adress.getId() + "";
+                    }else {
+                        area = adress.getEname();
+                        area1 = adress.getId() + "";
+                    }
                 }
                 new getCountryAsynTask().execute();
                 tv_address_1.setVisibility(View.GONE);
@@ -405,6 +425,7 @@ public class Question3Fragment extends BaseFragment {
         mPopWindow.showAtLocation(rl_address_main, Gravity.BOTTOM, 0, 0);
 
     }
+
 
 
 

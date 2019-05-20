@@ -21,8 +21,10 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import teabar.ph.com.teabar.R;
+import teabar.ph.com.teabar.activity.question.BaseQuestionActivity;
 import teabar.ph.com.teabar.activity.question.RecommendActivity;
 import teabar.ph.com.teabar.adpter.BasicExamAdapter;
+import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.BaseFragment;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.pojo.Tea;
@@ -109,8 +111,12 @@ public class Question6Fragment extends BaseFragment {
 
         @Override
         protected String doInBackground(Void... voids) {
+            int type =29;
+            if (((BaseQuestionActivity)getActivity()).getLanguage()==0){
+                type=2;
+            }
             String code = "";
-            String result =   HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/exam/getBasicExam?examId=2" );
+            String result =   HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/exam/getBasicExam?examId="+type );
             Log.e("back", "--->" + result);
             if (!ToastUtil.isEmpty(result)) {
                 if (!"4000".equals(result)){

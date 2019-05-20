@@ -28,6 +28,7 @@ public class EncourageActivity extends BaseActivity {
     @BindView(R.id.encourage_tv_year)
     TextView encourage_tv_year;
     MyApplication application;
+    int language;
     @Override
     public void initParms(Bundle parms) {
 
@@ -45,6 +46,7 @@ public class EncourageActivity extends BaseActivity {
             application = (MyApplication) getApplication();
         }
         application.addActivity(this);
+        language = application.IsEnglish();
         new GetEncourageAsyncTask().execute();
         Calendar c = Calendar.getInstance();
         int  year = c.get(Calendar.YEAR);
@@ -79,7 +81,7 @@ public class EncourageActivity extends BaseActivity {
         @Override
         protected String doInBackground(Void... voids) {
             String code ="";
-            String result = HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/app/encouraging");
+            String result = HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/app/encouraging?type="+language);
             if (!TextUtils.isEmpty(result)){
                 try {
                     JSONObject jsonObject = new JSONObject(result);

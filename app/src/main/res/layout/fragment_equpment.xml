@@ -26,6 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/equ_xq_online"
+                android:gravity="center"
                 android:textColor="@color/white"
                 android:layout_toRightOf="@+id/iv_main_water"
                 android:layout_centerHorizontal="true"
@@ -49,6 +50,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/equ_xq_waterf"
                 android:textColor="@color/white"
+                android:gravity="center"
                 android:layout_toRightOf="@+id/iv_main_online"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="7dp"
@@ -68,10 +70,11 @@
                 />
             <TextView
                 android:id="@+id/tv_main_hot"
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:text="@string/equ_xq_nohot"
                 android:textColor="@color/white"
+                android:gravity="center"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/iv_main_hot"
                 android:layout_centerHorizontal="true"

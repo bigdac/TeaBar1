@@ -33,6 +33,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -111,6 +113,8 @@ public class MainFragment2 extends BaseFragment  {
     SharedPreferences preferences;
      Equpment firstEqu;
     String userId;
+    int language;
+    int type1;
     @Override
     public int bindLayout() {
         return R.layout.fragment_main2;
@@ -122,6 +126,7 @@ public class MainFragment2 extends BaseFragment  {
         if (TextUtils.isEmpty(tips)){
             new getTipsAsynTask().execute();//获取健康小知识
         }
+        language= ((MainActivity)getActivity()).getLanguage();
         equipmentDao = new EquipmentImpl(getActivity().getApplicationContext());
          firstEqu = ((MainActivity)getActivity()).getFirstEqument();
         if (firstEqu!=null){
@@ -130,6 +135,7 @@ public class MainFragment2 extends BaseFragment  {
         preferences = getActivity().getSharedPreferences("my",Context.MODE_PRIVATE);
         String name = preferences.getString("userName","");
         userId = preferences.getString("userId","");
+        type1 = preferences.getInt("type1",0);
         tv_main_name.setText(name);
         scrollView =view. findViewById(R.id.scrollView);
         rv_main_jh = view.findViewById(R.id.rv_main_jh);
@@ -148,6 +154,9 @@ public class MainFragment2 extends BaseFragment  {
             }
         });
         iv_main_ask = view.findViewById(R.id.iv_main_ask);
+        if (type1==1){
+            iv_main_ask.setVisibility(View.INVISIBLE);
+        }
         iv_main_ask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -254,8 +263,10 @@ public class MainFragment2 extends BaseFragment  {
             }
         }else {
             li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
+
             firstEqu = null;
             firstMac = "";
+
         }
 
     }
@@ -367,21 +378,21 @@ public class MainFragment2 extends BaseFragment  {
 //        for (int i = 0; i < mTabItemBeanArrayList1.size(); i++) {
             View view1 = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_weatherlist, null);
              RecyclerView recycler_view1 = view1.findViewById(R.id.rv_weatherlist);
-            recyclerViewAdapter1 = new RecyclerViewAdapter(getActivity(), R.layout.item_weather, twoDataList);
+            recyclerViewAdapter1 = new RecyclerViewAdapter(getActivity(), R.layout.item_weather, twoDataList,tea1);
              WeatherLayoutManager weatherLayoutManager1=new WeatherLayoutManager(getActivity());
             recycler_view1.setLayoutManager(weatherLayoutManager1);
             recycler_view1.setAdapter(recyclerViewAdapter1);
 //
         View view2  = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_weatherlist, null);
          RecyclerView recycler_view2  = view2.findViewById(R.id.rv_weatherlist);
-         recyclerViewAdapter2  = new RecyclerViewAdapter(getActivity(), R.layout.item_weather, twoDataList);
+         recyclerViewAdapter2  = new RecyclerViewAdapter(getActivity(), R.layout.item_weather, twoDataList,tea2);
         WeatherLayoutManager weatherLayoutManager2=new WeatherLayoutManager(getActivity());
         recycler_view2.setLayoutManager(weatherLayoutManager2);
         recycler_view2.setAdapter(recyclerViewAdapter2);
 
         View view3  = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_weatherlist, null);
         RecyclerView recycler_view3  = view3.findViewById(R.id.rv_weatherlist);
-        recyclerViewAdapter3  = new RecyclerViewAdapter(getActivity(), R.layout.item_weather, twoDataList);
+        recyclerViewAdapter3  = new RecyclerViewAdapter(getActivity(), R.layout.item_weather, twoDataList,tea3);
         WeatherLayoutManager weatherLayoutManager3=new WeatherLayoutManager(getActivity());
         recycler_view3.setLayoutManager(weatherLayoutManager3);
         recycler_view3.setAdapter(recyclerViewAdapter3);
@@ -428,7 +439,9 @@ public class MainFragment2 extends BaseFragment  {
         if(list1.size()==0){
             new getTeaListAsynTask().execute();
         }
-        new searchWeatherAsynTask().execute();
+//        if(weathers.size()==0) {
+            new searchWeatherAsynTask().execute();
+//        }
     }
     List<RecyclerViewAdapter> baseLists  = new ArrayList<>();
     List<Weather> weathers = new ArrayList<>();
@@ -437,30 +450,40 @@ public class MainFragment2 extends BaseFragment  {
 
         @Override
         protected String doInBackground(Void... voids) {
+            String type= "en";
+            if (language==0){
+                type= "ZH_TW";
+            }
             String code = "";
-            String result =   HttpUtils.getOkHpptRequest("https://www.tianqiapi.com/api/?version=v1&city=香港" );
+            String result =   HttpUtils.getOkHpptRequest("http://api.openweathermap.org/data/2.5/forecast?id=1819730&APPID=64f17a2291526f4669269007d621d3b6&lang="+type+"&units=metric&cnt=24" );
             Log.e("back", "--->" + result);
             if (!ToastUtil.isEmpty(result)) {
                 if (!"4000".equals(result)){
                     try {
                         JSONObject jsonObject = new JSONObject(result);
-                        code = "200";
-                        JSONArray jsonArray = jsonObject.getJSONArray("data");
-                        for (int i =0;i<3;i++){
-                            JSONObject jsonObject1  = jsonArray.getJSONObject(i);
-                            Weather weather = new Weather();
-                            String weak = jsonObject1.getString("week");
-                            String wea = jsonObject1.getString("wea");
-//                            String humidity = jsonObject1.getString("humidity");
-                            String tem = jsonObject1.getString("tem");
-//                            String air_level = jsonObject1.getString("air_level");
-//                            weather.setAir_level(air_level);
-                            tem = tem.replaceAll("℃","");
-                            weather.setTem(tem);
-//                            weather.setHumidity(humidity);
-                            weather.setWea(wea);
-                            weather.setWeek(weak);
-                            weathers.add(weather);
+                        code = jsonObject.getString("cod");
+                        JSONArray jsonArray = jsonObject.getJSONArray("list");
+                        for (int i =0;i<jsonArray.length();i++){
+                            if (i==0||i==9||i==18) {
+                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                                Weather weather = new Weather();
+                                long time = jsonObject1.getLong("dt");
+                                String weak =  getWeek(time);
+                                JSONObject jsonObject11 = jsonObject1.getJSONObject("main");
+                                int temp = jsonObject11.getInt("temp");
+                                String humidity = jsonObject11.getString("humidity");
+                                JSONArray jsonObject12 = jsonObject1.getJSONArray("weather");
+                                JSONObject Jweathers = jsonObject12.getJSONObject( 0);
+                                String wea = Jweathers.getString("description");
+                                JSONObject jsonObject13 = jsonObject1.getJSONObject("wind");
+                                String air = jsonObject13.getString("speed");
+                                weather.setTem(temp+"");
+                                weather.setAir_level(air);
+                                weather.setWea(wea);
+                                weather.setHumidity(humidity);
+                                weather.setWeek(weak);
+                                weathers.add(weather);
+                            }
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -481,6 +504,7 @@ public class MainFragment2 extends BaseFragment  {
             switch (s) {
 
                 case "200":
+                    new FindWeatherAsynTask().execute();
                     for (int i =0;i<weathers.size();i++){
                         List<Weather> list = new ArrayList<>();
                         list.add(weathers.get(i));
@@ -506,6 +530,188 @@ public class MainFragment2 extends BaseFragment  {
             }
         }
     }
+    Tea tea1 = new Tea();
+    Tea tea2 = new Tea();
+    Tea tea3 = new Tea();
+    public  String getWeek(long time) {
+
+        Calendar cd = Calendar.getInstance();
+        cd.setTime(new Date(time));
+
+        int year  = cd.get(Calendar.YEAR); //获取年份
+        int month = cd.get(Calendar.MONTH); //获取月份
+        int day   = cd.get(Calendar.DAY_OF_MONTH); //获取日期
+        int week  = cd.get(Calendar.DAY_OF_WEEK); //获取星期
+
+        String weekString;
+        switch (week) {
+            case Calendar.SUNDAY:
+                weekString = getText(R.string.weather_week_7).toString();
+                break;
+            case Calendar.MONDAY:
+                weekString = getText(R.string.weather_week_1).toString();
+                break;
+            case Calendar.TUESDAY:
+                weekString = getText(R.string.weather_week_2).toString();
+                break;
+            case Calendar.WEDNESDAY:
+                weekString = getText(R.string.weather_week_3).toString();
+                break;
+            case Calendar.THURSDAY:
+                weekString = getText(R.string.weather_week_4).toString();
+                break;
+            case Calendar.FRIDAY:
+                weekString = getText(R.string.weather_week_5).toString();
+                break;
+            default:
+                weekString = getText(R.string.weather_week_6).toString();
+                break;
+
+        }
+
+        return weekString;
+    }
+
+    List<Tea> below = new ArrayList<>();
+    List<Tea> above = new ArrayList<>();
+    List<Tea> Humidity = new ArrayList<>();
+    /* 查询天气茶*/
+
+    class  FindWeatherAsynTask extends AsyncTask<Void,Void,String> {
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            String type= "en";
+            if (language==0){
+                type= "ZH_TW";
+            }
+            String code = "";
+            String result =   HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/app/getWeatherTea" );
+            Log.e("back", "--->" + result);
+            if (!ToastUtil.isEmpty(result)) {
+                if (!"4000".equals(result)){
+                    try {
+                        JSONObject jsonObject = new JSONObject(result);
+                        code = jsonObject.getString("state");
+                        JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                        JSONArray jsonArray = jsonObject1.getJSONArray("below");
+                        for (int i =0;i<jsonArray.length();i++){
+                            JSONObject jsonObject2 = jsonArray.getJSONObject(i);
+                            Gson gson = new Gson();
+                            Tea tea = gson.fromJson(jsonObject2.toString(),Tea.class);
+                            below.add(tea);
+                        }
+                        JSONArray jsonArray1 = jsonObject1.getJSONArray("Humidity");
+                        for (int i =0;i<jsonArray1.length();i++){
+                            JSONObject jsonObject2 = jsonArray1.getJSONObject(i);
+                            Gson gson = new Gson();
+                            Tea tea = gson.fromJson(jsonObject2.toString(),Tea.class);
+                            Humidity.add(tea);
+                        }
+                        JSONArray jsonArray2 = jsonObject1.getJSONArray("above");
+                        for (int i =0;i<jsonArray2.length();i++){
+                            JSONObject jsonObject2 = jsonArray2.getJSONObject(i);
+                            Gson gson = new Gson();
+                            Tea tea = gson.fromJson(jsonObject2.toString(),Tea.class);
+                            above.add(tea);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    code="4000";
+                }
+            }
+            return code;
+        }
+
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            switch (s) {
+
+                case "200":
+                    for (int i =0;i<weathers.size();i++){
+                        Tea teas;
+                        if (i==0){
+                            if (Humidity.size()>0&&above.size()>0&&below.size()>0) {
+                                if (Integer.valueOf(weathers.get(0).getHumidity()) > 70) {
+                                    int num2 = (int) (Math.random() * Humidity.size());
+
+                                    teas = Humidity.get(num2);
+                                    tea1 = teas;
+                                } else {
+                                    if (Integer.valueOf(weathers.get(0).getTem()) > 21) {
+                                        int num2 = (int) (Math.random() * above.size());
+
+                                        teas = above.get(num2);
+                                        tea2 = teas;
+                                    } else {
+                                        int num2 = (int) (Math.random() * below.size());
+
+                                        teas = below.get(num2);
+                                        tea3 = teas;
+                                    }
+                                }
+                                recyclerViewAdapter1.refrashTeaData(teas);
+                            }
+                        }
+                        if (i==1){
+                            if (Humidity.size()>0&&above.size()>0&&below.size()>0) {
+                                if (Integer.valueOf(weathers.get(1).getHumidity()) > 70) {
+                                    int num2 = (int) (Math.random() * Humidity.size());
+                                    teas = Humidity.get(num2);
+                                } else {
+                                    if (Integer.valueOf(weathers.get(1).getTem()) > 21) {
+                                        int num2 = (int) (Math.random() * above.size());
+                                        teas = above.get(num2);
+                                    } else {
+                                        int num2 = (int) (Math.random() * below.size());
+                                        teas = below.get(num2);
+                                    }
+                                }
+                                recyclerViewAdapter2.refrashTeaData(teas);
+                            }
+                        }
+
+                        if (i==2){
+                            if (Humidity.size()>0&&above.size()>0&&below.size()>0) {
+                                if (Integer.valueOf(weathers.get(2).getHumidity()) > 70) {
+                                    int num2 = (int) (Math.random() * Humidity.size());
+                                    teas = Humidity.get(num2);
+                                } else {
+                                    if (Integer.valueOf(weathers.get(2).getTem()) > 21) {
+                                        int num2 = (int) (Math.random() * above.size());
+                                        teas = above.get(num2);
+                                    } else {
+                                        int num2 = (int) (Math.random() * below.size());
+                                        teas = below.get(num2);
+                                    }
+                                }
+                                recyclerViewAdapter3.refrashTeaData(teas);
+                            }
+                        }
+
+                    }
+
+                    break;
+                case "4000":
+
+                    ToastUtil.showShort(getActivity(), "连接超时，请重试");
+
+                    break;
+                default:
+
+
+                    break;
+
+            }
+        }
+    }
+
 
 
     String returnMsg1,returnMsg2;

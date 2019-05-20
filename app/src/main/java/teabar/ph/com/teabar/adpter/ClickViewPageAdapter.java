@@ -18,10 +18,12 @@ public class ClickViewPageAdapter extends FragmentPagerAdapter {
     private List<BaseFragment> fragments;
     final int PAGE_COUNT=5;
     private Context context;
-    public ClickViewPageAdapter(FragmentManager fm, List<BaseFragment> fragments, Context context) {
+    int type1;
+    public ClickViewPageAdapter(FragmentManager fm, List<BaseFragment> fragments, Context context,int type1) {
         super(fm);
         this.fragments = fragments;
         this.context=context;
+        this.type1 = type1;
     }
 
     @Override
@@ -38,6 +40,7 @@ public class ClickViewPageAdapter extends FragmentPagerAdapter {
         View view= LayoutInflater.from(context).inflate(R.layout.item_memu,null);
         ImageView iv= (ImageView) view.findViewById(R.id.tab_iv);
         TextView tv= (TextView) view.findViewById(R.id.tab_tv);
+        if ( type1== 0) {
         switch (position){
             case 0:
                 //drawable代码在文章最后贴出
@@ -60,7 +63,28 @@ public class ClickViewPageAdapter extends FragmentPagerAdapter {
                 iv.setImageDrawable(context.getResources().getDrawable(R.drawable.rb_memu_icon5));
                 tv.setText(R.string.menu_wd);
                 break;
+            }
+        }else {
+            switch (position){
+                case 0:
+                    //drawable代码在文章最后贴出
+                    iv.setImageDrawable(context.getResources().getDrawable(R.drawable.rb_memu_icon1));
+                    tv.setText(R.string.menu_tea);
+                    break;
+                case 1:
+                    iv.setImageDrawable(context.getResources().getDrawable(R.drawable.rb_memu_icon2));
+                    tv.setText(R.string.menu_equ);
+                    break;
 
+                case 2:
+                    iv.setImageDrawable(context.getResources().getDrawable(R.drawable.rb_memu_icon4));
+                    tv.setText(R.string.menu_sc);
+                    break;
+                case 3:
+                    iv.setImageDrawable(context.getResources().getDrawable(R.drawable.rb_memu_icon5));
+                    tv.setText(R.string.menu_wd);
+                    break;
+            }
         }
         return view;
     }

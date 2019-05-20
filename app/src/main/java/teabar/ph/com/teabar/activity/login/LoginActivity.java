@@ -77,7 +77,7 @@ import teabar.ph.com.teabar.util.ToastUtil;
 
 
 public class LoginActivity extends BaseActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, View.OnClickListener  {
+    GoogleApiClient.OnConnectionFailedListener, View.OnClickListener  {
     MyApplication application;
     @BindView(R.id.et_login_user)
     EditText et_login_user;
@@ -89,6 +89,10 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
     TextView tv_main_1;
     @BindView(R.id.login_iv_seepassw)
     ImageView login_iv_seepassw;
+    @BindView(R.id.li_login_ty)
+    LinearLayout li_login_ty;
+    @BindView(R.id.iv_login_ty)
+    ImageView iv_login_ty;
     SharedPreferences preferences;
     boolean isHideFirst=true;
     String user;
@@ -103,6 +107,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
     QMUITipDialog tipDialog;
     UserEntryImpl userEntryDao;
     EquipmentImpl equipmentDao;
+    Boolean canLogin= true;
     @Override
     public void initParms(Bundle parms) {
 
@@ -297,7 +302,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
 
 
     }
-    @OnClick({R.id.bt_login_ensure, R.id.sign_in_button ,R.id.login_iv_seepassw ,R.id.tv_login_regist,R.id.tv_login_forget})
+    @OnClick({R.id.bt_login_ensure, R.id.sign_in_button ,R.id.login_iv_seepassw ,R.id.tv_login_regist,R.id.tv_login_forget,R.id.li_login_ty})
     public void onClick(View view){
         switch (view.getId()) {
             case R.id.tv_login_forget:
@@ -305,31 +310,38 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                 break;
 
             case R.id.bt_login_ensure:
-                 user = et_login_user.getText().toString().trim();
-                 password = et_login_pasw.getText().toString().trim();
-                if (TextUtils.isEmpty(user)) {
-                    toast("账号码不能为空");
-                    break;
-                }
-                if (TextUtils.isEmpty(password)) {
-                    ToastUtil.showShort(this, "请输入密码");
-                    break;
-                }
-                boolean isConn = NetWorkUtil.isConnected(MyApplication.getContext());
-                if (isConn){
-                    showProgressDialog();
-                    Map<String, Object> params = new HashMap<>();
-                    if (user.contains("@")){
-                        params.put("email", user);
-                    }else {
-                        params.put("phone", user);
+                if (canLogin) {
+                    user = et_login_user.getText().toString().trim();
+                    password = et_login_pasw.getText().toString().trim();
+                    if (TextUtils.isEmpty(user)) {
+                        toast("账号码不能为空");
+                        break;
                     }
-                    params.put("password", password);
-                    new LoginAsynTask().execute(params);
+                    if (TextUtils.isEmpty(password)) {
+                        ToastUtil.showShort(this, "请输入密码");
+                        break;
+                    }
+                    boolean isConn = NetWorkUtil.isConnected(MyApplication.getContext());
+                    if (isConn) {
+                        showProgressDialog();
+                        Map<String, Object> params = new HashMap<>();
+                        if (user.contains("Lify")) {
+                            params.put("hotelName", user);
+                        } else {
+                            if (user.contains("@")) {
+                                params.put("email", user);
+                            } else {
+                                params.put("phone", user);
+                            }
+                        }
+                        params.put("password", password);
+                        new LoginAsynTask().execute(params);
+                    } else {
+                        ToastUtil.showShort(this, getText(R.string.toast_all_cs).toString());
+                    }
                 }else {
-                    ToastUtil.showShort(this, "无网络可用，请检查网络");
+                    ToastUtil.showShort(this, getText(R.string.toast_login_canlogin).toString());
                 }
-
                 break;
             case R.id.sign_in_button:
                 Log.i("robin","点击了登录按钮");
@@ -359,6 +371,16 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                 startActivity(RegisterActivity.class);
                 break;
 
+            case R.id.li_login_ty:
+                if (canLogin){
+                    iv_login_ty.setImageResource(R.mipmap.log_fasle);
+                    canLogin=false;
+                }else {
+                    iv_login_ty.setImageResource(R.mipmap.login_esure);
+                    canLogin=true;
+                }
+
+                break;
         }
 
     }
@@ -511,6 +533,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                         String token = returnData.getString("token");
                         String photoUrl = returnData.getString("photoUrl");
                         type = returnData.getInt("type");
+                        type1 = returnData.getInt("type1");
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putString("user",user);
                         editor.putString("password",password);
@@ -520,6 +543,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                         editor.putString("photoUrl",photoUrl);
                         editor.putString("photo","");
                         editor.putInt("type",type);
+                        editor.putInt("type1",type1);
                         editor.commit();
                     }
                 } catch (Exception e) {
@@ -564,7 +588,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
         }
     }
     String userId;
-    int type;
+    int type ,type1;
     class ThirdLoginAsynTask extends AsyncTask<Map<String,Object>,Void,String> {
 
         @Override
@@ -596,6 +620,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                             editor.putString("userName",userName);
                             editor.putString("photo","");
                             editor.putInt("type",type);
+
                             editor.commit();
                         }
                     } catch (Exception e) {
@@ -616,8 +641,10 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
 
                 case "200":
 
+                    if (type==0) {
 //                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    LoginJM();
+                        LoginJM();
+                    }
                     Map<String,Object> params = new HashMap<>();
                     params.put("userId",userId);
                     new FindDeviceAsynTask().execute(params);
@@ -667,7 +694,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                     Log.e(TAG, "gotResult: -->"+"JM登录成功" );
 
                 } else {
-                    toast(  "登陆失败" + responseMessage);
+//                    toast(  "登陆失败" + responseMessage);
                 }
             }
         });
@@ -732,23 +759,28 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                         tipDialog.dismiss();
                     }
 //                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    if (type==0){
-                        Intent intent = new Intent(LoginActivity.this, MQService.class);
-                        startService(intent);// 启动服务
-                        startActivity( BaseQuestionActivity.class);
+                    if (type1==0) {
+                        if (type == 0) {
+                            Intent intent = new Intent(LoginActivity.this, MQService.class);
+                            startService(intent);// 启动服务
+                            startActivity(BaseQuestionActivity.class);
+                        } else {
+                            Intent intent = new Intent(LoginActivity.this, MQService.class);
+                            startService(intent);// 启动服务
+                            startActivity(MainActivity.class);
+                        }
                     }else {
                         Intent intent = new Intent(LoginActivity.this, MQService.class);
                         startService(intent);// 启动服务
-                        startActivity( MainActivity.class);
+                        startActivity(MainActivity.class);
                     }
-
-                        toast( returnMsg1);
+//                        toast( returnMsg1);
                     break;
                 case "4000":
                     if (tipDialog!=null&&tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    toast( "连接超时，请重试");
+                    toast( getText(R.string.toast_all_cs).toString());
                     break;
                 default:
                     if (tipDialog!=null&&tipDialog.isShowing()){

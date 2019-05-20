@@ -17,6 +17,7 @@ import com.zhy.http.okhttp.cookie.store.PersistentCookieStore;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -48,6 +49,7 @@ public class MyApplication extends Application {
     public static List<UserInfo> alreadyRead = new ArrayList<>();
     public static List<UserInfo> unRead = new ArrayList<>();
     public static List<Message> ids = new ArrayList<>();
+    public static int IsEnglish;
     public static Context getContext(){
         return mContext;
 
@@ -67,7 +69,8 @@ public class MyApplication extends Application {
         JMessageClient.setDebugMode(true);
         JMessageClient.init(getApplicationContext());
         LocalManageUtil.setApplicationLanguage(this);
-        Log.e("ZZZZZZZZZZZZZZZ", "onCreate: -->"+ LocalManageUtil.getSetLanguageLocale(this) );
+
+        Log.e("ZZZZZZZZZZZZZZZ", "onCreate: -->"+ LocalManageUtil.getSetLanguageLocale(this).toString()  );
 
 //        SMSSDK.initSDK(this,"257a640199764","125aced6309709d59520e466e078ba15");
         //设置Notification的模式
@@ -186,11 +189,13 @@ public class MyApplication extends Application {
     }
     /*0中文1 英文*/
     public int IsEnglish(){
-        if ("en_US".equals(LocalManageUtil.getSetLanguageLocale(this))){
-            return 1;
+        String place = LocalManageUtil.getSetLanguageLocale(this).toString();
+        if ( "en_US".equals(place)){
+            IsEnglish =1;
         }else {
-            return 0;
+            IsEnglish =0;
         }
+        return IsEnglish;
     }
     @Override
     protected void attachBaseContext(Context base) {

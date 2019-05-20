@@ -196,7 +196,7 @@
                     android:layout_marginRight="15dp"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/main_messagecard"
-                    android:paddingBottom="42dp"
+                    android:paddingBottom="27dp"
                     >
                     <TextView
                         android:id="@+id/tv_main_knowt"
@@ -215,7 +215,7 @@
                         android:layout_height="wrap_content"
                         android:lineSpacingMultiplier="1.3"
                         android:textColor="@color/white"
-                        android:layout_marginTop="19dp"
+                        android:layout_marginTop="15dp"
                         android:layout_marginLeft="17dp"
                         android:textSize="14sp"
                         android:layout_marginRight="17dp"

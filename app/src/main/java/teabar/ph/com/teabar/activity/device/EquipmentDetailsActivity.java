@@ -166,7 +166,7 @@ public class EquipmentDetailsActivity extends BaseActivity {
 
             case R.id.li_equ_choose:
                 if (equpment.getIsFirst()){
-                   toast("当前设备以为默认设备");
+                   toast(getText(R.string.toast_equ_mr).toString());
                 }else
                 customDialog2();
                 break;

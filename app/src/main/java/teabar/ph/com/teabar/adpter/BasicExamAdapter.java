@@ -21,7 +21,7 @@ public class BasicExamAdapter extends BaseAdapter{
     private LayoutInflater mInflater;
     private List<String> list;
     private int layout;
-    int select = -1;
+    int select[] = new int[3] ;
     int noselect = -1;
 
     public  BasicExamAdapter(Context context, int layout) {
@@ -60,12 +60,21 @@ public class BasicExamAdapter extends BaseAdapter{
     public examOptions getMdata(int position){
         return list2.get(position);
     }
+    public List<String> getStringList(){
+        List<String> examOptions  = new ArrayList<>();
+        for (int i=0;i<list2.size();i++){
+            if (list2.get(i).isIsselect()){
+                examOptions.add(list2.get(i).getOptionNum());
+            }
+        }
+        return examOptions;
+    }
     @Override
     public long getItemId(int position) {
         // TODO Auto-generated method stub
         return 0;
     }
-    public  void  setSelect(int position){
+    public  void  setSelect(int position[]){
         this.select = position;
         notifyDataSetChanged();
     }
@@ -92,6 +101,7 @@ public class BasicExamAdapter extends BaseAdapter{
 
         final String ee = getItem(position).toString();
         holder.bt_basic_button.setText(ee);
+        Open = list2.get(position).isIsselect();
         final boolean isOpen[] ={Open};
         if (!isOpen[0]){
             holder.bt_basic_button.setBackground(context.getDrawable(R.drawable.answer_button2));
@@ -100,6 +110,7 @@ public class BasicExamAdapter extends BaseAdapter{
         }else {
             holder.bt_basic_button.setBackground(context.getResources().getDrawable(R.drawable.login_face));
             holder.bt_basic_button.setTextColor(context.getResources().getColor(R.color.white));
+            chooseNum = chooseNum+1;
 
         }
         final ViewHolder finalHolder1 = holder;

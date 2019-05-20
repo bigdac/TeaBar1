@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -58,8 +59,16 @@ public class EqupmentWashActivity extends BaseActivity {
         tv_main_1.setLayoutParams(params);
         application.addActivity(this);
         seekbar1 = findViewById(R.id.seekbar1);
-        seekbar1.setValue(18);
-        number = 18;
+        if (equpment!=null){
+            String washtime = equpment.getWashTime();
+            if (!TextUtils.isEmpty(washtime)){
+             number =Integer.valueOf(washtime);
+            seekbar1.setValue(number);
+            } else {
+                seekbar1.setValue(18);
+                number = 18;
+            }
+        }
         seekbar1.setOnRangeChangedListener(new OnRangeChangedListener() {
             @Override
             public void onRangeChanged(RangeSeekBar view, float leftValue, float rightValue, boolean isFromUser) {

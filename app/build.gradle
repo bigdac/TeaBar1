@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'com.android.application'
 greendao {
-    schemaVersion 3
+    schemaVersion 4
     daoPackage 'com.ph.teabar.database.dao'
     targetGenDir 'src/main/java'
 }

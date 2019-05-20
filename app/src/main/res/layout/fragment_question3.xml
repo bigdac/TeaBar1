@@ -114,7 +114,7 @@
         android:id="@+id/bt_question1_esure"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/equ_dia_esure"
+        android:text="@string/question_qued"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/et_question_place"
         android:layout_marginRight="20dp"

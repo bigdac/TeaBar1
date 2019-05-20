@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--<ScrollView-->
+    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:layout_width="match_parent"-->
+
+    <!--android:layout_height="match_parent">-->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/white"
-    android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/tv_main_1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+    >
+
 
     <ImageView
         android:id="@+id/iv_make_pic"
-        android:layout_below="@+id/tv_main_1"
         android:layout_width="match_parent"
         android:layout_height="185dp"
         android:scaleType="centerCrop"
@@ -21,6 +23,7 @@
         android:layout_below="@+id/tv_main_1"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginTop="20dp"
         android:scaleType="centerInside"
         android:src="@mipmap/make_fh"
         />
@@ -44,7 +47,7 @@
         android:text="排毒系列"
         android:layout_below="@+id/tv_make_name"
         android:textSize="13sp"
-        android:textColor="@color/social_gray"
+        android:textColor="#777777"
         android:layout_marginLeft="15dp"
         />
     <ImageView
@@ -67,49 +70,29 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="24dp"
         />
-    <TextView
-        android:id="@+id/tv_make_kw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="12344"
-        android:textColor="@color/social_gray"
-        android:textSize="14sp"
-        android:layout_below="@+id/tv_make_style"
-        android:layout_marginRight="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="16dp"
-        android:visibility="gone"
-        />
+
     <TextView
         android:id="@+id/tv_make_mes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="一种起源于古代东方的茶，具有丰富的风味和社会效益。由于生姜的有效成分，这种草药茶是对正常消化功能的理想支持，并改善正常的生理活动。"
-        android:textColor="@color/social_gray"
+        android:textColor="#777777"
         android:textSize="14sp"
-        android:layout_below="@+id/tv_make_kw"
+        android:layout_below="@+id/tv_make_style"
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="26dp"
         />
+
     <TextView
-        android:id="@+id/tv_make_pl"
+        android:id="@+id/tv_make_plmes"
+        android:text="姜、柠檬草、鼠尾草"
         android:layout_below="@+id/tv_make_mes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="12dp"
-        android:text="@string/equ_xq_pl"
-        />
-    <TextView
-        android:id="@+id/tv_make_plmes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="姜、柠檬草、鼠尾草"
-        android:layout_alignTop="@+id/tv_make_pl"
-        android:layout_toRightOf="@+id/tv_make_pl"
-        android:layout_marginLeft="5dp"
-        android:textColor="@color/social_gray"
+        android:textColor="#777777"
         />
     <TextView
         android:id="@+id/tv_make_method"
@@ -210,5 +193,7 @@
         android:layout_marginTop="11dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+
         />
 </RelativeLayout>
+<!--</ScrollView>-->

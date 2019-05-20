@@ -17,27 +17,21 @@
         android:id="@+id/tv_question1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="太棒了！他是这样工作的，你告诉我越多，我越聪明"
+        android:text="@string/question_base3"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
         android:textColor="@color/login_black"
+        android:lineSpacingExtra="5dp"
         />
-    <TextView
-        android:id="@+id/tv_question2"
-        android:layout_below="@+id/tv_question1"
-        android:layout_marginTop="13dp"
-        android:layout_marginLeft="18dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="能更好的帮助你。首先让我们从基础开始"
-        />
+
     <Button
         android:id="@+id/bt_question1_esure"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="好的"
+        android:text="@string/question_qued"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/tv_question2"
+        android:layout_below="@+id/tv_question1"
         android:layout_marginRight="20dp"
         android:background="@drawable/brew_button"
         android:textColor="@color/nomal_green"

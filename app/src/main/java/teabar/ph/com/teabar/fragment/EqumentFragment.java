@@ -181,8 +181,8 @@ protected static final int RESULT_SPEECH = 1;
             for (Equpment equpment:equpments){
                 try {
                     Thread.sleep(500);
-                    if (!ToastUtil.isEmpty(equpment.getMacAdress()))
-                        MQservice.sendFindEqu(equpment.getMacAdress());
+//                    if (!ToastUtil.isEmpty(equpment.getMacAdress()))
+//                        MQservice.sendFindEqu(equpment.getMacAdress());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -285,8 +285,8 @@ protected static final int RESULT_SPEECH = 1;
         }
         }else {
             li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
-            FirEqupment =null;
-
+            List<Equpment> equpments  = equipmentDao.findAll();
+            equpmentAdapter.setEqumentData1(equpments);
         }
 
     }
@@ -382,11 +382,12 @@ protected static final int RESULT_SPEECH = 1;
                 equpments = equipmentDao.findAll();
                 equpmentAdapter.setEqumentData1(equpments);
             }
-            if (msg1.getMacAdress().equals(FirEqupment.getMacAdress())){
-                FirEqupment = msg1;
+            if (FirEqupment!=null&&msg1!=null) {
+                if (msg1.getMacAdress().equals(FirEqupment.getMacAdress())) {
+                    FirEqupment = msg1;
+                }
+                RefrashAllEqu(msg, msg1);
             }
-            RefrashAllEqu(msg,msg1);
-
 
         }
     }
@@ -400,8 +401,8 @@ protected static final int RESULT_SPEECH = 1;
         super.onActivityResult(requestCode, resultCode, data);
         if (     requestCode== RESULT_SPEECH&& data != null){
             ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            ToastUtil.showShort(getActivity(),result.get(0));
-            Log.e(TAG, "onActivityResult: zzz-->"+result.get(0) );
+//            ToastUtil.showShort(getActivity(),result.get(0));
+//            Log.e(TAG, "onActivityResult: zzz-->"+result.get(0) );
         }
         if (resultCode==2000){
             RefrashChooseEqu();

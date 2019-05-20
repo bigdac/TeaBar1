@@ -7,7 +7,7 @@
     <string name="dialog_negative">取消</string>
     <string name="facebook_app_id">630899240681105</string>
 
-    <string name="login_tv_login">Login</string>
+    <string name="login_tv_login">Log in</string>
     <string name="login_tv_regist">Sign Up</string>
     <string name="login_tv_welcom">Hello! Welcome to LIFY</string>
     <string name="login_et_user">Phone Number or Email Address</string>
@@ -26,14 +26,14 @@
     <string name="login_bt_regist">Register</string>
 
     <!--menu-->
-    <string name="menu_tea">Brew</string>
+    <string name="menu_tea">Home</string>
     <string name="menu_equ">Device</string>
-    <string name="menu_sq">Community</string>
+    <string name="menu_sq">Social</string>
     <string name="menu_sc">Shop</string>
     <string name="menu_wd">Profile</string>
 
     <!--encourage-->
-    <string name="encourage_bt_in">IN</string>
+    <string name="encourage_bt_in">OK</string>
 
     <!--equipment-->
     <string name="equ_xq_title">Device Details</string>
@@ -48,7 +48,8 @@
     <string name="equ_dia_esure">Confirm</string>
     <string name="equ_xq_deltitle">Erase Device</string>
     <string name="equ_xq_tistitle">Confirm to Erase Device?</string>
-
+    <string name="equ_xq_delmethod">Delete methods</string>
+    <string name="equ_xq_methodtitle">Whether to delete the method</string>
     <string name="equ_xq_online">Online</string>
     <string name="equ_xq_outline">Outline</string>
     <string name="equ_xq_dg">Dormant</string>
@@ -62,7 +63,7 @@
 
     <string name="equ_xq_star">Star Brew</string>
     <string name="equ_xq_buy">Shop Now</string>
-    <string name="equ_xq_method">Brewing Method</string>
+    <string name="equ_xq_method">Brewing Formula</string>
     <string name="equ_xq_yc">Benefits</string>
     <string name="equ_xq_pl">Ingredients:</string>
     <string name="equ_xq_kw">Flavour</string>
@@ -70,6 +71,8 @@
     <string name="equ_add_wifi">Enter WiFi Name</string>
     <string name="equ_add_wifipass">Enter WiFi Password</string>
     <string name="equ_add_add">Pair Now</string>
+    <string name="equ_add_wifi1">Wi-Fi Pairing</string>
+    <string name="toast_equ_mr">The current device is the default device</string>
     <!--inform-->
     <string name="equ_xq_informs">Notification Setting</string>
     <string name="equ_xq_finish">Pre-heating in Process</string>
@@ -90,7 +93,7 @@
     <!--light-->
     <string name="equ_light_light">Lighting Colour</string>
     <string name="equ_light_mode">Mode</string>
-    <string name="equ_light_cz">Reset</string>
+    <string name="equ_light_cz">Reset to Default</string>
     <string name="equ_light_lightset">Light color Settings</string>
 
     <!--mode-->
@@ -133,12 +136,13 @@
     <string name="my_power_s4">Emotional Health</string>
     <string name="my_power_day">Day</string>
     <string name="my_power_week">Week</string>
+    <string name="my_power_weeks">Weeks</string>
     <string name="my_power_month">Month</string>
     <string name="my_power_dw">Unit</string>
     <!--homepage-->
-    <string name="main_home_page">Home Page</string>
+    <string name="main_home_page">Home</string>
     <string name="main_home_hello">Hello</string>
-    <string name="my_power_know">Health Tips of the Day</string>
+    <string name="my_power_know">Wellness Tips of the Day</string>
     <string name="main_home_title">Please fill in the questionnaire in order to recommend a suitable individual tea drinking plan for you.</string>
     <string name="my_power_tea1">Herbal series</string>
     <string name="my_power_tea2">Fruit series</string>
@@ -235,8 +239,14 @@
     <string name="search_history">My Lify Score Recrods</string>
 
     <!--question-->
-    <string name="question_button">Next</string>
-
+    <string name="question_button">Next Step</string>
+    <string name="question_title">Lify Score Test</string>
+    <string name="question_base1"> Meet Lify!</string>
+    <string name="question_base2"> We\'re here to help you create a habit of wellness drinking.</string>
+    <string name="question_base3">Awesome! Here is how it works. I get smarter the more you tell me. So first, let’s start with some basics.</string>
+    <string name="question_base4">Are you pregnant</string>
+    <string name="question_base5">What’s your weight and height?</string>
+    <string name="question_qued">OK</string>
 
     <!--talk-->
     <string name="somebody_at_me">[Somebody@Me]</string>
@@ -251,6 +261,8 @@
     <string name="tea_kouwei_tjti1">Based on your basic health data, we recommend the following drinks:</string>
     <string name="tea_kouwei_xa">Add to My Favourite</string>
     <string name="tea_kouwei_tg">Skip</string>
+    <string name="tea_kouwei_yc">Benefits: </string>
+    <string name="tea_kouwei_kw">Flavour: </string>
     <!--adress-->
     <string name="adress_xz">Select Address</string>
     <string name="adress_hot">Hot countries/Regions</string>
@@ -258,10 +270,12 @@
     <string name="adress_hot_1">Chinese</string>
     <string name="adress_hot_2">the United States</string>
     <string name="adress_hot_4">Hong Kong,China</string>
-    <string name="adress_hot_7">Macau,China,</string>
+    <string name="adress_hot_41">Hong Kong</string>
+    <string name="adress_hot_7">Macau,China</string>
+    <string name="adress_hot_71">Macau</string>
     <string name="adress_hot_8">UK</string>
-    <string name="adress_hot_10">Taiwan,China </string>
-
+    <string name="adress_hot_10">Taiwan,China</string>
+    <string name="adress_hot_101">Taiwan</string>
     <!--dialog-->
     <string name="dialog_love_title">Add favorite</string>
     <string name="dialog_love_deltitle">Delete favorite</string>
@@ -272,6 +286,12 @@
     <string name="dialog_add_qx2">Set</string>
     <string name="dialog_add_qx3">Cancel</string>
     <string name="dialog_add_qx4">Confirm</string>
+    <string name="dialog_add_qx5">Done</string>
+    <string name="toast_forget_code">Please enter the verification code</string>
+    <string name="toast_forget_pass">Please enter your password</string>
+    <string name="toast_forget_phone">Please enter your mobile phone number or email address</string>
+    <string name="toast_forget_passl">The number of digits in the password should be greater than 6 and less than 16</string>
+    <string name="toast_forget_passsame">The two passwords are different</string>
     <!--toast-->
 
     <string name="toast_make_make">Please wait until the preheating is completed before making</string>
@@ -281,7 +301,15 @@
     <string name="toast_equ_error">Please check the Device</string>
     <string name="toast_equ_wash">Successfully set</string>
     <string name="toast_all_cs">Please open suspension window permission connection timeout, please try again</string>
-
+    <string name="toast_base_nv">Male can\'t choose</string>
+    <string name="toast_update_cg">Upload successful</string>
+    <string name="toast_update_zx">It\'s the latest version</string>
+    <string name="toast_update_base">Basic information not filled in</string>
+    <string name="toast_social_null">The contents cannot all be empty</string>
+    <string name="toast_wifi_addfial">The parameter is wrong, please modify it and try again</string>
+    <string name="toast_wifi_5G">5G WiFi is not supported</string>
+    <string name="toast_mess_null">Comments should not be empty</string>
+    <string name="toast_login_canlogin">Please allow protocol before login</string>
     <!--alarm-->
     <string name="alarm_equ_wrong">Failure warning</string>
     <string name="alarm_equ_water">No flow signal</string>
@@ -299,4 +327,14 @@
     <!--search-->
     <string name="search_mess">Type In Keywords</string>
     <string name="search_qsh">Please later。。。</string>
+    <string name="question_score_title">Recommended tea record</string>
+    <!--week-->
+    <string name="weather_week_1">Monday</string>
+    <string name="weather_week_2">Tuesday</string>
+    <string name="weather_week_3">Wednesday</string>
+    <string name="weather_week_4">Thursday</string>
+    <string name="weather_week_5">Friday</string>
+    <string name="weather_week_6">Saturday</string>
+    <string name="weather_week_7">Sunday</string>
+    <string name="weather_foryou">Today\'s pick</string>
 </resources>

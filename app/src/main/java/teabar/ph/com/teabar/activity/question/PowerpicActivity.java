@@ -71,7 +71,7 @@ public class  PowerpicActivity extends BaseActivity {
         dataSeriesA.add(nutritionGrades);
         dataSeriesA.add(mindGradesc);
         rcv_power.setData(dataSeriesA);
-        tv_power_score.setText(allGreade+"分");
+        tv_power_score.setText((int) allGreade+"分");
     }
 
     @Override

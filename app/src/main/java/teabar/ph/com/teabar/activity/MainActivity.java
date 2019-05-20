@@ -62,8 +62,10 @@ import teabar.ph.com.teabar.base.BaseFragment;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.fragment.EqumentFragment;
 import teabar.ph.com.teabar.fragment.FriendCircleFragment1;
+import teabar.ph.com.teabar.fragment.FriendCircleFragment2;
 import teabar.ph.com.teabar.fragment.FriendFragment;
 import teabar.ph.com.teabar.fragment.MailFragment;
+import teabar.ph.com.teabar.fragment.MailFragment1;
 import teabar.ph.com.teabar.fragment.MainFragment2;
 import teabar.ph.com.teabar.fragment.MyselfFragment;
 import teabar.ph.com.teabar.fragment.SocialFragment;
@@ -75,7 +77,7 @@ import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.view.ChangeDialog;
 import teabar.ph.com.teabar.view.NoSrcollViewPage;
 
-public class MainActivity extends BaseActivity implements FriendCircleFragment1.hidenShowView ,EqumentFragment.EquipmentCtrl,MainFragment2.FirstEquipmentCtrl {
+public class MainActivity extends BaseActivity implements FriendCircleFragment2.hidenShowView ,EqumentFragment.EquipmentCtrl,MainFragment2.FirstEquipmentCtrl {
     @BindView(R.id.main_viewPage)
     NoSrcollViewPage main_viewPage;
     @BindView(R.id.main_tabLayout)
@@ -86,7 +88,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
     MainFragment2 mainFragment ;
     EqumentFragment equmentFragment ;
     SocialFragment socialFragment ;
-    MailFragment mailFragment ;
+    MailFragment1 mailFragment ;
     MyselfFragment myselfFragment ;
     private boolean MQBound;
     public static float scale = 0 ;
@@ -98,6 +100,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
     UserEntryImpl userEntryDao;
     SharedPreferences preferences;
     String userId;
+    int type1;
     @Override
     public void initParms(Bundle parms) {
 
@@ -129,10 +132,11 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
         application.addActivity(this);
         preferences = getSharedPreferences("my", MODE_PRIVATE);
         userId = preferences.getString("userId","") ;
+        type1 = preferences.getInt("type1",0);
         mainFragment=new MainFragment2();
         equmentFragment=new EqumentFragment();
         socialFragment=new SocialFragment();
-        mailFragment = new MailFragment();
+        mailFragment = new MailFragment1();
         myselfFragment = new MyselfFragment();
         equipmentDao = new EquipmentImpl( getApplicationContext());
         equpments= equipmentDao.findAll();
@@ -202,7 +206,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
         dialog = new ChangeDialog(this);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setMode(1);
-        dialog.setTitle(R.string.alarm_qxsq);
+        dialog.setTitle(getText(R.string.alarm_qxsq).toString());
         dialog.setTips(getText(R.string.alarm_dkxfc).toString());
 
         backgroundAlpha(0.4f);
@@ -262,7 +266,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
                  mainFragment.RefrashFirstEqu1();
              }
             if (EqumentFragment.isRunning){
-                equmentFragment.RefrashFirstEqu(msg1);
+                equmentFragment.RefrashFirstEqu(FirstEqument);
             }
 
         }
@@ -320,17 +324,29 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
 
     }
     private void initView() {
-        mainMemu.add("茶饮");
-        mainMemu.add("设备");
-        mainMemu.add("社区");
-        mainMemu.add("商城");
-        mainMemu.add("我的");
-        fragmentList.add(mainFragment);
-        fragmentList.add(equmentFragment);
-        fragmentList.add(socialFragment);
-        fragmentList.add(mailFragment);
-        fragmentList.add(myselfFragment);
-        ClickViewPageAdapter tabAdapter = new ClickViewPageAdapter(getSupportFragmentManager(), fragmentList, this);
+
+        if (type1==0) {
+            mainMemu.add("茶饮");
+            mainMemu.add("设备");
+            mainMemu.add("社区");
+            mainMemu.add("商城");
+            mainMemu.add("我的");
+            fragmentList.add(mainFragment);
+            fragmentList.add(equmentFragment);
+            fragmentList.add(socialFragment);
+            fragmentList.add(mailFragment);
+            fragmentList.add(myselfFragment);
+        }else {
+            mainMemu.add("茶饮");
+            mainMemu.add("设备");
+            mainMemu.add("商城");
+            mainMemu.add("我的");
+            fragmentList.add(mainFragment);
+            fragmentList.add(equmentFragment);
+            fragmentList.add(mailFragment);
+            fragmentList.add(myselfFragment);
+        }
+        ClickViewPageAdapter tabAdapter = new ClickViewPageAdapter(getSupportFragmentManager(), fragmentList, this,type1);
         main_viewPage.setAdapter(tabAdapter);
         main_tabLayout.setupWithViewPager(main_viewPage);
         for (int i = 0; i < mainMemu.size(); i++) {
@@ -349,43 +365,82 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 ((ImageView) tab.getCustomView().findViewById(R.id.tab_iv)).setSelected(true);
+                if (type1==0){
                 switch (tab.getPosition()) {
                     case 0:
                         ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.nomal_green));
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                             getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
                         }
                         break;
                     case 1:
                         ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.nomal_green));
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                             getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
                         }
                         break;
                     case 2:
                         ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.nomal_green));
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                             getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
                         }
                         break;
                     case 3:
                         ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.nomal_green));
                       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-                          getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//                          getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                              getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
-        }
+                           }
                         break;
                     case 4:
                         ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.nomal_green));
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-                            getWindow().addFlags(
-                                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                            getWindow().setStatusBarColor(getResources().getColor(R.color.main_tit1));
+
+//                            getWindow().addFlags(
+//                                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                         }
 
                         break;
+                }
+                }else {
+                    switch (tab.getPosition()) {
+                        case 0:
+                            ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.nomal_green));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+//                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                                getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
+                            }
+                            break;
+                        case 1:
+                            ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.nomal_green));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+//                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                                getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
+                            }
+                            break;
+
+                        case 2:
+                            ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.nomal_green));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+//                          getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                                getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
+                            }
+                            break;
+                        case 3:
+                            ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.nomal_green));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                                getWindow().setStatusBarColor(getResources().getColor(R.color.main_tit1));
+
+//                            getWindow().addFlags(
+//                                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                            }
+
+                            break;
+                    }
                 }
             }
 
@@ -393,22 +448,41 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
             public void onTabUnselected(TabLayout.Tab tab) {
                 //没有选择时候调用
                 ((ImageView) tab.getCustomView().findViewById(R.id.tab_iv)).setSelected(false);
-                switch (tab.getPosition()) {
-                    case 0:
-                        ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.social_gray));
-                        break;
-                    case 1:
-                        ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.social_gray));
-                        break;
-                    case 2:
-                        ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.social_gray));
-                        break;
-                    case 3:
-                        ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.social_gray));
-                        break;
-                    case 4:
-                        ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.social_gray));
-                        break;
+                if (type1==0) {
+                    switch (tab.getPosition()) {
+                        case 0:
+                            ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.social_gray));
+                            break;
+                        case 1:
+                            ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.social_gray));
+                            break;
+                        case 2:
+                            ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.social_gray));
+                            break;
+                        case 3:
+                            ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.social_gray));
+                            break;
+                        case 4:
+                            ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.social_gray));
+                            break;
+                    }
+                }else {
+
+                        switch (tab.getPosition()) {
+                            case 0:
+                                ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.social_gray));
+                                break;
+                            case 1:
+                                ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.social_gray));
+                                break;
+                            case 2:
+                                ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.social_gray));
+                                break;
+                            case 3:
+                                ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.social_gray));
+                                break;
+                         }
+
                 }
             }
 
@@ -428,6 +502,10 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
             main_tabLayout.setVisibility(View.VISIBLE);
         }
 
+    }
+
+    public int getLanguage(){
+        return application.IsEnglish();
     }
     /**
      * 收到消息
@@ -488,9 +566,9 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment1.
         if (resultCode==1000) {
             socialFragment.Refrashfriend();
         }
-//        if (resultCode==2000){
-//                equmentFragment.RefrashChooseEqu();
-//        }
+        if (resultCode==2000){
+                mainFragment.RefrashFirstEqu1();
+        }
 
     }
 

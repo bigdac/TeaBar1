@@ -13,25 +13,19 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.jmessage.support.google.gson.Gson;
 import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.ScoreActivity;
 import teabar.ph.com.teabar.adpter.AnswerAdpter;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
@@ -64,7 +58,7 @@ public class QusetionActivity extends BaseActivity {
     public void initParms(Bundle parms) {
 
     }
-
+    int langauge;
     @Override
     public int bindLayout() {
         setSteepStatusBar(true);
@@ -83,7 +77,8 @@ public class QusetionActivity extends BaseActivity {
         application.addActivity(this);
         preferences = getSharedPreferences("my",MODE_PRIVATE);
         userId = preferences.getString("userId","");
-        answerAdpter = new AnswerAdpter(this,optionsList);
+          langauge =application.IsEnglish();
+        answerAdpter = new AnswerAdpter(this,optionsList,langauge);
         rv_question_da.setLayoutManager(new LinearLayoutManager(this));
         rv_question_da.setAdapter(answerAdpter);
         jsonArray = new com.alibaba.fastjson.JSONArray();
@@ -126,6 +121,7 @@ public class QusetionActivity extends BaseActivity {
         @Override
         protected String doInBackground(Void... voids) {
             String code = "";
+//            String result =   HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/webExam/getExam?type="+langauge+"&currentPage=1&pageSize=100" );
             String result =   HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/exam/getExam" );
             Log.e("back", "--->" + result);
             if (!ToastUtil.isEmpty(result)) {
@@ -148,7 +144,10 @@ public class QusetionActivity extends BaseActivity {
                                     examOptions.add(examOptions1);
                                 }
                                 question.setExamOptions(examOptions);
-                                list.add(question);
+                                if (question.getExamLanguage()==langauge){
+                                    list.add(question);
+                                }
+
                             }
 
 
@@ -169,7 +168,7 @@ public class QusetionActivity extends BaseActivity {
             switch (s) {
 
                 case "200":
-                  Question question =  list.get(0);
+                    Question question =  list.get(0);
                     tv_question_title1.setText(question.getType1());
                     tv_question_title.setText(question.getExamNum()+"、"+question.getExamTitle());
                     List<examOptions> examOptions  = question.getExamOptions();

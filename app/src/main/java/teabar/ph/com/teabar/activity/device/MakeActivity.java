@@ -10,6 +10,7 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -28,9 +29,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.ShareHashtag;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.google.gson.Gson;
 import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
@@ -48,6 +57,7 @@ import me.jessyan.autosize.AutoSizeCompat;
 import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.MethodActivity;
+import teabar.ph.com.teabar.activity.ShareActivity;
 import teabar.ph.com.teabar.adpter.MethodAdapter;
 import teabar.ph.com.teabar.adpter.PlanAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
@@ -63,8 +73,7 @@ import teabar.ph.com.teabar.view.DoubleWaveView;
 import teabar.ph.com.teabar.view.WaveProgress;
 
 public class MakeActivity extends BaseActivity {
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     @BindView(R.id.tv_make_name)
     TextView tv_make_name;
     @BindView(R.id.tv_make_style)
@@ -79,8 +88,7 @@ public class MakeActivity extends BaseActivity {
     TextView tv_make_sl;
     @BindView(R.id.tv_make_time)
     TextView tv_make_time;
-    @BindView(R.id.tv_make_kw)
-    TextView tv_make_kw;
+
     @BindView(R.id.iv_make_pic)
     ImageView iv_make_pic;
     @BindView(R.id.bt_make_make)
@@ -104,6 +112,8 @@ public class MakeActivity extends BaseActivity {
     String id ;
     long FirstId;
     MessageReceiver receiver;
+    CallbackManager callbackManager;
+    ShareDialog shareDialog;
     @Override
     public void initParms(Bundle parms) {
 
@@ -130,9 +140,7 @@ public class MakeActivity extends BaseActivity {
             application = (MyApplication) getApplication();
         }
         application.addActivity(this);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
+
         preferences = getSharedPreferences("my",MODE_PRIVATE);
         userId = preferences.getString("userId","");
         equipmentDao = new EquipmentImpl(getApplicationContext());
@@ -167,13 +175,34 @@ public class MakeActivity extends BaseActivity {
         //绑定services
         MQintent = new Intent(this, MQService.class);
         MQBound =  bindService(MQintent, MQconnection, Context.BIND_AUTO_CREATE);
+        shareDialog = new ShareDialog(this);
+        // this part is optional
+        shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+
+
+            @Override
+            public void onSuccess(Sharer.Result result) {
+                ToastUtil.show(MakeActivity.this,"分享成功",Toast.LENGTH_SHORT) ;
+            }
+
+            @Override
+            public void onCancel() {
+                toast("取消分享");
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                toast("分享失败");
+            }
+        });
+
     }
     //显示dialog
     public void showProgressDialog() {
 
         tipDialog = new QMUITipDialog.Builder(this)
                 .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
-                .setTipWord("请稍后...")
+                .setTipWord(getText(R.string.search_qsh).toString())
                 .create();
         tipDialog.show();
     }
@@ -250,7 +279,7 @@ public class MakeActivity extends BaseActivity {
     TextView tv_make_title;
     TextView tv_number;
     LinearLayout li_make_finish;
-     Button bt_view_stop;
+     Button bt_view_stop,bt_view_sc,bt_view_fx;
     private void customDialog( ) {
         IsMakeing =0;
         dialog1  = new Dialog(this, R.style.MyDialog);
@@ -260,6 +289,8 @@ public class MakeActivity extends BaseActivity {
         final TextView tv_units = view.findViewById(R.id.tv_units);
         tv_make_title = view.findViewById(R.id.tv_make_title);
          li_make_finish = view.findViewById(R.id.li_make_finish);
+        bt_view_sc = view.findViewById(R.id.bt_view_sc);
+        bt_view_fx = view.findViewById(R.id.bt_view_fx);
         tv_make_title.setText(R.string.equ_xq_jpz);
         waterView = (WaveProgress) view.findViewById(R.id.waterView);
         waterView.setWaveColor(Color.parseColor("#37dbc2"), Color.parseColor("#81fbe6"));
@@ -317,6 +348,29 @@ public class MakeActivity extends BaseActivity {
                 }
             }
         });
+        bt_view_fx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ShareDialog.canShow(ShareLinkContent.class)) {
+                    ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                            .setContentUrl(Uri.parse("http://developers.facebook.com/android"))
+                            .setShareHashtag(new ShareHashtag.Builder().setHashtag("#ConnectTheWorld").build())
+                            .setQuote("Connect on a global scale.")
+                            .build();
+                    shareDialog.show(linkContent);
+                }
+            }
+        });
+        bt_view_sc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                which = true;
+                Map<String,Object> params = new HashMap<>();
+                params.put("userId",userId );
+                params.put("teaId",id );
+                new CollectTeaAsyncTask().execute(params);
+            }
+        });
         dialog1.show();
 
     }
@@ -346,7 +400,7 @@ public class MakeActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.iv_equ_fh,R.id.iv_make_choose,R.id.bt_make_make,R.id.iv_make_love})
+    @OnClick({R.id.iv_equ_fh,R.id.iv_make_choose,R.id.bt_make_make,R.id.iv_make_love ,R.id.iv_make_share})
     public void onClick(View view){
         switch (view.getId()){
             case R.id.iv_equ_fh:
@@ -383,6 +437,18 @@ public class MakeActivity extends BaseActivity {
                         customDialog1(true);
                         tea.setIsCollection(1);
                     }
+                }
+
+                break;
+
+            case R.id.iv_make_share:
+                if (ShareDialog.canShow(ShareLinkContent.class)) {
+                    ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                            .setContentUrl(Uri.parse("http://developers.facebook.com/android"))
+                            .setShareHashtag(new ShareHashtag.Builder().setHashtag("#ConnectTheWorld").build())
+                            .setQuote("Connect on a global scale.")
+                            .build();
+                    shareDialog.show(linkContent);
                 }
 
                 break;
@@ -462,7 +528,7 @@ public class MakeActivity extends BaseActivity {
      *  添加喜愛
      *
      */
-    String returnMsg1;
+    String returnMsg1,returnMsg2;
     class CollectTeaAsyncTask extends AsyncTask<Map<String,Object>,Void,String> {
 
         @Override
@@ -482,7 +548,8 @@ public class MakeActivity extends BaseActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(result);
                         code = jsonObject.getString("state");
-                        returnMsg1=jsonObject.getString("message1");
+                        returnMsg1=jsonObject.getString("message2");
+                        returnMsg2 = jsonObject.getString("message3");
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -504,10 +571,9 @@ public class MakeActivity extends BaseActivity {
                     break;
 
                 case "4000":
-                    toast(  "连接超时，请重试");
+                    toast(  getText(R.string.toast_all_cs).toString());
                     break;
                 default:
-                    toast(  returnMsg1);
 
                     break;
 
@@ -540,7 +606,7 @@ public class MakeActivity extends BaseActivity {
                             Gson gson = new Gson();
                             tea = gson.fromJson(jsonObject1.toString(),Tea.class);
                         }
-
+                        returnMsg2 = jsonObject.getString("message2");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -557,20 +623,22 @@ public class MakeActivity extends BaseActivity {
 
             switch (s) {
                 case "200":
-                    tipDialog.dismiss();
-                    String syno = tea.getSynopsisEn() ;
-                    if (TextUtils.isEmpty(syno))
-                        syno="";
-                    String str1 = "<font color='#101010'>Advantage:  </font>"+syno;
-                    String str2 = "<font color='#101010'>Series:  </font>"+tea.getTasteEn();
-                    if (!TextUtils.isEmpty(tea.getTasteEn())){
-                        tv_make_kw.setVisibility(View.VISIBLE);
-                        tv_make_kw.setText(Html.fromHtml(str2));
+                    if (tipDialog!=null&&tipDialog.isShowing()) {
+                        tipDialog.dismiss();
                     }
+                    String syno = tea.getSynopsisEn() ;
+                    String str1 = "<font color='#101010'>"+getText(R.string.tea_kouwei_yc).toString()+" "+"</font>"+syno;
+                    String str2 = "<font color='#101010'>"+getText(R.string.tea_kouwei_kw)+" "+"</font>"+tea.getTasteEn();
+                    String str3 = "<font color='#101010'>"+getText(R.string.equ_xq_pl)+" "+"</font>"+tea.getIngredientEn();
+                    if (TextUtils.isEmpty(syno)){
+                        tv_make_mes.setText(Html.fromHtml(str2));
+                    }else {
+                        tv_make_mes.setText(Html.fromHtml(str1));
+                    }
+
                     tv_make_name.setText(tea.getTeaNameEn());
                     tv_make_style.setText(tea.getTypeEn());
-                    tv_make_plmes.setText(tea.getIngredientEn());
-                    tv_make_mes.setText(Html.fromHtml(str1));
+                    tv_make_plmes.setText (Html.fromHtml(str3));
                     tv_make_temp.setText(tea.getTemperature()+"℃");
                     tv_make_sl.setText(tea.getWaterYield()+"ml");
                     tv_make_time.setText(tea.getSeconds()+"");
@@ -582,10 +650,17 @@ public class MakeActivity extends BaseActivity {
                     break;
 
                 case "4000":
-                   toast(  "连接超时，请重试");
+                   toast(  getText(R.string.toast_all_cs).toString());
                     break;
                 default:
-                    toast(returnMsg1);
+                    if (tipDialog!=null&&tipDialog.isShowing()) {
+                        tipDialog.dismiss();
+                    }
+                    if (application.IsEnglish()==0){
+                        toast(  returnMsg1);
+                    }else {
+                        toast(  returnMsg2);
+                    }
 
                     break;
 

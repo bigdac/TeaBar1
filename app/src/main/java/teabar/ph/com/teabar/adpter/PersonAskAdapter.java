@@ -27,7 +27,7 @@ public class PersonAskAdapter extends RecyclerView.Adapter<PersonAskAdapter.Myvi
     public PersonAskAdapter(Context context , List<String> list ) {
         this.context = context;
         this.mData = list;
-        initData();
+
     }
     TextView textView;
     int i = 0 ;
@@ -144,17 +144,7 @@ public class PersonAskAdapter extends RecyclerView.Adapter<PersonAskAdapter.Myvi
     //    数据
     ArrayList<String> datas = new ArrayList<>();
 
-    //    初始化数据
-    private void initData() {
-        datas.add("作 家");
-        datas.add("段 子 手");
-        datas.add("软 文 作 者");
-        datas.add("摄 影 爱 好 者");
-        datas.add("画 家");
-        datas.add("哦 我还很喜欢音乐");
-        datas.add("还 有 其 他 七 七 八 八 的 我 就 不 说 了");
-        datas.add("老 师");
-    }
+
 
 
 }

@@ -53,31 +53,31 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.MyVi
         myViewHolder.tv_mail_name .setText(mData.get(position).getProductNameEn());
         Glide.with(mContext).load(headImg).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.color.white).into(myViewHolder.iv_mail_pic);
 
-        if (mData.get(position).isLove()){
-            Open = true;
-        }else {
-            Open =false;
-        }
-        final boolean isOpen[] ={Open};
-        if (!isOpen[0]){
-            myViewHolder.iv_mail_xa.setImageResource(R.mipmap.social_no);
-        }else {
-            myViewHolder.iv_mail_xa.setImageResource(R.mipmap.social_yes);
-
-        }
-        myViewHolder.iv_mail_xa.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                if (isOpen[0]){
-                    customDialog1(position,false);
-
-                }else {
-                    customDialog1(position,true);
-
-                }
-
-            }
-        });
+//        if (mData.get(position).isLove()){
+//            Open = true;
+//        }else {
+//            Open =false;
+//        }
+//        final boolean isOpen[] ={Open};
+//        if (!isOpen[0]){
+//            myViewHolder.iv_mail_xa.setImageResource(R.mipmap.social_no);
+//        }else {
+//            myViewHolder.iv_mail_xa.setImageResource(R.mipmap.social_yes);
+//
+//        }
+//        myViewHolder.iv_mail_xa.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View view) {
+//                if (isOpen[0]){
+//                    customDialog1(position,false);
+//
+//                }else {
+//                    customDialog1(position,true);
+//
+//                }
+//
+//            }
+//        });
     }
 
     /**
@@ -221,6 +221,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.MyVi
             iv_mail_pic = itemView.findViewById(R.id.iv_mail_pic);
             tv_mail_name = itemView.findViewById(R.id.tv_mail_name);
             iv_mail_xa = itemView.findViewById(R.id.iv_mail_xa);
+            iv_mail_xa.setVisibility(View.GONE);
         }
     }
     public void update(List<Tea> tea1 ){

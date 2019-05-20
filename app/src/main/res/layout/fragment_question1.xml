@@ -17,7 +17,7 @@
         android:id="@+id/tv_question1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="嗨！欢迎来到LIfy，"
+        android:text="@string/question_base1"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="18dp"
         android:textColor="@color/login_black"
@@ -27,15 +27,16 @@
         android:layout_below="@+id/tv_question1"
         android:layout_marginTop="13dp"
         android:layout_marginLeft="18dp"
+        android:text="@string/question_base2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="让我们帮你养成健康的生活习惯吧！"
+
         />
     <Button
         android:id="@+id/bt_question1_esure"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
-        android:text="好的"
+        android:text="@string/question_qued"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/tv_question2"
         android:layout_marginRight="20dp"

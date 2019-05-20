@@ -50,7 +50,7 @@ public class MethodAdapter extends RecyclerView.Adapter<MethodAdapter.MyviewHold
 
         tipDialog = new QMUITipDialog.Builder(context)
                 .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
-                .setTipWord("请稍后...")
+                .setTipWord(context.getText(R.string.search_qsh).toString())
                 .create();
         tipDialog.show();
     }
@@ -95,8 +95,8 @@ public class MethodAdapter extends RecyclerView.Adapter<MethodAdapter.MyviewHold
         TextView tv_dialog_qd = (TextView) view.findViewById(R.id.tv_dia_qd);
         TextView tv_dia_title = view.findViewById(R.id.tv_dia_title);
         TextView et_dia_name = view.findViewById(R.id.et_dia_name);
-        tv_dia_title.setText("删除方法");
-        et_dia_name.setText("是否删除方法");
+        tv_dia_title.setText(context.getText(R.string.equ_xq_delmethod).toString());
+        et_dia_name.setText(context.getText(R.string.equ_xq_methodtitle).toString());
         dialog.setContentView(view);
         //使得点击对话框外部不消失对话框
         dialog.setCanceledOnTouchOutside(false);

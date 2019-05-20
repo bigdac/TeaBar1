@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -47,7 +49,7 @@ public class SearchActivity extends BaseActivity {
     @BindView(R.id.iv_history_del)
     ImageView iv_history_del;
     //标签类相关
-    private EvaluateAdapter adapter_his, adapter_teste,adapter_function,adapter_aim;
+    private EvaluateAdapter adapter_his;
     List<String> list=new ArrayList<>();
     @Override
     public void initParms(Bundle parms) {
@@ -93,24 +95,14 @@ public class SearchActivity extends BaseActivity {
                 et_search_search.setText("");
             }
         });
-        iv_history_del.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                adapter_his.setItems(new ArrayList<String>());
-            }
-            });
+
         initView();
     }
 
     @Override
     public void doBusiness(Context mContext) {
-        for(int i=0;i<5;i++){
-            list.add("手冰冷");
-        }
-        adapter_his.setItems(list);
-        adapter_aim.setItems(list);
-        adapter_function.setItems(list);
-        adapter_teste.setItems(list);
+        getHistory();
+
     }
 
     @Override
@@ -122,11 +114,29 @@ public class SearchActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
     }
-    @OnClick({R.id.iv_power_fh})
+    @OnClick({R.id.iv_power_fh,R.id.tv_search_search,R.id.iv_history_del})
     public void onClick(View view){
         switch (view.getId()){
             case R.id.iv_power_fh:
                 finish();
+                break;
+
+            case R.id.tv_search_search:
+                if (!TextUtils.isEmpty(et_search_search.getText()))
+                setHistory(et_search_search.getText().toString().trim());
+                Intent intent = new Intent(SearchActivity.this, SearchFinishActivity.class);
+                intent.putExtra("searchName", et_search_search.getText().toString().trim());
+                startActivity(intent);
+                break;
+
+            case R.id.iv_history_del:
+                SharedPreferences.Editor editor = getSharedPreferences("SearchHistoryList", MODE_PRIVATE).edit();
+                editor.clear();
+                editor.commit();
+                loadList.clear();
+                adapter_his.setItems(new ArrayList<String>());
+                li_search_old.setVisibility(View.INVISIBLE);
+                iv_history_del.setVisibility(View.INVISIBLE);
                 break;
         }
 
@@ -152,10 +162,10 @@ public class SearchActivity extends BaseActivity {
         fv_history.setItemClickListener(new FlowTagView.TagItemClickListener() {
             @Override
             public void itemClick(int position) {
-                String e = adapter_his.getItem(position).toString();
-//                Intent intent = new Intent(ShopSearchActivity.this, ShopSearchResultActivity.class);
-//                intent.putExtra("goodsName", e);
-//                startActivity(intent);
+                String e = adapter_his.getItem(position).toString() ;
+                Intent intent = new Intent(SearchActivity.this, SearchFinishActivity.class);
+                intent.putExtra("searchName", e);
+                startActivityForResult(intent,2000);
             }
         });
 
@@ -193,11 +203,11 @@ public class SearchActivity extends BaseActivity {
         }
         adapter_his.setItems(loadList);
         if(loadList.size()==0){
-            li_search_old.setVisibility(View.GONE);
-            li_search_old.setVisibility(View.GONE);
+            li_search_old.setVisibility(View.INVISIBLE);
+            iv_history_del.setVisibility(View.INVISIBLE);
         }else {
             li_search_old.setVisibility(View.VISIBLE);
-            li_search_old.setVisibility(View.VISIBLE);
+            iv_history_del.setVisibility(View.VISIBLE);
         }
     }
 
@@ -221,5 +231,13 @@ public class SearchActivity extends BaseActivity {
             editor.putString("history_" + i, loadList.get(i));
         }
         editor.commit();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==3000){
+            getHistory();
+        }
     }
 }

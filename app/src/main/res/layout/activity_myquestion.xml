@@ -32,7 +32,7 @@
    <android.support.v7.widget.RecyclerView
        android:id="@+id/rv_myquestion"
        android:layout_below="@+id/tv_power"
-       android:overScrollMode="never    "
+       android:overScrollMode="never"
        android:layout_marginTop="10dp"
        android:layout_width="match_parent"
        android:layout_height="match_parent"/>

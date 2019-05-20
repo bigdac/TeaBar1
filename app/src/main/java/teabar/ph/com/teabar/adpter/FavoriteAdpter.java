@@ -68,7 +68,7 @@ public class FavoriteAdpter extends RecyclerView.Adapter< FavoriteAdpter.MyViewH
     }
 
     /**
-     * 添加喜愛
+     * 取消喜愛
      */
     Dialog dialog;
     int which;

@@ -23,7 +23,7 @@
         android:id="@+id/tv_power"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="WIFI添加"
+        android:text="@string/equ_add_wifi1"
         android:layout_below="@+id/iv_power_fh"
         android:layout_marginLeft="20dp"
         android:textSize="30sp"

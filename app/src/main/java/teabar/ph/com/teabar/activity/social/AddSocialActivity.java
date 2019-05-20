@@ -120,8 +120,13 @@ public class AddSocialActivity extends BaseActivity implements ImagePickerAdapte
                 break;
 
             case R.id.btn_submit:
-                showProgressDialog();
+
                 String content = et_content.getText().toString().trim();
+                if (content.length()==0&&bitmaps.size()==0){
+                    toast(getText(R.string.toast_social_null).toString());
+                    break;
+                }
+                showProgressDialog();
                 Map<String,Object> params = new HashMap<>();
                 Map<String,Object> params1 = new HashMap<>();
                 String picture [] = {"pictureFile1","pictureFile2","pictureFile3","pictureFile4"};
@@ -142,7 +147,7 @@ public class AddSocialActivity extends BaseActivity implements ImagePickerAdapte
 
         tipDialog = new QMUITipDialog.Builder(this)
                 .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
-                .setTipWord("请稍后...")
+                .setTipWord(getText(R.string.search_qsh).toString())
                 .create();
         tipDialog.show();
     }
@@ -183,18 +188,17 @@ public class AddSocialActivity extends BaseActivity implements ImagePickerAdapte
 
                 case "200":
                     tipDialog.dismiss();
-                    toast(returnMsg1);
                     isFrash=true;
                     finish();
 
                     break;
                 case "4000":
                     tipDialog.dismiss();
-                    toast( "连接超时，请重试");
+                    toast(getText(R.string.toast_all_cs).toString());
                     break;
                 default:
                     tipDialog.dismiss();
-                    toast( returnMsg1);
+
                     break;
 
             }

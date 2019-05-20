@@ -67,7 +67,8 @@
         android:background="@drawable/login_edtext"
         android:hint="@string/regist_et_nick"
         android:paddingLeft="15dp"
-        android:textColor="#888888"
+        android:textColorHint="#777777"
+        android:textColor="#333333"
         android:textSize="14sp" />
 
     <ImageView
@@ -90,7 +91,8 @@
         android:background="@drawable/login_edtext"
         android:hint="@string/login_et_user"
         android:paddingLeft="15dp"
-        android:textColor="#888888"
+        android:textColorHint="#777777"
+        android:textColor="#333333"
         android:textSize="14sp" />
 
     <ImageView
@@ -113,7 +115,9 @@
         android:background="@drawable/login_edtext"
         android:hint="@string/login_et_code"
         android:paddingLeft="15dp"
-        android:textColor="#888888"
+        android:textColorHint="#777777"
+        android:layout_toLeftOf="@+id/bt_register_code"
+        android:textColor="#333333"
         android:textSize="14sp" />
 
     <Button
@@ -124,7 +128,7 @@
         android:textColor="#28db9f"
         android:text="@string/login_bt_getcode"
         android:layout_alignTop="@+id/et_regist_code"
-        android:layout_alignRight="@+id/et_regist_code"
+        android:layout_alignRight="@+id/et_regist_pasw"
         />
 
     <EditText
@@ -138,7 +142,8 @@
         android:background="@drawable/login_edtext"
         android:hint="@string/login_et_pass"
         android:paddingLeft="15dp"
-        android:textColor="#888888"
+        android:textColorHint="#777777"
+        android:textColor="#333333"
         android:textSize="14sp" />
 
     <ImageView
@@ -162,6 +167,6 @@
         android:paddingBottom="10dp"
         android:textColor="@color/white"
         android:textSize="16sp"
-        android:text="@string/login_bt_regist"
+        android:text="@string/login_tv_regist"
         />
 </RelativeLayout>

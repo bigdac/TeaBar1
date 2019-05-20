@@ -91,10 +91,14 @@ public class FeedbackActivity extends BaseActivity implements ImagePickerAdapter
     }
 
 
-    @OnClick({R.id.iv_feed_fh })
+    @OnClick({R.id.iv_feed_fh ,R.id.btn_submit})
     public void onClick(View view){
         switch (view.getId()){
             case R.id.iv_feed_fh:
+                finish();
+                break;
+            case R.id.btn_submit:
+                toast(getText(R.string.toast_update_cg).toString());
                 finish();
                 break;
 
@@ -182,4 +186,7 @@ public class FeedbackActivity extends BaseActivity implements ImagePickerAdapter
             }
         }
     }
+
+
+
 }

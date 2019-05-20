@@ -327,8 +327,9 @@ public class AddDeviceActivity extends BaseActivity implements EasyPermissions.P
                 if (frequence > 4900 && frequence < 5900) {
                     // Connected 5G wifi. Device does not support 5G
                     et_add_name.setText("");
-                    et_add_name.setHint("不支持5G WiFi");
+                    et_add_name.setHint(getText(R.string.toast_wifi_5G).toString());
                     et_add_pass.setText("");
+
                 }
             }
             if (isMatching && !TextUtils.isEmpty(wifiName) && !wifiName.equals(apSsid)) {
@@ -359,7 +360,7 @@ public class AddDeviceActivity extends BaseActivity implements EasyPermissions.P
                 String apBssid=mWifiAdmin.getWifiConnectedBssid();
                 String apPassword=et_add_pass.getText().toString();
                 String taskResultCountStr = "1";
-                if (apPassword.length()>0){
+                if (apPassword.length()>0||TextUtils.isEmpty(ssid)){
                     isMatching = true;
                     wifiName = ssid;
                     new EsptouchAsyncTask3().execute(ssid, apBssid, apPassword, taskResultCountStr);

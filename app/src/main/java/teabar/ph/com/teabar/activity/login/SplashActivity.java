@@ -4,10 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
+import me.jessyan.autosize.AutoSizeCompat;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.EncourageActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
@@ -31,7 +33,14 @@ public class SplashActivity extends BaseActivity {
         setSteepStatusBar(true);
         return R.layout.activity_splash;
     }
+    @Override
+    public Resources getResources() {
+        //需要升级到 v1.1.2 及以上版本才能使用 AutoSizeCompat
+//        AutoSizeCompat.autoConvertDensityOfGlobal((super.getResources()));//如果没有自定义需求用这个方法
+        AutoSizeCompat.autoConvertDensity((super.getResources()), 667, false);//如果有自定义需求就用这个方法
+        return super.getResources();
 
+    }
     @Override
     public void initView(View view) {
         if (application == null) {

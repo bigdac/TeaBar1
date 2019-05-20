@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="login_black">#101010</color>
-    <color name="social_gray">#bbbbbb</color>
+    <color name="social_gray">#777777</color>
     <color name="login_gray">#555555</color>
     <color name="white">#FFFFFF</color>
     <color name="pink1">#FF638D</color>
@@ -49,5 +49,5 @@
     <color name="card1">#37dbc2</color>
     <color name="card2">#81fbe6</color>
     <color name="main_title">#33000000</color>
-
+    <color name="main_tit1">#4BE6C0</color>
 </resources>

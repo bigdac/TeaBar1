@@ -66,6 +66,7 @@ public class RegisterActivity extends BaseActivity {
     String password;
     UserEntryImpl userEntryDao;
     EquipmentImpl equipmentDao;
+    int language;
     @Override
     public void initParms(Bundle parms) {
 
@@ -87,6 +88,7 @@ public class RegisterActivity extends BaseActivity {
                 ScreenUtils.getStatusBarHeight());
         tv_main_1.setLayoutParams(params);
         application.addActivity(this);
+        language = application.IsEnglish();
         userEntryDao = new UserEntryImpl(getApplicationContext());
         equipmentDao = new EquipmentImpl(getApplicationContext());
         preferences = getSharedPreferences("my", MODE_PRIVATE);
@@ -163,7 +165,9 @@ public class RegisterActivity extends BaseActivity {
                     }
                     if (password.length()<6||password.length()>18){
                         toast( "密码位数应该大于6小于18");
-                    }else {
+                        break;
+                    }
+
                         Map<String,Object> params=new HashMap<>();
                         params.put("userName",nick);
                         params.put("verification",code);
@@ -176,8 +180,7 @@ public class RegisterActivity extends BaseActivity {
                         showProgressDialog();
                         new RegistAsyncTask().execute(params);
 
-                    }
-                    break;
+                break;
         }
     }
 
@@ -245,14 +248,15 @@ public class RegisterActivity extends BaseActivity {
                     }
                     LoginJM();
 //                    startActivity(new Intent(RegisterActivity.this, MainActivity.class));
-                    toast( "登录成功");
-
+                    Intent intent = new Intent(RegisterActivity.this, MQService.class);
+                    startService(intent);// 启动服务
+                    startActivity( BaseQuestionActivity.class);
                     break;
                 case "4000":
                     if (tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    toast( "连接超时，请重试");
+                    toast( getText(R.string.toast_all_cs).toString());
                     break;
                 default:
                     if (tipDialog.isShowing()){
@@ -290,12 +294,10 @@ public class RegisterActivity extends BaseActivity {
                         user = new UserEntry(1,userId,username, appKey);
                         userEntryDao.insert(user);
                     }
-                    Intent intent = new Intent(RegisterActivity.this, MQService.class);
-                    startService(intent);// 启动服务
-                    startActivity( BaseQuestionActivity.class);
+
 
                 } else {
-                    toast(  "登陆失败" + responseMessage);
+//                    toast(  "登陆失败" + responseMessage);
                 }
             }
         });
@@ -377,7 +379,7 @@ public class RegisterActivity extends BaseActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(result);
                         code = jsonObject.getString("state");
-                        returnMsg1=jsonObject.getString("message1");
+                        returnMsg1=jsonObject.getString("message2");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

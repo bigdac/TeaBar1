@@ -12,8 +12,8 @@ import teabar.ph.com.teabar.R;
  */
 
 public class FlowTagConfig {
-    private static final int DEFAULT_LINE_SPACING = 5;//默认行间距
-    private static final int DEFAULT_TAG_SPACING = 10;//各个标签之间的默认距离
+    private static final int DEFAULT_LINE_SPACING = 3;//默认行间距
+    private static final int DEFAULT_TAG_SPACING = 5;//各个标签之间的默认距离
     private static final int DEFAULT_FIXED_COLUMN_SIZE = 3; //默认列数
 
     private int lineSpacing;

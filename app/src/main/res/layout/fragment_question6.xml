@@ -38,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="45dp"
         android:paddingLeft="10dp"
-        android:text="好的"
+        android:text="@string/question_qued"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/fv_message"
         android:layout_marginRight="20dp"
