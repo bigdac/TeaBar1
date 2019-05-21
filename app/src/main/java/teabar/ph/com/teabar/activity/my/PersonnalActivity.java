@@ -2,6 +2,7 @@ package teabar.ph.com.teabar.activity.my;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -36,11 +38,17 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.yancy.gallerypick.config.GalleryConfig;
+import com.yancy.gallerypick.config.GalleryPick;
+import com.yancy.gallerypick.inter.IHandlerCallBack;
+import com.yancy.gallerypick.inter.ImageLoader;
+import com.yancy.gallerypick.widget.GalleryImageView;
 
 
 import org.json.JSONObject;
@@ -49,7 +57,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -111,6 +123,9 @@ public class PersonnalActivity extends BaseActivity  {
         }
         tv_person_name.setText(name);
         tv_person_id.setText(id+"");
+        initPermissions();
+        initGallery();
+        initImage();
     }
 
     @Override
@@ -121,6 +136,115 @@ public class PersonnalActivity extends BaseActivity  {
     @Override
     public void widgetClick(View v) {
 
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        if (requestCode == PERMISSIONS_REQUEST_READ_CONTACTS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.i(TAG, "同意授权");
+                GalleryPick.getInstance().setGalleryConfig(galleryConfig).open(PersonnalActivity.this);
+                isNeedCheck = false;
+            } else {
+                Log.i(TAG, "拒绝授权");
+            }
+        }
+    }
+    private boolean isNeedCheck = true;
+    private void initPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            Log.i(TAG, "需要授权 ");
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                Log.i(TAG, "拒绝过了");
+                Toast.makeText(this, "请在 设置-应用管理 中开启此应用的储存授权。", Toast.LENGTH_SHORT).show();
+            } else {
+                Log.i(TAG, "进行授权");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_READ_CONTACTS);
+            }
+        } else {
+            Log.i(TAG, "不需要授权 ");
+            isNeedCheck = true;
+            GalleryPick.getInstance().setGalleryConfig(galleryConfig).open(PersonnalActivity.this);
+        }
+    }
+    private IHandlerCallBack iHandlerCallBack;
+
+    private void initGallery() {
+        iHandlerCallBack = new IHandlerCallBack() {
+            @Override
+            public void onStart() {
+                Log.i(TAG, "onStart: 开启");
+            }
+
+            @Override
+            public void onSuccess(List<String> photoList) {
+                Log.i(TAG, "onSuccess: 返回数据");
+                try {
+                    if (photoList != null && !photoList.isEmpty()) {
+                        String path = photoList.get(0);
+                        File file = new File(path);
+                        if (file!=null && file.exists()){
+                            Glide.with(PersonnalActivity.this).load(file).transform(new GlideCircleTransform(getApplicationContext())).into(iv_person_pic);
+                            Map<String,Object> params = new HashMap<>();
+                            params.put("userId",id);
+                            Map<String,Object> params1 = new HashMap<>();
+                            params1.put("photo",file);
+                            preferences.edit().putString("photo",file.getPath()).commit();
+                            new LoadUserInfo().execute(params,params1);
+                        }
+//                        params.put("deviceId", deviceId);
+//                        new UpImageAysnc().execute(file).get(3, TimeUnit.SECONDS);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onCancel() {
+                Log.i(TAG, "onCancel: 取消");
+            }
+
+            @Override
+            public void onFinish() {
+                Log.i(TAG, "onFinish: 结束");
+            }
+
+            @Override
+            public void onError() {
+                Log.i(TAG, "onError: 出错");
+            }
+        };
+
+    }
+    private final int PERMISSIONS_REQUEST_READ_CONTACTS = 8;
+    private GalleryConfig galleryConfig;
+    private void initImage() {
+        galleryConfig = new GalleryConfig.Builder()
+                .imageLoader(new ImageLoader() {
+                    @Override
+                    public void displayImage(Activity activity, Context context, String path, GalleryImageView galleryImageView, int width, int height) {
+                        Glide.with(context)
+                                .load(path)
+                                .placeholder(R.mipmap.gallery_pick_photo)
+                                .centerCrop()
+                                .into(galleryImageView);
+                    }
+
+                    @Override
+                    public void clearMemoryCache() {
+
+                    }
+                })    // ImageLoader 加载框架（必填）
+                .iHandlerCallBack(iHandlerCallBack)     // 监听接口（必填）
+                .provider("teabar.ph.com.teabar.fileprovider2")   // provider(必填)
+                .multiSelect(false)                      // 是否多选   默认：false
+                .multiSelect(false, 9)                   // 配置是否多选的同时 配置多选数量   默认：false ， 9
+                .maxSize(9)                             // 配置多选时 的多选数量。    默认：9
+                .crop(true)                             // 快捷开启裁剪功能，仅当单选 或直接开启相机时有效
+                .crop(true, 1, 1, 500, 500)             // 配置裁剪功能的参数，   默认裁剪比例 1:1
+                .isShowCamera(true)                     // 是否现实相机按钮  默认：false
+                .filePath("/Gallery/Pictures")          // 图片存放路径
+                .build();
     }
 
     @OnClick({ R.id.iv_power_fh,R.id.rl_person_pic,R.id.rl_person_nick,R.id.rl_person_id,R.id.rl_person_mes})
@@ -212,19 +336,20 @@ public class PersonnalActivity extends BaseActivity  {
             @Override
             public void onClick(View view) {
                 if (popupWindow != null && popupWindow.isShowing()) {
-                    if (Build.VERSION.SDK_INT >= 23) {
-                        //android 6.0权限问题
-                        if (ContextCompat.checkSelfPermission(PersonnalActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
-                                ContextCompat.checkSelfPermission(PersonnalActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                            ToastUtil.showShort(PersonnalActivity.this,"请打开相机权限");
-                            ActivityCompat.requestPermissions(PersonnalActivity.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, ICONPRESS);
-                        } else {
-                            startGallery();
-                        }
-
-                    } else {
-                        startGallery();
-                    }
+//                    if (Build.VERSION.SDK_INT >= 23) {
+//                        //android 6.0权限问题
+//                        if (ContextCompat.checkSelfPermission(PersonnalActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+//                                ContextCompat.checkSelfPermission(PersonnalActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//                            ToastUtil.showShort(PersonnalActivity.this,"请打开相机权限");
+//                            ActivityCompat.requestPermissions(PersonnalActivity.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, ICONPRESS);
+//                        } else {
+//                            startGallery();
+//                        }
+//
+//                    } else {
+//                        startGallery();
+//                    }
+                    GalleryPick.getInstance().setGalleryConfig(galleryConfig).open(PersonnalActivity.this);
                 }
                 backgroundAlpha(1.0f);
                 popupWindow.dismiss();
@@ -397,15 +522,15 @@ public class PersonnalActivity extends BaseActivity  {
                 }
                 break;
             case ICON:
-                if (resultCode == RESULT_OK) {
-                    if (Build.VERSION.SDK_INT >= 19) {
-                        // 4.4及以上系统使用这个方法处理图片
-                        handleImageOnKitKat(data);
-                    } else {
-                        // 4.4以下系统使用这个方法处理图片
-                        handleImageBeforeKitKat(data);
-                    }
-                }
+//                if (resultCode == RESULT_OK) {
+//                    if (Build.VERSION.SDK_INT >= 19) {
+//                        // 4.4及以上系统使用这个方法处理图片
+//                        handleImageOnKitKat(data);
+//                    } else {
+//                        // 4.4以下系统使用这个方法处理图片
+//                        handleImageBeforeKitKat(data);
+//                    }
+//                }
                 break;
             case PICTURE_CUT://裁剪完成
                 isClickCamera = true;

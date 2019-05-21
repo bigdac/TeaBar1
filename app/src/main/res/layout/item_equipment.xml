@@ -5,7 +5,7 @@
     android:padding="5dp"
     >
     <ImageView
-        android:layout_width="188dp"
+        android:layout_width="match_parent"
         android:layout_height="207dp"
         android:scaleType="fitXY"
         android:src="@drawable/teacard" />
