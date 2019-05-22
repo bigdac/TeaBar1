@@ -18,7 +18,6 @@ public abstract class BaseRecycleViewAdapter<T,VH extends RecyclerView.ViewHolde
     public List<T> getDatas() {
         if (datas==null)
             datas = new ArrayList<T>();
-        Log.e("MainActivity", "getDatas: --》"+datas.size() );
         return datas;
     }
 

@@ -52,7 +52,7 @@ public class ArcProgressBar extends View {
     /**
      * 底部默认文字
      */
-   private String mArcText= "";
+    private String mArcText= "";
     /**
      * 线条数
      */
@@ -439,3 +439,4 @@ public class ArcProgressBar extends View {
         return height / slope;
     }
 }
+

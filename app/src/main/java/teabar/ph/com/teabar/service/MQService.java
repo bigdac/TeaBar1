@@ -13,6 +13,9 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Build;
@@ -23,7 +26,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextClock;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.peihou.daemonservice.AbsHeartBeatService;
 import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
@@ -163,14 +175,18 @@ public class MQService extends AbsHeartBeatService {
             int currentMin = calendar.get(Calendar.MINUTE);
             long currentTime=(currentHour*60+currentMin);
             Log.i("MQService","setTime="+setTime+",currentTime="+currentTime);
-
-            if (setTime==currentTime) {
+//            long diff=Math.abs(setTime-currentHour);
+//            if (diff>=30 && diff<=60){
+//            }
+            if (setTime==currentTime){
+                handler.sendEmptyMessage(2);
                 showNotifaction();
+
             }
         }
 
-
     }
+
     private static final String PUSH_CHANNEL_ID = "PUSH_NOTIFY_ID";
     private static final String PUSH_CHANNEL_NAME = "PUSH_NOTIFY_NAME";
     public void showNotifaction(){
@@ -184,6 +200,7 @@ public class MQService extends AbsHeartBeatService {
                 mNotificationManager.createNotificationChannel(channel);
             }
         }
+
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), PUSH_CHANNEL_ID);
 //        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this).
         mBuilder.setSmallIcon(R.mipmap.ic_launcher)
@@ -193,10 +210,16 @@ public class MQService extends AbsHeartBeatService {
 //                         mBuilder.setNumber(12);
 //                         mBuilder.setLargeIcon(btm);
 
-        mBuilder.setDefaults(Notification.DEFAULT_ALL);
+//        mBuilder.setDefaults(Notification.DEFAULT_ALL);
+        mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
+//        mBuilder.setDefaults(NotificationCompat.DEFAULT_ALL);
+//        mBuilder.setSound(Uri.parse("android.resource://" + getPackageName() + "/" +R.raw.beep));
         mBuilder.setAutoCancel(true);//自己维护通知的消失
         Notification notification = mBuilder.build();
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
+        Uri notification2 = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification2);
+        r.play();
 
 //                         //构建一个Intent
 //                         Intent resultIntent = new Intent(this,
@@ -822,6 +845,40 @@ public class MQService extends AbsHeartBeatService {
                     alermDialog4.dismiss();
                 }
                 setAlermDialog(0,errorCode);
+            }else if (msg.what==2){
+                View layoutView =  LayoutInflater.from(getApplicationContext()).inflate(R.layout.top_toast, null);
+                //设置文本的参数 设置加载文本文件的参数，必须通过LayoutView获取。
+                TextClock tv_clock= (TextClock) layoutView.findViewById(R.id.tv_clock);
+                TextView tv_device = (TextView) layoutView.findViewById(R.id.tv_device);
+                tv_clock.setFormat24Hour("H:mm");
+                tv_device.setText("亲，你喝茶的时间到了!");
+//                WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+//                //获得屏幕的宽度
+//                int width = ViewGroup.LayoutParams.MATCH_PARENT;
+//                Log.i(TAG,"-->"+width);
+//                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//                //设置TextView的宽度为 屏幕宽度
+//                layoutView.setLayoutParams(layoutParams);
+
+//                WindowManager wm = (WindowManager) MQService.this.getSystemService(Context.WINDOW_SERVICE);
+                //获得屏幕的宽度
+//                int width = wm.getDefaultDisplay().getWidth();
+//                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT);
+//                //设置TextView的宽度为 屏幕宽度
+//                layoutParams.topMargin=150;
+//                layoutView.setLayoutParams(layoutParams);
+                //获得屏幕的宽度
+                //创建toast对象，
+                Toast toast = new Toast(getApplicationContext());
+                //把要Toast的布局文件放到toast的对象中
+                toast.setView(layoutView);
+                toast.setDuration(toast.LENGTH_LONG);
+                toast.setGravity(Gravity.FILL_HORIZONTAL | Gravity.TOP, 0, 0);
+//                toast.setGravity(Gravity.TOP, 0, 0);
+                toast.getView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);//设置Toast可以布局到系统状态栏的下面
+                toast.show();
+
+
             }
         }
     };
