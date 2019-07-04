@@ -2,11 +2,17 @@ package teabar.ph.com.teabar.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -17,8 +23,13 @@ import com.lzy.imagepicker.ui.ImageGridActivity;
 import com.lzy.imagepicker.ui.ImagePreviewDelActivity;
 import com.lzy.imagepicker.view.CropImageView;
 
+import org.json.JSONObject;
+
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -26,17 +37,19 @@ import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.adpter.ImagePickerAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
+import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.base.MyApplication;
+import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.view.GlideImageLoader;
 import teabar.ph.com.teabar.view.SelectDialog;
 
 public class FeedbackActivity extends BaseActivity implements ImagePickerAdapter.OnRecyclerViewItemClickListener{
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
-    MyApplication application;
 
+    MyApplication application;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.et_content)
+    EditText et_content;
     private ImagePickerAdapter adapter;
     public static final int IMAGE_ITEM_ADD = -1;
     public static final int REQUEST_CODE_SELECT = 100;
@@ -44,6 +57,8 @@ public class FeedbackActivity extends BaseActivity implements ImagePickerAdapter
     private ArrayList<ImageItem> selImageList; //当前选择的所有图片
     private int maxImgCount = 3;               //允许选择图片最大数
     boolean isOpen = true;
+    SharedPreferences preferences;
+    String userId;
     @Override
     public void initParms(Bundle parms) {
 
@@ -61,10 +76,9 @@ public class FeedbackActivity extends BaseActivity implements ImagePickerAdapter
             application = (MyApplication) getApplication();
         }
         application.addActivity(this);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
         initImagePicker();
+        preferences = getSharedPreferences("my",MODE_PRIVATE);
+        userId = preferences.getString("userId","");
         selImageList = new ArrayList<>();
         adapter = new ImagePickerAdapter(this, selImageList, maxImgCount);
         adapter.setOnItemClickListener(this);
@@ -90,7 +104,7 @@ public class FeedbackActivity extends BaseActivity implements ImagePickerAdapter
 
     }
 
-
+    String [] fileName = {"pictureFile1","pictureFile2","pictureFile3"};
     @OnClick({R.id.iv_feed_fh ,R.id.btn_submit})
     public void onClick(View view){
         switch (view.getId()){
@@ -98,8 +112,19 @@ public class FeedbackActivity extends BaseActivity implements ImagePickerAdapter
                 finish();
                 break;
             case R.id.btn_submit:
-                toast(getText(R.string.toast_update_cg).toString());
-                finish();
+                if (!TextUtils.isEmpty(et_content.getText().toString().trim())) {
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("userId", userId);
+                    params.put("content", et_content.getText().toString().trim());
+                    Map<String, Object> params1 = new HashMap<>();
+                    for (int i = 0; i < selImageList.size(); i++) {
+                        File file = new File(selImageList.get(i).path);
+                        params1.put(fileName[i], file);
+                    }
+                    new LoadUserInfo(this).execute(params, params1);
+                }else {
+                    toast(getText(R.string.toast_social_null).toString());
+                }
                 break;
 
         }
@@ -125,8 +150,8 @@ public class FeedbackActivity extends BaseActivity implements ImagePickerAdapter
         switch (position) {
             case IMAGE_ITEM_ADD:
                 List<String> names = new ArrayList<>();
-                names.add("拍照");
-                names.add("相册");
+                names.add(getText(R.string.toast_main_pz).toString());
+                names.add(getText(R.string.toast_main_zp).toString());
                 showDialog(new SelectDialog.SelectDialogListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -187,6 +212,53 @@ public class FeedbackActivity extends BaseActivity implements ImagePickerAdapter
         }
     }
 
+    String returnMsg1,returnMsg2;
+    class LoadUserInfo extends BaseWeakAsyncTask<Map<String,Object>,Void,String,BaseActivity> {
+
+        public LoadUserInfo(BaseActivity baseActivity) {
+            super(baseActivity);
+        }
+
+        @Override
+        protected String doInBackground(BaseActivity baseActivity, Map<String, Object>... maps) {
+            String code = "";
+            Map<String,Object> param1 = maps[0];
+            Map<String,Object> param2 = maps[1];
+            String result = HttpUtils.upFileAndDesc(HttpUtils.ipAddress+"/content/feedback",  param1,param2);
+            if (!TextUtils.isEmpty(result)) {
+                try {
+                    if (!"4000".equals(result)){
+                        JSONObject jsonObject = new JSONObject(result);
+                        code = jsonObject.getString("state");
+                        returnMsg1=jsonObject.getString("message1");
+                    }
+                    else {
+                        code="4000";
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            return code;
+        }
+
+
+        @Override
+        protected void onPostExecute(BaseActivity baseActivity, String code) {
+
+            switch (code) {
+                case "200":
+                    toast(  getText(R.string.toast_update_cg).toString());
+                    finish();
+                    break;
+                default:
+                    toast( getText(R.string.toast_update_sb).toString());
+                    break;
+            }
+
+        }
+
+    }
 
 
 }

@@ -1,11 +1,12 @@
 <resources>
 
+
     <!-- Base application theme. -->
     <!--<style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
     <style name="AppTheme" parent="QMUI.Compat">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
     <style name="MyDialog" parent="android:style/Theme.Dialog">
@@ -93,6 +94,17 @@
         <item name="android:paddingBottom">8.67dp</item>
         <item name="android:textColor">@color/chat_text_color</item>
     </style>
+    <style name="jmui_msg_text_style1">
+        <item name="android:maxWidth">225dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:paddingTop">9dp</item>
+        <item name="android:paddingBottom">8.67dp</item>
+        <item name="android:textColor">@color/chat_text_color1</item>
+    </style>
 
     <style name="jmui_chat_item_sender_avatar_style">
         <item name="android:layout_width">@dimen/item_head_icon_size</item>
@@ -144,5 +156,8 @@
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
-
+    <declare-styleable name="CompanyEdittext">
+        <attr name="ce_text" format="string" />
+        <attr name="ce_text_color" format="color" />
+    </declare-styleable>
 </resources>

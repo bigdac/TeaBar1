@@ -11,7 +11,6 @@ import android.view.View;
 
 import me.jessyan.autosize.AutoSizeCompat;
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.EncourageActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
 

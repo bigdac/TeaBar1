@@ -57,6 +57,8 @@
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:lineSpacingExtra="4dp"
+                android:hint="@string/social_friend_talk"
+                android:textColorHint="#777777"
                 android:gravity="center_vertical"
                 android:maxLines="4"
                 android:paddingLeft="13dp"
@@ -92,7 +94,7 @@
                 android:layout_height="40dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="14dp"
-                android:src="@drawable/selector_send"/>
+                android:src="@mipmap/chat_sendmes"/>
 
             <!--发送-->
             <!--<Button-->

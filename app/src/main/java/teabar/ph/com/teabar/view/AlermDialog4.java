@@ -31,14 +31,14 @@ public class AlermDialog4 extends Dialog {
         unbinder=ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.btn_cancel,R.id.btn_ensure})
+    @OnClick({/*R.id.btn_cancel,*/R.id.btn_ensure})
     public void onClick(View v){
         switch (v.getId()){
-            case R.id.btn_cancel:
-                if (onNegativeClickListener!=null){
-                    onNegativeClickListener.onNegativeClick();
-                }
-                break;
+//            case R.id.btn_cancel:
+//                if (onNegativeClickListener!=null){
+//                    onNegativeClickListener.onNegativeClick();
+//                }
+//                break;
             case R.id.btn_ensure:
                 if (onPositiveClickListener!=null){
                     onPositiveClickListener.onPositiveClick();

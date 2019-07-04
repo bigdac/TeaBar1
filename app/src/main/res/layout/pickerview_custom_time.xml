@@ -21,7 +21,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="17dp"
             android:padding="8dp"
-            android:text="取消"
+            android:text="@string/equ_dia_del"
             android:textColor="@color/login_black"
             android:textSize="16sp"
            />
@@ -34,14 +34,16 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="17dp"
             android:padding="8dp"
-            android:text="完成"
+            android:text="@string/equ_dia_esure"
             android:textColor="@color/nomal_green"
             android:textSize="16sp" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="#aaa" />
+            android:layout_height="1dp"
+            android:background="#d9d9d9"
+            android:layout_alignParentBottom="true"
+            />
     </RelativeLayout>
 
 
@@ -49,45 +51,50 @@
     <LinearLayout
         android:id="@+id/timepicker"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:background="@android:color/white"
         android:orientation="horizontal">
 
         <com.contrarywind.view.WheelView
             android:id="@+id/year"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:layout_weight="1" />
 
         <com.contrarywind.view.WheelView
-
+            android:layout_gravity="center"
             android:id="@+id/month"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1.1" />
 
         <com.contrarywind.view.WheelView
             android:id="@+id/day"
+            android:layout_gravity="center"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1.1" />
 
         <com.contrarywind.view.WheelView
             android:id="@+id/hour"
+            android:layout_gravity="center"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1.1" />
 
         <com.contrarywind.view.WheelView
             android:id="@+id/min"
+            android:layout_gravity="center"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1.1" />
 
         <com.contrarywind.view.WheelView
             android:id="@+id/second"
+            android:layout_gravity="center"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1.1" />
 
 

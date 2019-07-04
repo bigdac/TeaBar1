@@ -25,6 +25,7 @@ import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.adpter.MyquestionAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
+import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.pojo.Question;
 import teabar.ph.com.teabar.pojo.ScoreRecords;
@@ -35,8 +36,7 @@ import teabar.ph.com.teabar.util.ToastUtil;
 public class MyQuestionActivity extends BaseActivity {
     @BindView(R.id.rv_myquestion)
     RecyclerView rv_myquestion;
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     MyquestionAdapter myquestionAdapter;
     List<ScoreRecords> mList = new ArrayList<>();
     MyApplication application;
@@ -59,15 +59,13 @@ public class MyQuestionActivity extends BaseActivity {
             application = (MyApplication) getApplication();
         }
         application.addActivity(this);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
+
         preferences = getSharedPreferences("my",MODE_PRIVATE);
         userId = preferences.getString("userId","");
         myquestionAdapter = new MyquestionAdapter(this,mList);
         rv_myquestion.setLayoutManager(new LinearLayoutManager(this));
         rv_myquestion.setAdapter(myquestionAdapter);
-        new getTeaListAsynTask().execute();
+        new getTeaListAsynTask(this).execute();
     }
 
     @Override
@@ -94,10 +92,14 @@ public class MyQuestionActivity extends BaseActivity {
     int  examTitle =1;
 
     /*  获取問題*/
-    class getTeaListAsynTask extends AsyncTask<Void,Void,String> {
+    class getTeaListAsynTask extends BaseWeakAsyncTask<Void,Void,String,BaseActivity> {
+
+        public getTeaListAsynTask(BaseActivity baseActivity) {
+            super(baseActivity);
+        }
 
         @Override
-        protected String doInBackground(Void... voids) {
+        protected String doInBackground(BaseActivity baseActivity, Void... voids) {
             String code = "";
             String result =   HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/web/getUserExam?userId="+userId  );
             Log.e("back", "--->" + result);
@@ -106,7 +108,8 @@ public class MyQuestionActivity extends BaseActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(result);
                         code = jsonObject.getString("state");
-                        returnMsg1=jsonObject.getString("message1");
+                        returnMsg1=jsonObject.getString("message2");
+                        returnMsg2=jsonObject.getString("message3");
                         JSONObject jsonObject1 =  jsonObject.getJSONObject("data");
                         if ("200".equals(code)) {
                             mList.clear();
@@ -128,8 +131,8 @@ public class MyQuestionActivity extends BaseActivity {
             return code;
         }
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(BaseActivity baseActivity, String s) {
+
 
             switch (s) {
 
@@ -137,13 +140,15 @@ public class MyQuestionActivity extends BaseActivity {
                     myquestionAdapter.setmDatas(mList);
                     break;
                 case "4000":
-
-                    toast(  "连接超时，请重试");
+                    toast( getText(R.string.toast_all_cs).toString());
 
                     break;
                 default:
-
-                    toast(  returnMsg1);
+                    if (application.IsEnglish()==0){
+                        toast(returnMsg1);
+                    }else {
+                        toast(returnMsg2);
+                    }
                     break;
 
             }

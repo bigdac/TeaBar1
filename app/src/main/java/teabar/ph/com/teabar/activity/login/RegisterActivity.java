@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -37,6 +38,7 @@ import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.activity.question.BaseQuestionActivity;
+import teabar.ph.com.teabar.activity.tkActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.pojo.Equpment;
@@ -45,11 +47,11 @@ import teabar.ph.com.teabar.service.MQService;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.SharePreferenceManager;
 import teabar.ph.com.teabar.util.ToastUtil;
+import teabar.ph.com.teabar.util.Utils;
 
 public class RegisterActivity extends BaseActivity {
     MyApplication application;
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     @BindView(R.id.et_regist_nick)
     EditText et_regist_nick;
     @BindView(R.id.et_regist_user)
@@ -60,6 +62,8 @@ public class RegisterActivity extends BaseActivity {
     EditText et_regist_pasw;
     @BindView(R.id.bt_register_code)
     Button bt_register_code;
+    @BindView(R.id.tv_login_tk)
+    TextView tv_login_tk;
     SharedPreferences preferences;
     QMUITipDialog tipDialog;//dialog
     String user;
@@ -83,18 +87,19 @@ public class RegisterActivity extends BaseActivity {
         if (application == null) {
             application = (MyApplication) getApplication();
         }
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
         application.addActivity(this);
+        if (application.IsEnglish()==0){
+            tv_login_tk.setText(Html.fromHtml("通過登錄你同意Lify的<u>《隱私政策和條款》</u>"));
+        }else {
+            tv_login_tk.setText(Html.fromHtml(" By signing up, you agree to our <u>Terms of Use and Cookies&Privacy Policy.</u>"));
+        }
         language = application.IsEnglish();
         userEntryDao = new UserEntryImpl(getApplicationContext());
         equipmentDao = new EquipmentImpl(getApplicationContext());
         preferences = getSharedPreferences("my", MODE_PRIVATE);
         tipDialog = new QMUITipDialog.Builder(this)
                 .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
-                .setTipWord("请稍后...")
+                .setTipWord(getText(R.string.search_qsh).toString())
                 .create();
         }
 
@@ -116,22 +121,23 @@ public class RegisterActivity extends BaseActivity {
         public void widgetClick(View v) {
 
         }
-        @OnClick({R.id.tv_regist_login,R.id.bt_register_code,R.id.et_regist_nick,R.id.bt_regist_ensure})
+        @OnClick({ R.id.bt_register_code,R.id.et_regist_nick,R.id.bt_regist_ensure ,R.id.tv_login_regist,R.id.regist_back})
         public void onClick(View view){
             switch (view.getId()){
-                case R.id.tv_regist_login:
-                    finish();
-                    break;
+
 
                 case R.id.bt_register_code:
                     user = et_regist_user.getText().toString().trim();
                     if (TextUtils.isEmpty(user)){
-                        toast("账户不能为空");
+                        toast(getText(R.string.register_toa_zh).toString());
                     }else {
                         Map<String,Object> params1=new HashMap<>();
                         if (user.contains("@")){
                             params1.put("email",user);
                         }else {
+                            if (user.length()==8){
+                                user = "+852"+user;
+                            }
                             params1.put("phone",user);
                         }
                         showProgressDialog();
@@ -148,23 +154,23 @@ public class RegisterActivity extends BaseActivity {
                     password=et_regist_pasw.getText().toString().trim();
                     user = et_regist_user.getText().toString().trim();
                     if (TextUtils.isEmpty(nick)){
-                        toast("昵称不能为空");
+                        toast( getText(R.string.register_toa_name).toString());
                         break;
                     }
                     if (TextUtils.isEmpty(code)){
-                        toast( "请输入验证码");
+                        toast( getText(R.string.login_et_code).toString());
                         break;
                     }
                     if (TextUtils.isEmpty(password)){
-                        toast( "请输入密码");
+                        toast( getText(R.string.register_toa_pass).toString());
                         break;
                     }
                     if (TextUtils.isEmpty(user)){
-                        toast( "请输入手机号或邮箱");
+                        toast( getText(R.string.login_et_user).toString());
                         break;
                     }
                     if (password.length()<6||password.length()>18){
-                        toast( "密码位数应该大于6小于18");
+                        toast( getText(R.string.register_toa_passlen).toString());
                         break;
                     }
 
@@ -181,6 +187,17 @@ public class RegisterActivity extends BaseActivity {
                         new RegistAsyncTask().execute(params);
 
                 break;
+
+                case R.id.tv_login_regist:
+                   if (!Utils.isFastClick()){
+                       startActivity(tkActivity.class);
+                   }
+
+                    break;
+
+                case R.id.regist_back:
+                    finish();
+                    break;
         }
     }
 
@@ -210,7 +227,8 @@ public class RegisterActivity extends BaseActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(result);
                         code = jsonObject.getString("state");
-                        returnMsg1=jsonObject.getString("message1");
+                        returnMsg1=jsonObject.getString("message2");
+                        returnMsg2 = jsonObject.getString("message3");
                         if ("200".equals(code)) {
                             JSONObject returnData = jsonObject.getJSONObject("data");
                              userId = returnData.getString("userId");
@@ -262,7 +280,12 @@ public class RegisterActivity extends BaseActivity {
                     if (tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    toast( returnMsg1);
+                    if (application.IsEnglish()==0){
+                        toast( returnMsg1);
+                    }else {
+                        toast( returnMsg2);
+                    }
+
                     break;
 
             }
@@ -321,7 +344,8 @@ public class RegisterActivity extends BaseActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(result);
                         code = jsonObject.getString("state");
-                        returnMsg1=jsonObject.getString("message1");
+                        returnMsg1=jsonObject.getString("message2");
+                        returnMsg2 = jsonObject.getString("message3");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -349,13 +373,18 @@ public class RegisterActivity extends BaseActivity {
                     if (tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    toast( "连接超时，请重试");
+                    toast( getText(R.string.toast_all_cs).toString());
                     break;
                 default:
                     if (tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    toast( returnMsg1);
+                    if (application.IsEnglish()==0){
+                        toast( returnMsg1);
+                    }else {
+                        toast( returnMsg2);
+                    }
+
                     break;
 
             }
@@ -380,6 +409,7 @@ public class RegisterActivity extends BaseActivity {
                         JSONObject jsonObject = new JSONObject(result);
                         code = jsonObject.getString("state");
                         returnMsg1=jsonObject.getString("message2");
+                        returnMsg2=jsonObject.getString("message3");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -409,13 +439,18 @@ public class RegisterActivity extends BaseActivity {
                     if (tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    toast( "连接超时，请重试");
+                    toast( getText(R.string.toast_all_cs).toString());
                     break;
                 default:
                     if (tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    toast( returnMsg1);
+                    if (application.IsEnglish()==0){
+                        toast( returnMsg1);
+                    }else {
+                        toast( returnMsg2);
+                    }
+
                     break;
 
             }
@@ -449,7 +484,7 @@ public class RegisterActivity extends BaseActivity {
         public void onFinish() {
             Log.e("Tag", "倒计时完成");
             if (bt_register_code!=null){
-                bt_register_code.setText("重新发送");
+                bt_register_code.setText(getText(R.string.register_toa_cx).toString());
                 bt_register_code.setClickable(true);
             }
 

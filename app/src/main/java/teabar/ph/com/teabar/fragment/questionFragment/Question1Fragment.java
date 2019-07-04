@@ -32,7 +32,7 @@ public class Question1Fragment extends BaseFragment {
     public void onClick(View view){
         switch (view.getId()){
             case R.id.bt_question1_esure:
-                ((BaseQuestionActivity)getActivity()).rePlaceFragment(1);
+                ((BaseQuestionActivity)getActivity()).rePlaceFragment(2);
                 break;
         }
     }

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.List;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.pojo.Adress;
+import teabar.ph.com.teabar.util.Utils;
 
 
 public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHolder>  {
@@ -32,18 +33,22 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, final int position) {
-        if (num==0){
-            myViewHolder.tv_address_place.setText(mData.get(position).getCname());
-        }else {
-            myViewHolder.tv_address_place.setText(mData.get(position).getEname());
-        }
-
-        myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                itemClickListerner.onClikner(view,position);
+        if (position<mData.size()) {
+            if (num == 0) {
+                myViewHolder.tv_address_place.setText(mData.get(position).getCname());
+            } else {
+                myViewHolder.tv_address_place.setText(mData.get(position).getEname());
             }
-        });
+
+            myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    itemClickListerner.onClikner(view, position);
+
+                }
+            });
+        }
     }
 
     public List<Adress> getmData(){
@@ -68,7 +73,9 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHo
         notifyDataSetChanged();
     }
     public void SetOnclickLister(OnItemClickListerner itemClickListerner){
+
         this.itemClickListerner = itemClickListerner;
+
     }
 
     OnItemClickListerner itemClickListerner;

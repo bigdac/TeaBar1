@@ -24,6 +24,7 @@ import com.bigkoo.pickerview.listener.CustomListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.google.gson.Gson;
+import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -45,6 +46,7 @@ import teabar.ph.com.teabar.pojo.Adress;
 import teabar.ph.com.teabar.util.DisplayUtil;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
+import teabar.ph.com.teabar.util.Utils;
 
 
 public class Question3Fragment extends BaseFragment {
@@ -60,6 +62,18 @@ public class Question3Fragment extends BaseFragment {
     TextView et_question_place;
     private TimePickerView pvCustomTime;
     AddressAdapter addressAdapter;
+    QMUITipDialog tipDialog;
+    //显示dialog
+    public void showProgressDialog() {
+
+        tipDialog = new QMUITipDialog.Builder(getActivity())
+                .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
+                .setTipWord(getText(R.string.search_qsh).toString())
+
+                .create();
+        tipDialog.show();
+    }
+
     @Override
     public int bindLayout() {
         return R.layout.fragment_question3;
@@ -160,31 +174,36 @@ public class Question3Fragment extends BaseFragment {
             switch (s) {
 
                 case "200":
+                    if (tipDialog!=null&&tipDialog.isShowing())
+                        tipDialog.dismiss();
                     addressAdapter.update(list);
                     if (list.size()==0){
-                        ((BaseQuestionActivity)getActivity()).setAdress(country1,province1,city1,area1);
-                        number=0;
+                        number=1;
                         mPopWindow.dismiss();
-                        if (TextUtils.isEmpty(province)){
-                            et_question_place.setText(country);
-                        }else if (TextUtils.isEmpty(city)){
-                            et_question_place.setText(country+"·"+province);
-                        }else if (TextUtils.isEmpty(area)){
-                            et_question_place.setText(country+"·"+province+"·"+city);
-                        }else  {
-                            et_question_place.setText(country+"·"+province+"·"+city+"·"+area);
-                        }
+//                        if (TextUtils.isEmpty(province)){
+//                            et_question_place.setText(country);
+//                        }else if (TextUtils.isEmpty(city)){
+//                            et_question_place.setText(country+"·"+province);
+//                        }else if (TextUtils.isEmpty(area)){
+//                            et_question_place.setText(country+"·"+province+"·"+city);
+//                        }else  {
+//                            et_question_place.setText(country+"·"+province+"·"+city+"·"+area);
+//                        }
 
                     }
+                    canClick=true;
                     break;
                 case "4000":
-
+                    if (tipDialog!=null&&tipDialog.isShowing())
+                        tipDialog.dismiss();
                     ToastUtil.showShort(getActivity(), getText(R.string.toast_all_cs).toString());
-
+                    canClick=true;
                     break;
                 default:
-
+                    if (tipDialog!=null&&tipDialog.isShowing())
+                        tipDialog.dismiss();
                     ToastUtil.showShort(getActivity(), returnMsg1);
+                    canClick=true;
                     break;
 
             }
@@ -193,7 +212,8 @@ public class Question3Fragment extends BaseFragment {
     int language;
     private PopupWindow mPopWindow;
     private View contentViewSign;
-    int number = 0 ;
+    int number = 1 ;
+    boolean canClick= true;
     String  country,province,city,area;
     String  country1,province1,city1,area1;
     private void showPopup() {
@@ -217,6 +237,7 @@ public class Question3Fragment extends BaseFragment {
         address_hot_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showProgressDialog();
                 country =null;
                 province =null;
                 city =null;
@@ -229,7 +250,7 @@ public class Question3Fragment extends BaseFragment {
                 province = getText(R.string.adress_hot_71).toString();
                 country1 = "130";
                 province1 = "655";
-                number=2;
+                number=3;
                 examId = 655;
                 new getCountryAsynTask().execute();
                 tv_address_1.setVisibility(View.GONE);
@@ -239,6 +260,7 @@ public class Question3Fragment extends BaseFragment {
         address_hot_2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showProgressDialog();
                 country =null;
                 province =null;
                 city =null;
@@ -251,7 +273,10 @@ public class Question3Fragment extends BaseFragment {
                 country1 = "3482";
                 number=1;
                 examId = 3482;
-                new getCountryAsynTask().execute();
+                mPopWindow.dismiss();
+                tipDialog.dismiss();
+                et_question_place.setText(country);
+                ((BaseQuestionActivity)getActivity()).setAdress(country1,null,null,null);
                 tv_address_1.setVisibility(View.GONE);
                 li_address_hot.setVisibility(View.GONE);
             }
@@ -259,6 +284,7 @@ public class Question3Fragment extends BaseFragment {
         address_hot_3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showProgressDialog();
                 country =null;
                 province =null;
                 city =null;
@@ -271,7 +297,7 @@ public class Question3Fragment extends BaseFragment {
                 province = getText(R.string.adress_hot_101).toString();
                 country1 = "130";
                 province1 = "612";
-                number=2;
+                number=3;
                 examId = 612;
                 new getCountryAsynTask().execute();
                 tv_address_1.setVisibility(View.GONE);
@@ -281,6 +307,7 @@ public class Question3Fragment extends BaseFragment {
         address_hot_4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showProgressDialog();
                 country =null;
                 province =null;
                 city =null;
@@ -291,7 +318,7 @@ public class Question3Fragment extends BaseFragment {
                 area1 =null;
                 country = getText(R.string.adress_hot_1).toString();
                 country1 = "130";
-                number=1;
+                number=2;
                 examId = 130;
                 new getCountryAsynTask().execute();
                 tv_address_1.setVisibility(View.GONE);
@@ -301,6 +328,7 @@ public class Question3Fragment extends BaseFragment {
         address_hot_5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showProgressDialog();
                 country =null;
                 province =null;
                 city =null;
@@ -313,7 +341,10 @@ public class Question3Fragment extends BaseFragment {
                 country1 = "2141";
                 number=1;
                 examId = 2141;
-                new getCountryAsynTask().execute();
+                ((BaseQuestionActivity)getActivity()).setAdress(country1,null,null,null);
+                mPopWindow.dismiss();
+                tipDialog.dismiss();
+                et_question_place.setText(country);
                 tv_address_1.setVisibility(View.GONE);
                 li_address_hot.setVisibility(View.GONE);
             }
@@ -321,6 +352,7 @@ public class Question3Fragment extends BaseFragment {
         address_hot_6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showProgressDialog();
                 country =null;
                 province =null;
                 city =null;
@@ -345,57 +377,70 @@ public class Question3Fragment extends BaseFragment {
         iv_address_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                number=0;
+                number=1;
                 mPopWindow.dismiss();
+
             }
         });
         addressAdapter.SetOnclickLister(new AddressAdapter.OnItemClickListerner() {
             @Override
             public void onClikner(View view, int position) {
-                Adress adress = addressAdapter.getmData().get(position);
-                examId = adress.getId();
-                number++;
+                if (!Utils.isFastClick()&&canClick) {
+                    canClick=false;
+                    showProgressDialog();
+                    Adress adress = addressAdapter.getmData().get(position);
+                    examId = adress.getId();
+                    if (number == 1) {
+                        if (language == 0) {
+                            country = adress.getCname();
+                            country1 = adress.getId() + "";
+                        } else {
+                            country = adress.getEname();
+                            country1 = adress.getId() + "";
+                        }
+                        ((BaseQuestionActivity) getActivity()).setAdress(country1, null, null, null);
+                        et_question_place.setText(country);
+                        number = 2;
 
-                if (number==1){
-                    if (language==0){
-                        country = adress.getCname();
-                        country1 = adress.getId()+"";
-                    }else {
-                        country = adress.getEname();
-                        country1 = adress.getId()+"";
+                    } else if (number == 2) {
+                        if (language == 0) {
+                            province = adress.getCname();
+                            province1 = adress.getId() + "";
+                        } else {
+                            province = adress.getEname();
+                            province1 = adress.getId() + "";
+                        }
+                        number = 3;
+                        ((BaseQuestionActivity) getActivity()).setAdress(country1, province1, null, null);
+                        et_question_place.setText(country + "·" + province);
+                    } else if (number == 3) {
+                        if (language == 0) {
+                            city = adress.getCname();
+                            city1 = adress.getId() + "";
+                        } else {
+                            city = adress.getEname();
+                            city1 = adress.getId() + "";
+                        }
+                        number = 4;
+                        ((BaseQuestionActivity) getActivity()).setAdress(country1, province1, city1, null);
+                        et_question_place.setText(country + "·" + province + "·" + city);
+                    } else if (number == 4) {
+                        if (language == 0) {
+                            area = adress.getCname();
+                            area1 = adress.getId() + "";
+                        } else {
+                            area = adress.getEname();
+                            area1 = adress.getId() + "";
+                        }
+                        ((BaseQuestionActivity) getActivity()).setAdress(country1, province1, city1, area1);
+                        et_question_place.setText(country + "·" + province + "·" + city + "·" + area1);
                     }
-                }else if (number==2){
-                    if (language==0) {
-                        province = adress.getCname();
-                        province1 = adress.getId() + "";
-                    }else {
-                        province = adress.getEname();
-                        province1 = adress.getId() + "";
-                    }
-                    city=null;
-                    area=null;
-                    city1=null;
-                    area1=null;
-                }else if (number==3){
-                    if (language==0) {
-                        city = adress.getCname();
-                        city1 = adress.getId() + "";
-                    }else {
-                        city = adress.getEname();
-                        city1 = adress.getId() + "";
-                    }
-                }else if (number==4){
-                    if (language==0) {
-                        area = adress.getCname();
-                        area1 = adress.getId() + "";
-                    }else {
-                        area = adress.getEname();
-                        area1 = adress.getId() + "";
-                    }
+                    new getCountryAsynTask().execute();
+                    tv_address_1.setVisibility(View.GONE);
+                    li_address_hot.setVisibility(View.GONE);
+                }else {
+                    ToastUtil.showShort(getActivity(),getText(R.string.toast_equ_fast).toString());
                 }
-                new getCountryAsynTask().execute();
-                tv_address_1.setVisibility(View.GONE);
-                li_address_hot.setVisibility(View.GONE);
             }
         });
         iv_address_back.setOnClickListener(new View.OnClickListener() {

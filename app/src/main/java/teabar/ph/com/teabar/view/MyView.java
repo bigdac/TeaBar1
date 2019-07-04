@@ -24,7 +24,7 @@ public class MyView extends View
 
     private Paint mPaint;
     private Paint mPaint2;
-    private int mStrokeWith;
+    private float mStrokeWith;
     private boolean mIsRound;
 //    private int mColor01;
 //    private int mColor02;
@@ -66,8 +66,6 @@ public class MyView extends View
         int color_07 = getResources().getColor(R.color.nomal_green);
 
 
-
-
         /*获取属性集合*/
         TypedArray typedArray = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.ColorCircleProgressView, 0, 0);
 
@@ -86,12 +84,12 @@ public class MyView extends View
         mViewPadding = typedArray.getInteger(R.styleable.ColorCircleProgressView_ViewPadding, 40);
 
         /*圆环的大小及是否圆角*/
-        mStrokeWith = typedArray.getInteger(R.styleable.ColorCircleProgressView_StrokeWith, 40);
+        mStrokeWith = typedArray.getDimension(R.styleable.ColorCircleProgressView_StrokeWith, getDimen(R.dimen.Viewsize));
         mIsRound = typedArray.getBoolean(R.styleable.ColorCircleProgressView_IsRound, true);
 
         /*Point的颜色和大小*/
-        mPointColor = typedArray.getColor(R.styleable.ColorCircleProgressView_PointColor, Color.WHITE);
-        mPointColor1 = typedArray.getColor(R.styleable.ColorCircleProgressView_PointColor1, Color.WHITE);
+        mPointColor = typedArray.getColor(R.styleable.ColorCircleProgressView_PointColor, Color.parseColor("#f1f1f1"));
+        mPointColor1 = typedArray.getColor(R.styleable.ColorCircleProgressView_PointColor1, Color.parseColor("#f1f1f1"));
         mPointRaido = typedArray.getInteger(R.styleable.ColorCircleProgressView_PointRadio, 10);
         mPointRaido1 = typedArray.getInteger(R.styleable.ColorCircleProgressView_PointRadio1, 1);
 
@@ -117,13 +115,13 @@ public class MyView extends View
         mPaint.setStyle(Paint.Style.STROKE);  /*画笔为线条线条*/
         mPaint.setStrokeWidth(mStrokeWith);     /*线条的宽*/
         mPaint.setAntiAlias(true);               /*抗锯齿*/
-        mPaint.setColor(Color.WHITE);
+        mPaint.setColor( Color.parseColor("#f1f1f1"));
         if(mIsRound) {mPaint.setStrokeCap(Paint.Cap.ROUND);}  /*是否圆角*/
         mPaint2 = new Paint();
         mPaint2.setStyle(Paint.Style.STROKE);  /*画笔为线条线条*/
         mPaint2.setStrokeWidth(mStrokeWith);     /*线条的宽*/
         mPaint2.setAntiAlias(true);               /*抗锯齿*/
-        mPaint2.setColor(Color.parseColor("#FC4D80"));
+        mPaint2.setColor(Color.parseColor("#2bdca3"));
         if(mIsRound) {mPaint2.setStrokeCap(Paint.Cap.ROUND);}  /*是否圆角*/
 
         mTextPaint = new Paint();
@@ -149,10 +147,10 @@ int width1 = 0;
         /*把宽高赋值给全局变量,得到圆心的坐标*/
         mView_x0=width/2;
         mView_y0=height/2;
-        String str = "65";
-        canvas.drawText(str, mViewPadding+50, mView_y0+15, mTextPaint);
-//         String s = getResources().getText(R.string.equ_xq_temp).toString();
-        canvas.drawText("95", width-mViewPadding-50- getTextWidth(str,mTextPaint), mView_y0+15, mTextPaint);
+//        String str = "65";
+//        canvas.drawText(str, mViewPadding+50, mView_y0+15, mTextPaint);
+////         String s = getResources().getText(R.string.equ_xq_temp).toString();
+//        canvas.drawText("95", width-mViewPadding-50- getTextWidth(str,mTextPaint), mView_y0+15, mTextPaint);
 //        canvas.drawText(s ,mView_x0-mViewPadding/2- getTextWidth(str,mTextPaint)/2,mView_y0-20,mTextPaint);
 //        canvas.drawText(temp,mView_x0-mViewPadding/2- getTextWidth(temp,mTextPaint1)/2,mView_y0-50,mTextPaint1);
 //        Log.i(TAG, (float) (mArcRadius + bDistance) - 2 * (mTextPaint.descent() + mTextPaint.ascent()) + "");
@@ -202,7 +200,17 @@ int width1 = 0;
 
 
     }
-
+    private float getDimen(int dimenId) {
+        return getResources().getDimension(dimenId);
+    }
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int height = getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec);
+        int width = getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec);
+        int min = Math.min(width, height);
+        setMeasuredDimension(min, min);
+    }
     public int getTextWidth(String str,Paint paint){
         Rect rect = new Rect();
         paint.getTextBounds(str, 0, str.length(), rect);
@@ -212,8 +220,8 @@ int width1 = 0;
     }
 
     public void setCurProgress(int curProgress) {
-        this.mPointAngle = (int)(((float)curProgress-65)/25f*180)+90;
-
+        this.mPointAngle = (int)(((float)curProgress-65)/30f*180)+90;
+        invalidate();
         Log.e("DDDDDD", "setCurProgress: -->"+mPointAngle +"...."+curProgress+";;;;"+(((float)curProgress-65)/25f*180));
     }
     @Override

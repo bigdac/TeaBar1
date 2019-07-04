@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="#f7f7f7"
     >
     <LinearLayout
         android:id="@+id/li_main_title"
@@ -25,7 +25,7 @@
                 android:id="@+id/tv_main_online"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/equ_xq_online"
+                android:text="@string/equ_xq_outline"
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:layout_toRightOf="@+id/iv_main_water"

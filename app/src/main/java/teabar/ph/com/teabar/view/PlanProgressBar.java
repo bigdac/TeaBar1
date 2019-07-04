@@ -1,10 +1,14 @@
 package teabar.ph.com.teabar.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Shader;
+import android.graphics.SweepGradient;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -17,7 +21,8 @@ public class PlanProgressBar extends View {
     private int progress;// 进度值
     private int width;// 宽度值
     private int height;// 高度值
-
+    private int mColor01;
+        private int mColor02;
     public PlanProgressBar(Context context, AttributeSet attrs,
                            int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -26,7 +31,14 @@ public class PlanProgressBar extends View {
 
     public PlanProgressBar(Context context, AttributeSet attrs) {
         super(context, attrs);
+        TypedArray typedArray = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.ColorCircleProgressView, 0, 0);
+        int color_01 =  Color.parseColor("#43e2c7");
+        int color_02 =  Color.parseColor("#2bdca3");
+        /*渐变颜色值*/
+        mColor01 = typedArray.getColor(R.styleable.ColorCircleProgressView_Color01, color_01);
+        mColor02 = typedArray.getColor(R.styleable.ColorCircleProgressView_Color02, color_02);
         init();
+        typedArray.recycle();
     }
 
     public PlanProgressBar(Context context) {
@@ -35,6 +47,7 @@ public class PlanProgressBar extends View {
     }
 
     private void init() {
+
         paint = new Paint();
         paint1 = new Paint();
     }
@@ -48,7 +61,10 @@ public class PlanProgressBar extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        paint.setColor(getResources().getColor(R.color.nomal_green));// 设置画笔颜色
+
+        LinearGradient sweepGradient = new LinearGradient(0 , 0,width,0 , mColor01, mColor02 , Shader.TileMode.CLAMP);
+        paint.setShader(sweepGradient);
+//        paint.setColor(getResources().getColor(R.color.nomal_green));// 设置画笔颜色
         paint1.setColor(Color.parseColor("#3DBBBBBB"));
 
 //        if (progress==100){

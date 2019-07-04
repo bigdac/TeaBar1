@@ -2,82 +2,50 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="#fafafa"
     >
-    <TextView
-        android:id="@+id/tv_main_1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        />
-    <RelativeLayout
-        android:id="@+id/rl_login_title"
-        android:layout_below="@+id/tv_main_1"
+    <ImageView
+        android:id="@+id/iv_login_logo1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-       >
-    <TextView
-        android:id="@+id/tv_login_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/login_tv_login"
-        android:textSize="28sp"
-        android:textColor="@color/login_black"
-        android:layout_marginLeft="20dp"
-        android:layout_centerVertical="true"
+        android:src="@mipmap/wj_logo"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="27dp"
         />
-        <TextView
-            android:id="@+id/tv_login_regist"
-            android:layout_toRightOf="@+id/tv_login_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/login_tv_regist"
-            android:textSize="17sp"
-            android:textColor="@color/login_gray"
-            android:layout_marginLeft="30dp"
-            android:layout_centerVertical="true"
-            />
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/logo"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
-            />
 
-    </RelativeLayout>
     <ImageView
         android:id="@+id/iv_login_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@mipmap/login_logo"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/rl_login_title"
-        android:layout_marginTop="40dp"
+        android:layout_below="@+id/iv_login_logo1"
+        android:layout_marginTop="20dp"
         />
 
 
     <EditText
         android:id="@+id/et_login_user"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:layout_below="@+id/iv_login_logo"
-        android:layout_marginLeft="26dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginRight="26dp"
+        android:layout_toRightOf="@+id/iv_login_user"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="25dp"
         android:background="@drawable/login_edtext"
         android:hint="@string/login_et_user"
         android:paddingLeft="15dp"
-        android:textColor="#888888"
+        android:textColorHint="#9d9d9d"
+        android:textColor="#333333"
         android:textSize="14sp" />
     <ImageView
+        android:id="@+id/iv_login_user"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:src="@mipmap/loign_user"
+        android:layout_height="50dp"
+        android:src="@mipmap/loign_user1"
         android:layout_alignTop="@+id/et_login_user"
-        android:layout_alignRight="@+id/et_login_user"
-        android:layout_marginRight="15dp"
+        android:layout_marginLeft="25dp"
         />
 
     <EditText
@@ -85,11 +53,12 @@
         android:layout_below="@+id/et_login_user"
         android:layout_marginTop="10dp"
         android:background="@drawable/login_edtext"
-        android:layout_marginLeft="26dp"
-        android:layout_marginRight="26dp"
+        android:layout_toRightOf="@+id/login_iv_seepassw"
+        android:layout_marginRight="25dp"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:textColor="#888888"
+        android:layout_height="50dp"
+        android:textColor="#333"
+        android:textColorHint="#9d9d9d"
         android:inputType="textPassword"
         android:hint="@string/login_et_pass"
         android:textSize="14sp"
@@ -98,11 +67,10 @@
     <ImageView
         android:id="@+id/login_iv_seepassw"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:src="@mipmap/loign_unsee"
+        android:layout_height="50dp"
+        android:src="@mipmap/loign_pass1"
         android:layout_alignTop="@+id/et_login_pasw"
-        android:layout_alignRight="@+id/et_login_pasw"
-        android:layout_marginRight="15dp"
+        android:layout_marginLeft="25dp"
         />
     <TextView
         android:id="@+id/tv_login_forget"
@@ -116,10 +84,37 @@
         android:textSize="16sp"
         android:textColor="#999999"
         />
+    <LinearLayout
+        android:id="@+id/li_login_repass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/et_login_pasw"
+        android:layout_marginLeft="27dp"
+        android:layout_marginTop="18dp"
+        >
+        <ImageView
+            android:id="@+id/iv_login_repass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/logo_xz"
+            android:layout_gravity="center"
+            />
+        <TextView
+            android:id="@+id/tv_login_rem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login_tv_rem"
+            android:textSize="16sp"
+            android:textColor="#999999"
+            android:layout_marginLeft="10dp"
+            />
+
+    </LinearLayout>
     <Button
         android:id="@+id/bt_login_ensure"
         android:layout_below="@+id/tv_login_forget"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:layout_marginRight="26dp"
         android:layout_marginLeft="26dp"
         android:background="@mipmap/login_button"
@@ -185,50 +180,49 @@
             />
 
     </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/login_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@mipmap/facebook"
-        android:layout_marginLeft="100dp"
-        android:layout_below="@+id/rl_login_third"
-        android:layout_marginTop="20dp"
-       />
-
-    <ImageView
-        android:id="@+id/sign_in_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="100dp"
-        android:layout_alignTop="@+id/login_button"
-        android:src="@mipmap/google"
-        />
     <LinearLayout
-        android:id="@+id/li_login_ty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/rl_login_third"
+        android:layout_marginTop="23dp"
+        android:layout_centerHorizontal="true"
+        >
+        <ImageView
+            android:id="@+id/login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/facebook"
+            />
+
+        <ImageView
+            android:id="@+id/sign_in_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:src="@mipmap/google"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tv_login_regist"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
         android:orientation="horizontal"
         android:gravity="center"
         >
-        <ImageView
-            android:id="@+id/iv_login_ty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/login_esure"
-            />
+        <!--android:text="@string/login_tv_regist1"-->
         <TextView
+            android:id="@+id/tv_login_tk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/login_tv_clause1"
-            android:textSize="12sp"
-            android:textColor="#bbbbbb"
-            android:layout_marginLeft="10dp"
+
+            android:textSize="14sp"
+            android:textColor="@color/social_gray"
             />
 
 

@@ -30,20 +30,49 @@
         android:layout_marginRight="6dp"
         />
     <TextView
-
+        android:layout_marginTop="6dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:text="@string/equ_light_mode"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="22dp"
+        android:gravity="center"
         android:textSize="20sp"
         android:textColor="@color/login_black"
         />
+
     <RelativeLayout
-        android:id="@+id/rl_mode_1"
-        android:layout_below="@+id/tv_esure"
+        android:id="@+id/rl_mode_3"
         android:layout_width="match_parent"
         android:layout_marginTop="30dp"
+        android:layout_below="@+id/tv_esure"
+        android:layout_height="50dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/equ_mode_3"
+            android:layout_marginLeft="36dp"
+            android:textSize="16sp"
+            android:textColor="@color/login_black"
+            android:layout_centerVertical="true"
+            />
+        <ImageView
+            android:id="@+id/iv_mode_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/mode_choose"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="33dp"
+            android:visibility="invisible"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_mode_1"
+        android:layout_below="@id/rl_mode_3"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
         android:layout_height="50dp">
         <TextView
             android:layout_width="wrap_content"
@@ -83,34 +112,6 @@
             />
         <ImageView
             android:id="@+id/iv_mode_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/mode_choose"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="33dp"
-            android:visibility="invisible"
-            />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/rl_mode_3"
-        android:layout_below="@+id/rl_mode_2"
-        android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_height="50dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/equ_mode_3"
-            android:layout_marginLeft="36dp"
-            android:textSize="16sp"
-            android:textColor="@color/login_black"
-            android:layout_centerVertical="true"
-            />
-        <ImageView
-            android:id="@+id/iv_mode_3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/mode_choose"

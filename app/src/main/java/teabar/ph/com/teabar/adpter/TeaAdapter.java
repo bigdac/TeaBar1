@@ -42,11 +42,12 @@ public class TeaAdapter extends RecyclerView.Adapter<TeaAdapter.MyViewHolder> {
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, final int i) {
         String headImg = mDatas.get(i).getTeaPicture();
         myViewHolder.tv_mail_name .setText(mDatas.get(i).getProductNameEn());
-        Glide.with(mContext).load(headImg).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.color.white).into(myViewHolder.iv_mail_pic);
+        Glide.with(mContext).load(headImg).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.moren).transform(new GlideCircleTransform(mContext)).into(myViewHolder.iv_mail_pic);
         Log.e("Adress", "onBindViewHolder: -->"+headImg );
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                long id = mDatas.get(i).getId();
                 Intent intent = new Intent(mContext,MakeActivity.class);
                 intent.putExtra("teaId",mDatas.get(i).getId());
                 mContext.startActivity(intent);

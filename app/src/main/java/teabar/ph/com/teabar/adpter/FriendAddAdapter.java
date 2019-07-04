@@ -51,6 +51,7 @@ public class FriendAddAdapter extends RecyclerView.Adapter<FriendAddAdapter.Myvi
                 .placeholder(R.mipmap.my_pic)//图片加载出来前，显示的图片
                 .fallback( R.mipmap.my_pic) //url为空的时候,显示的图片
                 .error(R.mipmap.my_pic)//图片加载失败后，显示的图片
+                .transform(new teabar.ph.com.teabar.util.GlideCircleTransform(context))
                 .diskCacheStrategy(DiskCacheStrategy.ALL).into(myviewHolder.iv_talk_pic);
         myviewHolder.bt_friend_add.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -21,7 +21,7 @@ public class MyView1 extends View
 
     private Paint mPaint;
     private Paint mPaint2;
-    private int mStrokeWith;
+    private float mStrokeWith;
     private boolean mIsRound;
 //    private int mColor01;
 //    private int mColor02;
@@ -78,7 +78,7 @@ public class MyView1 extends View
         mViewPadding = typedArray.getInteger(R.styleable.ColorCircleProgressView_ViewPadding, 40);
 
         /*圆环的大小及是否圆角*/
-        mStrokeWith = typedArray.getInteger(R.styleable.ColorCircleProgressView_StrokeWith, 40);
+        mStrokeWith = typedArray.getDimension(R.styleable.ColorCircleProgressView_StrokeWith, getDimen(R.dimen.Viewsize));
         mIsRound = typedArray.getBoolean(R.styleable.ColorCircleProgressView_IsRound, true);
 
         /*Point的颜色和大小*/
@@ -109,13 +109,13 @@ public class MyView1 extends View
         mPaint.setStyle(Paint.Style.STROKE);  /*画笔为线条线条*/
         mPaint.setStrokeWidth(mStrokeWith);     /*线条的宽*/
         mPaint.setAntiAlias(true);               /*抗锯齿*/
-        mPaint.setColor(Color.WHITE);
+        mPaint.setColor( Color.parseColor("#f1f1f1"));
         if(mIsRound) {mPaint.setStrokeCap(Paint.Cap.ROUND);}  /*是否圆角*/
         mPaint2 = new Paint();
         mPaint2.setStyle(Paint.Style.STROKE);  /*画笔为线条线条*/
         mPaint2.setStrokeWidth(mStrokeWith);     /*线条的宽*/
         mPaint2.setAntiAlias(true);               /*抗锯齿*/
-        mPaint2.setColor(Color.parseColor("#35DAC1"));
+        mPaint2.setColor(Color.parseColor("#2bdca3"));
         if(mIsRound) {mPaint2.setStrokeCap(Paint.Cap.ROUND);}  /*是否圆角*/
 
         mTextPaint = new Paint();
@@ -142,12 +142,12 @@ int width1 = 0;
         mView_x0=width/2;
         mView_y0=height/2;
         String str = "5";
-        canvas.drawText(str, mViewPadding+50, mView_y0+15, mTextPaint);
+//        canvas.drawText(str, mViewPadding-50, mView_y0+15, mTextPaint);
 //        String s = getResources().getText(R.string.equ_xq_time).toString();
-        canvas.drawText("30", width-mViewPadding-50- getTextWidth("30",mTextPaint), mView_y0+15, mTextPaint);
+//        canvas.drawText("30", width, mView_y0+15, mTextPaint);
 //        canvas.drawText(s,mView_x0-mViewPadding/2- (int)(getTextWidth("侵泡时间",mTextPaint)/2.5),height-130,mTextPaint);
 //        canvas.drawText(temp,mView_x0-mViewPadding/2- getTextWidth(temp,mTextPaint1)/2,mView_y0-50,mTextPaint1);
-//        Log.i(TAG, (float) (mArcRadius + bDistance) - 2 * (mTextPaint.descent() + mTextPaint.ascent()) + "");
+//        Log.i(TAG, (float) (mArcRadius + bDistance) - 2 * (mTextPaint.descent() + mTextPaint.ascent()) + "");+mViewPadding+50+getTextWidth("30",mTextPaint)
 
         /*设置线性渐变*/
 //        SweepGradient sweepGradient = new SweepGradient(width/ 2, height/ 2, new int[]{mColor01, mColor02, mColor03, mColor04, mColor05, mColor06, mColor07}, null);
@@ -175,16 +175,7 @@ int width1 = 0;
 
 //        if(mPointAngle<=90){mPointAngle=90;}
 //        else if(mPointAngle>270&mPointAngle<=360){mPointAngle=270;}
-        if (mPointAngle>=90&mPointAngle<180){
-            mPointAngle=0;
-        }else if (mPointAngle>180&mPointAngle<270){
-            mPointAngle=180;
-        }
-        if (0<mPointAngle&mPointAngle<90){
-            mPointAngle=90-mPointAngle;
-        }else if (mPointAngle<=360&mPointAngle>=270){
-            mPointAngle=360-mPointAngle+90;
-        }
+
 
         /*将45-315范围的角度转为0-100*/
 //        if(mOnProgressListener!=null) {
@@ -197,7 +188,7 @@ int width1 = 0;
         float R = (float) ((width - mViewPadding - mViewPadding) / 2);
         float Point_x= (float) (x0+R*Math.sin(mPointAngle*3.14/180));
         float Point_y= (float) (y0+R*Math.cos(mPointAngle * 3.14 / 180));
-        canvas.drawArc(rectF, mStartAangle+90 ,- mPointAngle, false, mPaint2);
+        canvas.drawArc(rectF, mStartAangle+90 ,-mPointAngle, false, mPaint2);
 //        Log.e("GGGGGGGGGGGGGG", "onDraw: -->"+(mStartAangle+90)+"...."+(mPointAngle) +"..."+mPointAngle);
         canvas.drawCircle(Point_x,Point_y,mPointRaido1,mPaint2);
         canvas.drawCircle(Point_x,Point_y,mPointRaido,mPaint1);
@@ -212,6 +203,17 @@ int width1 = 0;
 //        int h = rect.height();
         return w;
     }
+    private float getDimen(int dimenId) {
+        return getResources().getDimension(dimenId);
+    }
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int height = getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec);
+        int width = getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec);
+        int min = Math.min(width, height);
+        setMeasuredDimension(min, min);
+    }
 
     public void setCurProgress(int curProgress) {
         if (curProgress< 12.5){
@@ -219,7 +221,17 @@ int width1 = 0;
         }else {
            this.mPointAngle=360-(int)(((float)curProgress)/25f*180)+90;
         }
-
+        if (mPointAngle>=90&mPointAngle<180){
+            mPointAngle=0;
+        }else if (mPointAngle>180&mPointAngle<270){
+            mPointAngle=180;
+        }
+        if (0<mPointAngle&mPointAngle<90){
+            mPointAngle=90-mPointAngle;
+        }else if (mPointAngle<=360&mPointAngle>=270){
+            mPointAngle=360-mPointAngle+90;
+        }
+        invalidate();
     }
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -281,7 +293,16 @@ int width1 = 0;
                     Log.e("DDDDDD", "setCurProgress: -->"+mPointAngle +"...."+(mPointAngle)*25/180);
 
                 }
-
+                if (mPointAngle>=90&mPointAngle<180){
+                    mPointAngle=0;
+                }else if (mPointAngle>180&mPointAngle<270){
+                    mPointAngle=180;
+                }
+                if (0<mPointAngle&mPointAngle<90){
+                    mPointAngle=90-mPointAngle;
+                }else if (mPointAngle<=360&mPointAngle>=270){
+                    mPointAngle=360-mPointAngle+90;
+                }
                 /*得到点的角度后进行重绘*/
                 invalidate();
             }

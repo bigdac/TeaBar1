@@ -103,7 +103,7 @@
         <attr name="StartAngle" format="integer"/>
         <attr name="ViewPadding" format="integer"/>
         <!--定义圆环的大小，是否圆角-->
-        <attr name="StrokeWith" format="integer"/>
+        <attr name="StrokeWith" format="dimension"/>
         <attr name="IsRound" format="boolean"/>
 
         <!--定义点的大小和颜色-->

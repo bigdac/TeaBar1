@@ -68,7 +68,7 @@
                 android:layout_height="match_parent">
 
                 <teabar.ph.com.teabar.util.chat.view.DropDownListView
-                    android:background="#E8EDF3"
+                    android:background="#f7f7f7"
                     android:id="@+id/lv_chat"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

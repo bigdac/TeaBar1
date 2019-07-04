@@ -69,26 +69,29 @@ public class TimeFormat {
                 } else {
                     //不同天
                     int day = newDay - oldDay;
-                    if (day == 1) {
-                        result = "昨天";
-                    } else if (day == 2) {
-                        result = "前天";
-                    } else if (day > 2 && day < 8) {
+//                    if (day == 1) {
+//                        result = "昨天";
+//                    }
+// else if (day == 2) {
+//                        result = "前天";
+//                    }
+                    /*else*/
+                    if (day > 0 && day < 8) {
                         int week = date.getDay();
                         if (week == 1) {
-                            result = "周一";
+                            result = mContext.getText(R.string.weather_week_1).toString();
                         } else if (week == 2) {
-                            result = "周二";
+                            result =mContext.getText(R.string.weather_week_2).toString();
                         } else if (week == 3) {
-                            result = "周三";
+                            result = mContext.getText(R.string.weather_week_3).toString();
                         } else if (week == 4) {
-                            result = "周四";
+                            result = mContext.getText(R.string.weather_week_4).toString();
                         } else if (week == 5) {
-                            result = "周五";
+                            result = mContext.getText(R.string.weather_week_5).toString();
                         } else if (week == 6) {
-                            result = "周六";
+                            result = mContext.getText(R.string.weather_week_6).toString();
                         } else {
-                            result = "周日";
+                            result =mContext.getText(R.string.weather_week_7).toString();
                         }
                     } else {
                         result = oldMonth + "-" + oldDay;
@@ -96,33 +99,33 @@ public class TimeFormat {
                 }
             } else {
                 if (oldMonth == 1 || oldMonth == 3 || oldMonth == 5 || oldMonth == 7 || oldMonth == 8 || oldMonth == 10 || oldMonth == 12) {
-                    if (newDay == 1 && oldDay == 30) {
-                        result = "前天";
-                    } else if (newDay == 1 && oldDay == 31) {
-                        result = "昨天";
-                    } else if (newDay == 2 && oldDay == 31) {
-                        result = "前天";
-                    } else {
+//                    if (newDay == 1 && oldDay == 30) {
+//                        result = "前天";
+//                    } else if (newDay == 1 && oldDay == 31) {
+//                        result = "昨天";
+//                    } else if (newDay == 2 && oldDay == 31) {
+//                        result = "前天";
+//                    } else {
                         result = oldMonth + "-" + oldDay;
-                    }
+//                    }
                 } else if (oldMonth == 2) {
-                    if (newDay == 1 && oldDay == 27 || newDay == 2 && oldDay == 28) {
-                        result = "前天";
-                    } else if (newDay == 1 && oldDay == 28) {
-                        result = "昨天";
-                    } else {
+//                    if (newDay == 1 && oldDay == 27 || newDay == 2 && oldDay == 28) {
+//                        result = "前天";
+//                    } else if (newDay == 1 && oldDay == 28) {
+//                        result = "昨天";
+//                    } else {
                         result = oldMonth + "-" + oldDay;
-                    }
+//                    }
                 } else if (oldMonth == 4 || oldMonth == 6 || oldMonth == 9 || oldMonth == 11) {
-                    if (newDay == 1 && oldDay == 29) {
-                        result = "前天";
-                    } else if (newDay == 1 && oldDay == 30) {
-                        result = "昨天";
-                    } else if (newDay == 2 && oldDay == 30) {
-                        result = "前天";
-                    } else {
+//                    if (newDay == 1 && oldDay == 29) {
+//                        result = "前天";
+//                    } else if (newDay == 1 && oldDay == 30) {
+//                        result = "昨天";
+//                    } else if (newDay == 2 && oldDay == 30) {
+//                        result = "前天";
+//                    } else {
                         result = oldMonth + "-" + oldDay;
-                    }
+//                    }
                 }
             }
         }
@@ -182,26 +185,26 @@ public class TimeFormat {
                 } else {
                     //不同天
                     int day = newDay - oldDay;
-                    if (day == 1) {
+                    /*if (day == 1) {
                         result = "昨天 " + oldHour + ":" + oldMinute;
                     } else if (day == 2) {
                         result = "前天 " + oldHour + ":" + oldMinute;
-                    } else if (day > 2 && day < 8) {
+                    } else*/ if (day > 0 && day < 8) {
                         int week = date.getDay();
                         if (week == 1) {
-                            result =   "周一" + " " + oldHour + ":" + oldMinute;
+                            result =  mContext.getText(R.string.weather_week_1).toString() + " " + oldHour + ":" + oldMinute;
                         } else if (week == 2) {
-                            result = "周二" + " " + oldHour + ":" + oldMinute;
+                            result = mContext.getText(R.string.weather_week_2).toString()+ " " + oldHour + ":" + oldMinute;
                         } else if (week == 3) {
-                            result ="周三"  + " " + oldHour + ":" + oldMinute;
+                            result =mContext.getText(R.string.weather_week_3).toString()  + " " + oldHour + ":" + oldMinute;
                         } else if (week == 4) {
-                            result = "周四"  + " " + oldHour + ":" + oldMinute;
+                            result = mContext.getText(R.string.weather_week_4).toString() + " " + oldHour + ":" + oldMinute;
                         } else if (week == 5) {
-                            result ="周五"  + " " + oldHour + ":" + oldMinute;
+                            result =mContext.getText(R.string.weather_week_5).toString()  + " " + oldHour + ":" + oldMinute;
                         } else if (week == 6) {
-                            result ="周六"  + " " + oldHour + ":" + oldMinute;
+                            result =mContext.getText(R.string.weather_week_6).toString()  + " " + oldHour + ":" + oldMinute;
                         } else {
-                            result ="周日"  + " " + oldHour + ":" + oldMinute;
+                            result =mContext.getText(R.string.weather_week_7).toString()  + " " + oldHour + ":" + oldMinute;
                         }
                     } else {
                         result = oldMonth + "-" + oldDay + " " + oldHour + ":" + oldMinute;
@@ -209,33 +212,33 @@ public class TimeFormat {
                 }
             } else {
                 if (oldMonth == 1 || oldMonth == 3 || oldMonth == 5 || oldMonth == 7 || oldMonth == 8 || oldMonth == 10 || oldMonth == 12) {
-                    if (newDay == 1 && oldDay == 30) {
-                        result = "前天 " + oldHour + ":" + oldMinute;
-                    } else if (newDay == 1 && oldDay == 31) {
-                        result = "昨天 " + oldHour + ":" + oldMinute;
-                    } else if (newDay == 2 && oldDay == 31) {
-                        result = "前天 " + oldHour + ":" + oldMinute;
-                    } else {
+//                    if (newDay == 1 && oldDay == 30) {
+//                        result = "前天 " + oldHour + ":" + oldMinute;
+//                    } else if (newDay == 1 && oldDay == 31) {
+//                        result = "昨天 " + oldHour + ":" + oldMinute;
+//                    } else if (newDay == 2 && oldDay == 31) {
+//                        result = "前天 " + oldHour + ":" + oldMinute;
+//                    } else {
                         result = oldMonth + "-" + oldDay + " " + oldHour + ":" + oldMinute;
-                    }
+//                    }
                 } else if (oldMonth == 2) {
-                    if (newDay == 1 && oldDay == 27 || newDay == 2 && oldDay == 28) {
-                        result = "前天 " + oldHour + ":" + oldMinute;
-                    } else if (newDay == 1 && oldDay == 28) {
-                        result = "昨天 " + oldHour + ":" + oldMinute;
-                    } else {
+//                    if (newDay == 1 && oldDay == 27 || newDay == 2 && oldDay == 28) {
+//                        result = "前天 " + oldHour + ":" + oldMinute;
+//                    } else if (newDay == 1 && oldDay == 28) {
+//                        result = "昨天 " + oldHour + ":" + oldMinute;
+//                    } else {
                         result = oldMonth + "-" + oldDay + " " + oldHour + ":" + oldMinute;
-                    }
+//                    }
                 } else if (oldMonth == 4 || oldMonth == 6 || oldMonth == 9 || oldMonth == 11) {
-                    if (newDay == 1 && oldDay == 29) {
-                        result = "前天 " + oldHour + ":" + oldMinute;
-                    } else if (newDay == 1 && oldDay == 30) {
-                        result = "昨天 " + oldHour + ":" + oldMinute;
-                    } else if (newDay == 2 && oldDay == 30) {
-                        result = "前天 " + oldHour + ":" + oldMinute;
-                    } else {
+//                    if (newDay == 1 && oldDay == 29) {
+//                        result = "前天 " + oldHour + ":" + oldMinute;
+//                    } else if (newDay == 1 && oldDay == 30) {
+//                        result = "昨天 " + oldHour + ":" + oldMinute;
+//                    } else if (newDay == 2 && oldDay == 30) {
+//                        result = "前天 " + oldHour + ":" + oldMinute;
+//                    } else {
                         result = oldMonth + "-" + oldDay + " " + oldHour + ":" + oldMinute;
-                    }
+//                    }
                 }
             }
         }

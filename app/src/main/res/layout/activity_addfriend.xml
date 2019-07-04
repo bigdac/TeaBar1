@@ -5,11 +5,7 @@
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/tv_main_1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+
     <ImageView
         android:id="@+id/iv_power_fh"
         android:layout_below="@+id/tv_main_1"
@@ -39,14 +35,14 @@
         android:layout_height="50dp"
         android:layout_marginTop="21dp"
         android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
+
         android:background="@drawable/my_mb"
         >
         <ImageView
             android:id="@+id/bt_friend_search"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@mipmap/main_search"
+            android:src="@mipmap/main_ss3"
             android:scaleType="centerInside"
             android:layout_alignParentRight="true"
             android:layout_marginRight="5dp"
@@ -54,7 +50,7 @@
         <TextView
             android:layout_width="1dp"
             android:layout_height="25dp"
-            android:background="@color/social_gray"
+            android:background="#bbbbbb"
             android:layout_toLeftOf="@+id/bt_friend_search"
             android:layout_centerVertical="true"
             />
@@ -68,8 +64,9 @@
             android:background="@null"
             android:layout_centerVertical="true"
             android:hint="@string/social_friend_search"
-            android:textSize="16sp"
-            android:textColorHint="@color/login_black"
+            android:textSize="15sp"
+            android:textColorHint="#bbbbbb"
+            android:textColor="@color/login_black"
             />
     </RelativeLayout>
 

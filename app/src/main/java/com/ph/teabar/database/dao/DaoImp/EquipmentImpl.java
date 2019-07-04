@@ -10,6 +10,8 @@ import com.ph.teabar.database.dao.DaoMaster;
 import com.ph.teabar.database.dao.DaoSession;
 import com.ph.teabar.database.dao.EqupmentDao;
 
+import org.greenrobot.greendao.identityscope.IdentityScopeType;
+
 import java.util.List;
 
 import teabar.ph.com.teabar.pojo.Equpment;
@@ -25,7 +27,7 @@ public class EquipmentImpl {
         this.context = context;
         db= DBManager.getInstance(context).getWritableDasebase();
         master=new DaoMaster(db);
-        session=master.newSession();
+        session=master.newSession(IdentityScopeType.None);
         equipmentDao = session.getEqupmentDao();
     }
 

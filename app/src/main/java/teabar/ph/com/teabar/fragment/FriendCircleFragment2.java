@@ -12,6 +12,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.malinskiy.superrecyclerview.OnMoreListener;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
+import com.ph.teabar.database.dao.DaoImp.UserEntryImpl;
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 
 import org.json.JSONArray;
@@ -38,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
 import me.jessyan.autosize.utils.ScreenUtils;
 import pub.devrel.easypermissions.EasyPermissions;
 import teabar.ph.com.teabar.R;
@@ -46,6 +49,7 @@ import teabar.ph.com.teabar.activity.social.AddSocialActivity;
 import teabar.ph.com.teabar.adpter.CircleAdapter;
 import teabar.ph.com.teabar.adpter.viewholder.CircleAdapter2;
 import teabar.ph.com.teabar.base.BaseFragment;
+import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.bean.CircleItem;
 import teabar.ph.com.teabar.bean.CommentConfig;
 import teabar.ph.com.teabar.bean.CommentItem;
@@ -74,7 +78,7 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
     private int selectCommentItemOffset;
     private CirclePresenter presenter;
     private CommentConfig commentConfig;
-    private SuperRecyclerView recyclerView;
+    SuperRecyclerView recyclerView;
     private RelativeLayout bodyLayout;
     private LinearLayoutManager layoutManager;
     private final static int TYPE_PULLREFRESH = 1;
@@ -88,7 +92,11 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
     int currentPage = 1;
     int  Type = 0;
     Context context;
+    String userName;
     LinearLayout li_main_la;
+    private boolean isFrash =false;
+    private boolean isLoad =false;
+
     @Override
     public int bindLayout() {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -101,6 +109,7 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
         context= getActivity();
         preferences = getActivity().getSharedPreferences("my",Context.MODE_PRIVATE);
         id = preferences.getString("userId","");
+        userName = preferences.getString("userName","");
         tipDialog = new QMUITipDialog.Builder(getActivity())
                 .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
                 .setTipWord(getText(R.string.search_qsh).toString())
@@ -153,14 +162,13 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
     public void onStart() {
         super.onStart();
         if (AddSocialActivity.isFrash){
-            showProgressDialog();
             Type = TYPE_PULLREFRESH;
             currentPage=1;
             Map<String ,Object> params = new HashMap<>();
             params.put("id",id);
             params.put("currentPage",currentPage);
             params.put("pageSize",10);
-            new ShowContentAsynctask().execute(params);
+            new ShowContentAsynctask(this).execute(params);
         }
     }
 
@@ -168,6 +176,9 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
     public void onDestroy() {
         if(presenter !=null){
             presenter.recycle();
+        }
+        if (handler!=null){
+            handler.removeCallbacksAndMessages(null);
         }
         super.onDestroy();
     }
@@ -179,8 +190,8 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
 
     @SuppressLint({ "ClickableViewAccessibility", "InlinedApi" })
     private void initView1(View view) {
-
-        recyclerView = (SuperRecyclerView)view. findViewById(R.id.recyclerView);
+//        layoutManager =new WrapContentLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        recyclerView = view.findViewById( R.id.recyclerView);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DivItemDecoration(2, true));
@@ -212,14 +223,18 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
                     public void run() {
 //                        presenter.loadData(TYPE_PULLREFRESH);
 //                        tipDialog.show();
-                        Type = TYPE_PULLREFRESH;
-                        currentPage=1;
-                        Map<String ,Object> params = new HashMap<>();
-                        params.put("id",id);
-                        params.put("currentPage",currentPage);
-                        params.put("pageSize",10);
-                        showContentAsynctask = new ShowContentAsynctask();
-                        showContentAsynctask.execute(params);
+                        if (!isFrash&&!isLoad) {
+                            Type = TYPE_PULLREFRESH;
+                            currentPage = 1;
+//                            tipDialog.show();
+                            isFrash = true;
+                            Map<String, Object> params = new HashMap<>();
+                            params.put("id", id);
+                            params.put("currentPage", currentPage);
+                            params.put("pageSize", 10);
+                            showContentAsynctask = new ShowContentAsynctask(FriendCircleFragment2.this);
+                            showContentAsynctask.execute(params);
+                        }
                     }
                 },500);
             }
@@ -290,7 +305,8 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
                     CommentItem item = new CommentItem();
                     item.setId(circleItemList.get(commentConfig.circlePosition).getId());
                     item.setContent(content);
-                    item.setUser( circleItemList.get(commentConfig.circlePosition).getUser() );
+//                    item.setUser( circleItemList.get(commentConfig.circlePosition).getUser() );
+                    item.setUser(new User(circleItemList.get(commentConfig.circlePosition).getId(),userName,"") );
                     update2AddComment(commentConfig.circlePosition,item);
                 }
                 updateEditTextBodyVisible(View.GONE, null);
@@ -300,6 +316,30 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
         setViewTreeObserver();
     }
 
+    public class WrapContentLinearLayoutManager extends LinearLayoutManager {
+        public WrapContentLinearLayoutManager(Context context) {
+            super(context);
+        }
+
+        public WrapContentLinearLayoutManager(Context context, int orientation, boolean reverseLayout) {
+            super(context, orientation, reverseLayout);
+        }
+
+        public WrapContentLinearLayoutManager(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+            super(context, attrs, defStyleAttr, defStyleRes);
+        }
+
+        @Override
+        public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
+            try {
+                super.onLayoutChildren(recycler, state);
+            } catch (IndexOutOfBoundsException e) {
+                Log.e("problem", "meet a IOOBE in RecyclerView");
+            }
+        }
+
+
+    }
 
 
     boolean isRunning= false;
@@ -318,7 +358,7 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
                     params1.put("contentId",circleItemList.get(position).getId());
                     params2.put("position",position);
                     Log.e(TAG, "onItemClick: -->"+circleAdapter.getDates1().get(position).isOpen()+"...."+circleItemList.get(position).getId() );
-                    new GiveThumbsUpAsynctask().execute(params1,params2);
+                    new GiveThumbsUpAsynctask(FriendCircleFragment2.this).execute(params1,params2);
                     break;
             }
         }
@@ -339,10 +379,14 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
     茶吧查看发布*/
     String returnMsg1;
     ShowContentAsynctask showContentAsynctask ;
-    class ShowContentAsynctask extends AsyncTask<Map<String,Object>,Void,String>{
+    class ShowContentAsynctask extends BaseWeakAsyncTask<Map<String,Object>,Void,String,BaseFragment> {
+
+        public ShowContentAsynctask(BaseFragment baseFragment) {
+            super(baseFragment);
+        }
 
         @Override
-        protected String doInBackground(Map<String, Object>... maps) {
+        protected String doInBackground(BaseFragment baseFragment ,Map<String, Object>... maps) {
             String code = "";
             Map<String,Object> param = maps[0];
             String result = HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/content/showContent",param);
@@ -434,8 +478,8 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(BaseFragment baseFragment ,String s) {
+
             switch (s){
                 case "200":
                     currentPage++;
@@ -450,7 +494,7 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
                             tipDialog.dismiss();
                             AddSocialActivity.isFrash= false;
                         }
-                        ToastUtil.showShort(getActivity(),returnMsg1);
+//                        ToastUtil.showShort(getActivity(),returnMsg1);
                         break;
             }
         }
@@ -460,10 +504,14 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
     /*
        茶吧查看发布*/
 
-    class ToCommentAsynctask extends AsyncTask<Map<String,Object>,Void,String>{
+    class ToCommentAsynctask extends BaseWeakAsyncTask<Map<String,Object>,Void,String,BaseFragment>{
+
+        public ToCommentAsynctask(BaseFragment baseFragment) {
+            super(baseFragment);
+        }
 
         @Override
-        protected String doInBackground(Map<String, Object>... maps) {
+        protected String doInBackground(BaseFragment baseFragment ,Map<String, Object>... maps) {
             String code = "";
             Map<String,Object> param = maps[0];
             String result = HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/content/toComment",param);
@@ -490,8 +538,8 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(BaseFragment baseFragment ,String s) {
+
             switch (s){
                 case "200":
 
@@ -509,10 +557,14 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
   /*
        茶吧点赞*/
 
-    class GiveThumbsUpAsynctask extends AsyncTask<Map<String,Object>,Void,String>{
+    class GiveThumbsUpAsynctask extends BaseWeakAsyncTask<Map<String,Object>,Void,String,BaseFragment>{
+
+        public GiveThumbsUpAsynctask(BaseFragment baseFragment) {
+            super(baseFragment);
+        }
 
         @Override
-        protected String doInBackground(Map<String, Object>... maps) {
+        protected String doInBackground(BaseFragment baseFragment ,Map<String, Object>... maps) {
             String code = "";
             Map<String,Object> param = maps[0];
             Map<String,Object> param1 = maps[1];
@@ -559,8 +611,8 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(BaseFragment baseFragment ,String s) {
+
             switch (s){
                 case "200":
                     mPosition=-1;
@@ -663,7 +715,7 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
             param.put("comment",addItem.getContent());
             param.put("userId",id);
             param.put("contentId",addItem.getId());
-            new ToCommentAsynctask().execute(param);
+            new ToCommentAsynctask(this).execute(param);
             circleAdapter.notifyDataSetChanged();
             //circleAdapter.notifyItemChanged(circlePosition+1);
         }
@@ -722,14 +774,17 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
     @Override
     public void update2loadData(int loadType, List<CircleItem> datas) {
         if (loadType == TYPE_PULLREFRESH){
+            isFrash = false;
+            if (recyclerView!=null)
             recyclerView.setRefreshing(false);
             circleAdapter.setData(datas);
 
         }else if(loadType == TYPE_UPLOADREFRESH){
+            isLoad = false;
             Log.e(TAG, "update2loadData222: -->"+circleAdapter.getDates1().size() );
 //            circleAdapter.getDatas().addAll(datas);
             circleAdapter.setData(datas);
-            circleAdapter.notifyDataSetChanged();
+
             Log.e(TAG, "update2loadData333: -->"+circleAdapter.getDates1().size() );
         }
 
@@ -742,14 +797,17 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
                         @Override
                         public void run() {
 //                            presenter.loadData(TYPE_UPLOADREFRESH);
-                            Type = TYPE_UPLOADREFRESH;
-                            Map<String ,Object> params = new HashMap<>();
-                            params.put("id",id);
-                            params.put("currentPage",currentPage);
-                            params.put("pageSize",10);
-                            new ShowContentAsynctask().execute(params);
+                            if (!isFrash && !isLoad) {
+                                Type = TYPE_UPLOADREFRESH;
+                                isLoad = true;
+                                Map<String, Object> params = new HashMap<>();
+                                params.put("id", id);
+                                params.put("currentPage", currentPage);
+                                params.put("pageSize", 10);
+                                new ShowContentAsynctask(FriendCircleFragment2.this).execute(params);
+                            }
                         }
-                    }, 2000);
+                    }, 500);
 
                 }
             }, 1);

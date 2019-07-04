@@ -24,13 +24,13 @@ import butterknife.OnClick;
 import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.base.BaseActivity;
+import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
 
 public class ChangePassActivity extends BaseActivity {
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     MyApplication application;
     QMUITipDialog tipDialog;//dialog
     @BindView(R.id.et_oldPassword)
@@ -59,9 +59,6 @@ public class ChangePassActivity extends BaseActivity {
             application = (MyApplication) getApplication();
         }
         application.addActivity(this);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
         preferences = getSharedPreferences("my", MODE_PRIVATE);
         id = preferences.getString("userId","");
     }
@@ -104,7 +101,7 @@ public class ChangePassActivity extends BaseActivity {
                     params.put("id",id);
                     params.put("oldPassword",oldPassword);
                     params.put("newPassword",newPassword1);
-                    new ChangePassAsyncTask().execute(params);
+                    new ChangePassAsyncTask(ChangePassActivity.this).execute(params);
                 }else {
                     toast(getText(R.string.set_pass_notsame).toString());
                 }
@@ -125,11 +122,15 @@ public class ChangePassActivity extends BaseActivity {
      *  修改密码
      *
      */
-    String returnMsg1;
-    class ChangePassAsyncTask extends AsyncTask<Map<String,Object>,Void,String> {
+    String returnMsg1,returnMsg2;
+    class ChangePassAsyncTask extends BaseWeakAsyncTask<Map<String,Object>,Void,String,BaseActivity> {
+
+        public ChangePassAsyncTask(BaseActivity baseActivity) {
+            super(baseActivity);
+        }
 
         @Override
-        protected String doInBackground(Map<String, Object>... maps) {
+        protected String doInBackground(BaseActivity baseActivity, Map<String, Object>... maps) {
             String code = "";
             Map<String, Object> prarms = maps[0];
             String result =   HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/api/changePassword",prarms);
@@ -140,8 +141,8 @@ public class ChangePassActivity extends BaseActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(result);
                         code = jsonObject.getString("state");
-                        returnMsg1=jsonObject.getString("message1");
-
+                        returnMsg1=jsonObject.getString("message2");
+                        returnMsg2 = jsonObject.getString("message3");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -153,20 +154,27 @@ public class ChangePassActivity extends BaseActivity {
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(BaseActivity baseActivity, String s) {
+
 
             switch (s) {
-
+                case "200":
+                    tipDialog.dismiss();
+                    finish();
+                    break;
 
                 case "4000":
                     tipDialog.dismiss();
-                    toast( "连接超时，请重试");
+                    toast( getText(R.string.toast_all_cs).toString());
                     break;
                 default:
                     tipDialog.dismiss();
-                    finish();
-                    toast( returnMsg1);
+                    if (application.IsEnglish()==0){
+                        toast( returnMsg1);
+                    }else {
+                        toast( returnMsg2);
+                    }
+
                     break;
 
             }

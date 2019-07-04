@@ -44,8 +44,7 @@ import teabar.ph.com.teabar.view.FlowTagView;
 
 public class SearchFinishActivity extends BaseActivity {
     MyApplication application;
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     @BindView(R.id.rv_main_tealist)
     RecyclerView rv_main_tealist;
     @BindView(R.id.rv_main_jh)
@@ -73,9 +72,7 @@ public class SearchFinishActivity extends BaseActivity {
         if (application == null) {
             application = (MyApplication) getApplication();
         }
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
+
         application.addActivity(this);
         preferences =  getSharedPreferences("my",Context.MODE_PRIVATE);
         userId = preferences.getString("userId","");
@@ -165,6 +162,9 @@ public class SearchFinishActivity extends BaseActivity {
             switch (s) {
 
                 case "200":
+                    if (teaList.size()==0&&planList.size()==0){
+                        toast(getText(R.string.toast_search_no).toString());
+                    }
                     teaAdapter1.update(teaList);
                     myplanAdapter.update(planList);
                     break;

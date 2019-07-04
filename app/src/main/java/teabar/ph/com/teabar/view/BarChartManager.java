@@ -1,10 +1,12 @@
 package teabar.ph.com.teabar.view;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
@@ -13,26 +15,67 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import teabar.ph.com.teabar.R;
 
 public class BarChartManager {
     private BarChart mBarChart;
     private YAxis leftAxis;
     private YAxis rightAxis;
     private XAxis xAxis;
+    private  Context context;
 
-    public BarChartManager(BarChart barChart) {
+    public BarChartManager(BarChart barChart,Context context) {
         this.mBarChart = barChart;
         leftAxis = mBarChart.getAxisLeft();
         rightAxis = mBarChart.getAxisRight();
         xAxis = mBarChart.getXAxis();
+        this.context = context;
+    }
+    public class XFormattedValue extends ValueFormatter
+
+    {
+
+
+        private Context context;
+        private List<String> mValues;
+        public XFormattedValue(Context context,List<String> mValues){
+            this.context=context;
+        }
+        /*
+         * 重写该方法根据值返回自定义的数值
+         * */
+        @Override
+        public String getFormattedValue(float value, AxisBase axis) {
+
+            if (value==1){
+                return context.getText(R.string.weather_week_71).toString();
+            }else if (value==2){
+                return context.getText(R.string.weather_week_11).toString();
+            }else if (value==3){
+                return context.getText(R.string.weather_week_21).toString();
+            }else if (value==4){
+                return context.getText(R.string.weather_week_31).toString();
+            }else if (value==5){
+                return context.getText(R.string.weather_week_41).toString();
+            }else if (value==6){
+                return context.getText(R.string.weather_week_51).toString();
+            }else if (value==7){
+                return context.getText(R.string.weather_week_61).toString();
+            }
+            return "";
+        }
+
 
     }
-
     /**
      * 初始化LineChart
      */
@@ -50,6 +93,7 @@ public class BarChartManager {
 
         //显示边界
         mBarChart.setDrawBorders(false);
+
         //设置动画效果
 //        mBarChart.animateY(1000, Easing.Linear);
 //        mBarChart.animateX(1000, Easing.Linear);
@@ -58,9 +102,13 @@ public class BarChartManager {
         Legend legend = mBarChart.getLegend();
         legend.setForm(Legend.LegendForm.LINE);
         legend.setTextSize(11f);
+        legend.setTextColor(Color.parseColor("#333333"));
         legend.setEnabled(false);
-        mBarChart.setScaleXEnabled(true);/**禁止缩放x轴*/
+
+
+        mBarChart.setScaleXEnabled(false);/**禁止缩放x轴*/
         mBarChart.setScaleYEnabled(false);/**缩放y轴*/
+        leftAxis.setDrawLabels(false);
 
         //显示位置
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
@@ -70,6 +118,7 @@ public class BarChartManager {
 
         //XY轴的设置
         //X轴设置显示位置在底部
+
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setGranularity(1f);
 
@@ -77,18 +126,21 @@ public class BarChartManager {
         leftAxis.setAxisMinimum(0f);
         leftAxis.setDrawGridLines(true);
         rightAxis.setDrawGridLines(true);
-        leftAxis.enableGridDashedLine(10f, 10f, 0f);
-        leftAxis.setAxisLineColor(Color.parseColor("#ffffff"));
 
+//        leftAxis.enableGridDashedLine(10f, 10f, 0f);
+        leftAxis.setAxisLineColor(Color.parseColor("#dedede"));
+//        xAxis.setGridColor(Color.parseColor("#eeeeee"));
+//        xAxis.setAxisLineColor(Color.parseColor("#eeeeee"));
 //        xAxis.setAxisLineColor(Color.parseColor("#20e2ff"));
-        xAxis.setAxisLineWidth(1.5f);
+        xAxis.setAxisLineWidth(1.0f);
         xAxis.setDrawGridLines(false);
 //        leftAxis.setDrawAxisLine(false);
 //        leftAxis.setDrawGridLines(false);
         leftAxis.setAxisLineWidth(0f);
         rightAxis.setAxisMinimum(0f);
         leftAxis.setAxisMinimum(0f);
-        leftAxis.setTextColor(Color.parseColor("#ffffff"));
+        rightAxis.setAxisLineWidth(0f);
+//        leftAxis.setTextColor(Color.parseColor("#ffffff"));
 //        leftAxis.setEnabled(false);
         //手机屏幕上显示6剩下的滑动直方图然后显示
 
@@ -106,6 +158,7 @@ public class BarChartManager {
      * @param label
      * @param color
      */
+    String label1 = "";
     public void showBarChart(List<String> xAxisValues, List<Integer> yAxisValues, String label, int color) {
         initLineChart(xAxisValues.size());
         ArrayList<BarEntry> entries = new ArrayList<>();
@@ -123,16 +176,54 @@ public class BarChartManager {
         barDataSet.setValueTextSize(9f);
         barDataSet.setFormLineWidth(1f);
         barDataSet.setFormSize(15.f);
+        barDataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float v) {
+                return new DecimalFormat("###,###,###,##0").format(v);
+            }
+        });
         ArrayList<IBarDataSet> dataSets = new ArrayList<>();
         dataSets.add(barDataSet);
         BarData data = new BarData(dataSets);
+        data.setBarWidth(0.5f);
         //设置X轴的刻度数
+
         xAxis.setLabelCount(xAxisValues.size()-1,false);
+        if (xAxisValues.size()==7){
+            List<String> data1=new ArrayList<>();
+            data1.add(0,context.getText(R.string.weather_week_71).toString());
+            data1.add(1,context.getText(R.string.weather_week_11).toString());
+            data1.add(2,context.getText(R.string.weather_week_21).toString());
+            data1.add(3,context.getText(R.string.weather_week_31).toString());
+            data1.add(4,context.getText(R.string.weather_week_41).toString());
+            data1.add(5,context.getText(R.string.weather_week_51).toString());
+            data1.add(6,context.getText(R.string.weather_week_61).toString());
+            xAxis.setValueFormatter(new IndexAxisValueFormatter() {
+                @Override
+                public String getFormattedValue(float value) {
+//                    return super.getFormattedValue(value);
+                    return String.valueOf(data1.get((int) value));
+                }
+                //                @Override
+//                public String getFormattedValue(float value, AxisBase axis) {
+//                    return String.valueOf(data1.get((int) value));
+//
+//                }
+//
+//                @Override
+//                public int getDecimalDigits() {
+//                    return 0;
+//                }
+            });
+
+
+        }else
         xAxis.setValueFormatter(new IndexAxisValueFormatter(xAxisValues));
 //        xAxis.setAxisLineColor(Color.parseColor("#20e2ff"));
 
         mBarChart.zoom(xAxisValues.size()/7,1f,0,0);
         rightAxis.setEnabled(false);
+
 //        mBarChart.resetZoom();
         mBarChart.setData(data);
     }
@@ -219,11 +310,13 @@ public class BarChartManager {
         if (name == null) {
             name = "高限制线";
         }
+        leftAxis.removeAllLimitLines();
         LimitLine hightLimit = new LimitLine(high, name);
-        hightLimit.setLineWidth(4f);
+        hightLimit.setLineWidth(1f);
         hightLimit.setTextSize(10f);
         hightLimit.setLineColor(color);
         hightLimit.setTextColor(color);
+        hightLimit.enableDashedLine(8f,5f,0);  //设置虚线
         leftAxis.addLimitLine(hightLimit);
         mBarChart.invalidate();
     }
@@ -238,7 +331,7 @@ public class BarChartManager {
             name = "低限制线";
         }
         LimitLine hightLimit = new LimitLine(low, name);
-        hightLimit.setLineWidth(4f);
+        hightLimit.setLineWidth(1f);
         hightLimit.setTextSize(10f);
         leftAxis.addLimitLine(hightLimit);
         mBarChart.invalidate();

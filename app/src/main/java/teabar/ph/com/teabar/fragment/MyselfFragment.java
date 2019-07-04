@@ -11,25 +11,16 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import java.io.File;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.DrinkNumActivity;
-import teabar.ph.com.teabar.activity.my.FavoriteActivity;
-import teabar.ph.com.teabar.activity.MyIssueActivity;
-import teabar.ph.com.teabar.activity.my.MyPlanActivity;
-import teabar.ph.com.teabar.activity.question.MyQuestionActivity;
-import teabar.ph.com.teabar.activity.my.NearestActivity;
 import teabar.ph.com.teabar.activity.my.PersonnalActivity;
 import teabar.ph.com.teabar.activity.my.SettingActivity;
 import teabar.ph.com.teabar.base.BaseFragment;
 import teabar.ph.com.teabar.util.GlideCircleTransform;
-import teabar.ph.com.teabar.view.VerticalProgressBar;
 
 public class MyselfFragment extends BaseFragment {
-    VerticalProgressBar vp_progress;
+
     SharedPreferences preferences;
     @BindView(R.id.tv_my_name)
     TextView tv_my_name;
@@ -39,7 +30,7 @@ public class MyselfFragment extends BaseFragment {
     ImageView iv_my_pic;
     @Override
     public int bindLayout() {
-        return R.layout.fragment_myself;
+        return R.layout.fragment_myself1;
 
     }
 
@@ -54,8 +45,7 @@ public class MyselfFragment extends BaseFragment {
         }
         tv_my_name.setText(name);
         tv_id_2.setText(id+"");
-         vp_progress = view.findViewById(R.id.vp_progress);
-        vp_progress.setProgress(40);
+
 
     }
 
@@ -64,9 +54,8 @@ public class MyselfFragment extends BaseFragment {
         super.onStart();
         String photo = preferences.getString("photo","");
         if (!TextUtils.isEmpty(photo)){
-            File file = new File(photo);
-            Glide.with(getActivity()).load(photo).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.my_pic).transform(new GlideCircleTransform(getActivity())).into(iv_my_pic);
 
+            Glide.with(getActivity()).load(photo).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.my_pic).transform(new GlideCircleTransform(getActivity())).into(iv_my_pic);
         }
     }
 
@@ -79,37 +68,26 @@ public class MyselfFragment extends BaseFragment {
     public void widgetClick(View v) {
 
     }
-    @OnClick({R.id.rl_my_jh,R.id.rl_my_fb,R.id.rl_my_ask,R.id.rl_my_sz,R.id.vp_progress,R.id.iv_may_bj,R.id.rl_my_like,R.id.rl_my_nearest})
+    @OnClick({R.id.rl_my_sz,R.id.iv_may_bj})
     public void onClick(View view){
         switch (view.getId()){
-            case R.id.rl_my_jh:
-                startActivity(new Intent(getActivity(),MyPlanActivity.class));
-                break;
-            case R.id.rl_my_fb:
-                startActivity(new Intent(getActivity(),MyIssueActivity.class));
-                break;
-            case R.id.rl_my_ask:
-                startActivity(new Intent(getActivity(),MyQuestionActivity.class));
-                break;
+
             case R.id.rl_my_sz:
                 startActivity(new Intent(getActivity(),SettingActivity.class));
                 break;
-
-            case R.id.vp_progress:
-                startActivity(new Intent(getActivity(),DrinkNumActivity.class));
-                break;
-
             case R.id.iv_may_bj:
-                startActivity(new Intent(getActivity(),PersonnalActivity.class));
+                startActivityForResult(new Intent(getActivity(),PersonnalActivity.class),7300);
                 break;
 
-            case R.id.rl_my_nearest:
-                startActivity(new Intent(getActivity(),NearestActivity.class));
-                break;
+        }
+    }
 
-            case R.id.rl_my_like:
-                startActivity(new Intent(getActivity(),FavoriteActivity.class));
-                break;
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==7300){
+            String name = preferences.getString("userName","");
+            tv_my_name.setText(name);
         }
     }
 }

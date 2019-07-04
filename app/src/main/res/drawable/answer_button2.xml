@@ -5,7 +5,7 @@
     <corners  android:radius="25dp"
         />
 
-    <stroke android:color="@color/login_gray"
+    <stroke android:color="#999"
         android:width="1dp"
         />
 

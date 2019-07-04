@@ -19,8 +19,7 @@ import teabar.ph.com.teabar.pojo.ScoreRecords;
 import teabar.ph.com.teabar.view.RadarChart02View;
 
 public class QuestionScoreActivity extends BaseActivity {
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     @BindView(R.id.rcv_power)
     RadarChart02View rcv_power;
     @BindView(R.id.tv_power_score)
@@ -54,15 +53,15 @@ public class QuestionScoreActivity extends BaseActivity {
     double bodyGrades,nutritionGrades,mindGradesc,lifeGrades;
     @Override
     public void initParms(Bundle parms) {
-        scoreRecords =(ScoreRecords) parms.getSerializable("ScoreRecords");
-        name = parms.getString("name");
-        if (scoreRecords!=null){
-        bodyGrades = Double.valueOf(scoreRecords.getBodyGrades());
-        nutritionGrades = Double.valueOf(scoreRecords.getNutritionGrades());
-        mindGradesc = Double.valueOf(scoreRecords.getMindGrades());
-        lifeGrades = Double.valueOf(scoreRecords.getLifeGrades());
-        allGreade = bodyGrades+nutritionGrades+mindGradesc+lifeGrades;
-        }
+            scoreRecords =(ScoreRecords) parms.getSerializable("ScoreRecords");
+            name = parms.getString("name");
+            if (scoreRecords!=null){
+            bodyGrades = Double.valueOf(scoreRecords.getBodyGrades());
+            nutritionGrades = Double.valueOf(scoreRecords.getNutritionGrades());
+            mindGradesc = Double.valueOf(scoreRecords.getMindGrades());
+            lifeGrades = Double.valueOf(scoreRecords.getLifeGrades());
+            allGreade = bodyGrades+nutritionGrades+mindGradesc+lifeGrades;
+            }
 
     }
 
@@ -74,9 +73,7 @@ public class QuestionScoreActivity extends BaseActivity {
 
     @Override
     public void initView(View view) {
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
+
         if (application == null) {
             application = (MyApplication) getApplication();
         }

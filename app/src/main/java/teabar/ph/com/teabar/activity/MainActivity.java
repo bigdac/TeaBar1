@@ -1,7 +1,6 @@
 package teabar.ph.com.teabar.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -11,40 +10,34 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
-import android.speech.RecognizerIntent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
 import com.ph.teabar.database.dao.DaoImp.UserEntryImpl;
-import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import cn.jpush.im.android.api.JMessageClient;
-import cn.jpush.im.android.api.callback.GetUserInfoCallback;
 import cn.jpush.im.android.api.enums.ConversationType;
 import cn.jpush.im.android.api.event.ContactNotifyEvent;
 import cn.jpush.im.android.api.event.MessageEvent;
@@ -54,30 +47,27 @@ import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
 import me.jessyan.autosize.AutoSizeCompat;
-import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.adpter.ClickViewPageAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.BaseFragment;
 import teabar.ph.com.teabar.base.MyApplication;
-import teabar.ph.com.teabar.fragment.EqumentFragment;
-import teabar.ph.com.teabar.fragment.FriendCircleFragment1;
+import teabar.ph.com.teabar.fragment.EqumentFragment2;
 import teabar.ph.com.teabar.fragment.FriendCircleFragment2;
 import teabar.ph.com.teabar.fragment.FriendFragment;
-import teabar.ph.com.teabar.fragment.MailFragment;
 import teabar.ph.com.teabar.fragment.MailFragment1;
-import teabar.ph.com.teabar.fragment.MainFragment2;
+import teabar.ph.com.teabar.fragment.MainFragment3;
 import teabar.ph.com.teabar.fragment.MyselfFragment;
+import teabar.ph.com.teabar.fragment.MyselfFragment1;
 import teabar.ph.com.teabar.fragment.SocialFragment;
 import teabar.ph.com.teabar.pojo.Equpment;
 import teabar.ph.com.teabar.pojo.UserEntry;
 import teabar.ph.com.teabar.service.MQService;
 import teabar.ph.com.teabar.util.SharePreferenceManager;
-import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.view.ChangeDialog;
 import teabar.ph.com.teabar.view.NoSrcollViewPage;
 
-public class MainActivity extends BaseActivity implements FriendCircleFragment2.hidenShowView ,EqumentFragment.EquipmentCtrl,MainFragment2.FirstEquipmentCtrl {
+public class MainActivity extends BaseActivity implements FriendCircleFragment2.hidenShowView ,EqumentFragment2.EquipmentCtrl,MainFragment3.FirstEquipmentCtrl {
     @BindView(R.id.main_viewPage)
     NoSrcollViewPage main_viewPage;
     @BindView(R.id.main_tabLayout)
@@ -85,11 +75,12 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
     List<String> mainMemu = new ArrayList<>();
     List<BaseFragment> fragmentList = new ArrayList<>();
     MyApplication application;
-    MainFragment2 mainFragment ;
-    EqumentFragment equmentFragment ;
+    MainFragment3 mainFragment ;
+    EqumentFragment2 equmentFragment ;
     SocialFragment socialFragment ;
     MailFragment1 mailFragment ;
-    MyselfFragment myselfFragment ;
+    MyselfFragment1 myselfFragment ;
+    MyselfFragment myselfFragment1 ;
     private boolean MQBound;
     public static float scale = 0 ;
     MessageReceiver receiver;
@@ -116,9 +107,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
     @Override
     public int bindLayout() {
 //        setSteepStatusBar(true);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
-        }
+
         return R.layout.activity_main;
     }
 
@@ -133,13 +122,13 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
         preferences = getSharedPreferences("my", MODE_PRIVATE);
         userId = preferences.getString("userId","") ;
         type1 = preferences.getInt("type1",0);
-        mainFragment=new MainFragment2();
-        equmentFragment=new EqumentFragment();
+        mainFragment=new MainFragment3();
+        equmentFragment=new EqumentFragment2();
         socialFragment=new SocialFragment();
         mailFragment = new MailFragment1();
-        myselfFragment = new MyselfFragment();
+        myselfFragment = new MyselfFragment1();
+        myselfFragment1 = new MyselfFragment();
         equipmentDao = new EquipmentImpl( getApplicationContext());
-        equpments= equipmentDao.findAll();
         equpments= equipmentDao.findAll();
         for (int i = 0;i<equpments.size();i++){
             if (equpments.get(i).getIsFirst()){
@@ -250,23 +239,33 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (FirstEqument!=null&&MQservice!=null){
+            if (FirstEqument.getMStage()!=0xb6&&FirstEqument.getMStage()!=0xb7){
+                MQservice.sendFindEqu(FirstEqument.getMacAdress());
+            }
+        }
+    }
+
     Equpment msg1;
     class MessageReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.e("qqqqqZZZZ???", "11111");
             String msg = intent.getStringExtra("msg");
-             msg1 = (Equpment) intent.getSerializableExtra("msg1");
-             FirstEqument = msg1;
+            msg1 = (Equpment) intent.getSerializableExtra("msg1");
+            FirstEqument = msg1;
             int reset =  intent.getIntExtra("reset",0);
             if (reset==1){
                 FirstEqument = null;
             }
-             if (MainFragment2.isRunning){
+             if (MainFragment3.isRunning){
                  mainFragment.RefrashFirstEqu1();
              }
-            if (EqumentFragment.isRunning){
-                equmentFragment.RefrashFirstEqu(FirstEqument);
+            if (EqumentFragment2.isRunning){
+                equmentFragment.RefrashFirstEqu1();
             }
 
         }
@@ -301,10 +300,11 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
 
         @Override
         protected Void doInBackground(Void... voids) {
+                 MQservice.loadAlltopic();
             for (Equpment equpment:equpments){
                 try {
                     Thread.sleep(500);
-                    if (!ToastUtil.isEmpty(equpment.getMacAdress()))
+                    if (!TextUtils.isEmpty(equpment.getMacAdress()))
                     MQservice.sendFindEqu(equpment.getMacAdress());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -344,7 +344,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
             fragmentList.add(mainFragment);
             fragmentList.add(equmentFragment);
             fragmentList.add(mailFragment);
-            fragmentList.add(myselfFragment);
+            fragmentList.add(myselfFragment1);
         }
         ClickViewPageAdapter tabAdapter = new ClickViewPageAdapter(getSupportFragmentManager(), fragmentList, this,type1);
         main_viewPage.setAdapter(tabAdapter);
@@ -371,34 +371,34 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
                         ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.nomal_green));
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
 //                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                            getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
+//                            getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
                         }
                         break;
                     case 1:
                         ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.nomal_green));
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
 //                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                            getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
+//                            getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
                         }
                         break;
                     case 2:
                         ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.nomal_green));
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
 //                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                            getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
+//                            getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
                         }
                         break;
                     case 3:
                         ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.nomal_green));
                       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
 //                          getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                             getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
+//                             getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
                            }
                         break;
                     case 4:
                         ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.nomal_green));
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-                            getWindow().setStatusBarColor(getResources().getColor(R.color.main_tit1));
+//                            getWindow().setStatusBarColor(getResources().getColor(R.color.main_tit1));
 
 //                            getWindow().addFlags(
 //                                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -412,14 +412,14 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
                             ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.nomal_green));
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
 //                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                                getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
+//                                getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
                             }
                             break;
                         case 1:
                             ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.nomal_green));
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
 //                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                                getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
+//                                getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
                             }
                             break;
 
@@ -427,13 +427,13 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
                             ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.nomal_green));
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
 //                          getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                                getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
+//                                getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
                             }
                             break;
                         case 3:
                             ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.nomal_green));
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-                                getWindow().setStatusBarColor(getResources().getColor(R.color.main_tit1));
+//                                getWindow().setStatusBarColor(getResources().getColor(R.color.main_tit1));
 
 //                            getWindow().addFlags(
 //                                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -567,7 +567,20 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
             socialFragment.Refrashfriend();
         }
         if (resultCode==2000){
-                mainFragment.RefrashFirstEqu1();
+            equipmentDao = new EquipmentImpl( getApplicationContext());
+            equpments= equipmentDao.findAll();
+            if (equpments.size()>0){
+            for (int i = 0;i<equpments.size();i++){
+                if (equpments.get(i).getIsFirst()){
+                    FirstEqument = equpments.get(i) ;
+                }
+             }
+            }else {
+                FirstEqument=null;
+            }
+            mainFragment.RefrashFirstEqu1();
+            equmentFragment.RefrashFirstEqu1();
+
         }
 
     }
@@ -604,7 +617,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
             case KeyEvent.KEYCODE_BACK:
                 long secondTime=System.currentTimeMillis();
                 if(secondTime-firstTime>2000){
-                    Toast.makeText(MainActivity.this,"再按一次退出程序",Toast.LENGTH_SHORT).show();
+                    Toast.makeText( this,getText(R.string.toast_main_exit),Toast.LENGTH_SHORT).show();
                     firstTime=secondTime;
                     return true;
                 }else{

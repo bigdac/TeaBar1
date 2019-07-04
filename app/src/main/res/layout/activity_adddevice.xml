@@ -4,11 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-    android:id="@+id/tv_main_1"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    />
+
     <ImageView
         android:id="@+id/iv_power_fh"
         android:layout_below="@+id/tv_main_1"
@@ -42,7 +38,7 @@
         android:hint="@string/equ_add_wifi"
         android:paddingLeft="20dp"
         android:textSize="14sp"
-        android:textColorHint="#333333"
+        android:textColorHint="#bbbbbb"
         />
 
     <EditText
@@ -57,16 +53,16 @@
         android:hint="@string/equ_add_wifipass"
         android:paddingLeft="20dp"
         android:textSize="14sp"
-        android:textColorHint="#333333"
+        android:textColorHint="#bbbbbb"
         />
     <LinearLayout
         android:id="@+id/li_device_ask"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/et_add_pass"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal"
         >
 
@@ -88,15 +84,65 @@
         android:layout_marginLeft="10dp"
         />
     </LinearLayout>
+    <TextView
+        android:id="@+id/tv_add_mes1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="#777777"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/li_device_ask"
+        android:layout_marginTop="60dp"
+        android:text="@string/equ_add_wifimes1"
+        />
+    <TextView
+        android:id="@+id/tv_add_mes2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="#777777"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/tv_add_mes1"
+        android:text="@string/equ_add_wifimes2"
+        android:layout_marginTop="5dp"
+        />
+    <TextView
+        android:id="@+id/tv_add_mes3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="#777777"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/tv_add_mes2"
+        android:text="@string/equ_add_wifimes3"
+        android:layout_marginTop="5dp"
+        />
 
+    <TextView
+        android:id="@+id/tv_add_mes5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="#777777"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/tv_add_mes3"
+        android:text="@string/equ_add_wifimes5"
+        android:layout_marginTop="5dp"
+        />
     <Button
         android:id="@+id/bt_device_add"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@mipmap/login_button"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="60dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="50dp"
         android:text="@string/equ_add_add"
         android:textColor="@color/white"
         android:paddingBottom="11dp"

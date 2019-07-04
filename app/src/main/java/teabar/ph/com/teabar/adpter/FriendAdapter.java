@@ -18,6 +18,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -308,7 +311,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyviewHold
                                         !lastMsg.getContentType().equals(ContentType.prompt) &&
                                         //排除自己给自己发送消息
                                         !((UserInfo) lastMsg.getTargetInfo()).getUserName().equals(JMessageClient.getMyInfo().getUserName())) {
-                                    myviewHolder.    content.setText("[已读]" + contentStr);
+                                    myviewHolder.    content.setText(/*"[已读]" +*/ contentStr);
                                 } else {
                                     myviewHolder.     content.setText(contentStr);
                                 }
@@ -317,11 +320,11 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyviewHold
                                         lastMsg.getDirect().equals(MessageDirect.send) &&
                                         !lastMsg.getContentType().equals(ContentType.prompt) &&
                                         !((UserInfo) lastMsg.getTargetInfo()).getUserName().equals(JMessageClient.getMyInfo().getUserName())) {
-                                    contentStr = "[未读]" + contentStr;
-                                    SpannableStringBuilder builder = new SpannableStringBuilder(contentStr);
-                                    builder.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.line_normal)),
-                                            0, 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                                    myviewHolder.    content.setText(builder);
+//                                    contentStr = "[未读]" + contentStr;
+//                                    SpannableStringBuilder builder = new SpannableStringBuilder(contentStr);
+//                                    builder.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.line_normal)),
+//                                            0, 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                    myviewHolder.    content.setText(contentStr);
                                 } else {
                                     myviewHolder.   content.setText(contentStr);
                                 }
@@ -342,7 +345,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyviewHold
                 }
             }
         } else {
-            draft = "[草稿]" + draft;
+//            draft = "[草稿]" + draft;
             SpannableStringBuilder builder = new SpannableStringBuilder(draft);
             builder.setSpan(new ForegroundColorSpan(Color.RED), 0, 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             myviewHolder.   content.setText(builder);
@@ -357,14 +360,18 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyviewHold
                     @Override
                     public void gotResult(int status, String desc, Bitmap bitmap) {
                         if (status == 0) {
-                            myviewHolder.       headIcon.setImageBitmap(bitmap);
+                            myviewHolder.headIcon.setImageBitmap(bitmap);
                         } else {
-                            myviewHolder.     headIcon.setImageResource(R.drawable.jmui_head_icon);
+//                            myviewHolder.     headIcon.setImageResource(R.drawable.jmui_head_icon);
+                            Glide.with(context).load(((UserInfo) mDatas.get(position).getTargetInfo()).getAvatar()).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.my_pic).transform(new teabar.ph.com.teabar.util.GlideCircleTransform(context)).into( myviewHolder.headIcon);
+
                         }
                     }
                 });
             } else {
-                myviewHolder.  headIcon.setImageResource(R.drawable.jmui_head_icon);
+//                myviewHolder.  headIcon.setImageResource(R.drawable.jmui_head_icon);
+                Glide.with(context).load(((UserInfo) mDatas.get(position).getTargetInfo()).getAvatar()).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.my_pic).transform(new teabar.ph.com.teabar.util.GlideCircleTransform(context)).into( myviewHolder.headIcon);
+
             }
 
         myviewHolder. convName.setText(convItem.getTitle());

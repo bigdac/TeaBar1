@@ -44,17 +44,17 @@
 
         <TextView
             android:id="@+id/jmui_msg_content"
-            style="@style/jmui_msg_text_style"
+            style="@style/jmui_msg_text_style1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="3dp"
             android:autoLink="web"
-            android:background="@drawable/jmui_msg_send_bg"
+            android:background="@drawable/chat_bjsend"
             android:paddingLeft="10dp"
             android:paddingRight="18dp"
             android:textColorLink="#157BFB"
             android:visibility="gone"/>
-
+        <!--android:background="@drawable/jmui_msg_send_bg"-->
         <LinearLayout
             android:id="@+id/ll_businessCard"
             android:layout_width="wrap_content"

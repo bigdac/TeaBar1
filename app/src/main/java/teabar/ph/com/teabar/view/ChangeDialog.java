@@ -19,7 +19,7 @@ import teabar.ph.com.teabar.R;
 
 public class ChangeDialog extends Dialog {
     Unbinder unbinder;
-    @BindView(R.id.et_name) EditText et_name;//编辑内容
+    @BindView(R.id.et_name) TextView et_name;//编辑内容
     @BindView(R.id.tv_title) TextView tv_title;
     public ChangeDialog(@NonNull Context context) {
         super(context, R.style.MyDialog);
@@ -63,21 +63,22 @@ public class ChangeDialog extends Dialog {
     protected void onStart() {
         super.onStart();
         Log.i("dialog","-->onStart");
-        if (mode==0){
-            et_name.setHint(tips);
-            et_name.setBackgroundColor(Color.parseColor("#f5f5f5"));
-            if (inputType==2){
-                et_name.setInputType(InputType.TYPE_CLASS_NUMBER);
-            }else if (inputType==3){
-                et_name.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            }
-        }else if (mode==1){
-            et_name.setTextSize(20);
-            et_name.setText(tips);
-            et_name.setFocusable(false);
-            et_name.setFocusableInTouchMode(false);
-        }
-
+//        if (mode==0){
+//            et_name.setHint(tips);
+//            et_name.setBackgroundColor(Color.parseColor("#f5f5f5"));
+//            if (inputType==2){
+//                et_name.setInputType(InputType.TYPE_CLASS_NUMBER);
+//            }else if (inputType==3){
+//                et_name.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+//            }
+//        }else if (mode==1){
+//            et_name.setTextSize(20);
+//            et_name.setText(tips);
+//            et_name.setFocusable(false);
+//            et_name.setFocusableInTouchMode(false);
+//        }
+        et_name.setTextSize(20);
+        et_name.setText(tips);
         if (!TextUtils.isEmpty(title)){
             tv_title.setText(title);
         }

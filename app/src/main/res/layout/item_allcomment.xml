@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:padding="10dp"
     android:orientation="vertical">
    <LinearLayout
        android:id="@+id/li_all_title"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:orientation="horizontal"
+       android:layout_marginTop="10dp"
        >
       <ImageView
           android:id="@+id/iv_all_head"
@@ -17,7 +17,7 @@
           android:layout_height="50dp"
           android:src="@mipmap/my_pic"
           android:scaleType="centerInside"
-          android:layout_marginLeft="5dp"
+          android:layout_marginLeft="15dp"
 
           />
       <TextView
@@ -25,10 +25,10 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="你好"
-          android:textSize="16sp"
+          android:textSize="18sp"
           android:layout_gravity="center_vertical"
           android:layout_marginLeft="10dp"
-          android:textColor="#666666"
+          android:textColor="#333"
           />
    </LinearLayout>
 
@@ -37,8 +37,10 @@
        android:layout_below="@+id/li_all_title"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       android:layout_marginLeft="70dp"
+       android:layout_marginLeft="75dp"
        android:layout_marginRight="20dp"
+       android:textSize="13sp"
+       android:textColor="#333"
        />
 
    <View

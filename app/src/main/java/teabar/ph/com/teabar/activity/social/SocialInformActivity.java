@@ -41,12 +41,13 @@ import teabar.ph.com.teabar.util.SharePreferenceManager;
 
 public class SocialInformActivity extends BaseActivity {
 
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     @BindView(R.id.iv_power_fh)
     ImageView iv_power_fh;
     @BindView(R.id.rv_social_inform)
     RecyclerView rv_social_inform;
+    @BindView(R.id.iv_no_notification)
+    LinearLayout iv_no_notification;
     FriendInforImpl friendInforDao;
     MyApplication application;
     SocialInformAdapter socialInformAdapter ;
@@ -65,14 +66,17 @@ public class SocialInformActivity extends BaseActivity {
 
     @Override
     public void initView(View view) {
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
+
         if (application == null) {
             application = (MyApplication) getApplication();
         }
         friendInforDao = new FriendInforImpl(getApplicationContext());
         mList = friendInforDao.findAll();
+        if (mList.size()==0){
+            iv_no_notification.setVisibility(View.VISIBLE);
+        }else {
+            iv_no_notification.setVisibility(View.INVISIBLE);
+        }
         socialInformAdapter = new SocialInformAdapter(this,mList);
         rv_social_inform.setLayoutManager(new LinearLayoutManager(this));
         rv_social_inform.setAdapter(socialInformAdapter);
@@ -83,16 +87,16 @@ public class SocialInformActivity extends BaseActivity {
                 ContactManager.acceptInvitation(friendInfor.getId()+"", friendInfor.getAppKey(), new BasicCallback() {
                     @Override
                     public void gotResult(int responseCode, String responseMessage) {
-                        if (0 == responseCode) {
+                         if (0 == responseCode) {
                             //接收好友请求成功
                            friendInfor .setAddNum(1);
                           friendInforDao.update(friendInfor);
                           socialInformAdapter.notifyDataSetChanged();
-                          toast("接收好友请求成功");
+//                          toast(responseMessage);
 
                         } else {
                             //接收好友请求失败
-                            toast("接收好友请求失败");
+                            toast(responseMessage);
                         }
                     }
                 });
@@ -120,11 +124,13 @@ public class SocialInformActivity extends BaseActivity {
                                 friend.setId(Long.valueOf(username));
                                 friend.setAppKey(appKey);
                                 friend.setAddNum(0);
+//                                friend.setAddFriend(true);
                                 friendInforDao.insert(friend);
                                 mList.add(friend);
                             }else {
                                 mList.add(friendInfor);
                             }
+                            iv_no_notification.setVisibility(View.INVISIBLE);
                             socialInformAdapter.notifyDataSetChanged();
                             //拒绝好友请求
                         } else if (event.getType() == ContactNotifyEvent.Type.invite_declined) {
@@ -143,6 +149,7 @@ public class SocialInformActivity extends BaseActivity {
                                 friendInfor.setAddNum(0);
                                 friendInforDao.update(friendInfor);
                             }
+                            iv_no_notification.setVisibility(View.INVISIBLE);
                             socialInformAdapter.notifyDataSetChanged();
 
                         } else if (event.getType() == ContactNotifyEvent.Type.contact_deleted) {

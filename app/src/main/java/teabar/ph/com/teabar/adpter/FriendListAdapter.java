@@ -9,6 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
+import java.io.File;
 import java.util.List;
 
 import cn.jpush.im.android.api.model.UserInfo;
@@ -36,6 +40,8 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
     @Override
     public void onBindViewHolder(@NonNull final MyviewHolder myviewHolder, final int position) {
             myviewHolder.tv_talk_name.setText(mData.get(position).getNickname());
+
+            Glide.with(context).load(mData.get(position).getAvatar()).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.my_pic).transform(new teabar.ph.com.teabar.util.GlideCircleTransform(context)).into(myviewHolder.iv_talk_pic);
             myviewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -75,6 +81,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.My
         public MyviewHolder(View itemView){
             super(itemView);
             tv_talk_name = itemView.findViewById(R.id.tv_talk_name);
+            iv_talk_pic = itemView.findViewById(R.id.iv_talk_pic);
         }
     }
 }

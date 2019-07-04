@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import teabar.ph.com.teabar.R;
+import teabar.ph.com.teabar.activity.question.QuestionScore1Activity;
 import teabar.ph.com.teabar.activity.question.QuestionScoreActivity;
 import teabar.ph.com.teabar.pojo.ScoreRecords;
 
@@ -37,16 +38,17 @@ public class MyquestionAdapter extends RecyclerView.Adapter<MyquestionAdapter.My
 
     @Override
     public void onBindViewHolder(@NonNull final MyviewHolder myviewHolder, final int position) {
-        String s = context.getText(R.string.question_title).toString();
+        String s = context.getText(R.string.question_title1).toString();
         myviewHolder.tv_plan_name.setText(s+"  "+(position+1));
-//        myviewHolder.tv_tea_name.setText(mData.get(position).getCreateTime());
+        myviewHolder.tv_tea_name.setText(mData.get(position).getCreateTime());
         myviewHolder.tv_ques_fs.setText(mData.get(position).getGrades());
         myviewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context,QuestionScoreActivity.class);
+                Intent intent = new Intent(context,QuestionScore1Activity.class);
                 intent.putExtra("ScoreRecords",mData.get(position));
                 intent.putExtra("name",myviewHolder.tv_plan_name.getText().toString());
+                intent.putExtra("title",myviewHolder.tv_plan_name.getText().toString());
                 context.startActivity(intent);
 
             }

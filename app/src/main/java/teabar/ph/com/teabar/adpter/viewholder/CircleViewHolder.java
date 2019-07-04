@@ -27,7 +27,7 @@ public abstract class CircleViewHolder extends RecyclerView.ViewHolder implement
 
     public int viewType;
 
-    public ImageView headIv,iv_social_no;
+    public ImageView headIv,iv_social_no,iv_all_mes;
     public TextView nameTv , allMess;
     public TextView urlTipTv,tv_social_num,tv_social_talk;
     /** 动态的内容 */
@@ -57,7 +57,7 @@ public abstract class CircleViewHolder extends RecyclerView.ViewHolder implement
         nameTv = (TextView) itemView.findViewById(R.id.nameTv);
         allMess = itemView.findViewById(R.id.tv_all_mess);
         iv_social_no = itemView.findViewById(R.id.iv_social_no);
-
+        iv_all_mes = itemView.findViewById(R.id.iv_all_mes);
         contentTv = (ExpandTextView) itemView.findViewById(R.id.contentTv);
         urlTipTv = (TextView) itemView.findViewById(R.id.urlTipTv);
         timeTv = (TextView) itemView.findViewById(R.id.timeTv);

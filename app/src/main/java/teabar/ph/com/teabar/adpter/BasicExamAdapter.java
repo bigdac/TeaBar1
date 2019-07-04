@@ -84,8 +84,30 @@ public class BasicExamAdapter extends BaseAdapter{
     }
     boolean  Open;
     int chooseNum=0;
+    public void refrashNum(){
+        chooseNum=0;
+    }
+    boolean Unit= false;
+    public void chooseUnit(boolean unit,int pos){
+        if (unit){
+            for (int i=0;i<list2.size();i++){
+                if (i==list2.size()-1){
+                    list2.get(i).setIsselect(true);
+                }else {
+                    list2.get(i).setIsselect(false);
+                }
+            }
+            chooseNum = 1;
+        }else {
+            list2.get(list2.size()-1).setIsselect(false);
+            list2.get(pos).setIsselect(true);
+            chooseNum=1;
+        }
+        notifyDataSetChanged();
+    }
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
+
         ViewHolder holder = null;
         if (convertView == null) {
            holder = new  ViewHolder();
@@ -99,48 +121,50 @@ public class BasicExamAdapter extends BaseAdapter{
             holder = ( ViewHolder) convertView.getTag();
         }
 
-        final String ee = getItem(position).toString();
-        holder.bt_basic_button.setText(ee);
-        Open = list2.get(position).isIsselect();
-        final boolean isOpen[] ={Open};
-        if (!isOpen[0]){
-            holder.bt_basic_button.setBackground(context.getDrawable(R.drawable.answer_button2));
-            holder.bt_basic_button.setTextColor(context.getResources().getColor(R.color.login_black));
+            final String ee = getItem(position).toString();
+            holder.bt_basic_button.setText(ee);
+            Open = list2.get(position).isIsselect();
+            final boolean isOpen[] = {Open};
+            if (!isOpen[0]) {
+                holder.bt_basic_button.setBackground(context.getDrawable(R.drawable.answer_button2));
+                holder.bt_basic_button.setTextColor(context.getResources().getColor(R.color.login_black));
 
-        }else {
-            holder.bt_basic_button.setBackground(context.getResources().getDrawable(R.drawable.login_face));
-            holder.bt_basic_button.setTextColor(context.getResources().getColor(R.color.white));
-            chooseNum = chooseNum+1;
-
-        }
-        final ViewHolder finalHolder1 = holder;
-        holder.bt_basic_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                    if (isOpen[0]){
-                        finalHolder1.bt_basic_button.setBackground(context.getDrawable(R.drawable.answer_button2));
-                        finalHolder1.bt_basic_button.setTextColor(context.getResources().getColor(R.color.login_black));
-                        isOpen[0]=false;
-                        chooseNum = chooseNum-1;
-                        itemClickListerner.onClikner(view,position);
-                    }else {
-                        if (chooseNum<3){
-                            finalHolder1.bt_basic_button.setBackground(context.getResources().getDrawable(R.drawable.login_face));
-                            finalHolder1.bt_basic_button.setTextColor(context.getResources().getColor(R.color.white));
-                            isOpen[0]=true;
-                            chooseNum = chooseNum+1;
-                            itemClickListerner.onClikner(view,position);
-                        }else {
-                            ToastUtil.showShort(context,"最多選擇3個目標");
-                        }
-
-                    }
-
+            } else {
+                holder.bt_basic_button.setBackground(context.getResources().getDrawable(R.drawable.login_face));
+                holder.bt_basic_button.setTextColor(context.getResources().getColor(R.color.white));
+                chooseNum = chooseNum + 1;
 
             }
-        });
-//        if (clickTemp == position) {
+            final ViewHolder finalHolder1 = holder;
+            holder.bt_basic_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                        if (isOpen[0]) {
+                            finalHolder1.bt_basic_button.setBackground(context.getDrawable(R.drawable.answer_button2));
+                            finalHolder1.bt_basic_button.setTextColor(context.getResources().getColor(R.color.login_black));
+                            isOpen[0] = false;
+                            chooseNum = chooseNum - 1;
+                            itemClickListerner.onClikner(view, position);
+                        } else {
+                            if (chooseNum < 3) {
+                                finalHolder1.bt_basic_button.setBackground(context.getResources().getDrawable(R.drawable.login_face));
+                                finalHolder1.bt_basic_button.setTextColor(context.getResources().getColor(R.color.white));
+                                isOpen[0] = true;
+                                chooseNum = chooseNum + 1;
+                                itemClickListerner.onClikner(view, position);
+                            } else {
+                                ToastUtil.showShort(context,context.getText(R.string.question_mostchoose).toString()  );
+                            }
+
+                        }
+
+
+
+                }
+            });
+
+        //        if (clickTemp == position) {
 //                      holder.evaluate_tv.setBackgroundResource(R.drawable.answer_button);
 //                      holder.evaluate_tv.setTextColor(Color.parseColor("#ffffff"));
 //          } else {

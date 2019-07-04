@@ -28,6 +28,16 @@ public class Tea implements Serializable {
     String tasteCn;
     String tasteEn;
     String teaPhoto;
+    String rgb;
+
+    public String getRgb() {
+        return rgb;
+    }
+
+    public void setRgb(String rgb) {
+        this.rgb = rgb;
+    }
+
     int temperature;//温度
     int  seconds;//浸泡时间
     int waterYield;//体积

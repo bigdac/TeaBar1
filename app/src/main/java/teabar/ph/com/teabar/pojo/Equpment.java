@@ -26,6 +26,20 @@ public class Equpment implements Serializable {
     int Mode;//燈光模式
     boolean onLine;//是否在线
     int lightOpen ;//燈光開關
+    int bringht;
+    int hotFinish;//是否预热完成
+    public int getHotFinish() {
+        return this.hotFinish;
+    }
+    public void setHotFinish(int hotFinish) {
+        this.hotFinish = hotFinish;
+    }
+    public int getBringht() {
+        return this.bringht;
+    }
+    public void setBringht(int bringht) {
+        this.bringht = bringht;
+    }
     public int getLightOpen() {
         return this.lightOpen;
     }
@@ -128,13 +142,13 @@ public class Equpment implements Serializable {
     public void setEqupmentId(long equpmentId) {
         this.equpmentId = equpmentId;
     }
-    @Generated(hash = 2042419196)
+    @Generated(hash = 303452426)
     public Equpment(long equpmentId, String name, boolean isFirst,
             String macAdress, int mStage, String lightColor, String washTime,
             String hasWater, boolean inform_isFinish, boolean inform_isHot,
             boolean inform_noWater, boolean inform_isFull,
             boolean inform_isWashing, String errorCode, int Mode, boolean onLine,
-            int lightOpen) {
+            int lightOpen, int bringht, int hotFinish) {
         this.equpmentId = equpmentId;
         this.name = name;
         this.isFirst = isFirst;
@@ -152,11 +166,12 @@ public class Equpment implements Serializable {
         this.Mode = Mode;
         this.onLine = onLine;
         this.lightOpen = lightOpen;
+        this.bringht = bringht;
+        this.hotFinish = hotFinish;
     }
     @Generated(hash = 1019008802)
     public Equpment() {
     }
-
 
 
 

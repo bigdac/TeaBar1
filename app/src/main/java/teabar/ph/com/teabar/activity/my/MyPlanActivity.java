@@ -24,8 +24,7 @@ import teabar.ph.com.teabar.base.MyApplication;
 public class MyPlanActivity extends BaseActivity {
     @BindView(R.id.rv_myplan)
     RecyclerView rv_myplan;
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     PlanAdapter mPlanAdapter;
     List<String> mList = new ArrayList<>();
     MyApplication application;
@@ -46,9 +45,7 @@ public class MyPlanActivity extends BaseActivity {
             application = (MyApplication) getApplication();
         }
         application.addActivity(this);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
+
         for (int i = 0;i<2;i++){
             mList.add(i+"");
         }

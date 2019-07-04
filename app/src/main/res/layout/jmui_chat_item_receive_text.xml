@@ -40,14 +40,14 @@
                 android:layout_marginLeft="3dp"
                 android:layout_toRightOf="@id/jmui_avatar_iv"
                 android:autoLink="web"
-                android:background="@drawable/jmui_msg_receive_bg"
+                android:background="@drawable/chat_bjreciver"
                 android:paddingLeft="15dp"
                 android:paddingRight="10dp"
                 android:textColor="#363333"
                 android:textColorLink="#157BFB"
                 android:visibility="gone"/>
         </LinearLayout>
-
+        <!--android:background="@drawable/jmui_msg_receive_bg"-->
         <LinearLayout
             android:id="@+id/ll_businessCard"
             android:layout_width="wrap_content"

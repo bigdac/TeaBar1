@@ -5,11 +5,21 @@
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/tv_main_1"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:background="#fafafa"
+        android:layout_alignBottom="@+id/tv_power"
+        android:layout_marginBottom="-15dp"
+        >
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#c9c9c9"
+            android:layout_alignParentBottom="true"
+            />
+
+    </RelativeLayout>
     <ImageView
         android:id="@+id/iv_set_fh"
         android:layout_below="@+id/tv_main_1"
@@ -66,7 +76,7 @@
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/rl_set_password"
-        android:layout_marginTop="5dp"
+
         android:layout_below="@+id/rl_set_num"
         android:layout_width="match_parent"
         android:layout_height="50dp">
@@ -99,7 +109,7 @@
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/rl_set_mess"
-        android:layout_marginTop="5dp"
+
         android:layout_below="@+id/rl_set_password"
         android:layout_width="match_parent"
         android:layout_height="50dp">
@@ -114,9 +124,9 @@
             />
         <ImageView
             android:id="@+id/iv_set_open"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/equ_open"
+            android:layout_width="45dp"
+            android:layout_height="25dp"
+            android:src="@mipmap/device_open"
             android:textSize="16sp"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
@@ -133,7 +143,7 @@
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/rl_set_user"
-        android:layout_marginTop="5dp"
+
         android:layout_below="@+id/rl_set_mess"
         android:layout_width="match_parent"
         android:layout_height="50dp">
@@ -167,7 +177,7 @@
 
     <RelativeLayout
         android:id="@+id/rl_set_update"
-        android:layout_marginTop="5dp"
+
         android:layout_below="@+id/rl_set_user"
         android:layout_width="match_parent"
         android:layout_height="50dp">
@@ -212,7 +222,7 @@
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/rl_set_clean"
-        android:layout_marginTop="5dp"
+
         android:layout_below="@+id/rl_set_update"
         android:layout_width="match_parent"
         android:layout_height="50dp">
@@ -238,7 +248,6 @@
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/rl_set_tk"
-        android:layout_marginTop="5dp"
         android:layout_below="@+id/rl_set_clean"
         android:layout_width="match_parent"
         android:layout_height="50dp">

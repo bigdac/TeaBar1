@@ -19,6 +19,8 @@ import android.view.inputmethod.InputMethodManager;
 
 
 import com.peihou.daemonservice.DaemonHolder;
+import com.pgyersdk.crash.PgyCrashManager;
+import com.pgyersdk.update.PgyUpdateManager;
 import com.ph.teabar.database.dao.DaoImp.FriendInforImpl;
 
 import java.io.File;
@@ -30,6 +32,7 @@ import cn.jpush.im.android.api.event.ContactNotifyEvent;
 import cn.jpush.im.android.api.event.LoginStateChangeEvent;
 import cn.jpush.im.android.api.model.UserInfo;
 import teabar.ph.com.teabar.pojo.FriendInfor;
+import teabar.ph.com.teabar.service.CrashHandler;
 import teabar.ph.com.teabar.util.LogUtil;
 import teabar.ph.com.teabar.util.SharePreferenceManager;
 import teabar.ph.com.teabar.util.SharedPreferencesHelper;
@@ -57,6 +60,9 @@ public abstract class BaseActivity extends FragmentActivity implements
         MyApplication application = (MyApplication) getApplication();
         isDebug = application.isDebug;
         APP_NAME = application.APP_NAME;
+        CrashHandler crashHandler = CrashHandler.getInstance();
+        crashHandler.init(getApplicationContext());
+        PgyCrashManager.register();
         $Log(TAG + "-->onCreate()");
         try {
             Bundle bundle = getIntent().getExtras();
@@ -84,6 +90,7 @@ public abstract class BaseActivity extends FragmentActivity implements
             initView(mContextView);
             friendInforDao= new FriendInforImpl(getApplicationContext());
             doBusiness(this);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -144,8 +151,8 @@ public abstract class BaseActivity extends FragmentActivity implements
     private void steepStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 //            // 透明状态栏
-            getWindow().addFlags(
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            getWindow().addFlags(
+//                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             // 透明导航栏
 //            getWindow().addFlags(
 //                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
@@ -172,6 +179,7 @@ public abstract class BaseActivity extends FragmentActivity implements
                         friend.setId(Long.valueOf(username));
                         friend.setAppKey(appKey);
                         friend.setAddNum(0);
+//                        friend.setAddFriend(true);
                         friendInforDao.insert(friend);
 
                         //拒绝好友请求
@@ -187,9 +195,11 @@ public abstract class BaseActivity extends FragmentActivity implements
                             friend.setAppKey(appKey);
                             friend.setId(Long.valueOf(username));
                             friend.setAddNum(0);
+//                            friend.setAddFriend(true);
                             friendInforDao.insert(friend);
                         }else {
                             friendInfor.setAddNum(0);
+//                            friendInfor.setAddFriend(true);
                             friendInforDao.update(friendInfor);
                         }
 

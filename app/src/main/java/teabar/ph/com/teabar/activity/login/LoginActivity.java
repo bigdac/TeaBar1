@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -14,10 +15,15 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.TransformationMethod;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -64,6 +70,7 @@ import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.activity.question.BaseQuestionActivity;
 import teabar.ph.com.teabar.activity.question.RecommendActivity;
+import teabar.ph.com.teabar.activity.tkActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.pojo.Equpment;
@@ -85,14 +92,10 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
     EditText et_login_pasw;
     @BindView(R.id.tv_bj1)
     TextView tv_bj1;
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
-    @BindView(R.id.login_iv_seepassw)
-    ImageView login_iv_seepassw;
-    @BindView(R.id.li_login_ty)
-    LinearLayout li_login_ty;
-    @BindView(R.id.iv_login_ty)
-    ImageView iv_login_ty;
+    @BindView(R.id.iv_login_repass)
+    ImageView iv_login_repass;
+    @BindView(R.id.tv_login_tk)
+    TextView tv_login_tk;
     SharedPreferences preferences;
     boolean isHideFirst=true;
     String user;
@@ -107,7 +110,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
     QMUITipDialog tipDialog;
     UserEntryImpl userEntryDao;
     EquipmentImpl equipmentDao;
-    Boolean canLogin= true;
+
     @Override
     public void initParms(Bundle parms) {
 
@@ -136,9 +139,11 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
         }
         application.addActivity(this);
         preferences = getSharedPreferences("my", MODE_PRIVATE);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
+        if (application.IsEnglish()==0){
+            tv_login_tk.setText(Html.fromHtml("沒有帳號?<u>創建一個</u>"));
+        }else {
+            tv_login_tk.setText(Html.fromHtml("Don't have an account?<u>Create One</u>"));
+        }
         userEntryDao = new UserEntryImpl(getApplicationContext());
         equipmentDao = new EquipmentImpl(getApplicationContext());
         et_login_user.setText(preferences.getString("user", ""));
@@ -149,7 +154,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgressDialog();
+//                showProgressDialog();
                 LoginManager.getInstance()
                         .logInWithReadPermissions(LoginActivity.this,
                                 Arrays.asList("public_profile", "user_friends","email"));
@@ -213,6 +218,9 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                         "updated_time,timezone,age_range,first_name,last_name");
                 request.setParameters(parameters);
                 request.executeAsync();
+//                tv_login_tk.setText(Html.fromHtml(getString(R.string.login_tv_regist1)));
+//                String str1 = "<font color='#101010'>"+getText(R.string.tea_kouwei_yc).toString()+" "+"</font>"+syno;
+
             }
 
             @Override
@@ -302,7 +310,9 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
 
 
     }
-    @OnClick({R.id.bt_login_ensure, R.id.sign_in_button ,R.id.login_iv_seepassw ,R.id.tv_login_regist,R.id.tv_login_forget,R.id.li_login_ty})
+    @OnClick({R.id.bt_login_ensure, R.id.sign_in_button , R.id.tv_login_regist,R.id.tv_login_forget,R.id.li_login_repass
+
+    })
     public void onClick(View view){
         switch (view.getId()) {
             case R.id.tv_login_forget:
@@ -310,15 +320,15 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                 break;
 
             case R.id.bt_login_ensure:
-                if (canLogin) {
+
                     user = et_login_user.getText().toString().trim();
                     password = et_login_pasw.getText().toString().trim();
                     if (TextUtils.isEmpty(user)) {
-                        toast("账号码不能为空");
+                        toast(getText(R.string.toast_forget_phone).toString());
                         break;
                     }
                     if (TextUtils.isEmpty(password)) {
-                        ToastUtil.showShort(this, "请输入密码");
+                        toast(getText(R.string.toast_forget_pass).toString());
                         break;
                     }
                     boolean isConn = NetWorkUtil.isConnected(MyApplication.getContext());
@@ -339,51 +349,34 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                     } else {
                         ToastUtil.showShort(this, getText(R.string.toast_all_cs).toString());
                     }
-                }else {
-                    ToastUtil.showShort(this, getText(R.string.toast_login_canlogin).toString());
-                }
+
                 break;
             case R.id.sign_in_button:
                 Log.i("robin","点击了登录按钮");
                 signIn();
                 break;
 
-            case R.id.login_iv_seepassw :
-                if (isHideFirst == true) {
-                    login_iv_seepassw.setImageResource(R.mipmap.loign_see);
-                    //密文
-                    HideReturnsTransformationMethod method1 = HideReturnsTransformationMethod.getInstance();
-                    et_login_pasw.setTransformationMethod(method1);
-                    isHideFirst = false;
-                } else {
-                    login_iv_seepassw.setImageResource(R.mipmap.loign_unsee);
-                    //密文
-                    TransformationMethod method = PasswordTransformationMethod.getInstance();
-                    et_login_pasw.setTransformationMethod(method);
-                    isHideFirst = true;
 
-                }
-                // 光标的位置
-                int index = et_login_pasw.getText().toString().length();
-                et_login_pasw.setSelection(index);
-                break;
             case R.id.tv_login_regist:
                 startActivity(RegisterActivity.class);
                 break;
 
-            case R.id.li_login_ty:
-                if (canLogin){
-                    iv_login_ty.setImageResource(R.mipmap.log_fasle);
-                    canLogin=false;
+            case R.id.li_login_repass:
+                if (RemeberPass){
+                    RemeberPass=false;
+                    iv_login_repass.setImageResource(R.mipmap.logo_xzno);
                 }else {
-                    iv_login_ty.setImageResource(R.mipmap.login_esure);
-                    canLogin=true;
+                    RemeberPass=true;
+                    iv_login_repass.setImageResource(R.mipmap.logo_xz);
                 }
 
                 break;
+
+
         }
 
     }
+    boolean RemeberPass = true;
     /**
      * 自定义对话框
      */
@@ -428,11 +421,11 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
             params.put("photoUrl",acct.getPhotoUrl());
             params.put("userName",acct.getDisplayName());
             params.put("type1",3);//facebook 2 google 3
-            showProgressDialog();
+//            showProgressDialog();
             new ThirdLoginAsynTask().execute(params);
             }
         }else{
-            tv_bj1.setText("登录失败");
+//            tv_bj1.setText("登录失败");
             Log.i("robin", "没有成功"+result.getStatus());
         }
     }
@@ -502,7 +495,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
 
         tipDialog = new QMUITipDialog.Builder(this)
                 .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
-                .setTipWord("正在登录，请稍后")
+                .setTipWord(getText(R.string.search_qsh).toString())
 
                 .create();
         tipDialog.show();
@@ -525,7 +518,8 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("state");
-                    returnMsg1=jsonObject.getString("message1");
+                    returnMsg1=jsonObject.getString("message2");
+                    returnMsg2=jsonObject.getString("message3");
                     if ("200".equals(code)) {
                         JSONObject returnData = jsonObject.getJSONObject("data");
                        userId = returnData.getString("userId");
@@ -535,8 +529,14 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                         type = returnData.getInt("type");
                         type1 = returnData.getInt("type1");
                         SharedPreferences.Editor editor = preferences.edit();
-                        editor.putString("user",user);
-                        editor.putString("password",password);
+                        if (RemeberPass){
+                            editor.putString("user",user);
+                            editor.putString("password",password);
+                        }else {
+                            editor.remove("user");
+                            editor.remove("password");
+                            editor.commit();
+                        }
                         editor.putString("userId", userId);
                         editor.putString("token",token);
                         editor.putString("userName",userName);
@@ -575,13 +575,18 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                     if (tipDialog!=null&&tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    toast( "连接超时，请重试");
+                    ToastUtil.showShort(LoginActivity.this, getText(R.string.toast_all_cs).toString());
                     break;
                 default:
                     if (tipDialog!=null&&tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    toast( returnMsg1);
+                    if (application.IsEnglish()==0){
+                        toast( returnMsg1);
+                    }else {
+                        toast( returnMsg2);
+                    }
+
                     break;
 
             }
@@ -603,7 +608,8 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                     try {
                         JSONObject jsonObject = new JSONObject(result);
                         code = jsonObject.getString("state");
-                        returnMsg1=jsonObject.getString("message1");
+                        returnMsg1=jsonObject.getString("message2");
+                        returnMsg2=jsonObject.getString("message3");
                         if ("200".equals(code)) {
                             JSONObject returnData = jsonObject.getJSONObject("data");
                              userId = returnData.getString("userId");
@@ -653,13 +659,18 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                     if (tipDialog!=null&&tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    toast( "连接超时，请重试");
+                    ToastUtil.showShort(LoginActivity.this, getText(R.string.toast_all_cs).toString());
+
                     break;
                 default:
                     if (tipDialog!=null&&tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    toast( returnMsg1);
+                    if (application.IsEnglish()==0){
+                        toast( returnMsg1);
+                    }else {
+                        toast( returnMsg2);
+                    }
                     break;
 
             }
@@ -786,7 +797,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                     if (tipDialog!=null&&tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    toast( returnMsg1);
+//                    toast( returnMsg1);
                     break;
 
             }

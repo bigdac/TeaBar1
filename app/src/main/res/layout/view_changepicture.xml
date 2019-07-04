@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
-            android:text="拍照"
+            android:text="@string/toast_main_pz"
             android:textColor="#0073FF"
             />
         <TextView
@@ -32,7 +32,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#0073FF"
-            android:text="从手机相册选择"/>
+            android:text="@string/toast_main_zp"
+            />
 
     </LinearLayout>
 
@@ -42,7 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:textColor="#0073FF"
-        android:text="取消"
+        android:text="@string/equ_dia_del"
         android:gravity="center"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"

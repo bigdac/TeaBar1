@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
+import cn.jmessage.support.qiniu.android.dns.NetworkReceiver;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.event.ConversationRefreshEvent;
 import cn.jpush.im.android.api.event.MessageEvent;
@@ -52,15 +53,14 @@ import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 
 public class FriendFragment extends BaseFragment {
 
-    @BindView(R.id.tv_talk_no)
-    LinearLayout tv_talk_no;
+
     RecyclerView rv_friend;
     FriendAdapter friendAdapter ;
     private List<Conversation> mDatas = new ArrayList<Conversation>();
     List<Conversation> topConv = new ArrayList<>();
     List<Conversation> forCurrent = new ArrayList<>();
     List<Conversation> delFeedBack = new ArrayList<>();
-
+    LinearLayout tv_talk_no;
     private NetworkReceiver mReceiver;
     private static final int REFRESH_CONVERSATION_LIST = 0x3000;
     private static final int DISMISS_REFRESH_HEADER = 0x3001;
@@ -79,6 +79,7 @@ public class FriendFragment extends BaseFragment {
         isRunning=true;
         mContext = this.getActivity();
         rv_friend = view.findViewById(R.id.rv_friend);
+        tv_talk_no = view.findViewById(R.id.tv_talk_no);
         JMessageClient.registerEventReceiver(this);
         EventBus.getDefault().register(this);
         initConvListAdapter();
@@ -86,10 +87,12 @@ public class FriendFragment extends BaseFragment {
 
     }
     public void setNullConversation(boolean isHaveConv) {
-        if (isHaveConv) {
-            tv_talk_no.setVisibility(View.GONE);
-        } else {
-            tv_talk_no.setVisibility(View.VISIBLE);
+        if (tv_talk_no!=null) {
+            if (isHaveConv) {
+                tv_talk_no.setVisibility(View.GONE);
+            } else {
+                tv_talk_no.setVisibility(View.VISIBLE);
+            }
         }
     }
     public void initConvListAdapter() {
@@ -166,8 +169,8 @@ public class FriendFragment extends BaseFragment {
         TextView tv_dialog_qd = (TextView) view.findViewById(R.id.tv_dia_qd);
         TextView tv_dia_title = view.findViewById(R.id.tv_dia_title);
         TextView et_dia_name = view.findViewById(R.id.et_dia_name);
-        tv_dia_title.setText("删除对话");
-        et_dia_name.setText("是否删除对话");
+        tv_dia_title.setText(getText(R.string.personal_set_deltitle).toString());
+        et_dia_name.setText(getText(R.string.personal_set_delmes).toString());
         dialog.setContentView(view);
         //使得点击对话框外部不消失对话框
         dialog.setCanceledOnTouchOutside(false);
@@ -176,7 +179,8 @@ public class FriendFragment extends BaseFragment {
         Window dialogWindow = dialog.getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         lp.width = (int) (ScreenSizeUtils.getInstance(getActivity()).getScreenWidth() * 0.75f);
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.height = (int) (ScreenSizeUtils.getInstance(getActivity()).getScreenWidth() * 0.45f);
+
         lp.gravity = Gravity.CENTER;
         dialogWindow.setAttributes(lp);
         tv_dialog_qx.setOnClickListener(new View.OnClickListener() {
@@ -325,6 +329,7 @@ public class FriendFragment extends BaseFragment {
             switch (msg.what) {
                 case REFRESH_CONVERSATION_LIST:
                     Conversation conv = (Conversation) msg.obj;
+                    if (friendAdapter!=null)
                     friendAdapter.setToTop(conv);
                     break;
                 case DISMISS_REFRESH_HEADER:

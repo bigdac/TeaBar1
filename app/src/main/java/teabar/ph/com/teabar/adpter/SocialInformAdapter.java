@@ -46,11 +46,17 @@ public class SocialInformAdapter extends RecyclerView.Adapter<SocialInformAdapte
 
              }
          });
-         if (mData.get(position).getAddNum()==1){
-            myviewHolder. bt_addFriend .setText("已同意");
-            myviewHolder. bt_addFriend .setTextColor( context.getResources().getColor(R.color.login_gray));
-            myviewHolder.bt_addFriend.setClickable(false);
-            myviewHolder.bt_addFriend.setBackground(context.getDrawable( R.drawable.answer_button1) );
+         if (mData.get(position).getAddFriend()){
+             myviewHolder.tv_message.setText(context.getText(R.string.social_inform_addfinish).toString());
+             myviewHolder.bt_addFriend.setVisibility(View.INVISIBLE);
+         }else {
+             myviewHolder.bt_addFriend.setVisibility(View.VISIBLE);
+             if (mData.get(position).getAddNum() == 1) {
+                 myviewHolder.bt_addFriend.setText(context.getText(R.string.social_friend_ytj).toString());
+                 myviewHolder.bt_addFriend.setTextColor(context.getResources().getColor(R.color.social_gray));
+                 myviewHolder.bt_addFriend.setClickable(false);
+                 myviewHolder.bt_addFriend.setBackground(null);
+             }
          }
 
     }

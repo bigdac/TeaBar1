@@ -17,7 +17,11 @@
         android:layout_weight="1"/>
 
 
-
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="#cacaca"
+    />
 <android.support.design.widget.TabLayout
     android:id="@+id/main_tabLayout"
     android:layout_width="match_parent"
@@ -25,7 +29,7 @@
     app:tabGravity="fill"
     app:tabMode="fixed"
     app:tabIndicatorHeight="0dp"
-
+    android:background="#f7f7f7"
     />
 
 

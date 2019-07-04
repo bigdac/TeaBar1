@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import teabar.ph.com.teabar.R;
@@ -107,6 +108,8 @@ public class MainFragment2 extends BaseFragment  {
     TextView tv_main_name;
     @BindView(R.id.tv_main_know)
     TextView tv_main_know;
+    @BindView(R.id.tv_main_bz1)
+    TextView tv_main_bz1;
     String firstMac;
     EquipmentImpl equipmentDao;
     List<Equpment> equpments;
@@ -181,14 +184,18 @@ public class MainFragment2 extends BaseFragment  {
                     if (((MainActivity) getActivity()).getFirstEqument().getOnLine()) {
                         if (!Utils.isFastClick()) {
                                firstEqu = ((MainActivity) getActivity()).getFirstEqument();
-                            if (firstEqu.getMStage()!=0xb2) {
-                                li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
-                                firstEquipmentCtrl.open(0Xc0, firstMac);
-                                firstEqu.setMStage(0xb2);
-                            } else {
-                                li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
-                                firstEquipmentCtrl.open(0Xc1, firstMac);
-                                firstEqu.setMStage(0xb0);
+                            if (firstEqu.getMStage()!=0xb6||firstEqu.getMStage()!=0xb7) {
+                                if (firstEqu.getMStage() != 0xb2) {
+                                    li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
+                                    firstEquipmentCtrl.open(0Xc0, firstMac);
+                                    firstEqu.setMStage(0xb2);
+                                } else {
+                                    li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
+                                    firstEquipmentCtrl.open(0Xc1, firstMac);
+                                    firstEqu.setMStage(0xb0);
+                                }
+                            }else {
+                                ToastUtil.showShort(getActivity(), getText(R.string.toast_updata_no).toString());
                             }
                         } else {
                             ToastUtil.showShort(getActivity(), getText(R.string.toast_equ_fast).toString());
@@ -216,6 +223,17 @@ public class MainFragment2 extends BaseFragment  {
         //绑定services
         MQintent = new Intent(getActivity(), MQService.class);
         MQBound = getActivity().bindService(MQintent, MQconnection, Context.BIND_AUTO_CREATE);
+        long time=System.currentTimeMillis();
+        Calendar mCalendar=Calendar.getInstance();
+        mCalendar.setTimeInMillis(time);
+        int  mHour=mCalendar.get(Calendar.HOUR);
+        if (mHour>3&&mHour<12){
+            tv_main_bz1.setText(getText(R.string.main_home_zs).toString());
+        }else if (mHour>12&&mHour<18){
+            tv_main_bz1.setText(getText(R.string.main_home_zw).toString());
+        }else if (mHour>18||mHour<3){
+            tv_main_bz1.setText(getText(R.string.main_home_ws).toString());
+        }
     }
 
     Intent MQintent;
@@ -236,7 +254,7 @@ public class MainFragment2 extends BaseFragment  {
     };
 
     public void  RefrashFirstEqu1(){
-        if ( ((MainActivity)getActivity()).getFirstEqu()!=null) {
+        if ( ((MainActivity)Objects.requireNonNull(getActivity())).getFirstEqu()!=null) {
             Equpment equpment = ((MainActivity) getActivity()).getFirstEqu();
             if (equpment != null) {
                 String error = equpment.getErrorCode();
@@ -248,7 +266,10 @@ public class MainFragment2 extends BaseFragment  {
                         tv_main_water.setText(R.string.equ_xq_waterf);
                     }
                 }
-                tv_main_online.setText(R.string.equ_xq_online);
+                if (equpment.getOnLine())
+                    tv_main_online.setText(R.string.equ_xq_online);
+                else
+                    tv_main_online.setText(R.string.equ_xq_outline);
                 if (equpment.getMStage() == 0xb1) {
                     tv_main_hot.setText(R.string.equ_xq_ishot);
                 } else {
@@ -263,7 +284,6 @@ public class MainFragment2 extends BaseFragment  {
             }
         }else {
             li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
-
             firstEqu = null;
             firstMac = "";
 
@@ -274,13 +294,18 @@ public class MainFragment2 extends BaseFragment  {
     /*兩個默認設備同步*/
     public void  Synchronization(int type){
         //0是开机 1是关机 这里是显示 0 为绿色
-        if (type==0xb2){
-            firstEqu.setMStage(0xb0);
-            li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
+        if (firstEqu==null){
+            firstEqu = ((MainActivity)getActivity()).getFirstEqument();
+        }
+        if (firstEqu!=null) {
+            if (type == 0xb2) {
+                firstEqu.setMStage(0xb0);
+                li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.main_title1));
 
-        }else {
-            firstEqu.setMStage(0xb2);
-            li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
+            } else {
+                firstEqu.setMStage(0xb2);
+                li_main_title.setBackgroundColor(getActivity().getResources().getColor(R.color.nomal_green));
+            }
         }
     }
 
@@ -464,7 +489,7 @@ public class MainFragment2 extends BaseFragment  {
                         code = jsonObject.getString("cod");
                         JSONArray jsonArray = jsonObject.getJSONArray("list");
                         for (int i =0;i<jsonArray.length();i++){
-                            if (i==0||i==9||i==18) {
+                            if (i==0||i==9||i==17) {
                                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                                 Weather weather = new Weather();
                                 long time = jsonObject1.getLong("dt");
@@ -536,7 +561,7 @@ public class MainFragment2 extends BaseFragment  {
     public  String getWeek(long time) {
 
         Calendar cd = Calendar.getInstance();
-        cd.setTime(new Date(time));
+        cd.setTimeInMillis(time*1000);
 
         int year  = cd.get(Calendar.YEAR); //获取年份
         int month = cd.get(Calendar.MONTH); //获取月份

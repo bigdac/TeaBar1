@@ -33,8 +33,9 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/tv_question1"
         android:layout_marginRight="20dp"
-        android:background="@drawable/brew_button"
-        android:textColor="@color/nomal_green"
+        android:background="@mipmap/wj_button"
+        android:paddingBottom="5dp"
+        android:textColor="@color/white"
         android:layout_marginTop="50dp"
         />
 

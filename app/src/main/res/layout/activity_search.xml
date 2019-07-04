@@ -13,11 +13,7 @@
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/tv_main_1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+
     <ImageView
         android:id="@+id/iv_power_fh"
         android:layout_below="@+id/tv_main_1"
@@ -32,7 +28,7 @@
         android:layout_height="wrap_content"
         android:text="@string/search_title"
         android:layout_below="@+id/iv_power_fh"
-        android:layout_marginLeft="17dp"
+        android:layout_marginLeft="15dp"
         android:textSize="30sp"
         android:textColor="@color/login_black"
         />
@@ -40,8 +36,8 @@
         android:id="@+id/rl_search_search"
         android:layout_width="match_parent"
         android:background="@drawable/search_bg"
-        android:layout_marginLeft="17dp"
-        android:layout_marginRight="17dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:layout_below="@+id/tv_power"
         android:layout_marginTop="10dp"
         android:layout_height="40dp">
@@ -49,7 +45,7 @@
             android:id="@+id/iv_search_pic"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@mipmap/main_search"
+            android:src="@mipmap/main_ss3"
             android:layout_centerVertical="true"
             android:scaleType="centerInside"
             android:layout_marginLeft="10dp"
@@ -61,8 +57,7 @@
             android:background="@null"
             android:layout_toRightOf="@+id/iv_search_pic"
             android:layout_toLeftOf="@+id/iv_search_del"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
+            android:layout_marginRight="10dp"
             android:hint="@string/search_mess"
             android:textColor="@color/social_gray"
             android:textSize="14sp"
@@ -86,8 +81,19 @@
             android:src="@mipmap/search_del"
             android:layout_toLeftOf="@+id/tv_search_search"
             android:layout_centerVertical="true"
-            android:layout_marginRight="20dp"
-            android:visibility="gone"
+            android:layout_marginRight="18dp"
+            android:visibility="invisible"
+            />
+        <View
+            android:id="@+id/view_search_bz"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#c9c9c9"
+            android:layout_toRightOf="@+id/iv_search_del"
+            android:layout_marginLeft="-9dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"
+
             />
     </RelativeLayout>
     <ImageView
@@ -100,15 +106,17 @@
         android:layout_marginRight="20dp"
         android:scaleType="centerInside"
         android:layout_marginTop="5dp"
+        android:visibility="invisible"
         />
     <LinearLayout
         android:id="@+id/li_search_old"
         android:layout_below="@+id/rl_search_search"
+        android:visibility="invisible"
         android:orientation="vertical"
         android:layout_marginLeft="17dp"
         android:layout_marginRight="17dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="1dp">
         <TextView
             android:id="@+id/tv_search_old"
             android:layout_width="wrap_content"
@@ -127,6 +135,25 @@
 
         </teabar.ph.com.teabar.view.FlowTagView>
     </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_main_tealist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/li_search_old"
+        android:overScrollMode="never"
+        android:paddingLeft="5dp"
+
+        />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_main_jh"
+        android:layout_below="@+id/rv_main_tealist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:paddingBottom="20dp"
+        />
 
     <!--<LinearLayout-->
         <!--android:id="@+id/li_search_taste"-->

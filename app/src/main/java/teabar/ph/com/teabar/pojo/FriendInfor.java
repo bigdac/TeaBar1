@@ -11,6 +11,13 @@ public class FriendInfor {
     String useName;
     int addNum;
     String appKey;
+    boolean addFriend;
+    public boolean getAddFriend() {
+        return this.addFriend;
+    }
+    public void setAddFriend(boolean addFriend) {
+        this.addFriend = addFriend;
+    }
     public String getAppKey() {
         return this.appKey;
     }
@@ -35,12 +42,14 @@ public class FriendInfor {
     public void setId(long id) {
         this.id = id;
     }
-    @Generated(hash = 5776347)
-    public FriendInfor(long id, String useName, int addNum, String appKey) {
+    @Generated(hash = 569343964)
+    public FriendInfor(long id, String useName, int addNum, String appKey,
+            boolean addFriend) {
         this.id = id;
         this.useName = useName;
         this.addNum = addNum;
         this.appKey = appKey;
+        this.addFriend = addFriend;
     }
     @Generated(hash = 1592264104)
     public FriendInfor() {

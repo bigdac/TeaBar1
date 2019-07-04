@@ -3,13 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingBottom="10dp"
+    android:paddingBottom="5dp"
     >
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="120dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         >
 
         <ImageView
@@ -48,20 +50,10 @@
             android:textSize="40sp"
             android:layout_centerVertical="true"
             android:textColor="@color/nomal_green"
-            android:layout_toLeftOf="@+id/tv_ques_s"
-            android:layout_marginRight="10dp"
-            />
-        <TextView
-            android:id="@+id/tv_ques_s"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="分"
-            android:textSize="16sp"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:textColor="@color/social_gray"
             android:layout_marginRight="20dp"
             />
+
 
 
     </RelativeLayout>

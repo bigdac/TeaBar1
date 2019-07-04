@@ -1,49 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="178dp"
-    android:layout_height="217dp"
-    android:padding="5dp"
+    android:layout_width="165dp"
+    android:layout_height="195dp"
+    android:paddingBottom="13dp"
+    android:paddingLeft="5dp"
     >
-    <ImageView
+    <RelativeLayout
+        android:id="@+id/rl_equ_hasequ"
         android:layout_width="match_parent"
-        android:layout_height="207dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/teacard" />
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        >
+
+
     <ImageView
-        android:id="@+id/iv_equ_choose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:src="@mipmap/device_bj" />
+    <ImageView
+        android:id="@+id/iv_equ_choose"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
         android:src="@mipmap/equ_choose"
         android:layout_alignParentRight="true"
         android:layout_marginTop="10dp"
-        android:layout_marginRight="13dp"
+        android:layout_marginRight="10dp"
         />
     <RelativeLayout
         android:id="@+id/rl_equ_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="35dp"
+        android:layout_centerInParent="true"
+
         >
 
         <ImageView
-            android:id="@+id/iv_equ_equ"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/equ_off"
-            android:layout_centerInParent="true"
+            android:src="@mipmap/device_pic"
+            android:paddingTop="10dp"
             />
 
     </RelativeLayout>
+    <ImageView
+        android:id="@+id/iv_equ_equ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/device_online"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        />
     <TextView
         android:id="@+id/tv_equ_name"
-        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="lify—家"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/rl_equ_light"
-
+        android:textSize="14sp"
+        android:layout_below="@+id/iv_equ_equ"
+        android:layout_alignLeft="@+id/iv_equ_equ"
+        android:layout_marginTop="5dp"
         />
 
     <ImageView
@@ -51,11 +67,9 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:scaleType="centerInside"
-        android:src="@mipmap/equ_open"
+        android:src="@mipmap/device_open"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="13dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
         />
 
     <ImageView
@@ -63,10 +77,41 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="10dp"
-        android:src="@mipmap/equ_light"
+        android:src="@mipmap/device_light"
         android:scaleType="centerInside"
         />
 
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_equ_noequ"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:src="@mipmap/device_bj" />
+        <ImageView
+            android:id="@+id/iv_equ_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/device_add"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/equ_xq_add"
+            android:layout_below="@+id/iv_equ_add"
+            android:layout_centerHorizontal="true"
+            android:textSize="14sp"
+            android:textColor="#777777"
+            android:layout_marginTop="20dp"
+            />
+
+    </RelativeLayout>
 </RelativeLayout>

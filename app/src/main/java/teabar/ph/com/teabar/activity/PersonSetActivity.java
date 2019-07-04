@@ -1,6 +1,7 @@
 package teabar.ph.com.teabar.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +16,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,10 +25,13 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bigkoo.pickerview.adapter.ArrayWheelAdapter;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.CustomListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.contrarywind.listener.OnItemSelectedListener;
+import com.contrarywind.view.WheelView;
 import com.google.gson.Gson;
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 
@@ -53,6 +58,7 @@ import teabar.ph.com.teabar.adpter.BasicExamAdapter;
 import teabar.ph.com.teabar.adpter.PersonAskAdapter;
 import teabar.ph.com.teabar.adpter.PlanAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
+import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.bean.CircleItem;
 import teabar.ph.com.teabar.bean.CommentItem;
@@ -67,12 +73,13 @@ import teabar.ph.com.teabar.util.DisplayUtil;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.Utils;
+import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
+import teabar.ph.com.teabar.view.CompanyEdittext;
 import teabar.ph.com.teabar.view.FlowTagView;
 
 public class PersonSetActivity extends BaseActivity {
 
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     @BindView(R.id.tv_base_xxdz)
     TextView tv_base_xxdz;
     @BindView(R.id.tv_base_birthxq)
@@ -88,9 +95,9 @@ public class PersonSetActivity extends BaseActivity {
     @BindView(R.id.et_person_name)
     EditText et_person_name;
     @BindView(R.id.et_person_tall)
-     EditText et_person_tall;
+    TextView et_person_tall;
     @BindView(R.id.et_person_weight)
-     EditText et_person_weight;
+    TextView et_person_weight;
     @BindView(R.id.fv_message)
     FlowTagView fv_message;
     @BindView(R.id.tv_question_name)
@@ -134,19 +141,17 @@ public class PersonSetActivity extends BaseActivity {
             application = (MyApplication) getApplication();
         }
         application.addActivity(this);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
+
         language = application.IsEnglish();
         preferences =  getSharedPreferences("my",Context.MODE_PRIVATE);
         userId = preferences.getString("userId","");
         addressAdapter = new AddressAdapter(this,list,language);
         basicExamAdapter = new BasicExamAdapter(this,R.layout.item_basicexam);
         fv_message.setAdapter(basicExamAdapter);
-        new  getCountryAsynTask().execute();
+        new  getCountryAsynTask(PersonSetActivity.this).execute();
         Map<String ,Object> param = new HashMap<>();
         param.put("userId",userId);
-        new FindMessAsynctask().execute(param);
+        new FindMessAsynctask(PersonSetActivity.this).execute(param);
         initCustomTimePicker();
         basicExamAdapter.SetOnclickLister(new BasicExamAdapter.OnItemClickListerner() {
             @Override
@@ -177,6 +182,7 @@ public class PersonSetActivity extends BaseActivity {
     int sex = 1;
     @OnClick({R.id.iv_power_fh ,R.id.rl_set_place ,R.id.rl_set_age,R.id.iv_base_nan,R.id.tv_base_nan,
         R.id.iv_base_nv,R.id.tv_base_nv,R.id.iv_hy_yes,R.id.tv_hy_yes,R.id.iv_hy_no,R.id.tv_hy_no,R.id.bt_search_set
+            ,R.id.et_person_tall,R.id.et_person_weight
     })
     public void onClick(View view){
         switch (view.getId()){
@@ -195,6 +201,9 @@ public class PersonSetActivity extends BaseActivity {
             case R.id.iv_base_nan:
                 iv_base_nv.setImageResource(R.mipmap.set_xz2);
                 iv_base_nan.setImageResource(R.mipmap.choose_nan);
+                iv_hy_no .setImageResource(R.mipmap.set_xz2);
+                iv_hy_yes.setImageResource(R.mipmap.set_xz2);
+                conceive= 0;
                 sex =1;
                 break;
 
@@ -253,33 +262,159 @@ public class PersonSetActivity extends BaseActivity {
                 }
                 showProgressDialog();
                 Map<String,Object> param = new HashMap<>();
+                String text1 = et_person_tall.getText().toString().replaceAll("cm","");
+                String text2 = et_person_weight.getText().toString().replaceAll("KG","");
                 param.put("userId",userId);
-                param.put("weight",et_person_weight.getText().toString().trim());
+                param.put("weight",text2);
                 if (sex==1){
                     /*0nv 1nan*/
                     param.put("sex", 1);
                 }else {
                     param.put("sex", 0);
                 }
-                param.put("height",et_person_tall.getText().toString().trim());
+
+                param.put("height",text1);
                 param.put("birthday",tv_base_birthxq.getText().toString().trim());
                 param.put("country",country1);
                 param.put("province",province1);
                 param.put("city",city1);
                 param.put("area",area1);
                 param.put("conceive",conceive);
-                param.put("userName",userName);
-                new SaveMessAsynctask().execute(param);
+                param.put("userName",et_person_name.getText().toString().trim());
+                new SaveMessAsynctask(PersonSetActivity.this).execute(param);
                 String answer = Utils.listToString(stringList);
                 Map<String ,Object> params = new HashMap<>();
                 params.put("userId",userId);
                 params.put("answer",answer);
                 new  setBasicTeaAsynctask().execute(params);
                 break;
+
+            case R.id.et_person_tall:
+                customDialog();
+                break;
+
+            case R.id.et_person_weight:
+                customDialog1();
+                break;
         }
     }
 
+    Dialog dialog1;
 
+
+    TextView tv_tall_qx,tv_tall_qd ;
+    WheelView wheelView;
+    private void customDialog( ) {
+
+        dialog1  = new Dialog(this, R.style.MyDialog);
+        View view = View.inflate(this, R.layout.item_tall, null);
+        tv_tall_qx = view.findViewById(R.id.tv_tall_qx);
+        tv_tall_qd = view.findViewById(R.id.tv_tall_qd);
+        wheelView = view.findViewById(R.id.wheelview);
+        wheelView.setCyclic(false);
+
+        final List<String> mOptionsItems = new ArrayList<>();
+        for (int i =1;i<219;i++){
+            mOptionsItems.add(i+"cm");
+        }
+
+        wheelView.setAdapter(new ArrayWheelAdapter(mOptionsItems));
+        wheelView.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int index) {
+//                Toast.makeText(getActivity(), "" + mOptionsItems.get(index), Toast.LENGTH_SHORT).show();
+            }
+        });
+        wheelView.setCurrentItem(165);
+
+        dialog1.setContentView(view);
+        //使得点击对话框外部不消失对话框
+        dialog1.setCanceledOnTouchOutside(false);
+        //设置对话框的大小
+        view.setMinimumHeight((int) (ScreenSizeUtils.getInstance(this).getScreenHeight() * 0.23f));
+        Window dialogWindow = dialog1.getWindow();
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.width = (int) (ScreenSizeUtils.getInstance(this).getScreenWidth());
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.gravity = Gravity.BOTTOM;
+        dialogWindow.setAttributes(lp);
+        tv_tall_qx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (dialog1!=null&&dialog1.isShowing())
+                    dialog1.dismiss();
+
+            }
+        });
+        tv_tall_qd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text =   wheelView.getAdapter().getItem(wheelView.getCurrentItem()).toString();
+                et_person_tall.setText(text);
+                if (dialog1!=null&&dialog1.isShowing())
+                    dialog1.dismiss();
+            }
+        });
+
+        dialog1.show();
+
+    }
+
+    private void customDialog1( ) {
+
+        dialog1  = new Dialog(this, R.style.MyDialog);
+        View view = View.inflate(this, R.layout.item_tall, null);
+        tv_tall_qx = view.findViewById(R.id.tv_tall_qx);
+        tv_tall_qd = view.findViewById(R.id.tv_tall_qd);
+        wheelView = view.findViewById(R.id.wheelview);
+        wheelView.setCyclic(false);
+
+        final List<String> mOptionsItems = new ArrayList<>();
+        for (int i =1;i<200;i++){
+            mOptionsItems.add(i+"KG");
+        }
+
+        wheelView.setAdapter(new ArrayWheelAdapter(mOptionsItems));
+        wheelView.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int index) {
+//                Toast.makeText(getActivity(), "" + mOptionsItems.get(index), Toast.LENGTH_SHORT).show();
+            }
+        });
+        wheelView.setCurrentItem(60);
+
+        dialog1.setContentView(view);
+        //使得点击对话框外部不消失对话框
+        dialog1.setCanceledOnTouchOutside(false);
+        //设置对话框的大小
+        view.setMinimumHeight((int) (ScreenSizeUtils.getInstance(this).getScreenHeight() * 0.23f));
+        Window dialogWindow = dialog1.getWindow();
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.width = (int) (ScreenSizeUtils.getInstance(this).getScreenWidth());
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.gravity = Gravity.BOTTOM;
+        dialogWindow.setAttributes(lp);
+        tv_tall_qx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (dialog1!=null&&dialog1.isShowing())
+                    dialog1.dismiss();
+
+            }
+        });
+        tv_tall_qd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text =   wheelView.getAdapter().getItem(wheelView.getCurrentItem()).toString();
+                et_person_weight.setText(text);
+                if (dialog1!=null&&dialog1.isShowing())
+                    dialog1.dismiss();
+            }
+        });
+
+        dialog1.show();
+
+    }
     class setBasicTeaAsynctask extends AsyncTask<Map<String,Object>,Void,String>{
 
         @Override
@@ -333,10 +468,14 @@ public class PersonSetActivity extends BaseActivity {
     }
 
     /*上传信息*/
-    class SaveMessAsynctask extends AsyncTask<Map<String,Object>,Void,String> {
+    class SaveMessAsynctask extends BaseWeakAsyncTask<Map<String,Object>,Void,String,BaseActivity> {
+
+        public SaveMessAsynctask(BaseActivity baseActivity) {
+            super(baseActivity);
+        }
 
         @Override
-        protected String doInBackground(Map<String, Object>... maps) {
+        protected String doInBackground(BaseActivity baseActivity, Map<String, Object>... maps) {
             String code = "";
             Map<String,Object> param = maps[0];
             String result = HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/api/setBasic",param);
@@ -362,13 +501,17 @@ public class PersonSetActivity extends BaseActivity {
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(BaseActivity baseActivity, String s) {
+
             switch (s){
                 case "200":
                     if (tipDialog!=null&&tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("userName",et_person_name.getText().toString().trim());
+                    editor.commit();
+                    setResult(2000);
                     finish();
                     toast(getText(R.string.toast_update_cg).toString());
                     break;
@@ -384,10 +527,14 @@ public class PersonSetActivity extends BaseActivity {
     String height,weight,birthday,address,userName,label,addressEn;
     int conceive =0;
    /*查找基础信息*/
-    class FindMessAsynctask extends AsyncTask<Map<String,Object>,Void,String> {
+    class FindMessAsynctask extends BaseWeakAsyncTask<Map<String,Object>,Void,String,BaseActivity> {
 
-        @Override
-        protected String doInBackground(Map<String, Object>... maps) {
+       public FindMessAsynctask(BaseActivity baseActivity) {
+           super(baseActivity);
+       }
+
+       @Override
+        protected String doInBackground(BaseActivity baseActivity, Map<String, Object>... maps) {
             String code = "";
             Map<String,Object> param = maps[0];
             String result = HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/api/selectUserBasic",param);
@@ -434,15 +581,15 @@ public class PersonSetActivity extends BaseActivity {
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(BaseActivity baseActivity, String s) {
+
             switch (s){
                 case "200":
-                    new getTeaListAsynTask().execute();
+                    new getTeaListAsynTask(PersonSetActivity.this).execute();
                     et_person_name.setText(userName);
                     tv_base_birthxq.setText(birthday);
-                    et_person_tall.setText(height);
-                    et_person_weight.setText(weight);
+                    et_person_tall.setText(height+" cm");
+                    et_person_weight.setText(weight+" KG");
                     if (language==0){
                     tv_base_xxdz.setText(address);
                     }else {
@@ -451,15 +598,17 @@ public class PersonSetActivity extends BaseActivity {
                     if (conceive==0){
                         iv_hy_no .setImageResource(R.mipmap.choose_nv);
                         iv_hy_yes    .setImageResource(R.mipmap.set_xz2);
-                        sex=2;
+
                     }else {
                         iv_hy_yes  .setImageResource(R.mipmap.choose_nv);
                         iv_hy_no  .setImageResource(R.mipmap.set_xz2);
-                        sex=1;
+
                     }
                     if (sex==1){
                         iv_base_nv.setImageResource(R.mipmap.set_xz2);
                         iv_base_nan.setImageResource(R.mipmap.choose_nan);
+                        iv_hy_yes  .setImageResource(R.mipmap.set_xz2);
+                        iv_hy_no  .setImageResource(R.mipmap.set_xz2);
                     }else {
                         iv_base_nv.setImageResource(R.mipmap.choose_nv);
                         iv_base_nan.setImageResource(R.mipmap.set_xz2);
@@ -475,10 +624,14 @@ public class PersonSetActivity extends BaseActivity {
 
     String examTitle;
     /*  获取問題*/
-    class getTeaListAsynTask extends AsyncTask<Void,Void,String> {
+    class getTeaListAsynTask extends BaseWeakAsyncTask<Void,Void,String,BaseActivity> {
+
+        public getTeaListAsynTask(BaseActivity baseActivity) {
+            super(baseActivity);
+        }
 
         @Override
-        protected String doInBackground(Void... voids) {
+        protected String doInBackground(BaseActivity baseActivity, Void... voids) {
             int type =29;
             if ( application.IsEnglish()==0){
                 type=2;
@@ -512,8 +665,8 @@ public class PersonSetActivity extends BaseActivity {
             return code;
         }
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(BaseActivity baseActivity, String s) {
+
 
             switch (s) {
 
@@ -522,7 +675,6 @@ public class PersonSetActivity extends BaseActivity {
                     tv_question_name.setText(examTitle);
                     if (!TextUtils.isEmpty(label)){
                         String[] aa = label.split(",");
-
                             for (int j=0;j<examOptionsList.size();j++){
                                 examOptions examOptions = examOptionsList.get(j);
                                 for ( int i=0;i<aa.length;i++) {
@@ -535,6 +687,8 @@ public class PersonSetActivity extends BaseActivity {
 
                         basicExamAdapter.setItems(examOptionsList1);
                         stringList = basicExamAdapter.getStringList();
+                    }else {
+                        basicExamAdapter.setItems(examOptionsList);
                     }
 
                     break;
@@ -555,10 +709,14 @@ public class PersonSetActivity extends BaseActivity {
     /*  地址*/
     String returnMsg1,returnMsg2;
     long examId = 1 ;
-    class getCountryAsynTask extends AsyncTask<Void,Void,String> {
+    class getCountryAsynTask extends BaseWeakAsyncTask<Void,Void,String,BaseActivity> {
+
+        public getCountryAsynTask(BaseActivity baseActivity) {
+            super(baseActivity);
+        }
 
         @Override
-        protected String doInBackground(Void... voids) {
+        protected String doInBackground(BaseActivity baseActivity, Void... voids) {
             String code = "";
             String result =   HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/app/getMap?id="+examId );
             Log.e("back", "--->" + result);
@@ -591,8 +749,8 @@ public class PersonSetActivity extends BaseActivity {
 
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(BaseActivity baseActivity, String s) {
+
 
             switch (s) {
 
@@ -634,7 +792,7 @@ public class PersonSetActivity extends BaseActivity {
     private void showPopup() {
         if (examId!=1){
             examId = 1 ;
-            new getCountryAsynTask().execute();
+            new getCountryAsynTask(this).execute();
         }
         contentViewSign = LayoutInflater.from(this).inflate(R.layout.popview_address, null);
         final TextView tv_address_1 = contentViewSign.findViewById(R.id.tv_address_1);
@@ -666,7 +824,7 @@ public class PersonSetActivity extends BaseActivity {
                 province1 = "655";
                 number=2;
                 examId = 655;
-                new getCountryAsynTask().execute();
+                new getCountryAsynTask(PersonSetActivity.this).execute();
                 tv_address_1.setVisibility(View.GONE);
                 li_address_hot.setVisibility(View.GONE);
             }
@@ -686,7 +844,7 @@ public class PersonSetActivity extends BaseActivity {
                 country1 = "3482";
                 number=1;
                 examId = 3482;
-                new getCountryAsynTask().execute();
+                new getCountryAsynTask(PersonSetActivity.this).execute();
                 tv_address_1.setVisibility(View.GONE);
                 li_address_hot.setVisibility(View.GONE);
             }
@@ -708,7 +866,7 @@ public class PersonSetActivity extends BaseActivity {
                 province1 = "612";
                 number=2;
                 examId = 612;
-                new getCountryAsynTask().execute();
+                new getCountryAsynTask(PersonSetActivity.this).execute();
                 tv_address_1.setVisibility(View.GONE);
                 li_address_hot.setVisibility(View.GONE);
             }
@@ -728,7 +886,7 @@ public class PersonSetActivity extends BaseActivity {
                 country1 = "130";
                 number=1;
                 examId = 130;
-                new getCountryAsynTask().execute();
+                new getCountryAsynTask(PersonSetActivity.this).execute();
                 tv_address_1.setVisibility(View.GONE);
                 li_address_hot.setVisibility(View.GONE);
             }
@@ -748,7 +906,7 @@ public class PersonSetActivity extends BaseActivity {
                 country1 = "2141";
                 number=1;
                 examId = 2141;
-                new getCountryAsynTask().execute();
+                new getCountryAsynTask(PersonSetActivity.this).execute();
                 tv_address_1.setVisibility(View.GONE);
                 li_address_hot.setVisibility(View.GONE);
             }
@@ -770,7 +928,7 @@ public class PersonSetActivity extends BaseActivity {
                 province1 = "636";
                 number=2;
                 examId = 636;
-                new getCountryAsynTask().execute();
+                new getCountryAsynTask(PersonSetActivity.this).execute();
                 tv_address_1.setVisibility(View.GONE);
                 li_address_hot.setVisibility(View.GONE);
             }
@@ -828,7 +986,7 @@ public class PersonSetActivity extends BaseActivity {
                         area1 = adress.getId() + "";
                     }
                 }
-                new getCountryAsynTask().execute();
+                new getCountryAsynTask(PersonSetActivity.this).execute();
                 tv_address_1.setVisibility(View.GONE);
                 li_address_hot.setVisibility(View.GONE);
             }
@@ -840,7 +998,7 @@ public class PersonSetActivity extends BaseActivity {
             }
         });
 
-        addressAdapter.update(list);
+
         mPopWindow = new PopupWindow(contentViewSign);
         mPopWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         mPopWindow.setHeight((int)(DisplayUtil.getScreenHeight(this)*0.75));

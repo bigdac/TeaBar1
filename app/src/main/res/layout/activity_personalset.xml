@@ -1,29 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:overScrollMode="never"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<RelativeLayout
 
+<RelativeLayout
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/tv_main_1"
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="110dp"
+        android:background="#fafafa"
+        android:layout_alignBottom="@+id/tv_power"
+        android:layout_marginBottom="-15dp"
+        >
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#c9c9c9"
+            android:layout_alignParentBottom="true"
+            />
+
+    </RelativeLayout>
+
     <ImageView
         android:id="@+id/iv_power_fh"
-        android:layout_below="@+id/tv_main_1"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:scaleType="centerInside"
         android:src="@mipmap/login_back"
         />
+
     <TextView
         android:id="@+id/tv_power"
         android:layout_width="wrap_content"
@@ -148,7 +159,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/set_xz2"
-            android:layout_marginLeft="45dp"
             />
         <TextView
             android:id="@+id/tv_hy_yes"
@@ -163,7 +173,7 @@
             android:id="@+id/iv_hy_no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/set_xz1"
+            android:src="@mipmap/set_xz2"
             android:layout_marginLeft="53dp"
             />
         <TextView
@@ -204,7 +214,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
+
             android:gravity="center_vertical"
             android:textColor="@color/social_gray"
             android:paddingLeft="15dp"
@@ -233,17 +243,16 @@
         android:layout_marginLeft="22dp"
         android:layout_height="45dp">
 
-        <EditText
+        <TextView
             android:id="@+id/et_person_tall"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="170cm"
             android:background="#f5f5f5"
             android:inputType="number"
             android:paddingLeft="15dp"
-            android:layout_marginRight="10dp"
             android:textColor="@color/social_gray"
             android:textSize="14sp"
+            android:gravity="center_vertical"
             />
 
     </RelativeLayout>
@@ -268,17 +277,16 @@
         android:background="@drawable/login_edtext"
         android:layout_height="45dp">
 
-        <EditText
+        <TextView
             android:id="@+id/et_person_weight"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="60kg"
             android:background="#f5f5f5"
             android:paddingLeft="15dp"
-            android:layout_marginRight="10dp"
             android:inputType="number"
             android:textColor="@color/social_gray"
             android:textSize="14sp"
+            android:gravity="center_vertical"
             />
 
 
@@ -291,7 +299,7 @@
         android:layout_below="@+id/rl_set_weight"
         android:layout_marginLeft="22dp"
         android:layout_marginTop="23dp"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:textColor="@color/login_black"
         />
     <RelativeLayout
@@ -301,9 +309,10 @@
         android:layout_marginTop="13dp"
         android:layout_marginRight="22dp"
         android:layout_marginLeft="22dp"
-        android:background="@drawable/login_edtext"
-        android:layout_height="45dp">
 
+        android:background="#f5f5f5"
+        android:layout_height="45dp">
+        <!--android:background="@drawable/login_edtext"-->
         <TextView
             android:id="@+id/tv_base_xxdz"
             android:layout_width="match_parent"
@@ -343,6 +352,8 @@
         android:id="@+id/fv_message"
         android:layout_marginTop="12dp"
         android:layout_below="@+id/tv_question_name"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

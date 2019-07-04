@@ -29,12 +29,19 @@ import teabar.ph.com.teabar.view.RadarChart02View;
 
 public class  PowerpicActivity extends BaseActivity {
 
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     @BindView(R.id.rcv_power)
     RadarChart02View rcv_power;
     @BindView(R.id.tv_power_score)
     TextView tv_power_score;
+    @BindView(R.id.tv_ques_score1)
+    TextView tv_ques_score1;
+    @BindView(R.id.tv_ques_score2)
+    TextView tv_ques_score2;
+    @BindView(R.id.tv_ques_score3)
+    TextView tv_ques_score3;
+    @BindView(R.id.tv_ques_score4)
+    TextView tv_ques_score4;
     MyApplication application;
     List<Tea> teaList  ;
     double bodyGrades,nutritionGrades,mindGradesc,lifeGrades;
@@ -57,9 +64,7 @@ public class  PowerpicActivity extends BaseActivity {
 
     @Override
     public void initView(View view) {
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
+
 
         if (application == null) {
             application = (MyApplication) getApplication();
@@ -71,7 +76,11 @@ public class  PowerpicActivity extends BaseActivity {
         dataSeriesA.add(nutritionGrades);
         dataSeriesA.add(mindGradesc);
         rcv_power.setData(dataSeriesA);
-        tv_power_score.setText((int) allGreade+"分");
+        tv_power_score.setText((int) allGreade+"");
+        tv_ques_score1.setText((int)bodyGrades+"");
+        tv_ques_score2.setText((int)lifeGrades+"");
+        tv_ques_score3.setText((int)nutritionGrades+"");
+        tv_ques_score4.setText((int)mindGradesc+"");
     }
 
     @Override
@@ -106,7 +115,7 @@ public class  PowerpicActivity extends BaseActivity {
             case KeyEvent.KEYCODE_BACK:
                 long secondTime=System.currentTimeMillis();
                 if(secondTime-firstTime>2000){
-                    Toast.makeText( this,"再按一次退出程序",Toast.LENGTH_SHORT).show();
+                    Toast.makeText( this,getText(R.string.toast_main_exit),Toast.LENGTH_SHORT).show();
                     firstTime=secondTime;
                     return true;
                 }else{

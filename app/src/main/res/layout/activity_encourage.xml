@@ -10,10 +10,9 @@
         android:layout_height="wrap_content"
         android:text="15"
         android:textColor="@color/white"
-        android:textSize="48sp"
+        android:textSize="15sp"
         android:layout_marginLeft="20dp"
         android:layout_below="@+id/encourage_tv_year"
-        android:layout_marginTop="-11dp"
         />
     <TextView
         android:id="@+id/encourage_tv_year"
@@ -21,9 +20,10 @@
         android:layout_height="wrap_content"
         android:text="03"
         android:textColor="@color/white"
-        android:textSize="48sp"
+        android:textSize="63sp"
+        android:includeFontPadding="false"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="151dp"
+        android:layout_marginTop="171dp"
         />
     <TextView
         android:id="@+id/tv_encourage"
@@ -38,18 +38,40 @@
         android:layout_marginTop="33dp"
         android:textSize="18sp"
         />
+    <View
+        android:id="@+id/view1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_below="@+id/tv_encourage"
+        android:layout_width="40dp"
+        android:layout_height="1dp"
+        android:background="@color/white"
+        />
+    
+    <TextView
+        android:id="@+id/tv_encourage_zz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        android:layout_below="@+id/view1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:text="PPPPPPPPPP"
+        android:textStyle="italic"
+        />
+
     <Button
         android:id="@+id/encourage_bt_in"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
+        android:layout_width="70dp"
+        android:layout_height="27dp"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="100dp"
+        android:layout_alignParentBottom="true"
         android:layout_marginRight="22dp"
+        android:layout_marginBottom="52dp"
         android:background="@drawable/encourage_button"
         android:text="@string/encourage_bt_in"
         android:textColor="@color/white"
-        android:textSize="16sp"
-        />
+        android:textSize="14sp" />
 
 </RelativeLayout>

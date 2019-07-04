@@ -27,8 +27,6 @@ import teabar.ph.com.teabar.base.MyApplication;
 
 public class AddMethodActivity extends BaseActivity {
 
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
     @BindView(R.id.iv_power_fh)
     ImageView iv_power_fh;
     @BindView(R.id.iv_drink_scup)
@@ -56,9 +54,6 @@ public class AddMethodActivity extends BaseActivity {
 
     @Override
     public void initView(View view) {
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
 
         if (application == null) {
             application = (MyApplication) getApplication();

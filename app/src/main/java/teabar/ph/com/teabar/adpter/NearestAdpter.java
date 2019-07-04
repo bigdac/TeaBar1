@@ -37,7 +37,7 @@ public class NearestAdpter extends RecyclerView.Adapter< NearestAdpter.MyViewHol
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, final int i) {
-        myViewHolder.tv_name.setText(mData.get(i).getTeaNameEn());
+        myViewHolder.tv_name.setText(mData.get(i).getProductNameEn());
         myViewHolder.bt_brew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,7 +59,7 @@ public class NearestAdpter extends RecyclerView.Adapter< NearestAdpter.MyViewHol
     class  MyViewHolder extends RecyclerView.ViewHolder {
         ImageView iv_favirate_yes;
         TextView tv_name;
-        Button bt_brew;
+        TextView bt_brew;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             iv_favirate_yes = itemView.findViewById(R.id.iv_favirate_yes);

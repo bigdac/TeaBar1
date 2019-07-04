@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="5dp"
     >
-
-
-    <RelativeLayout
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:padding="5dp"
-        android:background="@drawable/main_healthcard"
-        android:layout_marginTop="5dp"
+        android:layout_height="350dp"
+        android:src="@mipmap/plan_newcard"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:scaleType="fitXY"
+        />
+    <!--android:src="@drawable/main_plancard"-->
+    <RelativeLayout
+        android:id="@+id/rl_main_plan"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         >
@@ -20,11 +25,11 @@
         <ImageView
             android:id="@+id/iv_plan_pic"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginRight="7dp"
+            android:layout_height="190dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="18dp"
             android:scaleType="centerCrop"
-            android:layout_marginLeft="7dp"
+            android:layout_marginLeft="18dp"
             />
 
         <TextView
@@ -32,10 +37,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/iv_plan_pic"
-        android:textColor="@color/white"
+        android:textColor="#333333"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="15dp"
-        android:textSize="18sp"
+        android:layout_marginLeft="23dp"
+            android:includeFontPadding="false"
+        android:textSize="20sp"
         android:text="健康计划"
         />
         <TextView
@@ -43,9 +49,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_health_name"
-            android:textColor="@color/white"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="15dp"
+            android:textColor="#777777"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="23dp"
+            android:layout_marginRight="23dp"
+            android:includeFontPadding="false"
             android:textSize="14sp"
             android:text="一周内改善你的健康"
             />
@@ -53,15 +61,15 @@
             android:id="@+id/tv_health_see"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="15dp"
-            android:layout_below="@+id/tv_health_mes"
-            android:textSize="16sp"
-            android:text="Go and See >>"
+            android:textColor="#2bdca3"
+            android:layout_marginBottom="18dp"
+            android:layout_marginLeft="23dp"
+            android:layout_alignParentBottom="true"
+            android:textSize="10sp"
+            android:text="Tap to discover >"
 
             />
     </RelativeLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

@@ -12,11 +12,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.model.Conversation;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.social.AddSocialActivity;
 import teabar.ph.com.teabar.activity.chat.FriendListActivity;
+import teabar.ph.com.teabar.activity.social.NewFeedActivity;
 import teabar.ph.com.teabar.activity.social.SocialInformActivity;
 import teabar.ph.com.teabar.base.BaseFragment;
 
@@ -33,6 +35,8 @@ public class SocialFragment extends BaseFragment {
     TextView tv_social_mes;
     @BindView(R.id.tv_hasmess)
     TextView tv_hasmess;
+    @BindView(R.id.iv_social_new)
+    ImageView iv_social_new;
     ImageView iv_main_add;
     private List<Conversation> mDatas = new ArrayList<Conversation>();
 
@@ -83,6 +87,7 @@ public class SocialFragment extends BaseFragment {
                 tv_login_regist.setTextSize(TypedValue.COMPLEX_UNIT_SP,30);
                 tv_login_regist.setTextColor(getActivity().getResources().getColor(R.color.login_black));
                 tv_login_login.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
+                iv_social_new.setVisibility(View.INVISIBLE);
                 tv_login_login.setTextColor(getActivity().getResources().getColor(R.color.social_gray));
                 FragmentManager fragmentManager;
                 FragmentTransaction fragmentTransaction;
@@ -108,6 +113,7 @@ public class SocialFragment extends BaseFragment {
                 fragmentManager = getActivity().getSupportFragmentManager();
                 fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.li_social,friendCircleFragment ).commit();
+                iv_social_new.setVisibility(View.VISIBLE);
                 rl_social_inform.setVisibility(View.INVISIBLE);
                 iv_social_friend.setVisibility(View.INVISIBLE);
                 iv_main_add.setVisibility(View.VISIBLE);
@@ -116,12 +122,27 @@ public class SocialFragment extends BaseFragment {
         });
         mDatas = JMessageClient.getConversationList();
         if (mDatas != null && mDatas.size() > 0) {
-            tv_hasmess.setVisibility(View.VISIBLE);
+            for (int i=0;i<mDatas.size();i++){
+               int unReadMsgCnt = mDatas.get(i).getUnReadMsgCnt();
+                if (unReadMsgCnt>0){
+                    tv_hasmess.setVisibility(View.VISIBLE);
+                    break;
+                }
+            }
+
         }
 
     }
 
+    @OnClick({R.id.iv_social_new})
+    public  void onClick (View view){
+        switch (view.getId()){
+            case R.id.iv_social_new:
+                startActivity(new Intent(getActivity(),NewFeedActivity.class));
+                break;
 
+        }
+    }
 
 
         public void Refrashfriend(){

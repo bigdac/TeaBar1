@@ -5,70 +5,131 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <RelativeLayout
+        android:id="@+id/rl_question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/question_bj"
+        >
+
+        <TextView
+            android:id="@+id/iv_question_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/question_base10"
+            android:textColor="@color/white"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_marginTop="40dp"
+            />
+
+
+
+        <TextView
+            android:id="@+id/tv_question_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/question_base4"
+            android:layout_below="@+id/iv_question_title"
+            android:layout_marginTop="26dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:paddingBottom="73dp"
+            />
+    </RelativeLayout>
     <ImageView
-        android:id="@+id/iv_question_logo"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:src="@mipmap/logo"
-        android:layout_marginTop="80dp"
-        android:layout_marginLeft="18dp"
-        />
-    <TextView
-        android:layout_below="@+id/iv_question_logo"
-        android:id="@+id/tv_question_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="你怀孕了吗？"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="18dp"
-        android:textColor="@color/login_black"
+        android:src="@mipmap/question_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/rl_question"
+        android:layout_marginTop="-60dp"
         />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/li_question_man"
-        android:layout_below="@+id/tv_question_name"
+        android:layout_below="@+id/rl_question"
         android:layout_marginTop="25dp"
         android:layout_marginLeft="18dp"
+        android:layout_marginRight="18sp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="50dp">
         <ImageView
-            android:id="@+id/iv_question_man"
+            android:id="@+id/iv_question_choose1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/choose_nan"
+            android:src="@mipmap/question_choose"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:visibility="invisible"
             />
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_search1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/personal_set_yes"
-            android:layout_marginLeft="12dp"
-            android:textSize="16sp"
+            android:textSize="14sp"
+            android:textColor="#9d9d9d"
+            android:layout_toLeftOf="@+id/iv_question_choose1"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:text="@string/personal_set_yes"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#d9d9d9"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             />
 
-    </LinearLayout>
-    <LinearLayout
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/li_question_women"
-        android:layout_alignTop="@id/li_question_man"
-        android:layout_toRightOf="@+id/li_question_man"
-        android:layout_marginLeft="50dp"
+        android:layout_below="@+id/li_question_man"
+
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18sp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="50dp">
         <ImageView
-            android:id="@+id/iv_question_women"
+            android:id="@+id/iv_question_choose2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/set_xz2"
+            android:src="@mipmap/question_choose"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:visibility="invisible"
             />
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_search2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/personal_set_no"
-            android:layout_marginLeft="12dp"
-            android:textSize="16sp"
+            android:textSize="14sp"
+            android:textColor="#9d9d9d"
+            android:layout_toLeftOf="@+id/iv_question_choose2"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:text="@string/personal_set_no"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#d9d9d9"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             />
 
-    </LinearLayout>
-
+    </RelativeLayout>
 
     <Button
         android:id="@+id/bt_question1_esure"
@@ -78,8 +139,9 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/li_question_women"
         android:layout_marginRight="20dp"
-        android:background="@drawable/brew_button"
-        android:textColor="@color/nomal_green"
+        android:background="@mipmap/wj_button"
+        android:paddingBottom="5dp"
+        android:textColor="@color/white"
         android:layout_marginTop="150dp"
         />
 

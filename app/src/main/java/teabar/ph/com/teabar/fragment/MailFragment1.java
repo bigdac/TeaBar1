@@ -69,8 +69,8 @@ public class MailFragment1 extends BaseFragment {
         webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);//不使用缓存，只从网络获取数据.
 
         //支持屏幕缩放
-        webSettings.setSupportZoom(true);
-        webSettings.setBuiltInZoomControls(true);
+//        webSettings.setSupportZoom(true);
+//        webSettings.setBuiltInZoomControls(true);
 
         //不显示webview缩放按钮
 //        webSettings.setDisplayZoomControls(false);

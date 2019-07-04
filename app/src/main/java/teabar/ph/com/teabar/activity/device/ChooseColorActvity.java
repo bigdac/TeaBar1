@@ -2,10 +2,14 @@ package teabar.ph.com.teabar.activity.device;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 
@@ -25,16 +29,23 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jaygoo.widget.OnRangeChangedListener;
+import com.jaygoo.widget.RangeSeekBar;
 import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import me.jessyan.autosize.AutoSizeCompat;
 import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
+import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
+import teabar.ph.com.teabar.fragment.EqumentFragment;
+import teabar.ph.com.teabar.fragment.MainFragment2;
 import teabar.ph.com.teabar.pojo.Equpment;
 import teabar.ph.com.teabar.service.MQService;
+import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.view.ColorPickerDialog;
 import teabar.ph.com.teabar.view.ColorPlateView;
 import teabar.ph.com.teabar.view.OnActivityColorPickerListener;
@@ -43,8 +54,7 @@ import teabar.ph.com.teabar.view.OnActivityColorPickerListener;
 
 public class ChooseColorActvity extends BaseActivity {
     MyApplication application;
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     @BindView(R.id.img_hue)
     ImageView img_hue;
     @BindView(R.id.color_plate)
@@ -57,8 +67,11 @@ public class ChooseColorActvity extends BaseActivity {
     RelativeLayout container;
     @BindView(R.id.tv_color)
     Button tv_color;
-    @BindView(R.id.tv_light_bj)
-    TextView tv_light_bj;
+    @BindView(R.id.iv_choose_light)
+    ImageView iv_choose_light ;
+
+    @BindView(R.id.seekbar)
+    RangeSeekBar slide_bar;
     private OnActivityColorPickerListener mListener;
     private ColorPickerDialog mColorPickerDialog;
     private boolean supportAlpha;//颜色是否支持透明度
@@ -67,6 +80,9 @@ public class ChooseColorActvity extends BaseActivity {
     Equpment equpment;
     private boolean MQBound;
     EquipmentImpl equipmentDao;
+    public static boolean isRunning = false;
+    MessageReceiver receiver;
+    int value;
     @Override
     public void initParms(Bundle parms) {
         equpment = (Equpment) parms.getSerializable("equpment");
@@ -77,7 +93,14 @@ public class ChooseColorActvity extends BaseActivity {
         setSteepStatusBar(true);
         return R.layout.activity_choosecolor;
     }
+    @Override
+    public Resources getResources() {
+        //需要升级到 v1.1.2 及以上版本才能使用 AutoSizeCompat
+//        AutoSizeCompat.autoConvertDensityOfGlobal((super.getResources()));//如果没有自定义需求用这个方法
+        AutoSizeCompat.autoConvertDensity((super.getResources()), 667, false);//如果有自定义需求就用这个方法
+        return super.getResources();
 
+    }
     @Override
     public void initView(View view) {
         color_plate.setHue(getColorHue());
@@ -85,9 +108,7 @@ public class ChooseColorActvity extends BaseActivity {
             application = (MyApplication) getApplication();
         }
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
+        isRunning = true;
         application.addActivity(this);
         equipmentDao = new EquipmentImpl(getApplicationContext());
         int defauleColor = getResources().getColor(R.color.colorPrimary);
@@ -104,9 +125,15 @@ public class ChooseColorActvity extends BaseActivity {
                     blue = Integer.valueOf(aa[2]);
                 }
                 defauleColor = Color.rgb(red, green, blue);
-                GradientDrawable myGrad = (GradientDrawable) tv_light_bj.getBackground();
-                myGrad.setColor(defauleColor);
+                iv_choose_light.setImageTintList(ColorStateList.valueOf(Color.rgb(red,green,blue)));
+
             }
+            if (equpment.getBringht()==0){
+                slide_bar.setValue(1);
+            }else {
+                slide_bar.setValue(equpment.getBringht());
+            }
+
 
         }
 
@@ -124,8 +151,76 @@ public class ChooseColorActvity extends BaseActivity {
 //        });
         MQintent = new Intent(this, MQService.class);
         MQBound =  bindService(MQintent, MQconnection, Context.BIND_AUTO_CREATE);
+
+        slide_bar.setIndicatorTextDecimalFormat("0");
+        slide_bar.setOnRangeChangedListener(new OnRangeChangedListener() {
+            @Override
+            public void onRangeChanged(RangeSeekBar view, float leftValue, float rightValue, boolean isFromUser) {
+                Log.i("TrackingTouch", "-->" + leftValue + "," + rightValue);
+
+                value = Math.round(leftValue);
+            }
+
+            @Override
+            public void onStartTrackingTouch(RangeSeekBar view, boolean isLeft) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(RangeSeekBar view, boolean isLeft) {
+                Log.i("TrackingTouch", "-->停止滑动"+MQservice);
+
+
+                if (MQservice != null ) {
+                    if (equpment.getMStage()!=0xb6&&equpment.getMStage()!=0xb7){
+                    equpment.setBringht(value);
+                    MQservice.send(equpment.getMacAdress(), value);
+                    }else {
+                        ToastUtil.showShort(ChooseColorActvity.this, getText(R.string.toast_updata_no).toString());
+                    }
+                }
+            }
+        });
+        IntentFilter intentFilter = new IntentFilter("ChooseColorActvity");
+        receiver = new  MessageReceiver();
+        registerReceiver(receiver, intentFilter);
+    }
+    Equpment msg1;
+    class MessageReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.e("qqqqqZZZZ???", "11111");
+            String msg = intent.getStringExtra("msg");
+            msg1 = (Equpment) intent.getSerializableExtra("msg1");
+            RefrashColor(msg1);
+        }
     }
 
+    public void RefrashColor(Equpment equpment ){
+        if (equpment!=null){
+            this.equpment =equpment;
+            if(!TextUtils.isEmpty(equpment.getLightColor())){
+                String[] aa =equpment.getLightColor().split("/");
+                int red =0;
+                int green=0;
+                int blue=0;
+                if (aa.length>=3){
+                    red = Integer.valueOf(aa[0]);
+                    green = Integer.valueOf(aa[1]);
+                    blue = Integer.valueOf(aa[2]);
+                }
+                int  defauleColor = Color.rgb(red, green, blue);
+                iv_choose_light.setImageTintList(ColorStateList.valueOf(Color.rgb(red,green,blue)));
+            }
+            if (equpment.getBringht()==0){
+                slide_bar.setValue(1);
+            }else {
+                slide_bar.setValue(equpment.getBringht());
+            }
+
+
+        }
+    }
 
     Intent MQintent;
     MQService MQservice;
@@ -157,8 +252,11 @@ public class ChooseColorActvity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        isRunning=false;
         if (MQservice!=null)
             unbindService(MQconnection);
+        if (receiver!=null)
+            unregisterReceiver(receiver);
     }
 
     @OnClick({R.id.iv_equ_fh,R.id.tv_color})
@@ -169,11 +267,26 @@ public class ChooseColorActvity extends BaseActivity {
                 break;
 
             case R.id.tv_color:
+                if (red==0&&green==0&&blue==0){
+                    if(!TextUtils.isEmpty(equpment.getLightColor())) {
+                        String[] aa = equpment.getLightColor().split("/");
+                        if (aa.length >= 3) {
+                            red = Integer.valueOf(aa[0]);
+                            green = Integer.valueOf(aa[1]);
+                            blue = Integer.valueOf(aa[2]);
+                        }
+                    }
+                }
+                if (equpment.getMStage()!=0xb6&&equpment.getMStage()!=0xb7){
+                    MQservice.sendLightColor(equpment.getMacAdress(),0,red,green,blue,0);
+                    equpment.setLightColor(red+"/"+green+"/"+blue);
+                    equipmentDao.update(equpment);
+                    setResult(3100);
+                    finish();
+                }else {
+                    ToastUtil.showShort(ChooseColorActvity.this, getText(R.string.toast_updata_no).toString());
+                }
 
-                 MQservice.sendLightColor(equpment.getMacAdress(),0,red,green,blue,0);
-                 equpment.setLightColor(red+"/"+green+"/"+blue);
-                 equipmentDao.update(equpment);
-                finish();
                 break;
         }
     }
@@ -292,8 +405,7 @@ public class ChooseColorActvity extends BaseActivity {
                     movePlateCursor();
 //                    tv_color.setBackgroundColor(getColor());
 
-                    GradientDrawable myGrad = (GradientDrawable) tv_light_bj.getBackground();
-                    myGrad.setColor(getColor());
+                    iv_choose_light.setImageTintList(ColorStateList.valueOf(Color.rgb(red,green,blue)));
                     Log.e("DDDDDDDDDDDDDDDDDDDZ", "onTouch: -->"+getColor() );
                     if (mListener!=null){
                         mListener.onColorChange(ChooseColorActvity.this,getColor());
@@ -337,6 +449,7 @@ public class ChooseColorActvity extends BaseActivity {
         final GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,new int[]{Color.HSVToColor(mCurrentHSV),0x0});
 //        mViewAlphaOverlay.setBackgroundDrawable(gd);
     }
+
 
 
 }

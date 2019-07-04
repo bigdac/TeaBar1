@@ -17,9 +17,9 @@ import teabar.ph.com.teabar.base.BaseFragment;
 public class Question4Fragment extends BaseFragment {
     RecyclerViewAdapter recyclerViewAdapter;
     List<String> list;
-    @BindView(R.id.iv_question_man)
+    @BindView(R.id.iv_question_choose1)
     ImageView iv_question_man;
-    @BindView(R.id.iv_question_women)
+    @BindView(R.id.iv_question_choose2)
     ImageView iv_question_women;
 
     @Override
@@ -41,13 +41,13 @@ public class Question4Fragment extends BaseFragment {
                 break;
 
             case R.id.li_question_women:
-                iv_question_women.setImageResource(R.mipmap.choose_nv);
-                iv_question_man.setImageResource(R.mipmap.set_xz2);
+                iv_question_women. setVisibility(View.VISIBLE);
+                iv_question_man.setVisibility(View.INVISIBLE);
                 choose=0;
                 break;
             case R.id.li_question_man:
-                iv_question_women.setImageResource(R.mipmap.set_xz2);
-                iv_question_man.setImageResource(R.mipmap.choose_nan);
+                iv_question_women.setVisibility(View.INVISIBLE);
+                iv_question_man.setVisibility(View.VISIBLE);
                 choose =1 ;
                 break;
         }

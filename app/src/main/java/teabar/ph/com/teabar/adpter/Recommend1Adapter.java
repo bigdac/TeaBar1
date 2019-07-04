@@ -26,6 +26,7 @@ import java.util.Map;
 
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.pojo.Tea;
+import teabar.ph.com.teabar.util.GlideCircleTransform;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
@@ -51,7 +52,7 @@ public class Recommend1Adapter extends RecyclerView.Adapter<Recommend1Adapter.My
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int position) {
         String headImg = mData.get(position).getTeaPicture();
         myViewHolder.tv_mail_name .setText(mData.get(position).getProductNameEn());
-        Glide.with(mContext).load(headImg).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.color.white).into(myViewHolder.iv_mail_pic);
+        Glide.with(mContext).load(headImg).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.color.white).transform(new GlideCircleTransform(mContext)).into(myViewHolder.iv_mail_pic);
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -13,11 +13,7 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-    android:id="@+id/tv_main_1"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    />
+
     <ImageView
         android:id="@+id/iv_power_fh"
         android:layout_below="@+id/tv_main_1"
@@ -171,6 +167,7 @@
         android:layout_below="@+id/rcv_power"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="20dp"
+        android:textSize="24sp"
         />
     <TextView
         android:id="@+id/tv_tea1"
@@ -179,7 +176,7 @@
         android:layout_below="@+id/tv_score_title"
         android:layout_marginTop="25dp"
         android:layout_marginLeft="20dp"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:textColor="@color/login_black"
         android:text=""
         />
@@ -201,7 +198,7 @@
         android:layout_below="@+id/tv_tea1_mes"
         android:layout_marginTop="25dp"
         android:layout_marginLeft="20dp"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:textColor="@color/login_black"
         android:text=""
         />
@@ -223,7 +220,7 @@
         android:layout_below="@+id/tv_tea2_mes"
         android:layout_marginTop="25dp"
         android:layout_marginLeft="20dp"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:textColor="@color/login_black"
         android:text=""
         />
@@ -240,10 +237,21 @@
         android:text=""
         />
     <TextView
+        android:id="@+id/tv_tea4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_tea3_mes"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="20dp"
+        android:textSize="18sp"
+        android:textColor="@color/login_black"
+        android:text=""
+        />
+    <TextView
         android:id="@+id/tv_tea4_mes"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
-        android:layout_below="@+id/tv_tea3_mes"
+        android:layout_below="@+id/tv_tea4"
         android:layout_marginTop="12dp"
         android:layout_marginLeft="20dp"
         android:textSize="14sp"

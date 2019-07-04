@@ -15,6 +15,8 @@
     <dimen name="gudieview_width">6dp</dimen>
     <dimen name="gudieview_heigh">6dp</dimen>
     <dimen name="title_bar_height">48.5dp</dimen>
-
-
+    <dimen name="Viewsize">20dp</dimen>
+    <dimen name="Devicespace">10dp</dimen>
+    <dimen name="BarTextSize">12sp</dimen>
+    <dimen name="Barspace">22dp</dimen>
 </resources>

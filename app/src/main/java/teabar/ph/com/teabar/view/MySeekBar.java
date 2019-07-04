@@ -15,7 +15,7 @@ import android.widget.SeekBar;
 import teabar.ph.com.teabar.R;
 
 
-public class MySeekBar extends  SeekBar {
+public class MySeekBar extends  android.support.v7.widget.AppCompatSeekBar {
     /**
      * SeekBar数值文字颜色
      */
@@ -109,7 +109,7 @@ public class MySeekBar extends  SeekBar {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setColor(mTextColor);
-        mPaint.setTextSize(mTextSize);
+        mPaint.setTextSize(getDimen(R.dimen.BarTextSize));
         mPaint1 = new Paint();
         mPaint1.setAntiAlias(true);
         mPaint1.setColor(Color.parseColor("#666666"));
@@ -123,11 +123,17 @@ public class MySeekBar extends  SeekBar {
             setPadding((int) Math.ceil(mBgWidth) / 2, 0, (int) Math.ceil(mBgWidth) / 2, (int) Math.ceil(mBgHeight) + 5);
         }
     }
-
+    private float getDimen(int dimenId) {
+        return getResources().getDimension(dimenId);
+    }
     @Override
     protected synchronized void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(heightMeasureSpec, widthMeasureSpec);
-        setMeasuredDimension(getMeasuredHeight(), getMeasuredWidth());
+//        setMeasuredDimension(getMeasuredHeight(), getMeasuredWidth());
+        int height = getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec);
+        int width = getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec);
+        int min = Math.min(width, height);
+        setMeasuredDimension(min, min);
     }
 
 
@@ -158,15 +164,15 @@ public class MySeekBar extends  SeekBar {
 
         canvas.drawBitmap(mBackgroundBitmap, bgX, bgY, mPaint);
 //        canvas.drawText(mText, textX, textY, mPaint);
-        drawText(canvas,mText, textX+13 , textY-55, mPaint,90);
+        drawText(canvas,mText, textX+13 , textY-getDimen(R.dimen.Barspace), mPaint,90);
     }
     void drawText(Canvas canvas ,String text , float x ,float y,Paint paint ,float angle){
         if(angle != 0){
             canvas.rotate(angle, x, y );
         }
-        canvas.drawText(text, x, y, paint);
-        int w =getTextWidth(text,paint);
-        canvas.drawText("ml",x+w+5,y,mPaint1);
+        canvas.drawText(text+"ml", x, y, paint);
+//        int w =getTextWidth(text,paint);
+//        canvas.drawText("ml",x+w+5,y,mPaint1);
         if(angle != 0){
             canvas.rotate(-angle, x, y);
         }

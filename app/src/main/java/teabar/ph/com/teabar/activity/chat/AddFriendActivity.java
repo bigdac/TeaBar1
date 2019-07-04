@@ -39,6 +39,7 @@ import teabar.ph.com.teabar.Mode.InfoModel;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.adpter.FriendAddAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
+import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.pojo.Friend;
 import teabar.ph.com.teabar.util.HttpUtils;
@@ -46,8 +47,8 @@ import teabar.ph.com.teabar.util.HttpUtils;
 
 public class AddFriendActivity extends BaseActivity {
 
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+//    @BindView(R.id.tv_main_1)
+//    TextView tv_main_1;
     @BindView(R.id.iv_power_fh)
     ImageView iv_power_fh;
     @BindView(R.id.rv_friend_inform)
@@ -74,9 +75,9 @@ public class AddFriendActivity extends BaseActivity {
 
     @Override
     public void initView(View view) {
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
+//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+//                ScreenUtils.getStatusBarHeight());
+//        tv_main_1.setLayoutParams(params);
 
         if (application == null) {
             application = (MyApplication) getApplication();
@@ -112,7 +113,7 @@ public class AddFriendActivity extends BaseActivity {
 
         tipDialog = new QMUITipDialog.Builder(this)
                 .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
-                .setTipWord("请稍后...")
+                .setTipWord(getText(R.string.search_qsh).toString())
                 .create();
         tipDialog.show();
     }
@@ -138,10 +139,10 @@ public class AddFriendActivity extends BaseActivity {
                     Map<String,Object> params = new HashMap<>();
                     params.put("search",searchUserName);
                     showProgressDialog();
-                    new SearchFriendAsyncTask().execute(params);
+                    new SearchFriendAsyncTask(this).execute(params);
 
                 }else {
-                    toast("ID或用户名不能为空");
+                    toast(getText(R.string.social_friend_search).toString());
                 }
                 break;
 
@@ -170,7 +171,7 @@ public class AddFriendActivity extends BaseActivity {
                         tipDialog.dismiss();
                     }
                 } else {
-                   toast( "该用户不存在");
+                   toast( getText(R.string.toast_search_no).toString());
                     if (tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
@@ -180,10 +181,15 @@ public class AddFriendActivity extends BaseActivity {
     }
 
     String returnMsg1,returnMsg2;
-    class SearchFriendAsyncTask extends AsyncTask<Map<String,Object>,Void,String>{
+    class SearchFriendAsyncTask extends BaseWeakAsyncTask<Map<String,Object>,Void,String,BaseActivity> {
+
+
+        public SearchFriendAsyncTask(BaseActivity baseActivity) {
+            super(baseActivity);
+        }
 
         @Override
-        protected String doInBackground(Map<String, Object>... maps) {
+        protected String doInBackground(BaseActivity baseActivity, Map<String, Object>... maps) {
             String code  ="";
             Map<String,Object> params = maps[0];
             String result = HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/api/selectUser",params);
@@ -194,7 +200,8 @@ public class AddFriendActivity extends BaseActivity {
                         friendList.clear();
                         JSONObject jsonObject = new JSONObject(result);
                         code = jsonObject.getString("state");
-                        returnMsg1=jsonObject.getString("message1");
+                        returnMsg1=jsonObject.getString("message2");
+                        returnMsg2=jsonObject.getString("message3");
 //                        JSONArray jsonArray = jsonObject.getJSONArray("data");
 //                        for (int i =0;i<jsonArray.length();i++){
 //                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
@@ -223,11 +230,11 @@ public class AddFriendActivity extends BaseActivity {
                 }
             }
             return code;
+
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(BaseActivity baseActivity, String s) {
             switch (s){
                 case "200":
                     friendAddAdapter.notifyDataSetChanged();
@@ -244,13 +251,20 @@ public class AddFriendActivity extends BaseActivity {
                     }
                     break;
 
-                    default:
+                default:
+                    if (application.IsEnglish()==0){
                         toast(returnMsg1);
-                        if (tipDialog.isShowing()){
-                            tipDialog.dismiss();
-                        }
-                        break;
+                    }else {
+                        toast(returnMsg2);
+                    }
+
+                    if (tipDialog.isShowing()){
+                        tipDialog.dismiss();
+                    }
+                    break;
             }
         }
+
+
     }
 }

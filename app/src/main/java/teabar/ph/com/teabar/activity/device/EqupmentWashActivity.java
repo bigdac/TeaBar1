@@ -25,11 +25,11 @@ import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.pojo.Equpment;
 import teabar.ph.com.teabar.service.MQService;
+import teabar.ph.com.teabar.util.ToastUtil;
 
 public class EqupmentWashActivity extends BaseActivity {
     MyApplication application;
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     @BindView(R.id.iv_equ_fh)
     ImageView iv_equ_fh;
     @BindView(R.id.tv_wash_number)
@@ -54,9 +54,7 @@ public class EqupmentWashActivity extends BaseActivity {
         if (application == null) {
             application = (MyApplication) getApplication();
         }
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
+
         application.addActivity(this);
         seekbar1 = findViewById(R.id.seekbar1);
         if (equpment!=null){
@@ -64,9 +62,11 @@ public class EqupmentWashActivity extends BaseActivity {
             if (!TextUtils.isEmpty(washtime)){
              number =Integer.valueOf(washtime);
             seekbar1.setValue(number);
+                tv_wash_number.setText( number+"");
             } else {
-                seekbar1.setValue(18);
-                number = 18;
+                seekbar1.setValue(50);
+                number = 50;
+                tv_wash_number.setText( number+"");
             }
         }
         seekbar1.setOnRangeChangedListener(new OnRangeChangedListener() {
@@ -127,9 +127,14 @@ public class EqupmentWashActivity extends BaseActivity {
                 break;
 
             case R.id.bt_wash_esure:
-                MQservice.sendWashNum(equpment.getMacAdress(),number);
-                toast(getText(R.string.toast_equ_wash).toString());
-                finish();
+                if (equpment.getMStage()!=0xb6&&equpment.getMStage()!=0xb7){
+                    MQservice.sendWashNum(equpment.getMacAdress(),number);
+                    toast(getText(R.string.toast_equ_wash).toString());
+                    finish();
+                }else {
+                    ToastUtil.showShort(EqupmentWashActivity.this, getText(R.string.toast_updata_no).toString());
+                }
+
                 break;
 
         }

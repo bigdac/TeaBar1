@@ -3,6 +3,7 @@ package teabar.ph.com.teabar.activity.question;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -28,12 +29,14 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import me.jessyan.autosize.AutoSizeCompat;
 import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.activity.device.AddDeviceActivity1;
 import teabar.ph.com.teabar.adpter.RecommendAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
+import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.pojo.Tea;
 import teabar.ph.com.teabar.util.HttpUtils;
@@ -41,8 +44,7 @@ import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 
 public class RecommendActivity extends BaseActivity {
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     @BindView(R.id.rv_recommend)
     RecyclerView rv_recommend ;
     List<Tea> list = new ArrayList<>();
@@ -50,16 +52,28 @@ public class RecommendActivity extends BaseActivity {
     RecommendAdapter recommendAdapter;
     SharedPreferences preferences;
     String userId;
+    int choose;
     @Override
     public void initParms(Bundle parms) {
         Tea tea1 = (Tea) parms.getSerializable("tea1");
         Tea tea2 = (Tea) parms.getSerializable("tea2");
         Tea tea3 = (Tea) parms.getSerializable("tea3");
+        choose = parms.getInt("choose");
+        if (tea1!=null)
         list.add(tea1);
+        if (tea2!=null)
         list.add(tea2);
+        if (tea3!=null)
         list.add(tea3);
     }
+    @Override
+    public Resources getResources() {
+        //需要升级到 v1.1.2 及以上版本才能使用 AutoSizeCompat
+//        AutoSizeCompat.autoConvertDensityOfGlobal((super.getResources()));//如果没有自定义需求用这个方法
+        AutoSizeCompat.autoConvertDensity((super.getResources()), 360, true);//如果有自定义需求就用这个方法
+        return super.getResources();
 
+    }
     @Override
     public int bindLayout() {
         setSteepStatusBar(true);
@@ -73,13 +87,10 @@ public class RecommendActivity extends BaseActivity {
         }
         application.addActivity(this);
         preferences = getSharedPreferences("my",MODE_PRIVATE);
-
-         userId = preferences.getString("userId","" )+"";
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
+        userId = preferences.getString("userId","" )+"";
         recommendAdapter  = new RecommendAdapter(this,list,userId);
-        rv_recommend.setLayoutManager(new GridLayoutManager(this,2));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
+        rv_recommend.setLayoutManager(linearLayoutManager);
         rv_recommend.setAdapter(recommendAdapter);
     }
 
@@ -88,7 +99,12 @@ public class RecommendActivity extends BaseActivity {
         switch (view.getId()){
             case R.id.tv_recom_skip:
                 application.removeActivity(this);
-                startActivity(AddDeviceActivity1.class);
+                if (choose==1){
+                    startActivity(AddDeviceActivity1.class);
+                }else {
+                    startActivity(MainActivity.class);
+                }
+
                 break;
 
             case R.id.bt_device_add:
@@ -118,7 +134,8 @@ public class RecommendActivity extends BaseActivity {
         Window dialogWindow = dialog.getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         lp.width = (int) (ScreenSizeUtils.getInstance(this).getScreenWidth() * 0.75f);
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.height = (int) (ScreenSizeUtils.getInstance(this).getScreenWidth() * 0.45f);
+
         lp.gravity = Gravity.CENTER;
         dialogWindow.setAttributes(lp);
         tv_dialog_qx.setOnClickListener(new View.OnClickListener() {
@@ -142,7 +159,7 @@ public class RecommendActivity extends BaseActivity {
                 Map<String,Object> params = new HashMap<>();
                 params.put("userId",userId );
                 params.put("teaId",teaId);
-                new CollectTeaAsyncTask().execute(params);
+                new CollectTeaAsyncTask(RecommendActivity.this).execute(params);
 
                 dialog.dismiss();
 
@@ -158,10 +175,14 @@ public class RecommendActivity extends BaseActivity {
      *
      */
     String returnMsg1,returnMsg2;
-    class CollectTeaAsyncTask extends AsyncTask<Map<String,Object>,Void,String> {
+    class CollectTeaAsyncTask extends BaseWeakAsyncTask<Map<String,Object>,Void,String,BaseActivity> {
+
+        public CollectTeaAsyncTask(BaseActivity baseActivity) {
+            super(baseActivity);
+        }
 
         @Override
-        protected String doInBackground(Map<String, Object>... maps) {
+        protected String doInBackground(BaseActivity baseActivity, Map<String, Object>... maps) {
             String code = "";
             String ip;
             Map<String, Object> prarms = maps[0];
@@ -186,9 +207,7 @@ public class RecommendActivity extends BaseActivity {
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
+        protected void onPostExecute(BaseActivity baseActivity, String s) {
             switch (s) {
                 case "200":
                     if (application.IsEnglish()==0){
@@ -234,7 +253,7 @@ public class RecommendActivity extends BaseActivity {
             case KeyEvent.KEYCODE_BACK:
                 long secondTime=System.currentTimeMillis();
                 if(secondTime-firstTime>2000){
-                    Toast.makeText( this,"再按一次退出程序",Toast.LENGTH_SHORT).show();
+                    Toast.makeText( this,getText(R.string.toast_main_exit),Toast.LENGTH_SHORT).show();
                     firstTime=secondTime;
                     return true;
                 }else{

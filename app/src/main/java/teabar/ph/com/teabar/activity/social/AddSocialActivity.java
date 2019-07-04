@@ -36,6 +36,7 @@ import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.adpter.ImagePickerAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
+import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
@@ -136,7 +137,7 @@ public class AddSocialActivity extends BaseActivity implements ImagePickerAdapte
                 }
                 params1.put("content",content);
                 params1.put("userId",userId);
-                new AddSocialAsynTask().execute(params1,params);
+                new AddSocialAsynTask(this).execute(params1,params);
 
 
                 break;
@@ -153,10 +154,14 @@ public class AddSocialActivity extends BaseActivity implements ImagePickerAdapte
     }
 
     String returnMsg1,returnMsg2;
-    class AddSocialAsynTask extends AsyncTask<Map<String,Object>,Void,String> {
+    class AddSocialAsynTask extends BaseWeakAsyncTask<Map<String,Object>,Void,String,BaseActivity> {
+
+        public AddSocialAsynTask(BaseActivity baseActivity) {
+            super(baseActivity);
+        }
 
         @Override
-        protected String doInBackground(Map<String, Object>... maps) {
+        protected String doInBackground(BaseActivity baseActivity, Map<String, Object>... maps) {
             String code = "";
             Map<String, Object> prarms = maps[0];
             Map<String,Object> prarms1 = maps[1];
@@ -181,8 +186,8 @@ public class AddSocialActivity extends BaseActivity implements ImagePickerAdapte
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(BaseActivity baseActivity, String s) {
+
 
             switch (s) {
 
@@ -228,8 +233,8 @@ public class AddSocialActivity extends BaseActivity implements ImagePickerAdapte
         switch (position) {
             case IMAGE_ITEM_ADD:
                 List<String> names = new ArrayList<>();
-                names.add("拍照");
-                names.add("相册");
+                names.add(getText(R.string.toast_main_pz).toString());
+                names.add(getText(R.string.toast_main_zp).toString());
                 showDialog(new SelectDialog.SelectDialogListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

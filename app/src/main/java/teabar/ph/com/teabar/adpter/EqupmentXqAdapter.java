@@ -51,7 +51,8 @@ public class EqupmentXqAdapter extends RecyclerView.Adapter<EqupmentXqAdapter.My
                 holder.tv_equ_name.setText(R.string.equ_xq_name);
                 String name = equpment.getName();
                 holder.tv_equ_xq.setText(name);
-                holder.tv_equ_xq.setVisibility(View.VISIBLE);
+                holder.iv_equ_choose.setVisibility(View.VISIBLE);
+                holder.tv_equ_xq.setVisibility(View.INVISIBLE);
                 break;
             case 1:
                 holder.tv_equ_name.setText(R.string.equ_xq_inform);
@@ -64,23 +65,31 @@ public class EqupmentXqAdapter extends RecyclerView.Adapter<EqupmentXqAdapter.My
                 holder.tv_equ_xq.setVisibility(View.GONE);
                 holder.tv_equ_xq1.setVisibility(View.VISIBLE);
                 String s ="";
-                switch (equpment.getMStage()){
-                    case 0:
-                        s=context.getResources().getText(R.string.equ_xq_nohot).toString();
-                        break;
-                    case 1:
+                if (!equpment.getOnLine()){
 
-                        s=context.getResources().getText(R.string.equ_xq_ishot).toString();
-                        break;
-                    case 2:
+                        s=context.getResources().getText(R.string.equ_xq_outline).toString();
+//                        break;
+//                    case 0XB0:
+//                        s=context.getResources().getText(R.string.equ_xq_nohot).toString();
+//                        break;
+//                    case 0xB1:
+//
+//                        s=context.getResources().getText(R.string.equ_xq_ishot).toString();
+//                        break;
+//                    case 0xB2:
+//
+//                        s=context.getResources().getText(R.string.equ_xq_dg).toString();
+//                        break;
+//                    case 3:
+//                    case 4:
+//                    case 5:
+//                        s=context.getResources().getText(R.string.equ_xq_xm).toString();
+//                        break;
+//                    default:
 
-                        s=context.getResources().getText(R.string.equ_xq_dg).toString();
-                        break;
-                    case 3:
-                    case 4:
-                    case 5:
-                        s=context.getResources().getText(R.string.equ_xq_xm).toString();
-                        break;
+//                        break;
+                }else {
+                    s=context.getResources().getText(R.string.equ_xq_online).toString();
                 }
                 holder.tv_equ_xq1.setText(s);
                 break;
@@ -90,12 +99,17 @@ public class EqupmentXqAdapter extends RecyclerView.Adapter<EqupmentXqAdapter.My
 
                 break;
             case 4:
-                holder.tv_equ_name.setText(R.string.equ_xq_day);
+                holder.tv_equ_name.setText(R.string.equ_xq_clean);
                 holder.tv_equ_xq.setVisibility(View.INVISIBLE);
 
                 break;
             case 5:
-                holder.tv_equ_name.setText(R.string.equ_xq_delt);
+                holder.tv_equ_name.setText(R.string.equ_xq_day);
+                holder.tv_equ_xq.setVisibility(View.INVISIBLE);
+
+                break;
+            case 6:
+                holder.tv_equ_name.setText(R.string.equ_xq_deltitle);
                 holder.tv_equ_xq.setVisibility(View.INVISIBLE);
 
                 break;

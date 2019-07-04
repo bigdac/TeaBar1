@@ -50,7 +50,7 @@ public class FavoriteAdpter extends RecyclerView.Adapter< FavoriteAdpter.MyViewH
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, final int i) {
-        myViewHolder.tv_name.setText(mData.get(i).getTeaNameEn());
+        myViewHolder.tv_name.setText(mData.get(i).getProductNameEn());
         myViewHolder.iv_favirate_yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,7 +89,7 @@ public class FavoriteAdpter extends RecyclerView.Adapter< FavoriteAdpter.MyViewH
         Window dialogWindow = dialog.getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         lp.width = (int) (ScreenSizeUtils.getInstance(context).getScreenWidth() * 0.75f);
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.height = (int) (ScreenSizeUtils.getInstance(context).getScreenWidth() * 0.45f);
         lp.gravity = Gravity.CENTER;
         dialogWindow.setAttributes(lp);
         tv_dialog_qx.setOnClickListener(new View.OnClickListener() {
@@ -182,7 +182,7 @@ public class FavoriteAdpter extends RecyclerView.Adapter< FavoriteAdpter.MyViewH
     class  MyViewHolder extends RecyclerView.ViewHolder {
         ImageView iv_favirate_yes;
         TextView tv_name ;
-        Button bt_brew;
+        TextView bt_brew;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             iv_favirate_yes = itemView.findViewById(R.id.iv_favirate_yes);

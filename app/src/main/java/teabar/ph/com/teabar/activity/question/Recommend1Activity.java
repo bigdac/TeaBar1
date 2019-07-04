@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
@@ -42,8 +43,7 @@ import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 
 public class Recommend1Activity extends BaseActivity {
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     @BindView(R.id.rv_recommend)
     RecyclerView rv_recommend ;
     List<Tea> list = new ArrayList<>();
@@ -72,11 +72,9 @@ public class Recommend1Activity extends BaseActivity {
         application.addActivity(this);
         preferences = getSharedPreferences("my",MODE_PRIVATE);
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
         recommendAdapter  = new Recommend1Adapter(this,list );
-        rv_recommend.setLayoutManager(new GridLayoutManager(this,2));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
+        rv_recommend.setLayoutManager(linearLayoutManager);
         rv_recommend.setAdapter(recommendAdapter);
         recommendAdapter.SetOnclickLister(new Recommend1Adapter.OnItemClickListerner() {
             @Override
@@ -120,7 +118,7 @@ public class Recommend1Activity extends BaseActivity {
             case KeyEvent.KEYCODE_BACK:
                 long secondTime=System.currentTimeMillis();
                 if(secondTime-firstTime>2000){
-                    Toast.makeText( this,"再按一次退出程序",Toast.LENGTH_SHORT).show();
+                    Toast.makeText( this,getText(R.string.toast_main_exit),Toast.LENGTH_SHORT).show();
                     firstTime=secondTime;
                     return true;
                 }else{

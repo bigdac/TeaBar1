@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -24,6 +25,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -63,6 +65,7 @@ import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.base.BaseActivity;
+import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.esptouch.EspWifiAdminSimple;
 import teabar.ph.com.teabar.esptouch.EsptouchTask;
@@ -88,8 +91,7 @@ public class AddDeviceActivity extends BaseActivity implements EasyPermissions.P
     LinearLayout li_device_ask;
     @BindView(R.id.bt_device_add)
     Button bt_device_add;
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     private EspWifiAdminSimple mWifiAdmin;
     String deviceMac,userId;
     QMUITipDialog tipDialog;
@@ -119,10 +121,6 @@ public class AddDeviceActivity extends BaseActivity implements EasyPermissions.P
         application.addActivity(this);
         equipmentDao = new EquipmentImpl(getApplicationContext());
         list = equipmentDao.findAll();
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
-
         preferences = getSharedPreferences("my", MODE_PRIVATE);
         userId = preferences.getString("userId","") ;
         //绑定services
@@ -356,22 +354,22 @@ public class AddDeviceActivity extends BaseActivity implements EasyPermissions.P
     public void onClick(View view){
         switch (view.getId()){
             case R.id.bt_device_add:
+
                 String ssid=et_add_name.getText().toString().trim();
                 String apBssid=mWifiAdmin.getWifiConnectedBssid();
-                String apPassword=et_add_pass.getText().toString();
+                String apPassword=et_add_pass.getText().toString().trim();
                 String taskResultCountStr = "1";
-                if (apPassword.length()>0||TextUtils.isEmpty(ssid)){
-                    isMatching = true;
-                    wifiName = ssid;
-                    new EsptouchAsyncTask3().execute(ssid, apBssid, apPassword, taskResultCountStr);
-//                    Map<String,Object> params = new HashMap<>();
-//                    params.put("userId",userId);
-//                    params.put("mac","123456789");
-//                    showProgressDialog("请稍后。。。");
-//                    new addDeviceAsyncTask().execute(params);
-                }else {
-                    toast("请输入密码");
+                if (TextUtils.isEmpty(ssid)){
+                    toast(getText(R.string.toast_wifi_name).toString());
+                    break;
                 }
+                if (TextUtils.isEmpty(apPassword)){
+                    toast(getText(R.string.toast_forget_pass).toString());
+                    break;
+                }
+                isMatching = true;
+                wifiName = ssid;
+                new EsptouchAsyncTask3().execute(ssid, apBssid, apPassword, taskResultCountStr);
             break;
 
             case R.id.li_device_ask:
@@ -416,10 +414,17 @@ public class AddDeviceActivity extends BaseActivity implements EasyPermissions.P
      * */
     int duration = 0;
     int gif[] = {R.drawable.adddevice1,R.drawable.adddevice2};
+    int gif1[] = {R.drawable.enadddevice1,R.drawable.enadddevice2};
     public void playGif1(final int i){
+        int mygif[]= {};
+        if (application.IsEnglish()==0){
+            mygif =gif;
+        }else {
+            mygif =gif1;
+        }
         duration=0;
         Glide.with(this)
-                .load(gif[i])
+                .load(mygif[i])
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .listener(new RequestListener<Integer, GlideDrawable>() {
 
@@ -477,28 +482,33 @@ public class AddDeviceActivity extends BaseActivity implements EasyPermissions.P
      * */
     String returnMsg1,returnMsg2;
 
-    class addDeviceAsyncTask extends AsyncTask<Map<String,Object>,Void,String> {
+    class addDeviceAsyncTask extends BaseWeakAsyncTask<Map<String,Object>,Void,String,BaseActivity> {
+
+
+        public addDeviceAsyncTask(BaseActivity baseActivity) {
+            super(baseActivity);
+        }
 
         @Override
-        protected String doInBackground(Map<String, Object>... maps) {
-
+        protected String doInBackground(BaseActivity baseActivity, Map<String, Object>... maps) {
             String code = "";
             Map<String ,Object> prarms = maps[0];
             String result = HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/app/addDevice",prarms);
             Log.e("back", "--->"+result);
             if (!ToastUtil.isEmpty(result)){
                 if (!"4000".equals(result)){
-                try {
-                    JSONObject jsonObject= new JSONObject(result);
-                    code = jsonObject.getString("state");
-                    returnMsg1=jsonObject.getString("message1");
+                    try {
+                        JSONObject jsonObject= new JSONObject(result);
+                        code = jsonObject.getString("state");
+                        returnMsg1=jsonObject.getString("message2");
+                        returnMsg2=jsonObject.getString("message3");
 //                    JSONObject returnData = jsonObject.getJSONObject("returnData");
-                    if ("200".equals(code)){
+                        if ("200".equals(code)){
 
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 }else {
                     code="4000";
                 }
@@ -507,40 +517,46 @@ public class AddDeviceActivity extends BaseActivity implements EasyPermissions.P
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
+        protected void onPostExecute(BaseActivity baseActivity, String s) {
             switch (s) {
                 case "4000":
-                    toast("请求超时，请重试");
+                    toast(getText(R.string.toast_all_cs).toString());
                     if (tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                break;
+                    break;
 
                 case "200":
-                    toast(returnMsg1);
+//                    toast(returnMsg1);
                     Map<String,Object> params = new HashMap<>();
                     params.put("userId",userId);
-                    new  FindDeviceAsynTask().execute(params);
+                    new  FindDeviceAsynTask(AddDeviceActivity.this).execute(params);
 
                     break;
-                    default:
-                        if (tipDialog.isShowing()){
-                            tipDialog.dismiss();
-                        }
-                        toast(returnMsg1);
-                        break;
+                default:
+                    if (tipDialog.isShowing()){
+                        tipDialog.dismiss();
+                    }
+                    if (application.IsEnglish()==0)
+                    toast(returnMsg1);
+                    else
+                    toast(returnMsg2);
+                    break;
 
             }
         }
     }
 
 
-    class FindDeviceAsynTask extends AsyncTask<Map<String,Object>,Void,String> {
+    class FindDeviceAsynTask extends BaseWeakAsyncTask<Map<String,Object>,Void,String,BaseActivity> {
+
+
+        public FindDeviceAsynTask(BaseActivity baseActivity) {
+            super(baseActivity);
+        }
 
         @Override
-        protected String doInBackground(Map<String, Object>... maps) {
+        protected String doInBackground(BaseActivity baseActivity, Map<String, Object>... maps) {
             String code = "";
             Map<String, Object> prarms = maps[0];
             String result =   HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/app/showUserDevice",prarms);
@@ -575,6 +591,7 @@ public class AddDeviceActivity extends BaseActivity implements EasyPermissions.P
                                 }
                             }
                         }
+                        Thread.sleep(3000);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -586,8 +603,7 @@ public class AddDeviceActivity extends BaseActivity implements EasyPermissions.P
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(BaseActivity baseActivity, String s) {
 
             switch (s) {
 
@@ -602,13 +618,17 @@ public class AddDeviceActivity extends BaseActivity implements EasyPermissions.P
                     if (tipDialog!=null&&tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    toast( "连接超时，请重试");
+                    toast(getText(R.string.toast_all_cs).toString());
                     break;
                 default:
                     if (tipDialog!=null&&tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    toast( returnMsg1);
+                    if (application.IsEnglish()==0){
+                        toast(returnMsg1);
+                    }else {
+                        toast(returnMsg2);
+                    }
                     break;
 
             }
@@ -626,6 +646,26 @@ public class AddDeviceActivity extends BaseActivity implements EasyPermissions.P
                 .setTipWord(message)
                 .create();
         tipDialog.show();
+        tipDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if (mEsptouchTask != null) {
+                    mEsptouchTask.interrupt();
+                }
+            }
+        });
+
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode==KeyEvent.KEYCODE_BACK){
+            if (mEsptouchTask != null) {
+                mEsptouchTask.interrupt();
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
 
     }
 
@@ -649,7 +689,7 @@ public class AddDeviceActivity extends BaseActivity implements EasyPermissions.P
         @Override
         protected void onPreExecute() {
 
-            showProgressDialog("正在配置, 请耐心等待...");
+            showProgressDialog(getText(R.string.search_qsh).toString());
 
 
         }
@@ -708,7 +748,7 @@ public class AddDeviceActivity extends BaseActivity implements EasyPermissions.P
                                 Map<String,Object> params = new HashMap<>();
                                  params.put("userId",userId);
                                  params.put("mac",deviceMac);
-                                new addDeviceAsyncTask().execute(params);
+                                new addDeviceAsyncTask(AddDeviceActivity.this).execute(params);
                                 Log.e(TAG, "onPostExecute: -->ssid"+ deviceMac );
                                 break;
                             }

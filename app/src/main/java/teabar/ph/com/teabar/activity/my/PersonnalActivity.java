@@ -28,6 +28,7 @@ import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,6 +70,7 @@ import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.PersonSetActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
+import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.util.BitmapCompressUtils;
 import teabar.ph.com.teabar.util.HttpUtils;
@@ -79,8 +81,7 @@ import teabar.ph.com.teabar.util.ToastUtil;
 * */
 public class PersonnalActivity extends BaseActivity  {
 
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     @BindView(R.id.iv_power_fh)
     ImageView iv_power_fh;
     @BindView(R.id.iv_person_pic)
@@ -89,6 +90,8 @@ public class PersonnalActivity extends BaseActivity  {
     TextView tv_person_name;
     @BindView(R.id.tv_person_id)
     TextView tv_person_id;
+    @BindView(R.id.rl_person_mes)
+     RelativeLayout rl_person_mes;
     SharedPreferences preferences;
     MyApplication application;
     String id;
@@ -106,26 +109,37 @@ public class PersonnalActivity extends BaseActivity  {
 
     @Override
     public void initView(View view) {
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
 
         if (application == null) {
             application = (MyApplication) getApplication();
         }
         application.addActivity(this);
         preferences = getSharedPreferences("my",MODE_PRIVATE);
+        int type1 = preferences.getInt("type1",0);
+        if (type1==1){
+            rl_person_mes.setVisibility(View.GONE);
+        }
         String name = preferences.getString("userName","");
+        tv_person_name.setText(name);
         id = preferences.getString("userId","");
         String photoUrl = preferences.getString("photoUrl","");
         if (!TextUtils.isEmpty(photoUrl)){
             Glide.with(this).load(photoUrl).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.my_pic).transform(new teabar.ph.com.teabar.util.GlideCircleTransform(this)).into(iv_person_pic);
         }
-        tv_person_name.setText(name);
+
         tv_person_id.setText(id+"");
         initPermissions();
         initGallery();
         initImage();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        String photo = preferences.getString("photo","");
+        if (!TextUtils.isEmpty(photo)){
+            Glide.with(this).load(photo).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.my_pic).transform(new GlideCircleTransform(this)).into(iv_person_pic);
+        }
     }
 
     @Override
@@ -155,7 +169,7 @@ public class PersonnalActivity extends BaseActivity  {
             Log.i(TAG, "需要授权 ");
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 Log.i(TAG, "拒绝过了");
-                Toast.makeText(this, "请在 设置-应用管理 中开启此应用的储存授权。", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "请在 设置-应用管理 中开启此应用的储存授权。", Toast.LENGTH_SHORT).show();
             } else {
                 Log.i(TAG, "进行授权");
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_READ_CONTACTS);
@@ -189,7 +203,7 @@ public class PersonnalActivity extends BaseActivity  {
                             Map<String,Object> params1 = new HashMap<>();
                             params1.put("photo",file);
                             preferences.edit().putString("photo",file.getPath()).commit();
-                            new LoadUserInfo().execute(params,params1);
+                            new LoadUserInfo(PersonnalActivity.this).execute(params,params1);
                         }
 //                        params.put("deviceId", deviceId);
 //                        new UpImageAysnc().execute(file).get(3, TimeUnit.SECONDS);
@@ -246,7 +260,19 @@ public class PersonnalActivity extends BaseActivity  {
                 .filePath("/Gallery/Pictures")          // 图片存放路径
                 .build();
     }
-
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch (keyCode){
+            case KeyEvent.KEYCODE_BACK:
+                if (popupWindow!=null&&popupWindow.isShowing()){
+                    popupWindow.dismiss();
+                }
+                setResult(7300);
+                finish();
+                break;
+        }
+        return super.onKeyUp(keyCode, event);
+    }
     @OnClick({ R.id.iv_power_fh,R.id.rl_person_pic,R.id.rl_person_nick,R.id.rl_person_id,R.id.rl_person_mes})
     public void onClick(View view){
         switch (view.getId()){
@@ -255,6 +281,7 @@ public class PersonnalActivity extends BaseActivity  {
                 if (popupWindow!=null&&popupWindow.isShowing()){
                     popupWindow.dismiss();
                 }
+                setResult(7300);
                 finish();
                 break;
 
@@ -271,11 +298,16 @@ public class PersonnalActivity extends BaseActivity  {
                 break;
 
             case R.id.rl_person_mes:
-                startActivity(PersonSetActivity.class);
+                Intent intent = new Intent(this,PersonSetActivity.class);
+                startActivityForResult( intent,2000 );
                 break;
 
         }
     }
+
+
+
+
     private View contentViewSign;
     private Button camera, gallery;
     private PopupWindow popupWindow;
@@ -318,7 +350,7 @@ public class PersonnalActivity extends BaseActivity  {
                         //android 6.0权限问题
                         if (ContextCompat.checkSelfPermission(PersonnalActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
                                 ContextCompat.checkSelfPermission(PersonnalActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                            ToastUtil.showShort(PersonnalActivity.this,"请打开相机权限");
+//                            ToastUtil.showShort(PersonnalActivity.this,"请打开相机权限");
                             ActivityCompat.requestPermissions(PersonnalActivity.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERAPRESS);
 
                         } else {
@@ -405,7 +437,7 @@ public class PersonnalActivity extends BaseActivity  {
             //Android 7.0系统开始 使用本地真实的Uri路径不安全,使用FileProvider封装共享Uri
             //参数二:fileprovider绝对路径 com.dyb.testcamerademo：项目包名
 
-            imageUri = FileProvider.getUriForFile(PersonnalActivity.this, "com.hm.camerademo.fileprovider2", imageFile);
+            imageUri = FileProvider.getUriForFile(PersonnalActivity.this, "teabar.ph.com.teabar.fileprovider2", imageFile);
         }
 
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //照相
@@ -549,7 +581,6 @@ public class PersonnalActivity extends BaseActivity  {
                 }
                 File file2 = BitmapCompressUtils.compressImage(bitmap2);
                 if (!TextUtils.isEmpty(file2.getPath())){
-
                     Glide.with(PersonnalActivity.this).load(file2).transform(new GlideCircleTransform(getApplicationContext())).into(iv_person_pic);
                 }
                 Map<String,Object> params = new HashMap<>();
@@ -557,16 +588,24 @@ public class PersonnalActivity extends BaseActivity  {
                 Map<String,Object> params1 = new HashMap<>();
                 params1.put("photo",file2);
                 preferences.edit().putString("photo",file2.getPath()).commit();
-                new LoadUserInfo().execute(params,params1);
+                new LoadUserInfo(this).execute(params,params1);
                 break;
+        }
+        if (resultCode==2000){
+            String name = preferences.getString("userName","");
+            tv_person_name.setText(name);
         }
     }
 
     String returnMsg1,returnMsg2;
-    class LoadUserInfo extends AsyncTask<Map<String,Object>,Void,String> {
+    class LoadUserInfo extends BaseWeakAsyncTask<Map<String,Object>,Void,String,BaseActivity> {
+
+        public LoadUserInfo(BaseActivity baseActivity) {
+            super(baseActivity);
+        }
 
         @Override
-        protected String doInBackground(Map<String, Object>... maps) {
+        protected String doInBackground(BaseActivity baseActivity, Map<String, Object>... maps) {
             String code = "";
             Map<String,Object> param1 = maps[0];
             Map<String,Object> param2 = maps[1];
@@ -590,15 +629,15 @@ public class PersonnalActivity extends BaseActivity  {
 
 
         @Override
-        protected void onPostExecute(String code) {
-            super.onPostExecute(code);
+        protected void onPostExecute(BaseActivity baseActivity, String code) {
+
             switch (code) {
                 case "200":
-                    toast(  "上传成功");
+                    toast(  getText(R.string.toast_update_cg).toString());
 
                     break;
                 default:
-                   toast( "上传失败");
+                   toast( getText(R.string.toast_update_sb).toString());
                     break;
             }
 

@@ -26,6 +26,7 @@ import java.util.Map;
 
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.pojo.Tea;
+import teabar.ph.com.teabar.util.GlideCircleTransform;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
@@ -51,7 +52,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.MyVi
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int position) {
         String headImg = mData.get(position).getTeaPicture();
         myViewHolder.tv_mail_name .setText(mData.get(position).getProductNameEn());
-        Glide.with(mContext).load(headImg).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.color.white).into(myViewHolder.iv_mail_pic);
+        Glide.with(mContext).load(headImg).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.color.white).transform(new GlideCircleTransform(mContext)).into(myViewHolder.iv_mail_pic);
 
 //        if (mData.get(position).isLove()){
 //            Open = true;
@@ -108,7 +109,8 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.MyVi
         Window dialogWindow = dialog.getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         lp.width = (int) (ScreenSizeUtils.getInstance(mContext).getScreenWidth() * 0.75f);
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.height = (int) (ScreenSizeUtils.getInstance(mContext).getScreenWidth() * 0.45f);
+
         lp.gravity = Gravity.CENTER;
         dialogWindow.setAttributes(lp);
         tv_dialog_qx.setOnClickListener(new View.OnClickListener() {

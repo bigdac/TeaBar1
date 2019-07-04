@@ -25,14 +25,7 @@
                 android:layout_height="240dp"
                 android:scaleType="centerCrop"
                 />
-            <ImageView
-                android:id="@+id/iv_buy_back"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:scaleType="centerInside"
-                android:src="@mipmap/login_back"
-                android:layout_marginTop="20dp"
-                />
+
         </RelativeLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/buyplan_health"
-                android:layout_marginTop="19dp"
+                android:layout_marginTop="45dp"
                 android:layout_marginLeft="20dp"
                 android:textSize="18sp"
                 android:textColor="#333333"
@@ -60,7 +53,7 @@
                 android:textSize="14sp"
                 android:textColor="#777777"
                 android:layout_marginTop="7dp"
-                android:paddingBottom="8dp"
+                android:layout_marginBottom="40dp"
                 />
 
 
@@ -77,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/buyplan_about"
                 android:textColor="#333333"
-                android:layout_marginTop="19dp"
+                android:layout_marginTop="45dp"
                 android:layout_marginLeft="20dp"
                 android:textSize="18sp"
                 />
@@ -92,7 +85,7 @@
                 android:layout_marginRight="17dp"
                 android:textSize="14sp"
                 android:textColor="#777777"
-                android:paddingBottom="16dp"
+                android:layout_marginBottom="90dp"
                 />
 
         </LinearLayout>
@@ -107,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/buyplan_td"
                 android:textColor="#333333"
-                android:layout_marginTop="19dp"
+                android:layout_marginTop="45dp"
                 android:layout_marginLeft="20dp"
                 android:textSize="18sp"
                 />
@@ -122,7 +115,7 @@
                 android:layout_marginRight="17dp"
                 android:textSize="14sp"
                 android:textColor="#777777"
-                android:paddingBottom="16dp"
+                android:layout_marginBottom="90dp"
                 />
 
         </LinearLayout>
@@ -139,20 +132,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="45dp"
                 android:text="@string/buyplan_yys"
-                android:textColor="#333333"
-                android:textSize="18sp" />
+                android:textColor="#454545"
+                android:textSize="20sp" />
             <TextView
                 android:id="@+id/tv_buy_name"
                 android:layout_below="@+id/tv_buy_yy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Dr.W. Christopher Winter"
-                android:textColor="#333333"
+                android:textColor="#454545"
                 android:layout_marginTop="1dp"
                 android:layout_marginLeft="20dp"
-                android:textSize="16sp"
+                android:textSize="17sp"
                 />
             <ImageView
                 android:id="@+id/iv_buy_pic"
@@ -174,7 +167,7 @@
                 android:layout_marginTop="14dp"
                 android:layout_marginLeft="20dp"
                 android:textSize="14sp"
-                android:paddingBottom="16dp"
+                android:layout_marginBottom="90dp"
                 />
 
         </RelativeLayout>
@@ -185,30 +178,56 @@
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:background="@color/white"
-        android:layout_height="70dp">
-
+        android:layout_height="80dp">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#f5f5f5"
+            />
         <TextView
-            android:layout_centerVertical="true"
+            android:id="@+id/tv_buy_week"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="¥300"
-            android:textColor="#FC4D74"
-            android:layout_marginTop="2dp"
-            android:layout_marginLeft="20dp"
-            android:textSize="18sp"
+            android:text="3zhou"
+            android:textColor="#333"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="23dp"
+            android:includeFontPadding="false"
+            android:textSize="20sp"
+            />
+        <TextView
+            android:layout_below="@+id/tv_buy_week"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:lineSpacingMultiplier="0.9"
+            android:text="$300"
+            android:textColor="#333"
+            android:layout_marginLeft="23dp"
+            android:textSize="20sp"
             />
         <Button
+            android:id="@+id/bt_plan_buy"
             android:layout_width="150dp"
             android:layout_height="50dp"
-            android:text="@string/equ_xq_buy"
+            android:text="@string/equ_xq_buy1"
             android:textSize="14sp"
             android:paddingBottom="10dp"
             android:textColor="@color/white"
             android:background="@mipmap/make_brew"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
+            android:layout_marginTop="17dp"
             android:layout_marginRight="20dp"
             />
 
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_buy_back"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="centerInside"
+        android:src="@mipmap/make_fh"
+        android:layout_marginTop="5dp"
+        />
 </RelativeLayout>

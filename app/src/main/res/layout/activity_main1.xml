@@ -21,6 +21,7 @@
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scrollbars="none"
              app:mainLayoutId="@layout/layout_recyclerview_verticalscroll"
              app:layout_moreProgress="@layout/view_more_progress"
              app:recyclerClipToPadding="true"

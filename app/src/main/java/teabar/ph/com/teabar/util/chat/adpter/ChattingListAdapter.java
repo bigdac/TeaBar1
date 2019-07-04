@@ -18,6 +18,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -532,20 +535,40 @@ public class ChattingListAdapter extends BaseAdapter {
         //显示头像
         if (holder.headIcon != null) {
             if (userInfo != null && !TextUtils.isEmpty(userInfo.getAvatar())) {
-                userInfo.getAvatarBitmap(new GetAvatarBitmapCallback() {
-                    @Override
-                    public void gotResult(int status, String desc, Bitmap bitmap) {
-                        if (status == 0) {
-                            holder.headIcon.setImageBitmap(bitmap);
-                        } else {
-                            holder.headIcon.setImageResource(R.drawable.jmui_head_icon);
-                        }
-                    }
-                });
-            } else {
-                holder.headIcon.setImageResource(R.drawable.jmui_head_icon);
-            }
+//                userInfo.getAvatarBitmap(new GetAvatarBitmapCallback() {
+//                    @Override
+//                    public void gotResult(int status, String desc, Bitmap bitmap) {
+//                        if (status == 0) {
+////                            holder.headIcon.setImageBitmap(bitmap);
+//                            Glide.with(mContext).load(((UserInfo) mConv.getTargetInfo()).getAvatar()).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.my_pic).transform(new teabar.ph.com.teabar.util.GlideCircleTransform(mContext)).into( holder.headIcon);
+//
+////                            holder.headIcon.setImageResource(R.mipmap.my_pic);
+//                        } else {
+////                            holder.headIcon.setImageResource(R.drawable.jmui_head_icon);
+////                            holder.headIcon.setImageResource(R.mipmap.my_pic);
+//                            Glide.with(mContext).load(((UserInfo) mConv.getTargetInfo()).getAvatar()).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.my_pic).transform(new teabar.ph.com.teabar.util.GlideCircleTransform(mContext)).into( holder.headIcon);
+//
+//                        }
+//                    }
+//                });
+//            } else {
+////                holder.headIcon.setImageResource(R.drawable.jmui_head_icon);
+////                holder.headIcon.setImageResource(R.mipmap.my_pic);
+//                Glide.with(mContext).load(((UserInfo) mConv.getTargetInfo()).getAvatar()).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.my_pic).transform(new teabar.ph.com.teabar.util.GlideCircleTransform(mContext)).into( holder.headIcon);
+//
+//            }
+                String path = userInfo.getAvatar();
+                if(!path.equals(holder.headIcon.getTag())){//解决图片加载不闪烁的问题,可以在加载时候，对于已经加载过的item,  采用比对tag方式判断是否需要重新计算高度
+                    holder.headIcon.setTag(null);//需要清空tag，否则报错
+                    Glide.with(mContext)
+                            .load(path)
+                            .placeholder(R.mipmap.my_pic).transform(new teabar.ph.com.teabar.util.GlideCircleTransform(mContext)).into(holder.headIcon);
+                    holder.headIcon.setTag(path);
+                }
 
+
+//                Glide.with(mContext).load(((UserInfo) mConv.getTargetInfo()).getAvatar()).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.my_pic).transform(new teabar.ph.com.teabar.util.GlideCircleTransform(mContext)).into(holder.headIcon);
+            }
             // 点击头像跳转到个人信息界面
 //            holder.headIcon.setOnClickListener(new View.OnClickListener() {
 //
@@ -625,7 +648,7 @@ public class ChattingListAdapter extends BaseAdapter {
                 if (msg.getTargetType() == ConversationType.group) {
                     holder.text_receipt.setText("全部已读");
                 } else if (!((UserInfo) msg.getTargetInfo()).getUserName().equals(JMessageClient.getMyInfo().getUserName())) {
-                    holder.text_receipt.setText("已读");
+                    holder.text_receipt.setText("");/*已读*/
                 }
                 holder.text_receipt.setTextColor(mContext.getResources().getColor(R.color.message_already_receipt));
             } else {
@@ -659,7 +682,8 @@ public class ChattingListAdapter extends BaseAdapter {
                         }
                     });
                 } else if (!((UserInfo) msg.getTargetInfo()).getUserName().equals(JMessageClient.getMyInfo().getUserName())) {
-                    holder.text_receipt.setText("未读");
+                    holder.text_receipt.setText("");/*未读*/
+
                 }
             }
         }

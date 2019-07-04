@@ -15,10 +15,10 @@
         android:textSize="20sp"
         android:textColor="#4b4b4b"
         />
-    <EditText
+    <TextView
         android:id="@+id/et_name"
         android:layout_width="255dp"
-        android:layout_height="39dp"
+        android:layout_height="wrap_content"
         android:hint="编辑内容"
         android:textColor="#939393"
         android:textSize="15sp"
@@ -28,7 +28,7 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:background="@null"
-        android:singleLine="true"
+
         />
     <View
         android:id="@+id/view2"
@@ -50,7 +50,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="取消"
+            android:text="@string/equ_dia_del"
             android:gravity="center"
             android:textColor="#797979"
             />
@@ -59,7 +59,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="确定"
+            android:text="@string/equ_dia_esure"
             android:gravity="center"
             android:textColor="#09c585"
             />

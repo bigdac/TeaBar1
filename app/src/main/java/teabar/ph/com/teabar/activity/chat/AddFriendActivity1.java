@@ -30,8 +30,7 @@ import teabar.ph.com.teabar.util.ToastUtil;
 
 public class AddFriendActivity1 extends BaseActivity {
 
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     @BindView(R.id.iv_power_fh)
     ImageView iv_power_fh;
     @BindView(R.id.et_reason)
@@ -59,9 +58,6 @@ public class AddFriendActivity1 extends BaseActivity {
 
     @Override
     public void initView(View view) {
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
 
         if (application == null) {
             application = (MyApplication) getApplication();
@@ -70,9 +66,9 @@ public class AddFriendActivity1 extends BaseActivity {
         preferences = getSharedPreferences("my",MODE_PRIVATE);
         name =  preferences.getString("userName","");
         if (TextUtils.isEmpty(name)) {
-            et_reason.setText("我是");
+            et_reason.setText(getText(R.string.social_friend_wo).toString());
         } else {
-            et_reason.setText("我是" + name);
+            et_reason.setText(getText(R.string.social_friend_wo).toString() + name);
         }
 
 
@@ -102,14 +98,14 @@ public class AddFriendActivity1 extends BaseActivity {
 ////                    }
 ////                    entry.save();
                     tipDialog.dismiss();
-                   toast(  "申请成功");
+                   toast(  getText(R.string.toast_add_cg).toString());
                     finish();
                 } else if (responseCode == 871317) {
-                  toast( "不能添加自己为好友");
+                    toast(  getText(R.string.toast_add_you).toString());
                     tipDialog.dismiss();
                 } else {
                     tipDialog.dismiss();
-                    toast(  "申请失败");
+                    toast(  getText(R.string.toast_add_sb).toString());
                 }
             }
         });
@@ -126,7 +122,7 @@ public class AddFriendActivity1 extends BaseActivity {
 
         tipDialog = new QMUITipDialog.Builder(this)
                 .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
-                .setTipWord("请稍后...")
+                .setTipWord(getText(R.string.search_qsh).toString())
                 .create();
         tipDialog.show();
     }

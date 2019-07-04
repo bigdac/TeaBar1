@@ -3,11 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-    android:id="@+id/tv_main_1"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    />
+
 
     <TextView
         android:id="@+id/tv_power"
@@ -42,10 +38,10 @@
         android:layout_marginTop="50dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:hint="wifi名称"
+        android:hint="@string/equ_add_wifi"
         android:paddingLeft="20dp"
         android:textSize="14sp"
-        android:textColorHint="#777777"
+        android:textColorHint="#bbbbbb"
         />
 
     <EditText
@@ -60,46 +56,96 @@
         android:hint="@string/equ_add_wifipass"
         android:paddingLeft="20dp"
         android:textSize="14sp"
-        android:textColorHint="#777777"
+        android:textColorHint="#bbbbbb"
+
         />
+
     <LinearLayout
         android:id="@+id/li_device_ask"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/et_add_pass"
         android:layout_alignParentRight="true"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="30dp"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
 
-    <ImageView
-        android:layout_width="wrap_content"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@mipmap/device_ask" />
+
+        <TextView
+            android:id="@+id/tv_wifi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:text="@string/equ_add_xq"
+            android:textColor="#333333"
+            android:textSize="14sp" />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_add_mes1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@mipmap/device_ask"
-        android:layout_gravity="center"
+        android:textSize="14sp"
+        android:textColor="#777777"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/li_device_ask"
+        android:layout_marginTop="60dp"
+        android:text="@string/equ_add_wifimes1"
         />
     <TextView
-        android:id="@+id/tv_wifi"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_add_mes2"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="配对教程"
-        android:layout_gravity="center"
         android:textSize="14sp"
-        android:textColor="#333333"
-        android:layout_marginLeft="10dp"
+        android:textColor="#777777"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/tv_add_mes1"
+        android:text="@string/equ_add_wifimes2"
+        android:layout_marginTop="5dp"
         />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_add_mes3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="#777777"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/tv_add_mes2"
+        android:text="@string/equ_add_wifimes3"
+        android:layout_marginTop="5dp"
+        />
 
+    <TextView
+        android:id="@+id/tv_add_mes5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="#777777"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/tv_add_mes3"
+        android:text="@string/equ_add_wifimes5"
+        android:layout_marginTop="5dp"
+        />
     <Button
         android:id="@+id/bt_device_add"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@mipmap/login_button"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:text="@string/equ_add_add"
         android:textColor="@color/white"
         android:paddingBottom="11dp"

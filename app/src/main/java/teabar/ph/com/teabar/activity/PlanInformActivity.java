@@ -27,8 +27,7 @@ import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
 
 public class PlanInformActivity extends BaseActivity {
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     boolean isOpen = true;
     @BindView(R.id.iv_inform_open)
     ImageView iv_inform_open;
@@ -53,9 +52,7 @@ public class PlanInformActivity extends BaseActivity {
             application = (MyApplication) getApplication();
         }
         application.addActivity(this);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
+
         initCustomTimePicker();
     }
 
@@ -76,10 +73,10 @@ public class PlanInformActivity extends BaseActivity {
                 break;
             case R.id.iv_inform_open:
                 if (isOpen){
-                    iv_inform_open.setImageResource(R.mipmap.equ_close);
+                    iv_inform_open.setImageResource(R.mipmap.device_close);
                     isOpen=false;
                 }else {
-                    iv_inform_open.setImageResource(R.mipmap.equ_open);
+                    iv_inform_open.setImageResource(R.mipmap.device_open);
                     isOpen=true;
                 }
                 break;

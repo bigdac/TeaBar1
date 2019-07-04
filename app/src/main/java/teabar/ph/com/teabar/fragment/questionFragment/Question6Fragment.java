@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import teabar.ph.com.teabar.adpter.BasicExamAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.BaseFragment;
 import teabar.ph.com.teabar.base.MyApplication;
+import teabar.ph.com.teabar.pojo.Equpment;
 import teabar.ph.com.teabar.pojo.Tea;
 import teabar.ph.com.teabar.pojo.examOptions;
 import teabar.ph.com.teabar.util.HttpUtils;
@@ -61,7 +63,6 @@ public class Question6Fragment extends BaseFragment {
         userId = preferences.getString("userId","");
         basicExamAdapter = new BasicExamAdapter(getActivity(),R.layout.item_basicexam);
         fv_message.setAdapter(basicExamAdapter);
-        new getTeaListAsynTask().execute();
         basicExamAdapter.SetOnclickLister(new BasicExamAdapter.OnItemClickListerner() {
             @Override
             public void onClikner(View view, int position) {
@@ -77,7 +78,14 @@ public class Question6Fragment extends BaseFragment {
                 Log.e("GGGGGGGGGGGGGGGG", "itemClick: -->"+stringList.size() );
             }
         });
-
+        String examtitle = ((BaseQuestionActivity)getActivity()).getExamTitle();
+        List<examOptions> mylists = ((BaseQuestionActivity)getActivity()).getQuesList();
+         if (!TextUtils.isEmpty(examtitle)&&mylists.size()!=0){
+             basicExamAdapter.setItems(mylists);
+             tv_question_name.setText(examtitle);
+         }else {
+             new getTeaListAsynTask().execute();
+         }
 
     }
     String answer ;
@@ -261,11 +269,13 @@ public class Question6Fragment extends BaseFragment {
 
                 case "200":
 
-                    Intent intent = new Intent(getActivity(),RecommendActivity.class);
-                    intent.putExtra("tea1",tea1);
-                    intent.putExtra("tea2",tea2);
-                    intent.putExtra("tea3",tea3);
-                    startActivity(intent);
+//                    Intent intent = new Intent(getActivity(),RecommendActivity.class);
+//                    intent.putExtra("tea1",tea1);
+//                    intent.putExtra("tea2",tea2);
+//                    intent.putExtra("tea3",tea3);
+//                    startActivity(intent);
+                    ((BaseQuestionActivity)getActivity()).setMesssage3(tea1,tea2,tea3);
+                    ((BaseQuestionActivity)getActivity()).rePlaceFragment(6);
                     break;
                 case "4000":
 

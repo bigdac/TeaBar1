@@ -40,7 +40,7 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.MyviewHolder> 
 
 
         if (position==0){
-            myviewHolder.pl_progress.setProgress(30);
+            myviewHolder.pl_progress.setProgress(100);
         }
 
         if (position==1){

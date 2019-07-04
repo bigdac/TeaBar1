@@ -57,8 +57,7 @@ import teabar.ph.com.teabar.view.BarChartManager;
 
 public class SetDrinkActivity extends BaseActivity {
 
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     @BindView(R.id.iv_power_fh)
     ImageView iv_power_fh;
     @BindView(R.id.tv_drink_num1)
@@ -72,6 +71,7 @@ public class SetDrinkActivity extends BaseActivity {
     private RangeSeekBar seekbar1;
     private TimePickerView pvCustomTime;
     SharedPreferences alermPreferences;
+
     @Override
     public void initParms(Bundle parms) {
 
@@ -85,14 +85,13 @@ public class SetDrinkActivity extends BaseActivity {
 
     @Override
     public void initView(View view) {
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
+
 
         if (application == null) {
             application = (MyApplication) getApplication();
         }
         alermPreferences=getSharedPreferences("alerm",MODE_PRIVATE);
+        int num = alermPreferences.getInt("setdrink",4);
         if (alermPreferences.contains("time")){
             String time = alermPreferences.getString("time", "");
             tv_drink_time.setText(time);
@@ -106,11 +105,13 @@ public class SetDrinkActivity extends BaseActivity {
         application.addActivity(this);
         initCustomTimePicker();
         seekbar1 = findViewById(R.id.seekbar2);
-        seekbar1.setValue(4);
+        seekbar1.setValue(num);
+        tv_drink_num1.setText(num+"");
         seekbar1.setOnRangeChangedListener(new OnRangeChangedListener() {
             @Override
             public void onRangeChanged(RangeSeekBar view, float leftValue, float rightValue, boolean isFromUser) {
                 tv_drink_num1.setText((int) leftValue+"");
+
             }
 
             @Override
@@ -184,9 +185,15 @@ public class SetDrinkActivity extends BaseActivity {
                     editor.putString("time",time);
                     editor.putBoolean("open",isOpen);
                     if (editor.commit()){
-                        ToastUtil.showShort(this,"设置成功");
+                        ToastUtil.showShort(this,getText(R.string.toast_add_cg).toString());
                     }
                 }
+                editor.putInt("setdrink",Integer.valueOf(tv_drink_num1.getText().toString()));
+                editor.commit();
+                Intent intent = new Intent();
+                intent.putExtra("num",tv_drink_num1.getText());
+                setResult(100,intent);
+                finish();
                 break;
 
         }

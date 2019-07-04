@@ -2,6 +2,7 @@ package teabar.ph.com.teabar.adpter;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -50,10 +51,13 @@ public class AnswerAdpter extends RecyclerView.Adapter< AnswerAdpter.MyViewHolde
         Open = mData.get(position).isIsselect();
         final boolean isOpen[] ={Open};
         if (isOpen[0]){
-            myViewHolder.iv_question_choose.setImageResource(R.mipmap.set_xz1);
+            myViewHolder.iv_question_choose.setVisibility(View.VISIBLE);
+
+            myViewHolder.tv_search.setTextColor(Color.parseColor("#454545"));
 
         }else {
-            myViewHolder.iv_question_choose.setImageResource(R.mipmap.set_xz2);
+            myViewHolder.iv_question_choose.setVisibility(View.INVISIBLE);
+            myViewHolder.tv_search.setTextColor(Color.parseColor("#9d9d9d"));
 
         }
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +110,8 @@ public class AnswerAdpter extends RecyclerView.Adapter< AnswerAdpter.MyViewHolde
                     int maxChoose = Integer.valueOf(selectnum);
                     if (!isUnique){
                          if (isOpen[0]){
-                        myViewHolder.iv_question_choose.setImageResource(R.mipmap.set_xz2);
+                        myViewHolder.iv_question_choose.setVisibility(View.INVISIBLE);
+                        myViewHolder.tv_search.setTextColor(Color.parseColor("#9d9d9d"));
                         isOpen[0]=false;
                         chooseNum = chooseNum-1;
                         String answer = mData.get(position).getOptionNum();
@@ -115,7 +120,8 @@ public class AnswerAdpter extends RecyclerView.Adapter< AnswerAdpter.MyViewHolde
                         if (chooseNum<maxChoose){
                             isOpen[0]=true;
                             chooseNum = chooseNum+1;
-                            myViewHolder.iv_question_choose.setImageResource(R.mipmap.set_xz1);
+                            myViewHolder.iv_question_choose.setVisibility(View.VISIBLE);
+                            myViewHolder.tv_search.setTextColor(Color.parseColor("#454545"));
                             String answer = mData.get(position).getOptionNum();
                             answerList.add(answer);
                         }else {

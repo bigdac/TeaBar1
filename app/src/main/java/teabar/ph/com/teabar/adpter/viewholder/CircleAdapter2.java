@@ -73,6 +73,7 @@ public class CircleAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void setData(List mDatas) {
         this.mDatas = mDatas;
         notifyDataSetChanged();
+
     }
 
     @NonNull
@@ -119,16 +120,18 @@ public class CircleAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder
             int  CommentNum = circleItem.getCommentNum();
             boolean hasComment = circleItem.hasComment();
 
-            Glide.with(context).load(headImg).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.color.bg_no_photo).transform(new GlideCircleTransform(context)).into(holder.headIv);
+            Glide.with(context).load(headImg).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.my_pic).transform(new GlideCircleTransform(context)).into(holder.headIv);
 
             holder.nameTv.setText(name);
             holder.timeTv.setText(createTime);
             holder.tv_social_num.setText(ThumbsUp[0]+"");
             holder.tv_social_talk.setText(CommentNum+"");
             if (CommentNum==0){
-                holder.allMess.setVisibility(View.INVISIBLE);
+                holder.allMess.setVisibility(View.GONE);
+                holder.iv_all_mes.setVisibility(View.GONE);
             }else {
                 holder.allMess.setVisibility(View.VISIBLE);
+                holder.iv_all_mes.setVisibility(View.VISIBLE);
             }
 
             holder.allMess.setOnClickListener(new View.OnClickListener() {
@@ -141,9 +144,9 @@ public class CircleAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder
             });
 
             if (!isOpen[0]){
-                holder.iv_social_no.setImageResource(R.mipmap.social_no);
+                holder.iv_social_no.setImageResource(R.mipmap.make_no1);
             }else {
-                holder.iv_social_no.setImageResource(R.mipmap.social_yes);
+                holder.iv_social_no.setImageResource(R.mipmap.make_yes1);
 
             }
             if(!TextUtils.isEmpty(content)){
@@ -166,7 +169,7 @@ public class CircleAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     onItemClickListener.onItemClick(v, position);
 
                             if (isOpen[0]){
-                                holder.iv_social_no.setImageResource(R.mipmap.social_no);
+                                holder.iv_social_no.setImageResource(R.mipmap.make_no1);
                                 isOpen[0]=false;
                                 if (ThumbsUp[0]==0){
                                     holder.tv_social_num.setText(ThumbsUp[0]+"");
@@ -176,15 +179,15 @@ public class CircleAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                 }
                                 Log.e("DDDD", "onClick: -->"+circleItem.isOpen() );
                                 circleItem.setOpen(false);
-                                mDatas.set(position,circleItem);
+                                mDatas.set(circlePosition,circleItem);
                             }else {
-                                holder.iv_social_no.setImageResource(R.mipmap.social_yes);
+                                holder.iv_social_no.setImageResource(R.mipmap.make_yes1);
                                 isOpen[0]=true;
                                 circleItem.setOpen(true);
                                 holder.tv_social_num.setText(ThumbsUp[0]+1+"");
                                 ThumbsUp[0] = ThumbsUp[0]+1;
                                 Log.e("DDDD", "onClick: -->"+circleItem.isOpen() );
-                                mDatas.set(position,circleItem);
+                                mDatas.set(circlePosition,circleItem);
                             }
                         }
 
@@ -196,10 +199,10 @@ public class CircleAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 if(hasComment){//处理评论列表
                     holder.commentList.setDatas(commentsDatas);
                     holder.commentList.setVisibility(View.VISIBLE);
-//                    holder.digCommentBody.setVisibility(View.VISIBLE);
+                    holder.digCommentBody.setVisibility(View.VISIBLE);
                 }else {
                     holder.commentList.setVisibility(View.GONE);
-//                    holder.digCommentBody.setVisibility(View.INVISIBLE);
+                    holder.digCommentBody.setVisibility(View.GONE);
                 }
             holder.snsBtn.setOnClickListener(new View.OnClickListener(){
                 @Override

@@ -240,10 +240,10 @@ public final class ViewfinderView extends View {
 //                R.string.viewfinderview_status_text1);
 //        String statusText2 = getResources().getString(
 //                R.string.viewfinderview_status_text2);
-        String statusText1 = "将二维码/条码放入取景框内";
-        String statusText2 = "即可自动扫描";
+        String statusText1 = getResources().getText(R.string.search_smes).toString();
+        String statusText2 = getResources().getText(R.string.search_smes1).toString();
 
-        int statusTextSize = 45;
+        int statusTextSize = 35;
         int statusPaddingTop = 180;
 
         paint.setColor(statusColor);

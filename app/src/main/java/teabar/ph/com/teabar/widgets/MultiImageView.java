@@ -137,9 +137,9 @@ public class MultiImageView extends LinearLayout {
 			return;
 		}
 
-		if (imagesList.size() == 1) {
-			addView(createImageView(0, false));
-		} else {
+		if (imagesList.size() >= 1) {
+//			addView(createImageView(0, false));
+//		} else {
 			int allCount = imagesList.size();
 			if(allCount == 4){
 				MAX_PER_ROW_COUNT = 2;

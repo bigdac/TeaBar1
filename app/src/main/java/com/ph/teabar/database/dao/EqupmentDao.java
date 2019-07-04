@@ -41,6 +41,8 @@ public class EqupmentDao extends AbstractDao<Equpment, Long> {
         public final static Property Mode = new Property(14, int.class, "Mode", false, "MODE");
         public final static Property OnLine = new Property(15, boolean.class, "onLine", false, "ON_LINE");
         public final static Property LightOpen = new Property(16, int.class, "lightOpen", false, "LIGHT_OPEN");
+        public final static Property Bringht = new Property(17, int.class, "bringht", false, "BRINGHT");
+        public final static Property HotFinish = new Property(18, int.class, "hotFinish", false, "HOT_FINISH");
     }
 
 
@@ -72,7 +74,9 @@ public class EqupmentDao extends AbstractDao<Equpment, Long> {
                 "\"ERROR_CODE\" TEXT," + // 13: errorCode
                 "\"MODE\" INTEGER NOT NULL ," + // 14: Mode
                 "\"ON_LINE\" INTEGER NOT NULL ," + // 15: onLine
-                "\"LIGHT_OPEN\" INTEGER NOT NULL );"); // 16: lightOpen
+                "\"LIGHT_OPEN\" INTEGER NOT NULL ," + // 16: lightOpen
+                "\"BRINGHT\" INTEGER NOT NULL ," + // 17: bringht
+                "\"HOT_FINISH\" INTEGER NOT NULL );"); // 18: hotFinish
     }
 
     /** Drops the underlying database table. */
@@ -125,6 +129,8 @@ public class EqupmentDao extends AbstractDao<Equpment, Long> {
         stmt.bindLong(15, entity.getMode());
         stmt.bindLong(16, entity.getOnLine() ? 1L: 0L);
         stmt.bindLong(17, entity.getLightOpen());
+        stmt.bindLong(18, entity.getBringht());
+        stmt.bindLong(19, entity.getHotFinish());
     }
 
     @Override
@@ -171,6 +177,8 @@ public class EqupmentDao extends AbstractDao<Equpment, Long> {
         stmt.bindLong(15, entity.getMode());
         stmt.bindLong(16, entity.getOnLine() ? 1L: 0L);
         stmt.bindLong(17, entity.getLightOpen());
+        stmt.bindLong(18, entity.getBringht());
+        stmt.bindLong(19, entity.getHotFinish());
     }
 
     @Override
@@ -197,7 +205,9 @@ public class EqupmentDao extends AbstractDao<Equpment, Long> {
             cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // errorCode
             cursor.getInt(offset + 14), // Mode
             cursor.getShort(offset + 15) != 0, // onLine
-            cursor.getInt(offset + 16) // lightOpen
+            cursor.getInt(offset + 16), // lightOpen
+            cursor.getInt(offset + 17), // bringht
+            cursor.getInt(offset + 18) // hotFinish
         );
         return entity;
     }
@@ -221,6 +231,8 @@ public class EqupmentDao extends AbstractDao<Equpment, Long> {
         entity.setMode(cursor.getInt(offset + 14));
         entity.setOnLine(cursor.getShort(offset + 15) != 0);
         entity.setLightOpen(cursor.getInt(offset + 16));
+        entity.setBringht(cursor.getInt(offset + 17));
+        entity.setHotFinish(cursor.getInt(offset + 18));
      }
     
     @Override

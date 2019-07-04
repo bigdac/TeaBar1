@@ -47,7 +47,7 @@ public class NoSrcollViewPage extends ViewPager {
     @Override
     public void setCurrentItem(int item) {
         // TODO Auto-generated method stub
-        super.setCurrentItem(item);
+        super.setCurrentItem(item,false);
     }
 
     @Override

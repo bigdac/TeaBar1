@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.facebook.FacebookSdk;
 import com.peihou.daemonservice.DaemonHolder;
+import com.pgyersdk.crash.PgyCrashManager;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.cookie.CookieJarImpl;
 import com.zhy.http.okhttp.cookie.store.PersistentCookieStore;
@@ -69,7 +70,7 @@ public class MyApplication extends Application {
         JMessageClient.setDebugMode(true);
         JMessageClient.init(getApplicationContext());
         LocalManageUtil.setApplicationLanguage(this);
-
+        PgyCrashManager.register();
         Log.e("ZZZZZZZZZZZZZZZ", "onCreate: -->"+ LocalManageUtil.getSetLanguageLocale(this).toString()  );
 
 //        SMSSDK.initSDK(this,"257a640199764","125aced6309709d59520e466e078ba15");

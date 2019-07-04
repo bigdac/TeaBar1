@@ -24,6 +24,7 @@ import butterknife.OnClick;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.adpter.AllCommentAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
+import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.pojo.Comment;
 import teabar.ph.com.teabar.util.HttpUtils;
@@ -40,6 +41,7 @@ public class AllCommentActivity extends BaseActivity {
     List<Comment> mLists;
     int pageNum=1;
     AllCommentAdapter allCommentAdapter;
+    MyApplication application;
     @Override
     public void initParms(Bundle parms) {
          id = parms.getString("contentId");
@@ -53,13 +55,16 @@ public class AllCommentActivity extends BaseActivity {
 
     @Override
     public void initView(View view) {
+        if (application == null) {
+            application = (MyApplication) getApplication();
+        }
         showProgressDialog();
         mLists = new ArrayList<>();
         Map<String ,Object> params = new HashMap<>();
         params.put("contentId",id);
         params.put("currentPage",1);
         params.put("pageSize",10);
-        new FindMethordAsynTask().execute(params);
+        new FindMethordAsynTask(this).execute(params);
         refreshLayou.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
@@ -72,9 +77,9 @@ public class AllCommentActivity extends BaseActivity {
                     params.put("contentId",id);
                     params.put("currentPage",1);
                     params.put("pageSize",10);
-                    new FindMethordAsynTask().execute(params);
+                    new FindMethordAsynTask(AllCommentActivity.this).execute(params);
                 }else {
-                    toast(   "无网络可用，请检查网络");
+//                    toast(   "无网络可用，请检查网络");
                 }
 
             }
@@ -92,9 +97,9 @@ public class AllCommentActivity extends BaseActivity {
                     params.put("contentId",id);
                     params.put("currentPage",pageNum);
                     params.put("pageSize",10);
-                    new FindMethordAsynTask().execute(params);
+                    new FindMethordAsynTask(AllCommentActivity.this).execute(params);
                 }else {
-                    toast(   "无网络可用，请检查网络");
+//                    toast(   "无网络可用，请检查网络");
                 }
             }
         });
@@ -108,15 +113,19 @@ public class AllCommentActivity extends BaseActivity {
 
         tipDialog = new QMUITipDialog.Builder(this)
                 .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
-                .setTipWord("请稍后...")
+                .setTipWord(getText(R.string.search_qsh).toString())
                 .create();
         tipDialog.show();
     }
     String returnMsg1,returnMsg2;
-    class FindMethordAsynTask extends AsyncTask<Map<String,Object>,Void,String> {
+    class FindMethordAsynTask extends BaseWeakAsyncTask<Map<String,Object>,Void,String,BaseActivity> {
+
+        public FindMethordAsynTask(BaseActivity baseActivity) {
+            super(baseActivity);
+        }
 
         @Override
-        protected String doInBackground(Map<String, Object>... maps) {
+        protected String doInBackground(BaseActivity baseActivity, Map<String, Object>... maps) {
             String code = "";
             Map<String, Object> prarms = maps[0];
             String result =   HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/content/showComment",prarms);
@@ -126,7 +135,8 @@ public class AllCommentActivity extends BaseActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(result);
                         code = jsonObject.getString("state");
-                        returnMsg1=jsonObject.getString("message1");
+                        returnMsg1=jsonObject.getString("message2");
+                        returnMsg2=jsonObject.getString("message3");
                         JSONObject jsonObject2  = jsonObject.getJSONObject("data");
                         JSONArray  jsonArray = jsonObject2.getJSONArray("items");
                         for (int i = 0;i<jsonArray.length();i++){
@@ -154,8 +164,8 @@ public class AllCommentActivity extends BaseActivity {
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(BaseActivity baseActivity, String s) {
+
 
             switch (s) {
 
@@ -174,13 +184,18 @@ public class AllCommentActivity extends BaseActivity {
                     if (tipDialog!=null&&tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    toast( "连接超时，请重试");
+                    toast(getText(R.string.toast_all_cs).toString());
                     break;
                 default:
                     if (tipDialog!=null&&tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    toast( returnMsg1);
+                    if (application.IsEnglish()==0){
+                        toast(returnMsg1);
+                    }else {
+                        toast(returnMsg2);
+                    }
+
                     break;
 
             }

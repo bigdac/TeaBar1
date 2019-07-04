@@ -36,16 +36,14 @@ import teabar.ph.com.teabar.util.ToastUtil;
 
 public class ForgetActivity extends BaseActivity {
     MyApplication application;
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     @BindView(R.id.et_regist_user)
     EditText et_regist_user;
     @BindView(R.id.et_regist_code)
     EditText et_regist_code;
     @BindView(R.id.et_regist_pasw)
     EditText et_regist_pasw;
-    @BindView(R.id.et_regist_pasw2)
-    EditText et_regist_pasw2;
+
     @BindView(R.id.bt_register_code)
     Button bt_register_code;
     SharedPreferences preferences;
@@ -78,9 +76,6 @@ public class ForgetActivity extends BaseActivity {
             application = (MyApplication) getApplication();
         }
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
         application.addActivity(this);
         preferences = getSharedPreferences("my", MODE_PRIVATE);
         }
@@ -104,12 +99,15 @@ public class ForgetActivity extends BaseActivity {
                 case R.id.bt_register_code:
                     user = et_regist_user.getText().toString().trim();
                     if (TextUtils.isEmpty(user)){
-                        toast("账户不能为空");
+                        toast(getText(R.string.toast_forget_phone).toString());
                     }else {
                         Map<String,Object> params1=new HashMap<>();
                         if (user.contains("@")){
                             params1.put("email",user);
                         }else {
+                            if (user.length()==8){
+                                user = "+852"+user;
+                            }
                             params1.put("phone",user);
                         }
                         showProgressDialog();
@@ -123,7 +121,7 @@ public class ForgetActivity extends BaseActivity {
                     String code=et_regist_code.getText().toString().trim();
                     password=et_regist_pasw.getText().toString().trim();
                     user = et_regist_user.getText().toString().trim();
-                    String password2 = et_regist_pasw2.getText().toString().trim();
+
                     if (TextUtils.isEmpty(code)){
                         toast( getText(R.string.toast_forget_code).toString());
                         break;
@@ -140,7 +138,6 @@ public class ForgetActivity extends BaseActivity {
                     if (password.length()<6||password.length()>16){
                         toast( getText(R.string.toast_forget_passl).toString());
                     }else {
-                        if (password2.equals(password)) {
                             Map<String, Object> params = new HashMap<>();
                             params.put("verification", code);
                             params.put("password", password);
@@ -151,9 +148,7 @@ public class ForgetActivity extends BaseActivity {
                             }
                             showProgressDialog();
                             new ForgetAsyncTask().execute(params);
-                        }else {
-                            toast( getText(R.string.toast_forget_passsame).toString());
-                        }
+
                     }
                     break;
         }
@@ -164,7 +159,7 @@ public class ForgetActivity extends BaseActivity {
 
         tipDialog = new QMUITipDialog.Builder(this)
                 .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
-                .setTipWord("正在注册，请稍后")
+                .setTipWord(getText(R.string.search_qsh).toString())
                 .create();
         tipDialog.show();
     }
@@ -290,7 +285,7 @@ public class ForgetActivity extends BaseActivity {
                     if (tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    toast( "连接超时，请重试");
+                    toast( getText(R.string.toast_all_cs).toString());
                     break;
                 default:
                     if (tipDialog.isShowing()){
@@ -350,13 +345,13 @@ public class ForgetActivity extends BaseActivity {
                     if (tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    toast( "连接超时，请重试");
+                    toast( getText(R.string.toast_all_cs).toString());
                     break;
                 default:
                     if (tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    toast( returnMsg1);
+//                    toast( returnMsg1);
                     break;
 
             }
@@ -391,7 +386,7 @@ public class ForgetActivity extends BaseActivity {
         public void onFinish() {
             Log.e("Tag", "倒计时完成");
             if (bt_register_code!=null){
-                bt_register_code.setText("重新发送");
+                bt_register_code.setText(getText(R.string.register_toa_cx).toString());
                 bt_register_code.setClickable(true);
             }
 

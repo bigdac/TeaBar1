@@ -4,11 +4,21 @@
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/tv_main_1"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:background="#fafafa"
+        android:layout_alignBottom="@+id/tv_wash"
+        android:layout_marginBottom="-15dp"
+        >
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#c9c9c9"
+            android:layout_alignParentBottom="true"
+            />
+
+    </RelativeLayout>
     <ImageView
         android:id="@+id/iv_equ_fh"
         android:layout_below="@+id/tv_main_1"
@@ -46,29 +56,30 @@
         android:layout_below="@+id/tv_wash_title"
         android:layout_marginLeft="17dp"
         android:layout_marginTop="50dp"
-        android:textColor="#666666"
-        android:textSize="16sp"
+        android:textColor="#454545"
+        android:textSize="20sp"
+        android:textStyle="bold"
         />
-    <TextView
-        android:id="@+id/tv_wash_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/equ_wash_4"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="28dp"
-        android:layout_alignBottom="@+id/tv_wash_number"
-        android:paddingBottom="2dp"
-        android:textColor="#424242"
-        android:textSize="12sp"
-        />
+    <!--<TextView-->
+        <!--android:id="@+id/tv_wash_time"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/equ_wash_4"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_marginRight="28dp"-->
+        <!--android:layout_alignBottom="@+id/tv_wash_number"-->
+        <!--android:paddingBottom="2dp"-->
+        <!--android:textColor="#424242"-->
+        <!--android:textSize="12sp"-->
+        <!--/>-->
     <TextView
         android:id="@+id/tv_wash_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="18"
         android:layout_below="@+id/tv_wash_title"
-        android:layout_marginRight="5dp"
-        android:layout_toLeftOf="@+id/tv_wash_time"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="28dp"
         android:layout_marginTop="50dp"
         android:textColor="#424242"
         android:textSize="20sp"
@@ -84,6 +95,7 @@
         android:layout_marginRight="7dp"
         app:rsb_progress_height="15dp"
         app:rsb_max="50"
+        app:rsb_min="10"
         app:rsb_mode="single"
         app:rsb_tick_mark_mode="other"
         app:rsb_tick_mark_number="1"

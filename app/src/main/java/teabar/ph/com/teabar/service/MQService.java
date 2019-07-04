@@ -19,9 +19,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
@@ -64,11 +66,18 @@ import java.util.concurrent.TimeUnit;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.activity.device.AddMethodActivity1;
+import teabar.ph.com.teabar.activity.device.ChooseColorActvity;
+import teabar.ph.com.teabar.activity.device.ChooseDeviceActivity;
+import teabar.ph.com.teabar.activity.device.EquipmentDetailsActivity;
+import teabar.ph.com.teabar.activity.device.EqupmentLightActivity;
 import teabar.ph.com.teabar.activity.device.MakeActivity;
 import teabar.ph.com.teabar.fragment.EqumentFragment;
+import teabar.ph.com.teabar.fragment.EqumentFragment2;
 import teabar.ph.com.teabar.pojo.Equpment;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.TenTwoUtil;
+import teabar.ph.com.teabar.util.ToastUtil;
+import teabar.ph.com.teabar.util.language.LocalManageUtil;
 import teabar.ph.com.teabar.view.AlermDialog4;
 
 public class MQService extends AbsHeartBeatService {
@@ -98,16 +107,37 @@ public class MQService extends AbsHeartBeatService {
    SharedPreferences preferences;
     public static int reset = 0;
     SharedPreferences alermPreferences;
+    public   int IsEnglish;
     @Override
     public void onCreate() {
         super.onCreate();
-        alermPreferences=getSharedPreferences("alerm",MODE_PRIVATE);
-
-        equipmentDao = new EquipmentImpl(this);
-        preferences = getSharedPreferences("my", MODE_PRIVATE);
         Log.i("MQService", "-->onCreate");
+        equipmentDao = new EquipmentImpl(getApplicationContext());
+        alermPreferences=getSharedPreferences("alerm",MODE_PRIVATE);
+        preferences = getSharedPreferences("my", MODE_PRIVATE);
+        LocalManageUtil.setApplicationLanguage(this);
+        IsEnglish();
         init();
+//        new InitAsnyTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
+    }
+    /*0中文1 英文*/
+    public int IsEnglish(){
+        String place = LocalManageUtil.getSetLanguageLocale(this).toString();
+        if ( "en_US".equals(place)){
+            IsEnglish =1;
+        }else {
+            IsEnglish =0;
+        }
+        return IsEnglish;
+    }
+    class InitAsnyTask extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            return null;
+        }
     }
 
     @Override
@@ -178,7 +208,7 @@ public class MQService extends AbsHeartBeatService {
 //            long diff=Math.abs(setTime-currentHour);
 //            if (diff>=30 && diff<=60){
 //            }
-            if (setTime==currentTime){
+            if (setTime==currentTime&&isOpen){
                 handler.sendEmptyMessage(2);
                 showNotifaction();
 
@@ -200,12 +230,20 @@ public class MQService extends AbsHeartBeatService {
                 mNotificationManager.createNotificationChannel(channel);
             }
         }
-
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), PUSH_CHANNEL_ID);
 //        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this).
-        mBuilder.setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("TarBar")
-                .setContentText("亲，你喝茶的时间到啦");
+        if (IsEnglish==0){
+            mBuilder.setSmallIcon(R.mipmap.app_name)
+                    .setContentTitle("Lify")
+                    .setContentText("是时候喝一杯養生茶了" );
+        }else {
+
+            mBuilder.setSmallIcon(R.mipmap.app_name)
+                    .setContentTitle("Lify")
+                    .setContentText("Time for a cup of wellness tea!" );
+        }
+
+
 //                         mBuilder.setTicker("亲，你喝茶的时间到啦");//第一次提示消息的时候显示在通知栏上
 //                         mBuilder.setNumber(12);
 //                         mBuilder.setLargeIcon(btm);
@@ -324,7 +362,42 @@ public class MQService extends AbsHeartBeatService {
             e.printStackTrace();
         }
     }
+    /**
+     * 发送清洗
+     * @param
+     */
+    public void sendCleanEqu( String mac,int mStage) {
 
+        try {
+            JSONObject jsonObject = new JSONObject();
+            JSONArray jsonArray = new JSONArray();
+            int ctrlCode = 0x0e;
+            int type = 0xc3;
+            int checkCode = (headCode + ctrlCode+length +type+ctrlCode2) % 256;
+            jsonArray.put(0,headCode);
+            jsonArray.put(1,ctrlCode);
+            jsonArray.put(2,length);
+            jsonArray.put(3,type);
+            jsonArray.put(4,ctrlCode2);
+            for (int i=5;i<34;i++){
+                jsonArray.put(i,0);
+            }
+            jsonArray.put(34,checkCode);
+            jsonObject.put("Coffee",jsonArray);
+            String topicName = "tea/"+mac+"/operate/set";
+            String payLoad =jsonObject.toString();
+            if (mStage!=0xb6&&mStage!=0xb7) {
+                boolean success = publish(topicName, 1, payLoad);
+                Log.e("GGGGGTTTTTT", "open: -------->" + success + jsonArray.toString() + "...." + jsonArray.length());
+                if (!success)
+                    success = publish(topicName, 1, payLoad);
+            }else {
+                ToastUtil.showShort(mContext,getText(R.string.toast_updata_no).toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 发送开关机命令
@@ -369,7 +442,7 @@ public class MQService extends AbsHeartBeatService {
      *
      * @param
      */
-    public void sendMakeMess(int size,int time,int temp, String mac) {
+    public void sendMakeMess(int size,int time,int temp, String mac,int r,int g,int b) {
 
         try {
             JSONObject jsonObject = new JSONObject();
@@ -378,7 +451,7 @@ public class MQService extends AbsHeartBeatService {
             int stage = 0xc2;
             int height = size/256;
             int low = size%256;
-            int checkCode = (headCode + ctrlCode+length+stage+ctrlCode2+height+length+time+temp) % 256;
+            int checkCode = (headCode + ctrlCode+length+stage+ctrlCode2+low+height+time+temp+r+g+b) % 256;
             jsonArray.put(0,headCode);
             jsonArray.put(1,ctrlCode);
             jsonArray.put(2,length);
@@ -387,6 +460,9 @@ public class MQService extends AbsHeartBeatService {
             for (int i=5;i<15;i++){
                 jsonArray.put(i,0);
             }
+            jsonArray.put(9,0);
+            jsonArray.put(10,0);
+            jsonArray.put(11,0);
             jsonArray.put(15,height);
             jsonArray.put(16,low);
             jsonArray.put(17,0);
@@ -395,6 +471,9 @@ public class MQService extends AbsHeartBeatService {
             for (int j=20;j<34;j++){
                 jsonArray.put(j,0);
             }
+            jsonArray.put(24,r);
+            jsonArray.put(25,g);
+            jsonArray.put(26,b);
             jsonArray.put(34,checkCode);
             jsonObject.put("Coffee",jsonArray);
 
@@ -430,6 +509,7 @@ public class MQService extends AbsHeartBeatService {
             for (int i=5;i<34;i++){
                 jsonArray.put(i,0);
             }
+
             jsonArray.put(34,checkCode);
             jsonObject.put("Coffee",jsonArray);
             String topicName = "tea/"+mac+"/operate/set";
@@ -510,11 +590,11 @@ public class MQService extends AbsHeartBeatService {
             jsonArray.put(3,0);
             jsonArray.put(4,ctrlCode2);
             jsonArray.put(5,0);
-            for (int i = 6;i<25;i++){
+            for (int i = 6;i<21;i++){
                 jsonArray.put(i,0);
             }
-            jsonArray.put(25,number);
-            for (int i = 26;i<34;i++){
+            jsonArray.put(21,number);
+            for (int i = 22;i<34;i++){
                 jsonArray.put(i,0);
             }
             jsonArray.put(34,checkCode);
@@ -599,6 +679,104 @@ public class MQService extends AbsHeartBeatService {
             e.printStackTrace();
         }
     }
+    /*
+    * 发送恢复默认
+    * */
+    public void sendBack(String mac ) {
+
+
+        try {
+            JSONObject jsonObject = new JSONObject();
+            JSONArray jsonArray = new JSONArray();
+            int ctrlCode = 0x0F;
+            int checkCode = (headCode + ctrlCode+length+ctrlCode2 +0xc4) % 256;
+            jsonArray.put(0,headCode);
+            jsonArray.put(1,ctrlCode);
+            jsonArray.put(2,length);
+            jsonArray.put(3,0xc4);
+            jsonArray.put(4,ctrlCode2);
+            for (int i=5;i<34;i++){
+                jsonArray.put(i,0);
+            }
+            jsonArray.put(34,checkCode);
+            jsonObject.put("Coffee",jsonArray);
+            String topicName = "tea/"+mac+"/operate/set";
+            String payLoad =jsonObject.toString();
+            boolean success = publish(topicName, 1, payLoad);
+            Log.e("GGGGGTTTTTT", "open: -------->"  +success+jsonArray.toString()+"...."+jsonArray.length() );
+            if (!success)
+                success = publish(topicName, 1, payLoad);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public boolean send(String mac, int funCode) {
+
+
+        boolean success=false;
+
+        try {
+            int len = 31;
+            JSONObject jsonObject = new JSONObject();
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.put(0, 0x32);
+            jsonArray.put(1, 0x0d);
+            jsonArray.put(2, len);
+            jsonArray.put(3, 0);
+            jsonArray.put(4, ctrlCode2);
+            for (int i=5;i<23;i++){
+                jsonArray.put(i, 0);
+            }
+            jsonArray.put(23, funCode);
+            for (int i=24;i<34;i++){
+                jsonArray.put(i, 0);
+            }
+            int sum = 0;
+            int length = jsonArray.length();
+            for (int i = 0; i < length; i++) {
+                sum += jsonArray.getInt(i);
+            }
+            jsonArray.put(34, sum % 256);
+            jsonObject.put("Coffee",jsonArray);
+            String topicName = "tea/"+mac+"/operate/set";
+            String payLoad =jsonObject.toString();
+            success = publish(topicName, 1, payLoad);
+            if (!success)
+                success = publish(topicName, 1, payLoad);
+            Log.i(TAG, "-->" + success + "," + payLoad);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return success;
+    }
+
+    public void loadAlltopic(){
+        try {
+
+            List<String> topicNames = getTopicNames();
+            boolean sss = client.isConnected();
+            Log.i("sss", "-->" + sss);
+            if (client!=null&&!client.isConnected()){
+                client.connect(options);
+            }
+            if (client.isConnected() && !topicNames.isEmpty()) {
+                for (String topicName : topicNames) {
+                    if (!TextUtils.isEmpty(topicName)) {
+                        client.subscribe(topicName, 1);
+                        Log.i("client", "-->" + topicName);
+                        Log.e("FFFDDDD", "doInBackground: 订阅-->" + topicName);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
 
     private String ArrayTransformString(int[] SafetyMeasure) {
         StringBuffer sb = new StringBuffer();
@@ -608,7 +786,7 @@ public class MQService extends AbsHeartBeatService {
         return sb.toString();
     }
 
-    static boolean hasError = false;
+//    static boolean hasError = false;
     String errorCode = "";
     @SuppressLint("StaticFieldLeak")
     class LoadAsyncTask extends AsyncTask<String, Void, Object> {
@@ -618,7 +796,7 @@ public class MQService extends AbsHeartBeatService {
 
             String topicName = strings[0];/**收到的主题*/
             String message = strings[1];/**收到的消息*/
-            Log.i("topicName", "-->:" + topicName);
+            Log.e("topicName", "-->:" + topicName);
             String macAddress = null;
             String topic = null;
             if (topicName.startsWith("tea")) {
@@ -644,6 +822,7 @@ public class MQService extends AbsHeartBeatService {
             try {
                 if ("reset".equals(topic)){
                     if (equipment!=null){
+                        equipmentDao.delete(equipment);
                         if (equipment.getIsFirst()){
                             reset=1;
                             if (MainActivity.isRunning){
@@ -653,19 +832,58 @@ public class MQService extends AbsHeartBeatService {
                             }
                         }else {
                             reset =2;
-                            if (EqumentFragment.isRunning){
+                            if (EqumentFragment2.isRunning){
                                 Intent mqttIntent = new Intent("EqumentFragment");
                                 mqttIntent.putExtra("reset", 2);
                                 sendBroadcast(mqttIntent);
                             }
                         }
-                        equipmentDao.delete(equipment);
                     }
 
+                }
+                if ("lwt".equals(topic)){
+                    /*離綫主題*/
+                    if (equipment!=null) {
+                        boolean isFirst = equipment.getIsFirst();//是否是默认设备
+                        equipment.setOnLine(false);
+                        equipment.setMStage(0xb2);
+                        sendFindEqu(macAddress);
+                        if (isFirst) {
+                            if (MainActivity.isRunning) {
+                                Intent mqttIntent = new Intent("MainActivity");
+                                mqttIntent.putExtra("msg", macAddress);
+                                mqttIntent.putExtra("msg1", equipment);
+                                sendBroadcast(mqttIntent);
+                            }
+                            if (MakeActivity.isRunning) {
+                                Intent mqttIntent = new Intent("MakeActivity");
+                                mqttIntent.putExtra("msg", macAddress);
+                                mqttIntent.putExtra("msg1", equipment);
+                                sendBroadcast(mqttIntent);
+                            }
+                            if (AddMethodActivity1.isRunning) {
+                                Intent mqttIntent = new Intent("AddMethodActivity1");
+                                mqttIntent.putExtra("msg", macAddress);
+                                mqttIntent.putExtra("msg1", equipment);
+                                sendBroadcast(mqttIntent);
+                            }
+                            equipmentDao.update(equipment);
+                        }
+                        if (EqumentFragment2.isRunning) {
+                            Intent mqttIntent = new Intent("EqumentFragment");
+                            mqttIntent.putExtra("msg", macAddress);
+                            mqttIntent.putExtra("msg1", equipment);
+                            sendBroadcast(mqttIntent);
+                        }
+                    }
+                }
+                if (!TextUtils.isEmpty(message) &&"online".equals(message)){
+//                    sendFindEqu(macAddress);
                 }
                 if (!TextUtils.isEmpty(message) && message.startsWith("{") && message.endsWith("}")) {
                     messageJsonObject = new JSONObject(message);
                 }
+
                 if (messageJsonObject != null && messageJsonObject.has("Coffee")) {
                     messageJsonArray = messageJsonObject.getJSONArray("Coffee");
                 }
@@ -678,23 +896,27 @@ public class MQService extends AbsHeartBeatService {
                         int mStage;//机器状态
                         String lightColor;//灯光颜色
                         String washTime;//清洗周期
-                        int mode=4; // 燈光模式4564常在  随机 呼吸
+                        int mode=4; // 燈光模式456  常在  随机 呼吸
                         int lightOpen1;
+                        int bringht;
                         mStage = messageJsonArray.getInt(2);
                         int code = messageJsonArray.getInt(3);
                         int wrongCode [] = TenTwoUtil.changeToTwo(code);
                         errorCode = ArrayTransformString(wrongCode);
 //                        errorCode = "1,1,1,1,1,1,1";
                         /*方法是倒叙的 可直bit0 是数字第一位*/
-                        for (int i =0;i<wrongCode.length;i++){
-                            if (wrongCode[i]==1){
-                                hasError =true;
-                            }
-                        }
-                        if (hasError){
-                            hasError =false;
+//                        for (int i =0;i<wrongCode.length;i++){
+//                            if (errorCode.contains("1")){
+//                                hasError =true;
+//                            }
+//                        }
+                        if (errorCode.contains("1")){
+//                            hasError =false;
                            Message message1= handler.obtainMessage();
-                           message1.obj=errorCode;
+                            Bundle b = new Bundle();
+                            b.putString("errorCode",errorCode);
+                            b.putString("mac",macAddress);
+                            message1.setData(b);
                            message1.what=1;
                            handler.sendMessage(message1);
                         }
@@ -704,13 +926,13 @@ public class MQService extends AbsHeartBeatService {
                                 mode= i;
                             }
                         }
-
+                        int hotFinish = TenTwoUtil.changeToTwo(lightMes)[0];
                         lightOpen1 = TenTwoUtil.changeToTwo(lightMes)[7];
                         lightColor = messageJsonArray.getString(8)+"/"+messageJsonArray.getString(9)+"/"+messageJsonArray.getString(10);
                         int height = messageJsonArray.getInt(21);/*水位查看制作水位*/
                         int low = messageJsonArray.getInt(22);
                         washTime = messageJsonArray.getString(23);
-//                        mode = messageJsonArray.getInt(8);
+                        bringht = messageJsonArray.getInt(25);
                         equipment.setErrorCode(errorCode);
                         equipment.setMStage(mStage);
                         equipment.setWashTime(washTime);
@@ -718,7 +940,8 @@ public class MQService extends AbsHeartBeatService {
                         equipment.setMode(mode);
                         equipment.setLightOpen(lightOpen1);
                         equipment.setOnLine(true);
-                        errorCode="";
+                        equipment.setBringht(bringht);
+                        equipment.setHotFinish(hotFinish);
                         if (isFirst){
                             if (MainActivity.isRunning){
                                 Intent mqttIntent = new Intent("MainActivity");
@@ -740,32 +963,71 @@ public class MQService extends AbsHeartBeatService {
                             }
                             equipmentDao.update(equipment);
                         }
-
-                       if (EqumentFragment.isRunning) {
-                                Intent mqttIntent = new Intent("EqumentFragment");
+                       if (EqupmentLightActivity.isRunning){
+                                Intent mqttIntent = new Intent("EqupmentLightActivity");
                                 mqttIntent.putExtra("msg", macAddress);
                                 mqttIntent.putExtra("msg1", equipment);
                                 sendBroadcast(mqttIntent);
-                            }
+                        }
+                       if (EqumentFragment2.isRunning) {
+                                Intent mqttIntent = new Intent("EqumentFragment");
+                                mqttIntent.putExtra("msg", macAddress);
+                                mqttIntent.putExtra("msg1", equipment);
 
-                       if (mStage==0xb4||mStage==0xb3||mStage==0xb5){
-                                if (MakeActivity.isRunning) {
-                                    Intent mqttIntent = new Intent("MakeActivity");
-                                    mqttIntent.putExtra("nowStage", mStage);
-                                    mqttIntent.putExtra("height", height);
-                                    mqttIntent.putExtra("low", low);
-                                    sendBroadcast(mqttIntent);
-                                }
-                                if (AddMethodActivity1.isRunning) {
-                                    Intent mqttIntent = new Intent("AddMethodActivity1");
-                                    mqttIntent.putExtra("nowStage", mStage);
-                                    mqttIntent.putExtra("height", height);
-                                    mqttIntent.putExtra("low", low);
-                                    sendBroadcast(mqttIntent);
-                                }
+                                     mqttIntent.putExtra("nowStage", mStage);
+                                     mqttIntent.putExtra("height", height);
+                                     mqttIntent.putExtra("low", low);
+                                     mqttIntent.putExtra("errorCode",errorCode);
+
+                                sendBroadcast(mqttIntent);
+                            }
+                       if (ChooseColorActvity.isRunning) {
+                                Intent mqttIntent = new Intent("ChooseColorActvity");
+                                mqttIntent.putExtra("msg", macAddress);
+                                mqttIntent.putExtra("msg1", equipment);
+                                sendBroadcast(mqttIntent);
+                        }
+                        if (EquipmentDetailsActivity.isRunning) {
+                                Intent mqttIntent = new Intent("EquipmentDetailsActivity");
+                                mqttIntent.putExtra("msg", macAddress);
+                                mqttIntent.putExtra("msg1", equipment);
+                                mqttIntent.putExtra("mStage",mStage);
+                                sendBroadcast(mqttIntent);
+                        }
+                       if (ChooseDeviceActivity.isRunning) {
+                                Intent mqttIntent = new Intent("ChooseDeviceActivity");
+                                mqttIntent.putExtra("msg", macAddress);
+                                mqttIntent.putExtra("msg1", equipment);
+                                sendBroadcast(mqttIntent);
                        }
 
+//                       if (mStage==0xb8|| mStage==0xb4||mStage==0xb5||errorCode.contains("1")){
+                                if (ChooseDeviceActivity.isRunning) {
+                                    Intent mqttIntent = new Intent("ChooseDeviceActivity");
+                                    mqttIntent.putExtra("nowStage", mStage);
+                                    mqttIntent.putExtra("height", height);
+                                    mqttIntent.putExtra("low", low);
+                                    mqttIntent.putExtra("errorCode",errorCode);
+                                    sendBroadcast(mqttIntent);
+                                }
+//                           if (MakeActivity.isRunning) {
+//                               Intent mqttIntent = new Intent("MakeActivity");
+//                               mqttIntent.putExtra("nowStage", mStage);
+//                               mqttIntent.putExtra("height", height);
+//                               mqttIntent.putExtra("low", low);
+//                               mqttIntent.putExtra("errorCode",errorCode);
+//                               sendBroadcast(mqttIntent);
+//                           }
+//                                if (AddMethodActivity1.isRunning) {
+//                                    Intent mqttIntent = new Intent("AddMethodActivity1");
+//                                    mqttIntent.putExtra("nowStage", mStage);
+//                                    mqttIntent.putExtra("height", height);
+//                                    mqttIntent.putExtra("low", low);
+//                                    sendBroadcast(mqttIntent);
+//                                }
+//                       }
 
+                            errorCode="";
                     }
 
                         if ("reset".equals(topic)){
@@ -778,7 +1040,7 @@ public class MQService extends AbsHeartBeatService {
                                     }
                                 }else {
                                     reset =2;
-                                    if (EqumentFragment.isRunning){
+                                    if (EqumentFragment2.isRunning){
                                         Intent mqttIntent = new Intent("EqumentFragment");
                                         mqttIntent.putExtra("reset", 2);
                                     }
@@ -787,38 +1049,7 @@ public class MQService extends AbsHeartBeatService {
                             }
 
                         }
-                        if ("lwt".equals(topic)){
-                            /*離綫主題*/
-                            boolean isFirst = equipment.getIsFirst()  ;//是否是默认设备
-                            equipment.setOnLine(false);
-                            if (isFirst){
-                                if (MainActivity.isRunning){
-                                    Intent mqttIntent = new Intent("MainActivity");
-                                    mqttIntent.putExtra("msg", macAddress);
-                                    mqttIntent.putExtra("msg1", equipment);
-                                    sendBroadcast(mqttIntent);
-                                }
-                                if (MakeActivity.isRunning){
-                                    Intent mqttIntent = new Intent("MakeActivity");
-                                    mqttIntent.putExtra("msg", macAddress);
-                                    mqttIntent.putExtra("msg1", equipment);
-                                    sendBroadcast(mqttIntent);
-                                }
-                                if (AddMethodActivity1.isRunning){
-                                    Intent mqttIntent = new Intent("AddMethodActivity1");
-                                    mqttIntent.putExtra("msg", macAddress);
-                                    mqttIntent.putExtra("msg1", equipment);
-                                    sendBroadcast(mqttIntent);
-                                }
-                                equipmentDao.update(equipment);
-                            }
-                            if (EqumentFragment.isRunning) {
-                                Intent mqttIntent = new Intent("EqumentFragment");
-                                mqttIntent.putExtra("msg", macAddress);
-                                mqttIntent.putExtra("msg1", equipment);
-                                sendBroadcast(mqttIntent);
-                            }
-                        }
+
 
                 }
 
@@ -840,18 +1071,45 @@ public class MQService extends AbsHeartBeatService {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what==1){
-                String errorCode = (String) msg.obj;
+                String errorCode =   msg.getData().getString("errorCode");
+                String mac =   msg.getData().getString("mac");
+                String Open = preferences.getString(mac,"111");
                 if (alermDialog4!=null&&alermDialog4.isShowing()){
                     alermDialog4.dismiss();
                 }
-                setAlermDialog(0,errorCode);
+                String open1 = Open.substring(0,1);
+                String open2 = Open.substring(1,2);
+                String open3 = Open.substring(2,3);
+                StringBuilder sb = new StringBuilder(errorCode);
+                if ("0".equals(open1)){
+                    sb.replace(12, 13,"0");
+                }
+                if ("0".equals(open2)){
+
+                    sb.replace(4, 5,"0");
+                }
+                if ("0".equals(open3)){
+
+                    sb.replace(6, 7,"0");
+                }
+                errorCode = sb.toString();
+                if (errorCode.contains("1")){
+                    setAlermDialog(0,errorCode );
+                }
+
             }else if (msg.what==2){
                 View layoutView =  LayoutInflater.from(getApplicationContext()).inflate(R.layout.top_toast, null);
                 //设置文本的参数 设置加载文本文件的参数，必须通过LayoutView获取。
                 TextClock tv_clock= (TextClock) layoutView.findViewById(R.id.tv_clock);
                 TextView tv_device = (TextView) layoutView.findViewById(R.id.tv_device);
                 tv_clock.setFormat24Hour("H:mm");
-                tv_device.setText("亲，你喝茶的时间到了!");
+
+                if (IsEnglish==0){
+                    tv_device.setText("是时候喝一杯養生茶了");
+                }else {
+                    tv_device.setText("Time for a cup of wellness tea!");
+
+                }
 //                WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
 //                //获得屏幕的宽度
 //                int width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -883,7 +1141,7 @@ public class MQService extends AbsHeartBeatService {
         }
     };
      AlermDialog4 alermDialog4;
-    private void setAlermDialog(int mode, String line) {
+    private void setAlermDialog(int mode, String line ) {
         try {
             alermDialog4 = new AlermDialog4(MQService.this);
             alermDialog4.setLine(line);
@@ -911,12 +1169,12 @@ public class MQService extends AbsHeartBeatService {
                 alermDialog4.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
             }
             alermDialog4.setCanceledOnTouchOutside(false);
-            alermDialog4.setOnNegativeClickListener(new AlermDialog4.OnNegativeClickListener() {
-                @Override
-                public void onNegativeClick() {
-                    alermDialog4.dismiss();
-                }
-            });
+//            alermDialog4.setOnNegativeClickListener(new AlermDialog4.OnNegativeClickListener() {
+//                @Override
+//                public void onNegativeClick() {
+//                    alermDialog4.dismiss();
+//                }
+//            });
             alermDialog4.setOnPositiveClickListener(new AlermDialog4.OnPositiveClickListener() {
                 @Override
                 public void onPositiveClick() {
@@ -941,7 +1199,6 @@ public class MQService extends AbsHeartBeatService {
     public List<String> getTopicNames() {
         List<String> list = new ArrayList<>();
         List<Equpment> equpments = equipmentDao.findAll();
-
         for (Equpment equpment : equpments){
             String macAddress = equpment.getMacAdress();
             String onlineTopicName = "";
@@ -957,7 +1214,7 @@ public class MQService extends AbsHeartBeatService {
             list.add(s4);
             list.add(s5);
         }
-
+        Log.e(TAG, "getTopicNames: fffffffffffffff-->"+list.size() );
         return list;
     }
 
@@ -966,11 +1223,11 @@ public class MQService extends AbsHeartBeatService {
      */
     public void connect() {
         try {
-            if (client != null && !client.isConnected()) {
-                client.connect(options);
-            }
-            List<String> topicNames = getTopicNames();
-            new ConAsync().execute(topicNames);
+//            if (client != null && !client.isConnected()) {
+//                client.connect(options);
+//            }
+//            List<String> topicNames = getTopicNames();
+            new ConAsync().execute();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -998,23 +1255,32 @@ public class MQService extends AbsHeartBeatService {
 
     public boolean publish(String topicName, int qos, String payload) {
         boolean flag = false;
-        if (client != null && client.isConnected()) {
-            try {
+        try {
+            if (client != null && !client.isConnected()) {
+                client.connect(options);
+                String ss[]=topicName.split("/");
+                String deviceMac=ss[1];
+                String topicName1 = "tea/" + deviceMac + "/status/transfer";
+                String topicName2 = "tea/" + deviceMac + "/operate/transfer";
+                String topicName3 = "tea/" + deviceMac + "/extra/transfer";
+                String topicName4 = "tea/" + deviceMac + "/reset/transfer";
+                String topicName5 = "tea/" + deviceMac + "/lwt";
+                subscribe(topicName1,1);
+                subscribe(topicName2,1);
+                subscribe(topicName3,1);
+                subscribe(topicName4,1);
+                subscribe(topicName5,1);
+            }
+            if (client != null && client.isConnected()) {
+
                 MqttMessage message = new MqttMessage(payload.getBytes("utf-8"));
                 qos = 1;
-                //设置保留消息
-                if (topicName.contains("friend")) {
-                    message.setRetained(true);
-                }
-                if (topicName.contains("clockuniversal")) {
-                    message.setRetained(true);
-                }
                 message.setQos(qos);
                 client.publish(topicName, message);
                 flag = true;
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return flag;
     }

@@ -1,9 +1,11 @@
 package teabar.ph.com.teabar.activity.device;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,15 +28,17 @@ public class EqupmentInformActivity extends BaseActivity {
     MyApplication application;
     @BindView(R.id.rv_equmentxq)
     RecyclerView rv_equmentxq;
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     @BindView(R.id.iv_equ_fh)
     ImageView iv_equ_fh;
     List<String> stringList;
     EqupmentInformAdapter equpmentInformAdapter;
+    SharedPreferences preferences;
+    String notOpen[] = {"notOpen1","notOpen2","notOpen3"};
+    String mac ;
     @Override
     public void initParms(Bundle parms) {
-
+        mac = parms.getString("mac");
     }
 
     @Override
@@ -48,22 +52,30 @@ public class EqupmentInformActivity extends BaseActivity {
         if (application == null) {
             application = (MyApplication) getApplication();
         }
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
         application.addActivity(this);
+        preferences = getSharedPreferences("my", MODE_PRIVATE);
+        String Open = preferences.getString(mac,"111");
+        Log.e(TAG, "initView: --->"+Open );
+
         stringList = new ArrayList<>();
-        for (int i = 0;i<5;i++){
-            stringList.add(i+"");
-        }
+        stringList.add(Open.substring(0,1));
+        stringList.add(Open.substring(1,2));
+        stringList.add(Open.substring(2,3));
         equpmentInformAdapter = new EqupmentInformAdapter(this,stringList);
         rv_equmentxq.setLayoutManager(new LinearLayoutManager(this));
         rv_equmentxq.setAdapter(equpmentInformAdapter);
         equpmentInformAdapter.SetOnItemClick(new EqupmentInformAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
+                List Data = equpmentInformAdapter.getmData();
+                String mes = "";
+                for (int i = 0;i<Data.size();i++){
+                    mes = mes+Data.get(i);
+                }
+                Log.e(TAG, "onItemClick: ___>"+mes );
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(mac,mes);
+                editor.commit();
             }
 
             @Override

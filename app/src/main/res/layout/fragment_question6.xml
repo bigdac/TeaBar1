@@ -5,29 +5,67 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <RelativeLayout
+        android:id="@+id/rl_question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/question_bj"
+        >
+
+        <TextView
+            android:id="@+id/iv_question_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/question_base10"
+            android:textColor="@color/white"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_marginTop="30dp"
+            />
+
+
+
+        <TextView
+            android:id="@+id/tv_question_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_below="@+id/iv_question_title"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:paddingBottom="73dp"
+            />
+    </RelativeLayout>
     <ImageView
-        android:id="@+id/iv_question_logo"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@mipmap/logo"
-        android:layout_marginTop="80dp"
-        android:layout_marginLeft="18dp"
-        />
-    <TextView
-        android:layout_below="@+id/iv_question_logo"
-        android:id="@+id/tv_question_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="你的健康目标是什么？（多项选择、无顺序）这将帮助我们个性化的"
+        android:src="@mipmap/question_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/rl_question"
+        android:layout_marginTop="-65dp"
+        />
+
+    <TextView
+        android:id="@+id/tv_q6_choose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="18dp"
-        android:textColor="@color/login_black"
+        android:textColor="#9d9d9d"
+        android:layout_below="@+id/rl_question"
+        android:textSize="14sp"
+
         />
 
     <teabar.ph.com.teabar.view.FlowTagView
         android:id="@+id/fv_message"
         android:layout_marginTop="12dp"
-        android:layout_below="@+id/tv_question_name"
+        android:layout_below="@+id/tv_q6_choose"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -37,13 +75,13 @@
         android:id="@+id/bt_question1_esure"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
-        android:paddingLeft="10dp"
         android:text="@string/question_qued"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/fv_message"
         android:layout_marginRight="20dp"
-        android:background="@drawable/brew_button"
-        android:textColor="@color/nomal_green"
+        android:background="@mipmap/wj_button"
+        android:paddingBottom="5dp"
+        android:textColor="@color/white"
         android:layout_marginTop="50dp"
         />
 

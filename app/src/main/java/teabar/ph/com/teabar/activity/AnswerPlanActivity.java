@@ -23,8 +23,7 @@ import teabar.ph.com.teabar.view.ScoreProgressBar;
 
 public class AnswerPlanActivity extends BaseActivity {
     MyApplication application;
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     @BindView(R.id.rv_plan)
     RecyclerView rv_plan;
     AnswerPlanAdapter answerPlanAdapter;
@@ -47,9 +46,6 @@ public class AnswerPlanActivity extends BaseActivity {
             application = (MyApplication) getApplication();
         }
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
         application.addActivity(this);
         for (int i = 0;i<4;i++){
             list.add(i+"");

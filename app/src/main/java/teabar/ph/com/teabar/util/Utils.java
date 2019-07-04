@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import teabar.ph.com.teabar.R;
 
@@ -66,7 +68,7 @@ public class Utils{
 
     private static final int MIN_DELAY_TIME= 1000;  // 两次点击间隔不能少于1000ms
     private static long lastClickTime;
-
+    /*判非*/
     public static boolean isFastClick() {
         boolean flag = true;
         long currentClickTime = System.currentTimeMillis();
@@ -117,6 +119,44 @@ public class Utils{
         } else {
             return false;
         }
+    }
+    public static String convertString(String str, Boolean beginUp){
+
+        char[] ch = str.toCharArray();
+        StringBuffer sbf = new StringBuffer();
+        for(int i=0; i< ch.length; i++){
+            if(i == 0 && beginUp){//如果首字母需大写
+                sbf.append(charToUpperCase(ch[i]));
+            }else{
+                sbf.append(charToLowerCase(ch[i]));
+            }
+        }
+        return sbf.toString();
+    }
+
+    /**转大写**/
+    private static char charToUpperCase(char ch){
+        if(ch <= 122 && ch >= 97){
+            ch -= 32;
+        }
+        return ch;
+    }
+    /***转小写**/
+    private static char charToLowerCase(char ch){
+        if(ch <= 90 && ch >= 65){
+            ch += 32;
+        }
+        return ch;
+    }
+
+    public static boolean checkcountname(String countname)
+    {
+        Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
+        Matcher m = p.matcher(countname);
+        if (m.find()) {
+            return true;
+        }
+        return false;
     }
 
 

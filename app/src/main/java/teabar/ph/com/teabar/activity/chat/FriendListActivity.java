@@ -15,12 +15,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.ph.teabar.database.dao.DaoImp.FriendInforImpl;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.jpush.im.android.api.ContactManager;
@@ -39,14 +36,15 @@ import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 
 public class FriendListActivity extends BaseActivity {
 
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     @BindView(R.id.iv_power_fh)
     ImageView iv_power_fh;
     @BindView(R.id.iv_power_add)
    ImageView iv_power_add;
     @BindView(R.id.rv_friend_inform)
     RecyclerView rv_friend_inform;
+    @BindView(R.id.iv_no_friend)
+    LinearLayout iv_no_friend;
     MyApplication application;
     FriendListAdapter friendListAdapter ;
     List<UserInfo> list =new ArrayList<>() ;
@@ -65,9 +63,7 @@ public class FriendListActivity extends BaseActivity {
 
     @Override
     public void initView(View view) {
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
+
 
         if (application == null) {
             application = (MyApplication) getApplication();
@@ -82,9 +78,10 @@ public class FriendListActivity extends BaseActivity {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(FriendListActivity.this,ChatActivity.class);
+                UserInfo  userInfo  = friendListAdapter.getmData().get(position);
                 intent.putExtra("targetId",friendListAdapter.getmData().get(position).getUserName());
                 intent.putExtra("targetAppKey",friendListAdapter.getmData().get(position).getAppKey());
-                intent.putExtra("name",friendListAdapter.getmData().get(position).getUserName());
+                intent.putExtra("name",friendListAdapter.getmData().get(position).getNickname());
                 delfriend=1000;
                 startActivity(intent);
             }
@@ -104,11 +101,15 @@ public class FriendListActivity extends BaseActivity {
                     //获取好友列表成功
                     friendListAdapter.setmData(userInfoList);
                     friendListAdapter.notifyDataSetChanged();
-
+                    if (userInfoList.size()==0){
+                        iv_no_friend.setVisibility(View.VISIBLE);
+                    }else {
+                        iv_no_friend.setVisibility(View.INVISIBLE);
+                    }
 
                 } else {
                     //获取好友列表失败
-                    toast("获取好友列表失败，请重试");
+                    toast(getText(R.string.toast_add_sb).toString());
                 }
             }
         });
@@ -123,8 +124,8 @@ public class FriendListActivity extends BaseActivity {
         TextView tv_dialog_qd = (TextView) view.findViewById(R.id.tv_dia_qd);
         TextView tv_dia_title = view.findViewById(R.id.tv_dia_title);
         TextView et_dia_name = view.findViewById(R.id.et_dia_name);
-        tv_dia_title.setText("删除好友");
-        et_dia_name.setText("是否删除好友");
+        tv_dia_title.setText(getText(R.string.social_friend_del).toString());
+        et_dia_name.setText(getText(R.string.social_friend_del1).toString());
         dialog.setContentView(view);
         //使得点击对话框外部不消失对话框
         dialog.setCanceledOnTouchOutside(false);
@@ -133,7 +134,7 @@ public class FriendListActivity extends BaseActivity {
         Window dialogWindow = dialog.getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         lp.width = (int) (ScreenSizeUtils.getInstance(this).getScreenWidth() * 0.75f);
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.height = (int) (ScreenSizeUtils.getInstance(this).getScreenWidth() * 0.45f);
         lp.gravity = Gravity.CENTER;
         dialogWindow.setAttributes(lp);
         tv_dialog_qx.setOnClickListener(new View.OnClickListener() {
@@ -151,7 +152,7 @@ public class FriendListActivity extends BaseActivity {
                     public void gotResult(int responseCode, String responseMessage) {
                         if (0 == responseCode) {
                             //移出好友列表成功
-                            toast("删除好友成功");
+                            toast(getText(R.string.toast_add_cg).toString());
                             UserInfo userInfo =  friendListAdapter.getmData().get(position ) ;
                             FriendInfor friendInfor = friendInforDao.findById(Long.valueOf(userInfo.getUserName()));
                             if (friendInfor!=null){
@@ -165,7 +166,7 @@ public class FriendListActivity extends BaseActivity {
 
                         } else {
                             //移出好友列表失败
-                            toast("删除好友失败");
+                            toast(getText(R.string.toast_add_sb).toString());
                         }
                     }
                 });

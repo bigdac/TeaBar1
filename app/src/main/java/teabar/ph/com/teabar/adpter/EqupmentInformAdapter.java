@@ -27,6 +27,9 @@ public class EqupmentInformAdapter extends RecyclerView.Adapter<EqupmentInformAd
         this.mData = list;
 
     }
+    public List getmData(){
+        return mData;
+    }
 
 
     @NonNull
@@ -44,52 +47,51 @@ public class EqupmentInformAdapter extends RecyclerView.Adapter<EqupmentInformAd
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
 
         switch (position){
-            case 0:
-                holder.tv_equ_name.setText(R.string.equ_xq_finish);
-                break;
-            case 1:
-                holder.tv_equ_name.setText(R.string.equ_xq_yrfinish);
 
-                break;
-            case 2:
+            case 0:
                 holder.tv_equ_name.setText(R.string.equ_xq_water);
 
                 break;
-            case 3:
+            case 1:
                 holder.tv_equ_name.setText(R.string.equ_xq_full);
 
-
                 break;
-            case 4:
+            case 2:
                 holder.tv_equ_name.setText(R.string.equ_xq_wash);
 
                 break;
 
         }
-        final boolean isOpen[] ={true};
+        final boolean isOpen[] ={"1".equals(mData.get(position))};
         if (!isOpen[0]){
-            holder.iv_equ_choose.setImageResource(R.mipmap.equ_close);
+            holder.iv_equ_choose.setImageResource(R.mipmap.device_close);
         }else {
-            holder.iv_equ_choose.setImageResource(R.mipmap.equ_open);
+            holder.iv_equ_choose.setImageResource(R.mipmap.device_open);
 
         }
         holder.iv_equ_choose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (isOpen[0]){
-                    holder.iv_equ_choose.setImageResource(R.mipmap.equ_close);
+                    holder.iv_equ_choose.setImageResource(R.mipmap.device_close);
                     isOpen[0]=false;
                 }else {
-                    holder.iv_equ_choose.setImageResource(R.mipmap.equ_open);
+                    holder.iv_equ_choose.setImageResource(R.mipmap.device_open);
                     isOpen[0]=true;
                 }
+                if ("1".equals(mData.get(position))){
+                    mData.set(position,"0");
+                }else {
+                    mData.set(position,"1");
+                }
+                onItemClickListener.onItemClick(view, position);
             }
         });
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.onItemClick(v, position);
+
                 }
             });
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -117,7 +119,7 @@ public class EqupmentInformAdapter extends RecyclerView.Adapter<EqupmentInformAd
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View view, int position);
+        void onItemClick(View view, int position );
 
         void onLongClick(View view, int posotion);
     }

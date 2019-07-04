@@ -105,7 +105,7 @@ public class MethodAdapter extends RecyclerView.Adapter<MethodAdapter.MyviewHold
         Window dialogWindow = dialog.getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         lp.width = (int) (ScreenSizeUtils.getInstance(context).getScreenWidth() * 0.75f);
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.height = (int) (ScreenSizeUtils.getInstance(context).getScreenWidth() * 0.45f);
         lp.gravity = Gravity.CENTER;
         dialogWindow.setAttributes(lp);
         tv_dialog_qx.setOnClickListener(new View.OnClickListener() {
@@ -174,7 +174,7 @@ public class MethodAdapter extends RecyclerView.Adapter<MethodAdapter.MyviewHold
                     }
                     mData.remove(remove);
                     notifyDataSetChanged();
-                    ToastUtil.showShort(context, returnMsg1);
+//                    ToastUtil.showShort(context, returnMsg1);
 
                     break;
                 case "4000":
@@ -188,7 +188,7 @@ public class MethodAdapter extends RecyclerView.Adapter<MethodAdapter.MyviewHold
                     if (tipDialog!=null&&tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    ToastUtil.showShort(context, returnMsg1);
+//                    ToastUtil.showShort(context, returnMsg1);
                     break;
 
             }

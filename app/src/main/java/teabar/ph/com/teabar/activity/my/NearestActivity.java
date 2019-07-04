@@ -36,6 +36,7 @@ import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.adpter.NearestAdpter;
 import teabar.ph.com.teabar.adpter.SocialAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
+import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.pojo.Tea;
 import teabar.ph.com.teabar.util.HttpUtils;
@@ -44,8 +45,7 @@ import teabar.ph.com.teabar.util.ToastUtil;
 
 public class NearestActivity extends BaseActivity {
 
-    @BindView(R.id.tv_main_1)
-    TextView tv_main_1;
+
     @BindView(R.id.iv_power_fh)
     ImageView iv_power_fh;
     @BindView(R.id.rv_nearest)
@@ -69,9 +69,7 @@ public class NearestActivity extends BaseActivity {
 
     @Override
     public void initView(View view) {
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                ScreenUtils.getStatusBarHeight());
-        tv_main_1.setLayoutParams(params);
+
 
         if (application == null) {
             application = (MyApplication) getApplication();
@@ -82,14 +80,18 @@ public class NearestActivity extends BaseActivity {
         nearestAdpter = new NearestAdpter(this,list);
         rv_nearest.setLayoutManager(new LinearLayoutManager(this));
         rv_nearest.setAdapter(nearestAdpter);
-        new getNeastTeaAsynctask().execute();
+        new getNeastTeaAsynctask(this).execute();
     }
 
     String returnMsg1,returnMsg2;
-    class getNeastTeaAsynctask extends AsyncTask<Void,Void,String> {
+    class getNeastTeaAsynctask extends BaseWeakAsyncTask<Void,Void,String,BaseActivity> {
+
+        public getNeastTeaAsynctask(BaseActivity baseActivity) {
+            super(baseActivity);
+        }
 
         @Override
-        protected String doInBackground(Void... voids) {
+        protected String doInBackground(BaseActivity baseActivity, Void... voids) {
             String code = "";
             String result =   HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/app/getLatelyTea?userId="+userId );
             Log.e("back", "--->" + result);
@@ -99,7 +101,8 @@ public class NearestActivity extends BaseActivity {
 
                         JSONObject jsonObject = new JSONObject(result);
                         code = jsonObject.getString("state");
-                        returnMsg1=jsonObject.getString("message1");
+                        returnMsg1=jsonObject.getString("message2");
+                        returnMsg2=jsonObject.getString("message3");
                         if ("200".equals(code)) {
                             list.clear();
                             JSONArray jsonArray = jsonObject.getJSONArray("data");
@@ -122,9 +125,7 @@ public class NearestActivity extends BaseActivity {
 
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
+        protected void onPostExecute(BaseActivity baseActivity, String s) {
             switch (s) {
 
                 case "200":
@@ -133,12 +134,15 @@ public class NearestActivity extends BaseActivity {
                     break;
                 case "4000":
 
-                    toast(  "连接超时，请重试");
+                    toast(getText(R.string.toast_all_cs).toString());
 
                     break;
                 default:
-
-                    toast( returnMsg1);
+                    if (application.IsEnglish()==0){
+                        toast(returnMsg1);
+                    }else {
+                        toast(returnMsg2);
+                    }
                     break;
 
             }
@@ -155,7 +159,7 @@ public class NearestActivity extends BaseActivity {
 
         tipDialog = new QMUITipDialog.Builder(this)
                 .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
-                .setTipWord("请稍后...")
+                .setTipWord(getText(R.string.search_qsh).toString())
                 .create();
         tipDialog.show();
     }

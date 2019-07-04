@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'com.android.application'
 greendao {
-    schemaVersion 4
+    schemaVersion 5
     daoPackage 'com.ph.teabar.database.dao'
     targetGenDir 'src/main/java'
 }
@@ -25,8 +25,8 @@ android {
         applicationId "teabar.ph.com.teabar"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         ndk {
@@ -112,5 +112,5 @@ dependencies {
     implementation 'pub.devrel:easypermissions:1.0.1'
     implementation project(':daemonservice')
     implementation 'com.github.YancyYe:GalleryPick:1.2.1'
-
+    implementation 'com.pgyersdk:sdk:3.0.4'
 }

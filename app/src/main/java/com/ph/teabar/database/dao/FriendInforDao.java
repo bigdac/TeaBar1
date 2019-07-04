@@ -28,6 +28,7 @@ public class FriendInforDao extends AbstractDao<FriendInfor, Long> {
         public final static Property UseName = new Property(1, String.class, "useName", false, "USE_NAME");
         public final static Property AddNum = new Property(2, int.class, "addNum", false, "ADD_NUM");
         public final static Property AppKey = new Property(3, String.class, "appKey", false, "APP_KEY");
+        public final static Property AddFriend = new Property(4, boolean.class, "addFriend", false, "ADD_FRIEND");
     }
 
 
@@ -46,7 +47,8 @@ public class FriendInforDao extends AbstractDao<FriendInfor, Long> {
                 "\"_id\" INTEGER PRIMARY KEY NOT NULL ," + // 0: id
                 "\"USE_NAME\" TEXT," + // 1: useName
                 "\"ADD_NUM\" INTEGER NOT NULL ," + // 2: addNum
-                "\"APP_KEY\" TEXT);"); // 3: appKey
+                "\"APP_KEY\" TEXT," + // 3: appKey
+                "\"ADD_FRIEND\" INTEGER NOT NULL );"); // 4: addFriend
     }
 
     /** Drops the underlying database table. */
@@ -70,6 +72,7 @@ public class FriendInforDao extends AbstractDao<FriendInfor, Long> {
         if (appKey != null) {
             stmt.bindString(4, appKey);
         }
+        stmt.bindLong(5, entity.getAddFriend() ? 1L: 0L);
     }
 
     @Override
@@ -87,6 +90,7 @@ public class FriendInforDao extends AbstractDao<FriendInfor, Long> {
         if (appKey != null) {
             stmt.bindString(4, appKey);
         }
+        stmt.bindLong(5, entity.getAddFriend() ? 1L: 0L);
     }
 
     @Override
@@ -100,7 +104,8 @@ public class FriendInforDao extends AbstractDao<FriendInfor, Long> {
             cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // useName
             cursor.getInt(offset + 2), // addNum
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // appKey
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // appKey
+            cursor.getShort(offset + 4) != 0 // addFriend
         );
         return entity;
     }
@@ -111,6 +116,7 @@ public class FriendInforDao extends AbstractDao<FriendInfor, Long> {
         entity.setUseName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setAddNum(cursor.getInt(offset + 2));
         entity.setAppKey(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setAddFriend(cursor.getShort(offset + 4) != 0);
      }
     
     @Override

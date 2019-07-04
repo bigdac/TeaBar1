@@ -2,8 +2,9 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="190dp"
     android:background="@drawable/dialog_bg"
+    android:layout_gravity="center"
     >
     <TextView
         android:id="@+id/tv_dia_title"
@@ -18,10 +19,13 @@
     <TextView
         android:id="@+id/et_dia_name"
         android:layout_below="@+id/tv_dia_title"
-        android:layout_marginTop="25dp"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:textColor="#C7C7CD"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_height="wrap_content"
+        android:textColor="#777777"
         android:text="@string/equ_xq_tistitle"
         android:layout_centerHorizontal="true"
         android:textSize="14sp"
@@ -30,14 +34,14 @@
         android:id="@+id/view1"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/et_dia_name"
-        android:layout_marginTop="20dp"
+        android:layout_above="@+id/li_button"
         android:background="#f5f5f5"
         />
     <LinearLayout
-        android:layout_below="@id/view1"
+        android:id="@+id/li_button"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         >
         <TextView
