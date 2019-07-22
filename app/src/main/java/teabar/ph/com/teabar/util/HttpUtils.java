@@ -7,7 +7,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.GetBuilder;
 
@@ -17,7 +16,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -42,7 +40,9 @@ public class HttpUtils {
 
 //    public static String ipAddress="http://168v7u7115.iask.in:32054";
 //    public static String ipAddress="http://192.168.1.24:8081";
-    public static String ipAddress="http://47.98.131.11:8081";
+//    public static String ipAddress="http://47.98.131.11:8081";
+//    public static String ipAddress="http://47.110.132.149:8081";
+    public static String ipAddress="https://p99.tech/teabar";
     public static String Address="http://192.168.1.27:8094";
     public static String getInputStream(InputStream is) {
         String result = null;

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:id="@+id/rl_mode"
+    >
+
+
+
+    <RelativeLayout
+        android:id="@+id/rl_language_c"
+        android:layout_width="match_parent"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/tv_esure"
+        android:layout_height="50dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="中文"
+            android:layout_marginLeft="21dp"
+            android:textSize="16sp"
+            android:textColor="@color/login_black"
+            android:layout_centerVertical="true"
+            />
+        <ImageView
+            android:id="@+id/iv_mode_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/mode_choose"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="28dp"
+            android:visibility="invisible"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#f1f1f1"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="21dp"
+            android:layout_marginLeft="21dp"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_language_e"
+        android:layout_below="@id/rl_language_c"
+        android:layout_width="match_parent"
+
+        android:layout_height="50dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="English"
+            android:layout_marginLeft="21dp"
+            android:textSize="16sp"
+            android:textColor="@color/login_black"
+            android:layout_centerVertical="true"
+            />
+        <ImageView
+            android:id="@+id/iv_mode_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/mode_choose"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="28dp"
+            android:visibility="invisible"
+            />
+        
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

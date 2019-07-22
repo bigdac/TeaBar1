@@ -12,9 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 
@@ -26,13 +23,12 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import me.jessyan.autosize.AutoSizeCompat;
-import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
+import teabar.ph.com.teabar.util.Utils;
 
 public class ForgetActivity extends BaseActivity {
     MyApplication application;
@@ -140,10 +136,13 @@ public class ForgetActivity extends BaseActivity {
                     }else {
                             Map<String, Object> params = new HashMap<>();
                             params.put("verification", code);
-                            params.put("password", password);
+                            String MD5password = Utils.md5(password);
+                            params.put("password", MD5password);
                             if (user.contains("@")) {
+
                                 params.put("email", user);
                             } else {
+
                                 params.put("phone", user);
                             }
                             showProgressDialog();

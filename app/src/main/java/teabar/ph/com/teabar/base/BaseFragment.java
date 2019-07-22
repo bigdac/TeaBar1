@@ -41,10 +41,15 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mContextView = inflater.inflate(bindLayout(), container, false);
-        unbinder =  ButterKnife.bind(this,mContextView);
-        initView(mContextView);
-        doBusiness(getActivity());
+        try {
+            mContextView = inflater.inflate(bindLayout(), container, false);
+            unbinder =  ButterKnife.bind(this,mContextView);
+            initView(mContextView);
+            doBusiness(getActivity());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return mContextView;
     }
 

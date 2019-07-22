@@ -13,15 +13,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
 import com.ph.teabar.database.dao.DaoImp.UserEntryImpl;
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -34,14 +31,11 @@ import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
 import me.jessyan.autosize.AutoSizeCompat;
-import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.activity.question.BaseQuestionActivity;
 import teabar.ph.com.teabar.activity.tkActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
-import teabar.ph.com.teabar.pojo.Equpment;
 import teabar.ph.com.teabar.pojo.UserEntry;
 import teabar.ph.com.teabar.service.MQService;
 import teabar.ph.com.teabar.util.HttpUtils;
@@ -177,7 +171,8 @@ public class RegisterActivity extends BaseActivity {
                         Map<String,Object> params=new HashMap<>();
                         params.put("userName",nick);
                         params.put("verification",code);
-                        params.put("password",password);
+                        String MD5password = Utils.md5(password);
+                        params.put("password",MD5password);
                         if (user.contains("@")){
                          params.put("email",user);
                         }else {

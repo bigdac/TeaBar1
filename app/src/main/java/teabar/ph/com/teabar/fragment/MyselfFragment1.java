@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -52,17 +53,21 @@ public class MyselfFragment1 extends BaseFragment {
 
     @Override
     public void initView(View view) {
-        preferences = getActivity().getSharedPreferences("my",Context.MODE_PRIVATE);
+        preferences = Objects.requireNonNull(getActivity()).getSharedPreferences("my",Context.MODE_PRIVATE);
         String name = preferences.getString("userName","");
         String id = preferences.getString("userId","");
         String photoUrl = preferences.getString("photoUrl","");
         if (!TextUtils.isEmpty(photoUrl)){
-            Glide.with(getActivity()).load(photoUrl).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.my_pic).transform(new GlideCircleTransform(getActivity())).into(iv_my_pic);
+            Glide.with(getContext()).load(photoUrl).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.my_pic).transform(new GlideCircleTransform(getActivity())).into(iv_my_pic);
         }
         tv_my_name.setText(name);
         tv_id_2.setText(id+"");
          vp_progress = view.findViewById(R.id.vp_progress);
         vp_progress.setProgress(40);
+        String fNum = preferences.getString("friendNum","");
+        if (!TextUtils.isEmpty(fNum)){
+            tv_my_friend.setText(fNum);
+        }
         findFriend();
     }
     int friendNum;

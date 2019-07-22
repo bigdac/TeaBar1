@@ -652,6 +652,7 @@ public class AddDeviceActivity extends BaseActivity implements EasyPermissions.P
                 if (mEsptouchTask != null) {
                     mEsptouchTask.interrupt();
                 }
+                toast(getText(R.string.toast_main_file).toString());
             }
         });
 
@@ -769,11 +770,15 @@ public class AddDeviceActivity extends BaseActivity implements EasyPermissions.P
                     if (tipDialog!=null&&tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    Toast.makeText(AddDeviceActivity.this, "配置失败", Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddDeviceActivity.this,getText(R.string.toast_main_file).toString() , Toast.LENGTH_LONG).show();
+
                 }
             }
         }
     }
+
+
+
     private void onEsptoucResultAddedPerform(final IEsptouchResult result) {
         runOnUiThread(new Runnable() {
 

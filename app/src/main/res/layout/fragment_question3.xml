@@ -10,6 +10,14 @@
         android:layout_height="wrap_content"
         android:background="@mipmap/question_bj"
         >
+        <ImageView
+            android:id="@+id/iv_power_fh"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/wj_close1"
+            android:layout_alignParentRight="true"
+            />
 
         <TextView
             android:id="@+id/iv_question_title"
@@ -168,14 +176,14 @@
         android:id="@+id/bt_question1_esure"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/question_qued"
+        android:text="@string/question_button"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/et_question_place"
         android:layout_marginRight="20dp"
         android:background="@mipmap/wj_button"
         android:paddingBottom="5dp"
         android:textColor="@color/white"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="35dp"
         />
 
 </RelativeLayout>

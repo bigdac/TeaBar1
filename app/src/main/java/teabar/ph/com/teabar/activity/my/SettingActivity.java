@@ -7,10 +7,12 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,10 +28,14 @@ import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.ChangePassActivity;
 import teabar.ph.com.teabar.activity.FeedbackActivity;
+import teabar.ph.com.teabar.activity.MainActivity;
+import teabar.ph.com.teabar.activity.device.EqupmentLightActivity;
 import teabar.ph.com.teabar.activity.login.LoginActivity;
 import teabar.ph.com.teabar.activity.tkActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
+import teabar.ph.com.teabar.util.ToastUtil;
+import teabar.ph.com.teabar.util.language.LocalManageUtil;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 
 public class SettingActivity extends BaseActivity {
@@ -59,6 +65,7 @@ public class SettingActivity extends BaseActivity {
         return R.layout.activity_setting;
     }
     SharedPreferences alermPreferences;
+    String lang;
     @Override
     public void initView(View view) {
         if (application == null) {
@@ -83,6 +90,7 @@ public class SettingActivity extends BaseActivity {
         equipmentDao = new EquipmentImpl(getApplicationContext());
         friendInforDao = new FriendInforImpl(getApplicationContext());
         userEntryDao = new UserEntryImpl(getApplicationContext());
+        lang = LocalManageUtil.getSelectLanguage(this);
     }
 
     @Override
@@ -103,7 +111,7 @@ public class SettingActivity extends BaseActivity {
 
     }
     @OnClick({R.id.iv_set_fh,R.id.rl_set_password,R.id.rl_set_mess,R.id.rl_set_user,R.id.bt_set_exsit,
-            R.id.rl_set_update,R.id.rl_set_tk,R.id.rl_set_clean
+            R.id.rl_set_update,R.id.rl_set_tk,R.id.rl_set_clean,R.id.rl_set_yy
     })
     public void onClick(View view){
         switch (view.getId()){
@@ -155,8 +163,69 @@ public class SettingActivity extends BaseActivity {
                 customDialog1();
 
                 break;
+            case R.id.rl_set_yy:
+                customDialog2();
+                break;
 
         }
+    }
+
+
+     /*選擇語言*/
+     private void customDialog2(  ) {
+         dialog  = new Dialog(this, R.style.MyDialog);
+         View view = View.inflate(this, R.layout.popview_languages, null);
+         RelativeLayout rl_language_c =   view.findViewById(R.id.rl_language_c);
+         RelativeLayout rl_language_e =  view.findViewById(R.id.rl_language_e);
+         ImageView iv_mode_3 = view.findViewById(R.id.iv_mode_3);
+         ImageView iv_mode_1 = view.findViewById(R.id.iv_mode_1);
+        if (!"ENGLISH".equals(lang)){
+            iv_mode_3.setVisibility(View.VISIBLE);
+            iv_mode_1.setVisibility(View.INVISIBLE);
+        }else {
+            iv_mode_3.setVisibility(View.INVISIBLE);
+            iv_mode_1.setVisibility(View.VISIBLE);
+        }
+
+         dialog.setContentView(view);
+         //使得点击对话框外部不消失对话框
+         dialog.setCanceledOnTouchOutside(true);
+         //设置对话框的大小
+         view.setMinimumHeight((int) (ScreenSizeUtils.getInstance(this).getScreenHeight() * 0.25f));
+         Window dialogWindow = dialog.getWindow();
+         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+         lp.width = (int) (ScreenSizeUtils.getInstance(this).getScreenWidth() * 0.75f);
+         lp.height = (int) (ScreenSizeUtils.getInstance(this).getScreenWidth() * 0.45f);
+         lp.gravity = Gravity.CENTER;
+         dialogWindow.setAttributes(lp);
+         rl_language_c.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 iv_mode_3.setVisibility(View.VISIBLE);
+                 iv_mode_1.setVisibility(View.INVISIBLE);
+                 selectLanguage(2);
+                 dialog.dismiss();
+             }
+
+         });
+         rl_language_e.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 iv_mode_3.setVisibility(View.INVISIBLE);
+                 iv_mode_1.setVisibility(View.VISIBLE);
+                 selectLanguage(3);
+                 dialog.dismiss();
+
+             }
+         });
+         dialog.show();
+
+     }
+
+
+    private void selectLanguage(int select) {
+        LocalManageUtil.saveSelectLanguage(this, select);
+        MainActivity.reStart(this);
     }
     /**
      * 自定义对话

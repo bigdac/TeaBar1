@@ -271,6 +271,31 @@
             android:layout_marginRight="24dp"
             />
     </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_set_yy"
+        android:layout_below="@+id/rl_set_tk"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/set_yy"
+            android:textSize="16sp"
+            android:textColor="@color/login_black"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="#47D2D2D2"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="24dp"
+            />
+    </RelativeLayout>
     <Button
         android:id="@+id/bt_set_exsit"
         android:layout_width="wrap_content"
@@ -279,7 +304,7 @@
         android:background="@mipmap/login_button"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="40dp"
         android:textColor="@color/white"
         android:paddingBottom="12dp"
         android:textSize="17sp"

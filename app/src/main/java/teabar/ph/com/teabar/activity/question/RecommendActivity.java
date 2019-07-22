@@ -2,6 +2,7 @@ package teabar.ph.com.teabar.activity.question;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -20,6 +22,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -32,8 +37,10 @@ import butterknife.OnClick;
 import me.jessyan.autosize.AutoSizeCompat;
 import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
+import teabar.ph.com.teabar.activity.BuyNowActivity;
 import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.activity.device.AddDeviceActivity1;
+import teabar.ph.com.teabar.activity.device.MakeActivity;
 import teabar.ph.com.teabar.adpter.RecommendAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
@@ -53,11 +60,14 @@ public class RecommendActivity extends BaseActivity {
     SharedPreferences preferences;
     String userId;
     int choose;
+    String shopUrl;
+    QMUITipDialog tipDialog;
+    Tea tea1,tea2,tea3;
     @Override
     public void initParms(Bundle parms) {
-        Tea tea1 = (Tea) parms.getSerializable("tea1");
-        Tea tea2 = (Tea) parms.getSerializable("tea2");
-        Tea tea3 = (Tea) parms.getSerializable("tea3");
+         tea1 = (Tea) parms.getSerializable("tea1");
+         tea2 = (Tea) parms.getSerializable("tea2");
+         tea3 = (Tea) parms.getSerializable("tea3");
         choose = parms.getInt("choose");
         if (tea1!=null)
         list.add(tea1);
@@ -88,13 +98,67 @@ public class RecommendActivity extends BaseActivity {
         application.addActivity(this);
         preferences = getSharedPreferences("my",MODE_PRIVATE);
         userId = preferences.getString("userId","" )+"";
+        shopUrl = preferences.getString("shopUrl","");
+        if (TextUtils.isEmpty(shopUrl)){
+            new GetwebAsyncTask(this).execute();
+        }
         recommendAdapter  = new RecommendAdapter(this,list,userId);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
         rv_recommend.setLayoutManager(linearLayoutManager);
         rv_recommend.setAdapter(recommendAdapter);
     }
+    class GetwebAsyncTask extends BaseWeakAsyncTask<Void ,Void ,String,BaseActivity> {
 
-    @OnClick({R.id.tv_recom_skip,R.id.bt_device_add})
+        public GetwebAsyncTask(BaseActivity baseActivity) {
+            super(baseActivity);
+        }
+
+        @Override
+        protected String doInBackground(BaseActivity baseActivity, Void... voids) {
+            String code ="";
+            String result = HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/tea/getTeaUrl?urlId=1");
+            if (!TextUtils.isEmpty(result)){
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("state");
+                    JSONObject data = jsonObject.getJSONObject("data");
+                    shopUrl  = data.getString("shopUrl");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(BaseActivity baseActivity, String s) {
+
+            switch (s){
+                case "200":
+                    if (tipDialog!=null&&tipDialog.isShowing()){
+                        tipDialog.dismiss();
+                    }
+
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("shopUrl",shopUrl);
+                    editor.commit();
+                    break;
+                default:
+
+                    break;
+            }
+        }
+    }
+    //显示dialog
+    public void showProgressDialog() {
+
+        tipDialog = new QMUITipDialog.Builder(this)
+                .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
+                .setTipWord(getText(R.string.search_qsh).toString())
+                .create();
+        tipDialog.show();
+    }
+    @OnClick({R.id.tv_recom_skip,R.id.bt_device_add,R.id.bt_device_buy})
     public void onClick(View view){
         switch (view.getId()){
             case R.id.tv_recom_skip:
@@ -110,8 +174,33 @@ public class RecommendActivity extends BaseActivity {
             case R.id.bt_device_add:
               customDialog1();
                 break;
+
+            case R.id.bt_device_buy:
+                if (TextUtils.isEmpty(shopUrl)){
+                    showProgressDialog();
+                    new  GetwebAsyncTask(this).execute();
+                }else {
+                    String url = "";
+                    Intent intent1 = new Intent(this,BuyNowActivity.class);
+
+                    if (tea1!=null){
+                        url = tea1.getShopId()+":1";
+                    }
+                    if (tea2!=null){
+                        url = url+","+tea2.getShopId()+":1";
+                    }
+                    if (tea2!=null){
+                        url = url+","+tea3.getShopId()+":1";
+                    }
+                    intent1.putExtra("myUrl","https://lify-wellness.myshopify.com/cart/"+url);
+                    startActivity(intent1);
+                }
+                break;
+
+
         }
     }
+
     /**
      * 添加喜愛dialog
      */
@@ -215,8 +304,8 @@ public class RecommendActivity extends BaseActivity {
                     }else {
                         toast(returnMsg2);
                     }
-                    application.removeActivity(RecommendActivity.this);
-                    startActivity(AddDeviceActivity1.class);
+//                    application.removeActivity(RecommendActivity.this);
+//                    startActivity(AddDeviceActivity1.class);
                     break;
 
                 case "4000":

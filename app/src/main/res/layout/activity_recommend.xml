@@ -20,23 +20,24 @@
         android:layout_height="wrap_content"
         android:text="@string/tea_kouwei_tg"
         android:layout_below="@+id/tv_main_1"
-        android:background="@drawable/question_button2"
+        android:textSize="15sp"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="18dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:paddingLeft="25dp"
-        android:paddingRight="25dp"
-        />
+        android:paddingLeft="50dp"
 
+        />
+    <!--android:background="@drawable/question_button2"-->
     <TextView
         android:id="@+id/tv_power"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/tea_kouwei_tj"
         android:layout_below="@+id/iv_power_fh"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10sp"
         android:textSize="30sp"
         android:textColor="@color/login_black"
         />
@@ -46,7 +47,7 @@
         android:layout_height="wrap_content"
         android:text="@string/tea_kouwei_tjti1"
         android:layout_below="@+id/tv_power"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
         android:textSize="15sp"
@@ -91,7 +92,21 @@
             android:overScrollMode="never"
             />
 
-
+    <Button
+        android:id="@+id/bt_device_buy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/buy_now"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/bt_device_add"
+        android:layout_marginBottom="10dp"
+        android:text="@string/tea_kouwei_buy"
+        android:textColor="@color/white"
+        android:paddingBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textSize="16sp"
+        />
     <Button
         android:id="@+id/bt_device_add"
         android:layout_width="match_parent"

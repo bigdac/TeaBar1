@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
+import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v7.widget.RecyclerView;
+import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -53,10 +55,12 @@ public class CircleAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void setCirclePresenter(CirclePresenter presenter){
         this.presenter = presenter;
     }
-    List<CircleItem> mDatas;
-    public CircleAdapter2(Context context , List <CircleItem> list){
+    List<CircleItem> mDatas = new ArrayList<>();
+    LinearLayoutManager linearLayout ;
+    public CircleAdapter2(Context context , LinearLayoutManager linearLayout){
         this.context = context;
-        this.mDatas = list;
+//        this.mDatas = list;
+        this.linearLayout = linearLayout;
     }
 
     @Override
@@ -71,9 +75,34 @@ public class CircleAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 
     public void setData(List mDatas) {
+//        this.mDatas = mDatas;
+//        notifyDataSetChanged();
+        notifyData(mDatas);
+    }
+    public void setData1(List mDatas) {
         this.mDatas = mDatas;
-        notifyDataSetChanged();
+//        notifyDataSetChanged();
 
+    }
+    public void notifyData(List<CircleItem> poiItemList) {
+        if (poiItemList != null) {
+            int previousSize = mDatas.size();
+             mDatas.clear();
+            notifyItemRangeRemoved(0, previousSize);
+            mDatas.addAll(poiItemList);
+            notifyItemRangeInserted(0, poiItemList.size());
+            if (previousSize==0){
+                linearLayout.scrollToPosition(0);
+            }else {
+                if (poiItemList.size()%10==0){
+                    linearLayout.scrollToPosition(poiItemList.size()-10);
+                }else {
+                    linearLayout.scrollToPosition(poiItemList.size()-((poiItemList.size()%10)+1));
+                }
+
+            }
+
+        }
     }
 
     @NonNull

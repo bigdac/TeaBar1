@@ -1,7 +1,8 @@
 <resources>
-    <string name="app_name">Lify</string>
+    <string name="app_name">Lify Wellness</string>
     <string name="language_auto">自動</string>
     <string name="language_traditional">繁體</string>
+    <string name="language_en">ENGLISH</string>
     <string name="dialog_title">Please Select Color</string>
     <string name="dialog_positive">確定</string>
     <string name="dialog_negative">取消</string>
@@ -240,6 +241,7 @@
     <string name="set_now">當前版本：</string>
     <string name="set_tk">條款及細則</string>
     <string name="set_hk">確認清理緩存？</string>
+    <string name="set_yy">語言</string>
     <!--drink-->
     <string name="drink_unit">杯</string>
     <string name="drink_units">單位（杯）</string>
@@ -338,6 +340,7 @@
     <string name="tea_kouwei_tjti">推薦结果</string>
     <string name="tea_kouwei_tjti1">根據你的健康數據，我們為你推薦：</string>
     <string name="tea_kouwei_xa">一鍵加入喜愛</string>
+    <string name="tea_kouwei_buy">加入購物車結算</string>
     <string name="tea_kouwei_tg">跳過</string>
     <string name="tea_kouwei_yc">益處：</string>
     <string name="tea_kouwei_kw">口味：</string>
@@ -407,6 +410,7 @@
     <string name="toast_main_pz">拍照</string>
     <string name="toast_main_zp">從相冊選取</string>
     <string name="toast_main_code">請掃描正確的二維碼</string>
+    <string name="toast_main_file">配置失败</string>
     <!--alarm-->
     <string name="alarm_equ_wrong">故障报警</string>
     <string name="alarm_equ_water">无流量信号</string>
@@ -423,7 +427,7 @@
 
     <!--search-->
     <string name="search_mess">搜索你想要的</string>
-    <string name="search_qsh">請稍後。。。</string>
+    <string name="search_qsh">請稍後...</string>
 
     <!--week-->
     <string name="weather_week">周</string>

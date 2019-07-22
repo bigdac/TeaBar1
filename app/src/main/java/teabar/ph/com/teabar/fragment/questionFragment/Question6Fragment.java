@@ -1,12 +1,17 @@
 package teabar.ph.com.teabar.fragment.questionFragment;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -22,6 +27,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import teabar.ph.com.teabar.R;
+import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.activity.question.BaseQuestionActivity;
 import teabar.ph.com.teabar.activity.question.RecommendActivity;
 import teabar.ph.com.teabar.adpter.BasicExamAdapter;
@@ -34,6 +40,7 @@ import teabar.ph.com.teabar.pojo.examOptions;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.Utils;
+import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 import teabar.ph.com.teabar.view.FlowTagView;
 
 
@@ -52,6 +59,8 @@ public class Question6Fragment extends BaseFragment {
     List<Tea> listB = new ArrayList<>();
     List<Tea> listC = new ArrayList<>();
     List lists [] = {listA,listB,listC};
+    @BindView(R.id.iv_power_fh)
+    ImageView iv_power_fh;
     @Override
     public int bindLayout() {
         return R.layout.fragment_question6;
@@ -61,6 +70,11 @@ public class Question6Fragment extends BaseFragment {
     public void initView(View view) {
         preferences = getActivity().getSharedPreferences("my",Context.MODE_PRIVATE);
         userId = preferences.getString("userId","");
+        if ( ((BaseQuestionActivity)getActivity()).getType()==0){
+            iv_power_fh.setVisibility(View.GONE);
+        }else {
+            iv_power_fh.setVisibility(View.VISIBLE);
+        }
         basicExamAdapter = new BasicExamAdapter(getActivity(),R.layout.item_basicexam);
         fv_message.setAdapter(basicExamAdapter);
         basicExamAdapter.SetOnclickLister(new BasicExamAdapter.OnItemClickListerner() {
@@ -89,9 +103,12 @@ public class Question6Fragment extends BaseFragment {
 
     }
     String answer ;
-    @OnClick({R.id.bt_question1_esure})
+    @OnClick({R.id.bt_question1_esure,R.id.iv_power_fh})
     public void onClick(View view){
         switch (view.getId()){
+            case R.id.iv_power_fh:
+               customDialog1();
+                break;
             case R.id.bt_question1_esure:
                 answer = Utils.listToString(stringList);
                 Map<String ,Object> params = new HashMap<>();
@@ -101,6 +118,49 @@ public class Question6Fragment extends BaseFragment {
                 Log.e(TAG, "onClick: --》"+Utils.listToString(stringList)+stringList.size()+"..." );
                 break;
         }
+    }
+    /**
+     * 自定义对话
+     */
+    Dialog dialog;
+    private void customDialog1(  ) {
+        dialog  = new Dialog( getActivity(), R.style.MyDialog);
+        View view = View.inflate(getActivity(), R.layout.dialog_del1, null);
+        TextView tv_dialog_qx = (TextView) view.findViewById(R.id.tv_dia_qx);
+        TextView tv_dialog_qd = (TextView) view.findViewById(R.id.tv_dia_qd);
+        TextView et_dia_name = view.findViewById(R.id.et_dia_name);
+        et_dia_name.setText(this.getText(R.string.question_back).toString());
+        dialog.setContentView(view);
+        //使得点击对话框外部不消失对话框
+        dialog.setCanceledOnTouchOutside(false);
+        //设置对话框的大小
+        view.setMinimumHeight((int) (ScreenSizeUtils.getInstance(getActivity()).getScreenHeight() * 0.25f));
+        Window dialogWindow = dialog.getWindow();
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.width = (int) (ScreenSizeUtils.getInstance(getActivity()).getScreenWidth() * 0.75f);
+        lp.height = (int) (ScreenSizeUtils.getInstance(getActivity()).getScreenWidth() * 0.45f);
+
+        lp.gravity = Gravity.CENTER;
+        dialogWindow.setAttributes(lp);
+        tv_dialog_qx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                dialog.dismiss();
+            }
+
+        });
+        tv_dialog_qd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(),MainActivity.class));
+                dialog.dismiss();
+
+            }
+        });
+        dialog.show();
+
     }
     @Override
     public void doBusiness(Context mContext) {

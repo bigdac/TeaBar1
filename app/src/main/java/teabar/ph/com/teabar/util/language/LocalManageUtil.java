@@ -26,19 +26,19 @@ public class LocalManageUtil {
         return SPUtil.getInstance(context).getSystemCurrentLocal();
     }
 
- /*   public static String getSelectLanguage(Context context) {
+    public static String getSelectLanguage(Context context) {
         switch (SPUtil.getInstance(context).getSelectLanguage()) {
             case 0:
                 return context.getString(R.string.language_auto);
             case 1:
-                return context.getString(R.string.language_cn);
+//                return context.getString(R.string.language_cn);
             case 2:
                 return context.getString(R.string.language_traditional);
             case 3:
             default:
                 return context.getString(R.string.language_en);
         }
-    }*/
+    }
 
     /**
      * 获取选择的语言设置

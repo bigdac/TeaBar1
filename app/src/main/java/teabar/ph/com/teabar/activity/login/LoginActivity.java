@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -16,20 +15,11 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
-import android.text.method.TransformationMethod;
-import android.text.style.BackgroundColorSpan;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,7 +44,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.net.SocketTimeoutException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -65,12 +54,9 @@ import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
 import me.jessyan.autosize.AutoSizeCompat;
-import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.activity.question.BaseQuestionActivity;
-import teabar.ph.com.teabar.activity.question.RecommendActivity;
-import teabar.ph.com.teabar.activity.tkActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.pojo.Equpment;
@@ -81,6 +67,7 @@ import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.NetWorkUtil;
 import teabar.ph.com.teabar.util.SharePreferenceManager;
 import teabar.ph.com.teabar.util.ToastUtil;
+import teabar.ph.com.teabar.util.Utils;
 
 
 public class LoginActivity extends BaseActivity implements GoogleApiClient.ConnectionCallbacks,
@@ -320,36 +307,39 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                 break;
 
             case R.id.bt_login_ensure:
-
-                    user = et_login_user.getText().toString().trim();
-                    password = et_login_pasw.getText().toString().trim();
-                    if (TextUtils.isEmpty(user)) {
-                        toast(getText(R.string.toast_forget_phone).toString());
-                        break;
-                    }
-                    if (TextUtils.isEmpty(password)) {
-                        toast(getText(R.string.toast_forget_pass).toString());
-                        break;
-                    }
-                    boolean isConn = NetWorkUtil.isConnected(MyApplication.getContext());
-                    if (isConn) {
-                        showProgressDialog();
-                        Map<String, Object> params = new HashMap<>();
-                        if (user.contains("Lify")) {
-                            params.put("hotelName", user);
-                        } else {
-                            if (user.contains("@")) {
-                                params.put("email", user);
-                            } else {
-                                params.put("phone", user);
-                            }
+                    if (!Utils.isFastClick()) {
+                        user = et_login_user.getText().toString().trim();
+                        password = et_login_pasw.getText().toString().trim();
+                        if (TextUtils.isEmpty(user)) {
+                            toast(getText(R.string.toast_forget_phone).toString());
+                            break;
                         }
-                        params.put("password", password);
-                        new LoginAsynTask().execute(params);
-                    } else {
-                        ToastUtil.showShort(this, getText(R.string.toast_all_cs).toString());
-                    }
+                        if (TextUtils.isEmpty(password)) {
+                            toast(getText(R.string.toast_forget_pass).toString());
+                            break;
+                        }
+                        boolean isConn = NetWorkUtil.isConnected(MyApplication.getContext());
+                        if (isConn) {
+                            showProgressDialog();
+                            Map<String, Object> params = new HashMap<>();
+                            if (user.contains("Lify")) {
+                                params.put("hotelName", user);
+                            } else {
+                                if (user.contains("@")) {
 
+                                    params.put("email", user);
+                                } else {
+
+                                    params.put("phone", user);
+                                }
+                            }
+                             String MD5password = Utils.md5(password);
+                            params.put("password", MD5password);
+                            new LoginAsynTask().execute(params);
+                        } else {
+                            ToastUtil.showShort(this, getText(R.string.toast_all_cs).toString());
+                        }
+                    }
                 break;
             case R.id.sign_in_button:
                 Log.i("robin","点击了登录按钮");
@@ -593,7 +583,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
         }
     }
     String userId;
-    int type ,type1;
+    int type ,type1;//type 用户是否第一次登录   ， 用户类型
     class ThirdLoginAsynTask extends AsyncTask<Map<String,Object>,Void,String> {
 
         @Override
@@ -626,7 +616,6 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                             editor.putString("userName",userName);
                             editor.putString("photo","");
                             editor.putInt("type",type);
-
                             editor.commit();
                         }
                     } catch (Exception e) {

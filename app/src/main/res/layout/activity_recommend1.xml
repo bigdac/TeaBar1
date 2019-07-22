@@ -67,19 +67,35 @@
         >
 
     </android.support.v7.widget.RecyclerView>
-
+    <Button
+        android:id="@+id/bt_device_buy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/buy_now"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/iv_power_fh"
+        android:layout_marginBottom="10dp"
+        android:text="@string/tea_kouwei_buy"
+        android:textColor="@color/white"
+        android:paddingBottom="11dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textSize="16sp"
+        />
     <Button
         android:id="@+id/iv_power_fh"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@mipmap/login_button"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:text="@string/dialog_add_qx5"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:paddingBottom="10dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="30dp"
         />
 
 </RelativeLayout>

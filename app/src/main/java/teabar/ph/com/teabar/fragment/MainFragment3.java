@@ -1,6 +1,7 @@
 package teabar.ph.com.teabar.fragment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -8,28 +9,24 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.pgyersdk.crash.PgyCrashManager;
 import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
 
 import org.json.JSONArray;
@@ -47,15 +44,10 @@ import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.activity.SearchActivity;
 import teabar.ph.com.teabar.activity.device.MakeActivity;
 import teabar.ph.com.teabar.activity.question.ChooseWhichActivity;
-import teabar.ph.com.teabar.activity.question.QusetionActivity;
-import teabar.ph.com.teabar.adpter.MyViewPagerAdapter;
 import teabar.ph.com.teabar.adpter.MyplanAdapter;
-import teabar.ph.com.teabar.adpter.RecyclerViewAdapter;
 import teabar.ph.com.teabar.adpter.TeaListAdapter;
-import teabar.ph.com.teabar.adpter.WetherAdapter;
 import teabar.ph.com.teabar.base.BaseFragment;
 import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
-import teabar.ph.com.teabar.base.TabItemBean;
 import teabar.ph.com.teabar.pojo.Equpment;
 import teabar.ph.com.teabar.pojo.Plan;
 import teabar.ph.com.teabar.pojo.Tea;
@@ -65,7 +57,6 @@ import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.Utils;
 import teabar.ph.com.teabar.util.zxing.android.CaptureActivity;
-import teabar.ph.com.teabar.view.WeatherLayoutManager;
 
 
 public class MainFragment3 extends BaseFragment  {
@@ -84,7 +75,6 @@ public class MainFragment3 extends BaseFragment  {
     List<String> list = new ArrayList<>();
     private static final int REQUEST_CODE_SCAN = 0x0000;
     public static boolean isRunning = false;
-
     private boolean MQBound;
     @BindView(R.id.li_main_title)
     RelativeLayout li_main_title ;
@@ -120,6 +110,8 @@ public class MainFragment3 extends BaseFragment  {
     TextView tv_main_error;
     @BindView(R.id.tv_main_num)
     TextView tv_main_num;
+    @BindView(R.id.bt_main_dt)
+    Button bt_main_dt;
     String firstMac;
     EquipmentImpl equipmentDao;
     SharedPreferences preferences;
@@ -185,6 +177,7 @@ public class MainFragment3 extends BaseFragment  {
             tv_main_bz1.setText(getText(R.string.main_home_ws).toString());
         }
 
+        Utils.expandViewTouchDelegate(bt_main_dt,50,0,50,50);
 
     }
 
@@ -571,7 +564,7 @@ public class MainFragment3 extends BaseFragment  {
             }
             String code = "";
 
-            String result =   HttpUtils.getOkHpptRequest("http://api.openweathermap.org/data/2.5/forecast?id=1819730&APPID=64f17a2291526f4669269007d621d3b6&lang="+type+"&units=metric&cnt=24" );
+            String result =   HttpUtils.getOkHpptRequest("https://api.openweathermap.org/data/2.5/forecast?id=1819730&APPID=64f17a2291526f4669269007d621d3b6&lang="+type+"&units=metric&cnt=24" );
             Log.e("back", "--->" + result);
             if (!ToastUtil.isEmpty(result)) {
                 if (!"4000".equals(result)){
@@ -651,6 +644,7 @@ public class MainFragment3 extends BaseFragment  {
         * */
         String dataNum = "1314";
     getAnswerNumAsynTask getAnswerNumAsynTask ;
+    @SuppressLint("StaticFieldLeak")
     class getAnswerNumAsynTask extends BaseWeakAsyncTask<Void,Void,String,BaseFragment> {
 
         public getAnswerNumAsynTask(BaseFragment baseFragment) {
@@ -1180,11 +1174,19 @@ public class MainFragment3 extends BaseFragment  {
                 String content = data.getStringExtra("codedContent");
 //                返回的BitMap图像
 
-                if (content.contains("teaId")){
+                if (content.contains("teaId:")){
                     String teaId= content.substring(content.indexOf(":")+1);
-                    Intent intent = new Intent(getActivity(),MakeActivity.class);
-                    intent.putExtra("teaId",Long.valueOf(teaId));
-                    startActivity(intent);
+                    long num = 0;
+                    try {
+                        num = Long.valueOf(teaId);
+                        Intent intent = new Intent(getActivity(),MakeActivity.class);
+                        intent.putExtra("teaId",num);
+                        startActivity(intent);
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                        ToastUtil.showShort(getActivity(),getText(R.string.toast_main_code).toString());
+                    }
+
 //                ToastUtil.showShort(this,content);
                 }else {
                     ToastUtil.showShort(getActivity(),getText(R.string.toast_main_code).toString());

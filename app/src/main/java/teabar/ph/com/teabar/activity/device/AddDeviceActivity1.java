@@ -652,6 +652,8 @@ public class AddDeviceActivity1 extends BaseActivity implements  EasyPermissions
                 if (mEsptouchTask!=null){
                     mEsptouchTask.interrupt();
                 }
+
+                toast(getText(R.string.toast_main_file).toString());
             }
         });
 
@@ -677,7 +679,7 @@ public class AddDeviceActivity1 extends BaseActivity implements  EasyPermissions
         @Override
         protected void onPreExecute() {
 
-            showProgressDialog("正在配置, 请耐心等待...");
+            showProgressDialog(getText(R.string.search_qsh).toString());
 
 
         }
@@ -757,7 +759,7 @@ public class AddDeviceActivity1 extends BaseActivity implements  EasyPermissions
                     if (tipDialog!=null&&tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
-                    Toast.makeText(AddDeviceActivity1.this, "配置失败", Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddDeviceActivity1.this,getText(R.string.toast_main_file).toString() , Toast.LENGTH_LONG).show();
                 }
             }
         }

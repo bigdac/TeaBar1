@@ -43,6 +43,7 @@ import com.google.gson.Gson;
 import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -53,7 +54,9 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import me.jessyan.autosize.AutoSizeCompat;
 import teabar.ph.com.teabar.R;
+import teabar.ph.com.teabar.activity.BuyNowActivity;
 import teabar.ph.com.teabar.activity.MailActivity;
+import teabar.ph.com.teabar.activity.login.EncourageActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.base.MyApplication;
@@ -111,6 +114,7 @@ public class MakeActivity extends BaseActivity {
     long FirstId;
     MessageReceiver receiver;
     CallbackManager callbackManager;
+    String shopUrl;
     ShareDialog shareDialog;
     @Override
     public void initParms(Bundle parms) {
@@ -140,6 +144,10 @@ public class MakeActivity extends BaseActivity {
 
         preferences = getSharedPreferences("my",MODE_PRIVATE);
         userId = preferences.getString("userId","");
+        shopUrl = preferences.getString("shopUrl","");
+        if (TextUtils.isEmpty(shopUrl)){
+            new  GetwebAsyncTask(this).execute();
+        }
         equipmentDao = new EquipmentImpl(getApplicationContext());
         equpments= equipmentDao.findAll();
         bt_make_make.setVisibility(View.VISIBLE);
@@ -231,6 +239,48 @@ public class MakeActivity extends BaseActivity {
     }
 
 
+    class GetwebAsyncTask extends BaseWeakAsyncTask<Void ,Void ,String,BaseActivity> {
+
+        public GetwebAsyncTask(BaseActivity baseActivity) {
+            super(baseActivity);
+        }
+
+        @Override
+        protected String doInBackground(BaseActivity baseActivity, Void... voids) {
+            String code ="";
+            String result = HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/tea/getTeaUrl?urlId=1");
+            if (!TextUtils.isEmpty(result)){
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("state");
+                    JSONObject data = jsonObject.getJSONObject("data");
+                    shopUrl  = data.getString("shopUrl");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(BaseActivity baseActivity, String s) {
+
+            switch (s){
+                case "200":
+                    if (tipDialog!=null&&tipDialog.isShowing()){
+                        tipDialog.dismiss();
+                    }
+
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("shopUrl",shopUrl);
+                    editor.commit();
+                    break;
+                default:
+
+                    break;
+            }
+        }
+    }
 
     class MessageReceiver extends BroadcastReceiver {
         @Override
@@ -530,7 +580,14 @@ public class MakeActivity extends BaseActivity {
                 break;
 
             case R.id.bt_make_buy:
-                startActivity(MailActivity.class);
+                if (TextUtils.isEmpty(shopUrl)){
+                    showProgressDialog();
+                    new GetwebAsyncTask(this).execute();
+                }else {
+                    Intent intent1 = new Intent(this,BuyNowActivity.class);
+                    intent1.putExtra("myUrl","https://lify-wellness.myshopify.com/cart/"+tea.getShopId()+":1");
+                    startActivity(intent1);
+                }
                 break;
         }
     }
@@ -646,7 +703,12 @@ public class MakeActivity extends BaseActivity {
         protected void onPostExecute(String s) {
             switch (s) {
                 case "200":
-                    toast(returnMsg2);
+                    if (application.IsEnglish()==0){
+                        toast(returnMsg1);
+                    }else {
+                        toast(returnMsg2);
+                    }
+
                     break;
 
                 case "4000":

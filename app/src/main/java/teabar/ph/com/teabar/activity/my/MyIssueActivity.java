@@ -465,7 +465,7 @@ public class MyIssueActivity extends BaseActivity implements CircleContract.View
             Log.e(TAG, "update2loadData222: -->"+circleAdapter.getDates1().size() );
 //            circleAdapter.getDatas().addAll(datas);
             circleAdapter.setData(datas);
-            circleAdapter.notifyDataSetChanged();
+
             Log.e(TAG, "update2loadData333: -->"+circleAdapter.getDates1().size() );
         }
 

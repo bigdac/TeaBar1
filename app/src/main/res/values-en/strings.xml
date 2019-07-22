@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Lify</string>
+    <string name="app_name">Lify Wellness</string>
     <string name="language_auto">自动</string>
     <string name="language_traditional">繁體</string>
     <string name="dialog_title">Please Select Color</string>
@@ -254,6 +254,8 @@
     <string name="drink_method">Brew list</string>
     <string name="drink_makemethod">Brewing method</string>
     <string name="set_tk">Terms and Conditions</string>
+    <string name="set_yy">Language</string>
+    <string name="language_en">ENGLISH</string>
     <string name="drink_makebig">BREW</string>
     <string name="drink_makesmal">brew a big cup now</string>
     <string name="drink_sm">off</string>
@@ -337,6 +339,7 @@
     <string name="tea_kouwei_tjti">Recommended Drinks</string>
     <string name="tea_kouwei_tjti1">Based on your basic health data, we recommend the following drinks:</string>
     <string name="tea_kouwei_xa">Add TO MY FAVORITE</string>
+    <string name="tea_kouwei_buy">PURCHASE NOW</string>
     <string name="tea_kouwei_tg">SKIP</string>
     <string name="tea_kouwei_yc">Benefits: </string>
     <string name="tea_kouwei_kw">Flavour: </string>
@@ -405,6 +408,8 @@
     <string name="toast_main_pz">Take A Photo With Camera</string>
     <string name="toast_main_zp">Choose From Photo Album</string>
     <string name="toast_main_code">Please scan the correct qr code</string>
+    <string name="toast_main_file">Device Pairing Failure</string>
+
     <!--alarm-->
     <string name="alarm_equ_wrong">Device Failure Alert</string>
     <string name="alarm_equ_water">Flowmeter Error</string>

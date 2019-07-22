@@ -5,15 +5,6 @@ import java.io.Serializable;
 public class Tea implements Serializable {
         long  id ;
         long teaId;
-
-    public long getTeaId() {
-        return teaId;
-    }
-
-    public void setTeaId(long teaId) {
-        this.teaId = teaId;
-    }
-
     String teaNameCn ;//名稱
         String teaNameEn;
         String typeCn;//类型
@@ -29,92 +20,27 @@ public class Tea implements Serializable {
     String tasteEn;
     String teaPhoto;
     String rgb;
-
-    public String getRgb() {
-        return rgb;
-    }
-
-    public void setRgb(String rgb) {
-        this.rgb = rgb;
-    }
-
+    String shopId;
     int temperature;//温度
     int  seconds;//浸泡时间
     int waterYield;//体积
     boolean love ;
     int isCollection;
 
-    public int getIsCollection() {
-        return isCollection;
-    }
-
-    public void setIsCollection(int isCollection) {
-        this.isCollection = isCollection;
-    }
-
-    public boolean isLove() {
-        return love;
-    }
-
-    public void setLove(boolean love) {
-        this.love = love;
-    }
-
-    public String getTeaPicture() {
-        return teaPicture;
-    }
-
-    public void setTeaPicture(String teaPicture) {
-        this.teaPicture = teaPicture;
-    }
-
-    public String getProductNameEn() {
-        return productNameEn;
-    }
-
-    public void setProductNameEn(String productNameEn) {
-        this.productNameEn = productNameEn;
-    }
-
-    public String getProductNameCn() {
-        return productNameCn;
-    }
-
-    public void setProductNameCn(String productNameCn) {
-        this.productNameCn = productNameCn;
-    }
-
-    public String getTasteCn() {
-        return tasteCn;
-    }
-
-    public void setTasteCn(String tasteCn) {
-        this.tasteCn = tasteCn;
-    }
-
-    public String getTasteEn() {
-        return tasteEn;
-    }
-
-    public void setTasteEn(String tasteEn) {
-        this.tasteEn = tasteEn;
-    }
-
-    public String getTeaPhoto() {
-        return teaPhoto;
-    }
-
-    public void setTeaPhoto(String teaPhoto) {
-        this.teaPhoto = teaPhoto;
-    }
-
-
-      public long getId() {
+    public long getId() {
         return id;
     }
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getTeaId() {
+        return teaId;
+    }
+
+    public void setTeaId(long teaId) {
+        this.teaId = teaId;
     }
 
     public String getTeaNameCn() {
@@ -181,6 +107,70 @@ public class Tea implements Serializable {
         this.synopsisEn = synopsisEn;
     }
 
+    public String getTeaPicture() {
+        return teaPicture;
+    }
+
+    public void setTeaPicture(String teaPicture) {
+        this.teaPicture = teaPicture;
+    }
+
+    public String getProductNameEn() {
+        return productNameEn;
+    }
+
+    public void setProductNameEn(String productNameEn) {
+        this.productNameEn = productNameEn;
+    }
+
+    public String getProductNameCn() {
+        return productNameCn;
+    }
+
+    public void setProductNameCn(String productNameCn) {
+        this.productNameCn = productNameCn;
+    }
+
+    public String getTasteCn() {
+        return tasteCn;
+    }
+
+    public void setTasteCn(String tasteCn) {
+        this.tasteCn = tasteCn;
+    }
+
+    public String getTasteEn() {
+        return tasteEn;
+    }
+
+    public void setTasteEn(String tasteEn) {
+        this.tasteEn = tasteEn;
+    }
+
+    public String getTeaPhoto() {
+        return teaPhoto;
+    }
+
+    public void setTeaPhoto(String teaPhoto) {
+        this.teaPhoto = teaPhoto;
+    }
+
+    public String getRgb() {
+        return rgb;
+    }
+
+    public void setRgb(String rgb) {
+        this.rgb = rgb;
+    }
+
+    public String getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(String shopId) {
+        this.shopId = shopId;
+    }
+
     public int getTemperature() {
         return temperature;
     }
@@ -205,8 +195,19 @@ public class Tea implements Serializable {
         this.waterYield = waterYield;
     }
 
+    public boolean isLove() {
+        return love;
+    }
 
+    public void setLove(boolean love) {
+        this.love = love;
+    }
 
+    public int getIsCollection() {
+        return isCollection;
+    }
 
-
+    public void setIsCollection(int isCollection) {
+        this.isCollection = isCollection;
+    }
 }

@@ -10,12 +10,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.res.TypedArray;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -24,7 +20,6 @@ import android.os.Message;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -872,10 +867,10 @@ protected static final int RESULT_SPEECH = 1;
     public void onDestroyView() {
         super.onDestroyView();
         if (MQBound) {
-            getActivity().unbindService(MQconnection);
+            Objects.requireNonNull(getActivity()).unbindService(MQconnection);
         }
         if (receiver != null) {
-            getActivity(). unregisterReceiver(receiver);
+            Objects.requireNonNull(getActivity()). unregisterReceiver(receiver);
         }
         if (handler!=null){
             handler.removeCallbacksAndMessages(null);

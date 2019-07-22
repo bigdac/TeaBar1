@@ -1,10 +1,12 @@
 package teabar.ph.com.teabar.activity.login;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -20,6 +22,7 @@ import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.util.HttpUtils;
+import teabar.ph.com.teabar.util.Utils;
 
 public class EncourageActivity extends BaseActivity {
     @BindView(R.id.tv_encourage)
@@ -30,7 +33,10 @@ public class EncourageActivity extends BaseActivity {
     TextView encourage_tv_year;
     @BindView(R.id.tv_encourage_zz)
     TextView tv_encourage_zz;
+    @BindView(R.id.encourage_bt_in)
+    Button encourage_bt_in;
     MyApplication application;
+    SharedPreferences preferences;
     int language;
     @Override
     public void initParms(Bundle parms) {
@@ -49,7 +55,9 @@ public class EncourageActivity extends BaseActivity {
             application = (MyApplication) getApplication();
         }
         application.addActivity(this);
+        preferences = getSharedPreferences("my",MODE_PRIVATE);
         language = application.IsEnglish();
+        new GetwebAsyncTask(this).execute();
         new GetEncourageAsyncTask(this).execute();
         Calendar c = Calendar.getInstance();
         int  year = c.get(Calendar.YEAR);
@@ -98,6 +106,7 @@ public class EncourageActivity extends BaseActivity {
         }
         encourage_tv_year.setText(day);
         encourage_tv_day.setText(Emonth+" "+year);
+        Utils.expandViewTouchDelegate(encourage_bt_in,70,70,70,70);
     }
 
     @Override
@@ -156,6 +165,47 @@ public class EncourageActivity extends BaseActivity {
                     default:
 
                         break;
+            }
+        }
+    }
+
+    String shopUrl ;
+    class GetwebAsyncTask extends BaseWeakAsyncTask<Void ,Void ,String,BaseActivity> {
+
+        public GetwebAsyncTask(BaseActivity baseActivity) {
+            super(baseActivity);
+        }
+
+        @Override
+        protected String doInBackground(BaseActivity baseActivity, Void... voids) {
+            String code ="";
+            String result = HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/tea/getTeaUrl?urlId=1");
+            if (!TextUtils.isEmpty(result)){
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("state");
+                    message1 = jsonObject .getString("message1");
+                    JSONObject data = jsonObject.getJSONObject("data");
+                    shopUrl  = data.getString("shopUrl");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(BaseActivity baseActivity, String s) {
+
+            switch (s){
+                case "200":
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("shopUrl",shopUrl);
+                    editor.commit();
+                    break;
+                default:
+
+                    break;
             }
         }
     }

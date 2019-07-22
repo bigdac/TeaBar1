@@ -103,6 +103,7 @@ public class QusetionActivity extends BaseActivity {
         application.addActivity(this);
         preferences = getSharedPreferences("my",MODE_PRIVATE);
         userId = preferences.getString("userId","");
+
         langauge =application.IsEnglish();
         answerAdpter = new AnswerAdpter(this,optionsList,langauge);
         rv_question_da.setLayoutManager(new LinearLayoutManager(this));

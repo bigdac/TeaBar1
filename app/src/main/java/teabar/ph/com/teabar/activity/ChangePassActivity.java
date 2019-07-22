@@ -2,15 +2,11 @@ package teabar.ph.com.teabar.activity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 
@@ -21,13 +17,13 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
+import teabar.ph.com.teabar.util.Utils;
 
 public class ChangePassActivity extends BaseActivity {
 
@@ -72,6 +68,7 @@ public class ChangePassActivity extends BaseActivity {
     public void widgetClick(View v) {
 
     }
+    String oldPassword,newPassword1;
     @OnClick({R.id.iv_pass_fh,R.id.bt_change_esure})
     public void onClick(View view){
         switch (view.getId()){
@@ -80,8 +77,8 @@ public class ChangePassActivity extends BaseActivity {
                 break;
 
             case R.id.bt_change_esure:
-                String oldPassword = et_oldPassword.getText().toString().trim();
-                String newPassword1 = et_newPassword1.getText().toString().trim();
+                 oldPassword = et_oldPassword.getText().toString().trim();
+                 newPassword1 = et_newPassword1.getText().toString().trim();
                 String newPassword2 = et_newPassword2.getText().toString().trim();
                 if (TextUtils.isEmpty(oldPassword)){
                     toast(getText(R.string.set_pass_ynull).toString());
@@ -99,8 +96,8 @@ public class ChangePassActivity extends BaseActivity {
                     showProgressDialog();
                     Map<String,Object> params=new HashMap<>();
                     params.put("id",id);
-                    params.put("oldPassword",oldPassword);
-                    params.put("newPassword",newPassword1);
+                    params.put("oldPassword", Utils.md5(oldPassword));
+                    params.put("newPassword",Utils.md5(newPassword1));
                     new ChangePassAsyncTask(ChangePassActivity.this).execute(params);
                 }else {
                     toast(getText(R.string.set_pass_notsame).toString());
@@ -160,6 +157,9 @@ public class ChangePassActivity extends BaseActivity {
             switch (s) {
                 case "200":
                     tipDialog.dismiss();
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("password",newPassword1);
+                    editor.commit();
                     finish();
                     break;
 

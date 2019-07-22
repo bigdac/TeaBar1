@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Objects;
+
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.login.LoginActivity;
 
@@ -36,7 +38,7 @@ public class GuideFragment extends Fragment {
             view.findViewById(R.id.tv_guild_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
+                    Objects.requireNonNull(getActivity()).startActivity(new Intent(getActivity(), LoginActivity.class));
                 }
             });
         }

@@ -11,6 +11,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.jpush.im.android.api.JMessageClient;
@@ -56,7 +58,7 @@ public class SocialFragment extends BaseFragment {
         });
         FragmentManager fragmentManager;
         FragmentTransaction fragmentTransaction;
-        fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         friendCircleFragment=new FriendCircleFragment2();
         friendFragment = new FriendFragment();
@@ -149,7 +151,7 @@ public class SocialFragment extends BaseFragment {
             FragmentManager fragmentManager;
             FragmentTransaction fragmentTransaction;
             FriendFragment friendFragment = new FriendFragment();
-            fragmentManager = getActivity().getSupportFragmentManager();
+            fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.li_social,friendFragment ).commit();
         }

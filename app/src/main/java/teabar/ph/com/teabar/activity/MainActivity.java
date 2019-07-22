@@ -37,7 +37,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import cn.jpush.im.android.api.ContactManager;
 import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.callback.GetUserInfoListCallback;
 import cn.jpush.im.android.api.enums.ConversationType;
 import cn.jpush.im.android.api.event.ContactNotifyEvent;
 import cn.jpush.im.android.api.event.MessageEvent;
@@ -110,7 +112,11 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
 
         return R.layout.activity_main;
     }
-
+    public static void reStart(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
     @Override
     public void initView(View view) {
         isRunning =true;
@@ -170,12 +176,33 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
                         user = new UserEntry(1,userId,username, appKey);
                         userEntryDao.insert(user);
                     }
+                    findFriend();
+
+                }
+            }
+        });
+
+
+
+    }
+    public void findFriend(){
+        ContactManager.getFriendList(new GetUserInfoListCallback() {
+            @Override
+            public void gotResult(int responseCode, String responseMessage, List<UserInfo> userInfoList) {
+                if (0 == responseCode) {
+                    //获取好友列表成功
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("friendNum",userInfoList.size()+"");
+                    editor.commit();
+
+
+                } else {
+                    //获取好友列表失败
 
                 }
             }
         });
     }
-
     private static final int REQUEST_OVERLAY = 4444;
 
     private void requestOverlayPermission() {

@@ -272,8 +272,8 @@
         app:textColor="#666666"
         app:textOrientation="top"
         app:textSize="15sp" />
-    <RelativeLayout
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_centerHorizontal="true"
@@ -282,11 +282,13 @@
         >
         <Button
             android:id="@+id/btn_back"
-            android:layout_width="170dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="@string/equ_xq_mr1"
             android:textSize="15sp"
             android:background="@drawable/question_button2"
+            android:layout_marginLeft="15dp"
             android:textColor="#333"
             android:layout_marginRight="10dp"
 
@@ -294,8 +296,9 @@
 
         <Button
             android:id="@+id/btn_make"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="@string/equ_xq_cp"
             android:textSize="15sp"
             android:layout_toRightOf="@+id/btn_back"
@@ -303,8 +306,8 @@
             android:textColor="@color/white"
             android:layout_marginLeft="10dp"
             android:layout_centerVertical="true"
-
+            android:layout_marginRight="15dp"
             />
-    </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>

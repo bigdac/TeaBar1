@@ -1,14 +1,15 @@
 package teabar.ph.com.teabar.base;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
+import android.os.SystemClock;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -17,10 +18,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
-
 import com.peihou.daemonservice.DaemonHolder;
 import com.pgyersdk.crash.PgyCrashManager;
-import com.pgyersdk.update.PgyUpdateManager;
 import com.ph.teabar.database.dao.DaoImp.FriendInforImpl;
 
 import java.io.File;
@@ -37,6 +36,7 @@ import teabar.ph.com.teabar.util.LogUtil;
 import teabar.ph.com.teabar.util.SharePreferenceManager;
 import teabar.ph.com.teabar.util.SharedPreferencesHelper;
 import teabar.ph.com.teabar.util.ToastUtil;
+import teabar.ph.com.teabar.util.language.LocalManageUtil;
 
 public abstract class BaseActivity extends FragmentActivity implements
         View.OnClickListener {
@@ -144,7 +144,10 @@ public abstract class BaseActivity extends FragmentActivity implements
 //        }
 
     }
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocalManageUtil.setLocal(newBase));
+    }
     /**
      * [沉浸状态栏]
      */
@@ -268,7 +271,18 @@ public abstract class BaseActivity extends FragmentActivity implements
      * @param clz
      */
     public void startActivity(Class<?> clz) {
+
         startActivity(clz, null);
+    }
+
+    @SuppressLint("RestrictedApi")
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode, @Nullable Bundle options) {
+        if (checkDoubleClick(intent)) {
+            super.startActivityForResult(intent, requestCode, options);
+        }
+
+
     }
 
     /**
@@ -392,6 +406,36 @@ public abstract class BaseActivity extends FragmentActivity implements
 
     public void toast(int resId) {
         ToastUtil.showShort(this,String.valueOf(resId));
+    }
+    private String mActivityJumpTag;        //activity跳转tag
+    private long mClickTime;                //activity跳转时间
+
+    /**
+     * 检查是否重复跳转，不需要则重写方法并返回true
+     */
+    protected boolean checkDoubleClick(Intent intent) {
+
+        // 默认检查通过
+        boolean result = true;
+        // 标记对象
+        String tag;
+        if (intent.getComponent() != null) { // 显式跳转
+            tag = intent.getComponent().getClassName();
+        }else if (intent.getAction() != null) { // 隐式跳转
+            tag = intent.getAction();
+        }else {
+            return true;
+        }
+
+        if (tag.equals(mActivityJumpTag) && mClickTime >= SystemClock.uptimeMillis() - 500) {
+            // 检查不通过
+            result = false;
+        }
+
+        // 记录启动标记和时间
+        mActivityJumpTag = tag;
+        mClickTime = SystemClock.uptimeMillis();
+        return result;
     }
 
 }

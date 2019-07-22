@@ -60,6 +60,7 @@ public class BaseQuestionActivity extends BaseActivity {
     SharedPreferences preferences;
     MyApplication application;
     String userId;
+    int type ;
     @Override
     public void initParms(Bundle parms) {
 
@@ -79,6 +80,7 @@ public class BaseQuestionActivity extends BaseActivity {
         application.addActivity(this);
         preferences = getSharedPreferences("my",MODE_PRIVATE);
          userId = preferences.getString("userId","");
+         type = preferences.getInt("type",0);
          question1Fragment = new Question1Fragment();
          question2Fragment = new Question2Fragment();
          question3Fragment = new Question3Fragment();
@@ -101,6 +103,9 @@ public class BaseQuestionActivity extends BaseActivity {
         return application.IsEnglish();
     }
 
+    public int getType (){
+        return type;
+    }
     public void  rePlaceFragment (int type){
         if (type==5){
             Map<String,Object> params = new HashMap<>();

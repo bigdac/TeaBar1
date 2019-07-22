@@ -11,6 +11,7 @@ import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -61,6 +62,7 @@ import teabar.ph.com.teabar.mvp.presenter.CirclePresenter;
 import teabar.ph.com.teabar.util.CommonUtils;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
+import teabar.ph.com.teabar.view.WeatherLayoutManager;
 import teabar.ph.com.teabar.widgets.CommentListView;
 import teabar.ph.com.teabar.widgets.DivItemDecoration;
 
@@ -81,6 +83,7 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
     SuperRecyclerView recyclerView;
     private RelativeLayout bodyLayout;
     private LinearLayoutManager layoutManager;
+//    private WrapContentLinearLayoutManager layoutManager;
     private final static int TYPE_PULLREFRESH = 1;
     private final static int TYPE_UPLOADREFRESH = 2;
     QMUITipDialog tipDialog;
@@ -190,13 +193,17 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
 
     @SuppressLint({ "ClickableViewAccessibility", "InlinedApi" })
     private void initView1(View view) {
-//        layoutManager =new WrapContentLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+
         recyclerView = view.findViewById( R.id.recyclerView);
+        ((SimpleItemAnimator)recyclerView.getRecyclerView().getItemAnimator()).setSupportsChangeAnimations(false);
         layoutManager = new LinearLayoutManager(getActivity());
+//        layoutManager =new WrapContentLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DivItemDecoration(2, true));
         recyclerView.getMoreProgressView().getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
-
+        circleAdapter = new CircleAdapter2(getActivity(),layoutManager);
+        circleAdapter.setCirclePresenter(presenter);
+        recyclerView.setAdapter(circleAdapter);
         recyclerView.getRecyclerView().setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -236,7 +243,7 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
                             showContentAsynctask.execute(params);
                         }
                     }
-                },500);
+                },300);
             }
         };
         recyclerView.setRefreshListener(refreshListener);
@@ -259,9 +266,7 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
             }
         });
 
-        circleAdapter = new CircleAdapter2(getActivity(),circleItemList);
-        circleAdapter.setCirclePresenter(presenter);
-        recyclerView.setAdapter(circleAdapter);
+
 
         /*处理点赞逻辑*/
         circleAdapter.SetOnItemClick(new CircleAdapter2.OnItemClickListener() {
@@ -483,7 +488,7 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
             switch (s){
                 case "200":
                     currentPage++;
-                    update2loadData(Type,circleItemList);
+                    update2loadData(currentPage-1,Type,circleItemList);
                     if (tipDialog.isShowing()){
                         tipDialog.dismiss();
                         AddSocialActivity.isFrash= false;
@@ -762,6 +767,11 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
     }
 
     @Override
+    public void update2loadData(int loadType, List<CircleItem> datas) {
+
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         hidenShowView= (hidenShowView) getActivity();
@@ -771,13 +781,14 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
         void hiden(boolean b);
      }
 
-    @Override
-    public void update2loadData(int loadType, List<CircleItem> datas) {
+    public void update2loadData(int page ,int loadType, List<CircleItem> datas) {
         if (loadType == TYPE_PULLREFRESH){
             isFrash = false;
             if (recyclerView!=null)
             recyclerView.setRefreshing(false);
             circleAdapter.setData(datas);
+            layoutManager.scrollToPosition(0);
+//            circleAdapter.setData1(datas);
 
         }else if(loadType == TYPE_UPLOADREFRESH){
             isLoad = false;
@@ -807,7 +818,7 @@ public class FriendCircleFragment2 extends BaseFragment  implements CircleContra
                                 new ShowContentAsynctask(FriendCircleFragment2.this).execute(params);
                             }
                         }
-                    }, 500);
+                    }, 300);
 
                 }
             }, 1);

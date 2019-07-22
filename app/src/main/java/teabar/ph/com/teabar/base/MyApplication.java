@@ -11,22 +11,16 @@ import android.util.Log;
 import com.facebook.FacebookSdk;
 import com.peihou.daemonservice.DaemonHolder;
 import com.pgyersdk.crash.PgyCrashManager;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.cookie.CookieJarImpl;
-import com.zhy.http.okhttp.cookie.store.PersistentCookieStore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.android.api.model.UserInfo;
-import okhttp3.OkHttpClient;
 import teabar.ph.com.teabar.service.MQService;
 import teabar.ph.com.teabar.service.NotificationClickEventReceiver;
 import teabar.ph.com.teabar.util.language.LocalManageUtil;
@@ -191,7 +185,14 @@ public class MyApplication extends Application {
     /*0中文1 英文*/
     public int IsEnglish(){
         String place = LocalManageUtil.getSetLanguageLocale(this).toString();
+        String lang = LocalManageUtil.getSelectLanguage(this);
+        if ("自动".equals(lang)){
         if ( "en_US".equals(place)){
+            IsEnglish =1;
+        }else {
+            IsEnglish =0;
+        }
+        }else if ( "ENGLISH".equals(lang)){
             IsEnglish =1;
         }else {
             IsEnglish =0;
