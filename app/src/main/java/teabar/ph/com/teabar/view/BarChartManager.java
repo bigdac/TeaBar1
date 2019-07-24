@@ -2,9 +2,7 @@ package teabar.ph.com.teabar.view;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 
-import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
@@ -15,7 +13,6 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
@@ -220,8 +217,12 @@ public class BarChartManager {
         }else
         xAxis.setValueFormatter(new IndexAxisValueFormatter(xAxisValues));
 //        xAxis.setAxisLineColor(Color.parseColor("#20e2ff"));
+        if (xAxisValues.size()==7) {
+            mBarChart.zoom(  1.0f,1f,0,0);
+        }else {
+            mBarChart.zoom(  2.0f,1f,0,0);
+        }
 
-        mBarChart.zoom(xAxisValues.size()/7,1f,0,0);
         rightAxis.setEnabled(false);
 
 //        mBarChart.resetZoom();

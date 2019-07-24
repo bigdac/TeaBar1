@@ -8,7 +8,6 @@ import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.target.ViewTarget;
 
-
 import java.io.File;
 
 import teabar.ph.com.teabar.widgets.videolist.model.VideoLoadMvpView;
@@ -32,6 +31,8 @@ public class VideoLoadTarget extends ViewTarget<TextureVideoView, File> implemen
     public void onResourceReady(File resource, GlideAnimation<? super File> glideAnimation) {
         mLoadMvpView.videoResourceReady(resource.getAbsolutePath());
     }
+
+    
 
     @Override
     public void getSize(SizeReadyCallback cb) {

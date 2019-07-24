@@ -32,8 +32,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -57,7 +55,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import me.jessyan.autosize.utils.ScreenUtils;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;

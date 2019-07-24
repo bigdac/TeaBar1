@@ -87,7 +87,7 @@
                 android:id="@+id/tv_my_plan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="5"
+                android:text="0"
                 android:textColor="@color/nomal_green"
                 android:textSize="30sp"
                 android:layout_centerHorizontal="true"
@@ -189,6 +189,7 @@
             android:background="@mipmap/my_drink_bj"
             android:scaleType="centerInside" />
         <TextView
+            android:id="@+id/tv_my_brew"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_below="@+id/iv_my_today"

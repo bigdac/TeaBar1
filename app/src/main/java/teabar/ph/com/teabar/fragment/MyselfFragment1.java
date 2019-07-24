@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
@@ -12,6 +13,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Objects;
@@ -23,15 +27,17 @@ import cn.jpush.im.android.api.callback.GetUserInfoListCallback;
 import cn.jpush.im.android.api.model.UserInfo;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.DrinkNumActivity;
-import teabar.ph.com.teabar.activity.my.MyIssueActivity;
 import teabar.ph.com.teabar.activity.my.FavoriteActivity;
+import teabar.ph.com.teabar.activity.my.MyIssueActivity;
 import teabar.ph.com.teabar.activity.my.MyPlanActivity;
 import teabar.ph.com.teabar.activity.my.NearestActivity;
 import teabar.ph.com.teabar.activity.my.PersonnalActivity;
 import teabar.ph.com.teabar.activity.my.SettingActivity;
 import teabar.ph.com.teabar.activity.question.MyQuestionActivity;
 import teabar.ph.com.teabar.base.BaseFragment;
+import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.util.GlideCircleTransform;
+import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.view.VerticalProgressBar;
 
 public class MyselfFragment1 extends BaseFragment {
@@ -45,6 +51,10 @@ public class MyselfFragment1 extends BaseFragment {
     ImageView iv_my_pic;
     @BindView(R.id.tv_my_friend)
     TextView tv_my_friend;
+    @BindView(R.id.tv_my_brew)
+    TextView tv_my_brew;
+    String id;
+    int setNum;
     @Override
     public int bindLayout() {
         return R.layout.fragment_myself;
@@ -55,15 +65,20 @@ public class MyselfFragment1 extends BaseFragment {
     public void initView(View view) {
         preferences = Objects.requireNonNull(getActivity()).getSharedPreferences("my",Context.MODE_PRIVATE);
         String name = preferences.getString("userName","");
-        String id = preferences.getString("userId","");
+         id = preferences.getString("userId","");
+        setNum = preferences.getInt("drinkNum",0);
         String photoUrl = preferences.getString("photoUrl","");
         if (!TextUtils.isEmpty(photoUrl)){
             Glide.with(getContext()).load(photoUrl).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.my_pic).transform(new GlideCircleTransform(getActivity())).into(iv_my_pic);
         }
         tv_my_name.setText(name);
         tv_id_2.setText(id+"");
-         vp_progress = view.findViewById(R.id.vp_progress);
-        vp_progress.setProgress(40);
+        vp_progress = view.findViewById(R.id.vp_progress);
+        vp_progress.setProgress(0);
+        tv_my_brew.setText("Brews 0%");
+        if (setNum!=0){
+            new getNumAsyncTask (this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
         String fNum = preferences.getString("friendNum","");
         if (!TextUtils.isEmpty(fNum)){
             tv_my_friend.setText(fNum);
@@ -76,9 +91,59 @@ public class MyselfFragment1 extends BaseFragment {
         super.onStart();
         String photo = preferences.getString("photo","");
         if (!TextUtils.isEmpty(photo)){
-
             Glide.with(getActivity()).load(photo).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.my_pic).transform(new GlideCircleTransform(getActivity())).into(iv_my_pic);
+        }
+    }
+    int num=0;
+    @SuppressLint("StaticFieldLeak")
+    class getNumAsyncTask extends BaseWeakAsyncTask<Void,Void,String,BaseFragment> {
 
+
+        public getNumAsyncTask(BaseFragment baseFragment) {
+            super(baseFragment);
+        }
+
+        @Override
+        protected String doInBackground(BaseFragment baseFragment, Void... voids) {
+            String code = "";
+            String result = HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/app/getUserDrink?userId="+id);
+
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                code = jsonObject.getString("state");
+                JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                JSONArray jsonArrayday = jsonObject1.getJSONArray("dayCount");
+                num = jsonArrayday.length();
+
+            } catch ( Exception e) {
+                e.printStackTrace();
+            }
+
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(BaseFragment baseFragment, String s) {
+            switch (s){
+                case "200":
+                    if (tv_my_brew!=null){
+                        int max = (Integer.valueOf(num)*100)/setNum ;
+                        if (max<=100){
+                            tv_my_brew.setText("Brews "+max+"%");
+                            vp_progress.setProgress(max);
+                        }else {
+                            tv_my_brew.setText("Brews 100%");
+                            vp_progress.setProgress(100);
+                        }
+
+                    }
+
+                    break;
+
+                default:
+
+                    break;
+            }
         }
     }
 

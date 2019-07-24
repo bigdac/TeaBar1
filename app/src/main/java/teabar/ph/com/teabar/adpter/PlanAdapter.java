@@ -2,7 +2,6 @@ package teabar.ph.com.teabar.adpter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,10 +40,12 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.MyviewHolder> 
 
         if (position==0){
             myviewHolder.pl_progress.setProgress(100);
+            myviewHolder.tv_plan_day.setText("Week 10/10");
         }
 
         if (position==1){
-            myviewHolder.pl_progress.setProgress(5);
+            myviewHolder.pl_progress.setProgress(10);
+            myviewHolder.tv_plan_day.setText("Week 1/10");
         }
 
     }

@@ -33,10 +33,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.gifdecoder.GifDecoder;
@@ -59,7 +56,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import me.jessyan.autosize.utils.ScreenUtils;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -458,6 +454,7 @@ public class AddDeviceActivity extends BaseActivity implements EasyPermissions.P
                         return false;
                     }
                 }) //仅仅加载一次gif动画
+
                 .into(new GlideDrawableImageViewTarget(imageView, 1));
 
     }

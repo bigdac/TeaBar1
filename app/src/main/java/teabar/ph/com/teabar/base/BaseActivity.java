@@ -31,7 +31,6 @@ import cn.jpush.im.android.api.event.ContactNotifyEvent;
 import cn.jpush.im.android.api.event.LoginStateChangeEvent;
 import cn.jpush.im.android.api.model.UserInfo;
 import teabar.ph.com.teabar.pojo.FriendInfor;
-import teabar.ph.com.teabar.service.CrashHandler;
 import teabar.ph.com.teabar.util.LogUtil;
 import teabar.ph.com.teabar.util.SharePreferenceManager;
 import teabar.ph.com.teabar.util.SharedPreferencesHelper;
@@ -60,8 +59,8 @@ public abstract class BaseActivity extends FragmentActivity implements
         MyApplication application = (MyApplication) getApplication();
         isDebug = application.isDebug;
         APP_NAME = application.APP_NAME;
-        CrashHandler crashHandler = CrashHandler.getInstance();
-        crashHandler.init(getApplicationContext());
+//        CrashHandler crashHandler = CrashHandler.getInstance();
+//        crashHandler.init(getApplicationContext());
         PgyCrashManager.register();
         $Log(TAG + "-->onCreate()");
         try {

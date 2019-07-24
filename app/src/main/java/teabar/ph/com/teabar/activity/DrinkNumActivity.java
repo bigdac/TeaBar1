@@ -8,30 +8,22 @@ import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
-import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
@@ -65,6 +57,7 @@ public class DrinkNumActivity extends BaseActivity {
     ArrayList<String> xValuesMonth = new ArrayList<>();/**X轴month值*/
     List<Integer> yValueMonth = new ArrayList<>();/**Y轴month值*/
     String userId ;
+    int month;
     SharedPreferences preferences;
     int setNum = 0;
     List <Numbers> listDay = new ArrayList<>();
@@ -91,62 +84,70 @@ public class DrinkNumActivity extends BaseActivity {
         application.addActivity(this);
         preferences = getSharedPreferences("my", MODE_PRIVATE);
         userId =preferences.getString("userId","");
-        setNum = preferences.getInt("drinkNum",4);
+        setNum = preferences.getInt("drinkNum",0);
+        tv_drink_num.setText(setNum+"");
+        mBarChart = findViewById(R.id.bar_chart);
+        mBarChart1 = findViewById(R.id.bar_chart1);
+        Calendar calendar = Calendar.getInstance();
+        Calendar a = Calendar.getInstance();
+        a.set(Calendar.DATE, 1);//把日期设置为当月第一天
+        a.roll(Calendar.DATE, -1);//日期回滚一天，也就是最后一天
+        month = a.get(Calendar.DATE);
         initView();
-
-        mBarChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry entry, Highlight highlight) {
-                Highlight highlight1 = highlight;
-               float fisrthx = highlight.getY();
-                tv_drink_num.setText( (int) fisrthx+"");
-                Log.v("tfhr", "点击某一条" + highlight.getYPx()+"....");
-            }
-
-            @Override
-            public void onNothingSelected() {
-
-            }
-        });
-        mBarChart1.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry entry, Highlight highlight) {
-                Highlight highlight1 = highlight;
-                float fisrthx = highlight.getY();
-                tv_drink_num.setText( (int) fisrthx+"");
-                Log.v("tfhr", "点击某一条" + highlight.getYPx()+"....");
-            }
-
-            @Override
-            public void onNothingSelected() {
-
-            }
-        });
+//        mBarChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+//            @Override
+//            public void onValueSelected(Entry entry, Highlight highlight) {
+//                Highlight highlight1 = highlight;
+//               float fisrthx = highlight.getY();
+//                tv_drink_num.setText( (int) fisrthx+"");
+//                Log.v("tfhr", "点击某一条" + highlight.getYPx()+"....");
+//            }
+//
+//            @Override
+//            public void onNothingSelected() {
+//
+//            }
+//        });
+//        mBarChart1.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+//            @Override
+//            public void onValueSelected(Entry entry, Highlight highlight) {
+//                Highlight highlight1 = highlight;
+//                float fisrthx = highlight.getY();
+//                tv_drink_num.setText( (int) fisrthx+"");
+//                Log.v("tfhr", "点击某一条" + highlight.getYPx()+"....");
+//            }
+//
+//            @Override
+//            public void onNothingSelected() {
+//
+//            }
+//        });
     }
     private void initView() {
 
-        mBarChart = findViewById(R.id.bar_chart);
-        mBarChart1 = findViewById(R.id.bar_chart1);
-        for (int i = 1; i <= 24; i++) {
+        for (int i = 0; i <= 23; i++) {
             xValuesDay.add(i+"");
-            yValueDay.add((int) (Math.random() * 8));
+//            yValueDay.add((int) (Math.random() * 8));
+            yValueDay.add(0);
         }
         for (int i = 1; i <=7; i++) {
             xValuesWeek.add(i+"");
-            yValueWeek.add((int) (Math.random() * 8 ));
+//            yValueWeek.add((int) (Math.random() * 8 ));
+            yValueWeek.add(0);
         }
-        for (int i = 1; i <= 30; i++) {
+        for (int i = 1; i <= month; i++) {
             xValuesMonth.add(i+"");
-            yValueMonth.add((int) (Math.random() *8 ));
+//            yValueMonth.add((int) (Math.random() *8 ));
+            yValueMonth.add(0);
         }
         barChartManager = new BarChartManager(mBarChart,this);
         barChartManager1 = new BarChartManager(mBarChart1,this);
         setValueDay();
+        new getNumAsyncTask().execute();
         barChartManager.setYAxis(10,0,10);
         barChartManager1.setYAxis(10,0,10);
         barChartManager.setHightLimitLine(setNum,"",Color.parseColor("#777777"));
         barChartManager1.setHightLimitLine(setNum,"",Color.parseColor("#777777"));
-
 
     }
 
@@ -165,7 +166,7 @@ public class DrinkNumActivity extends BaseActivity {
         @Override
         protected String doInBackground(Void... voids) {
             String code = "";
-            String result = HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"http://47.98.131.11:8081/app/getUserDrink?userId="+userId);
+            String result = HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/app/getUserDrink?userId="+userId);
 
             try {
                 JSONObject jsonObject = new JSONObject(result);
@@ -174,6 +175,30 @@ public class DrinkNumActivity extends BaseActivity {
                 JSONArray jsonArrayday = jsonObject1.getJSONArray("dayCount");
                 JSONArray jsonArrayweek = jsonObject1.getJSONArray("weekCount");
                 JSONArray jsonArraymonth = jsonObject1.getJSONArray("monthCount");
+                for (int i=0;i<jsonArrayday.length();i++){
+                    JSONObject jsonObject2  = jsonArrayday.getJSONObject(i);
+                    String time = jsonObject2.getString("time");
+                    String num = jsonObject2.getString("num");
+                    if (!TextUtils.isEmpty(time)){
+                        yValueDay.set(Integer.valueOf(time),Integer.valueOf(num));
+                    }
+                }
+                for (int i=0;i<jsonArrayweek.length();i++){
+                    JSONObject jsonObject2  = jsonArrayweek.getJSONObject(i);
+                    String time = jsonObject2.getString("date");
+                    String num = jsonObject2.getString("num");
+                    if (!TextUtils.isEmpty(time)){
+                        yValueWeek.set(Integer.valueOf(time),Integer.valueOf(num));
+                    }
+                }
+                for (int i=0;i<jsonArraymonth.length();i++){
+                    JSONObject jsonObject2  = jsonArraymonth.getJSONObject(i);
+                    String time = jsonObject2.getString("date");
+                    String num = jsonObject2.getString("num");
+                    if (!TextUtils.isEmpty(time)){
+                        yValueMonth.set(Integer.valueOf(time),Integer.valueOf(num));
+                    }
+                }
 
 
             } catch ( Exception e) {
@@ -181,6 +206,21 @@ public class DrinkNumActivity extends BaseActivity {
             }
 
             return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            switch (s){
+                case "200":
+                    setValueDay();
+
+                    break;
+
+                    default:
+
+                        break;
+            }
         }
     }
 
