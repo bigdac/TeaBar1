@@ -304,6 +304,7 @@ protected static final int RESULT_SPEECH = 1;
         equpmentAdapter.setEqumentData1(equpments);
     }
     String errorMes;
+    /*刷新设备*/
     public void  RefrashFirstEqu1(){
         tv_main_error.setVisibility(View.GONE);
         iv_main_error.setVisibility(View.GONE);
@@ -409,6 +410,7 @@ protected static final int RESULT_SPEECH = 1;
         switch (view.getId()) {
 
             case R.id.li_main_title:
+                /*顶部默认设备操作*/
                 if (((MainActivity) getActivity()).getFirstEqu()!=null) {
                     if (((MainActivity) getActivity()).getFirstEqument().getOnLine()) {
                         if (!Utils.isFastClick()) {

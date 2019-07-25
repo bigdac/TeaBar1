@@ -9,9 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -32,38 +30,24 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.share.Sharer;
-import com.facebook.share.model.ShareHashtag;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
-import com.jaygoo.widget.OnRangeChangedListener;
-import com.jaygoo.widget.RangeSeekBar;
 import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import me.jessyan.autosize.AutoSizeCompat;
 import me.jessyan.autosize.internal.CustomAdapt;
-import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.MainActivity;
-import teabar.ph.com.teabar.activity.login.LoginActivity;
-import teabar.ph.com.teabar.adpter.MethodAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.base.MyApplication;
@@ -71,16 +55,13 @@ import teabar.ph.com.teabar.pojo.Equpment;
 import teabar.ph.com.teabar.pojo.MakeMethod;
 import teabar.ph.com.teabar.pojo.Tea;
 import teabar.ph.com.teabar.service.MQService;
-import teabar.ph.com.teabar.util.DisplayUtil;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.Utils;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
-import teabar.ph.com.teabar.view.ArcProgressBar;
 import teabar.ph.com.teabar.view.MySeekBar;
 import teabar.ph.com.teabar.view.MyView;
 import teabar.ph.com.teabar.view.MyView1;
-import teabar.ph.com.teabar.view.VerticalProgressBar1;
 import teabar.ph.com.teabar.view.WaveProgress;
 
 
@@ -135,8 +116,10 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
         type = parms.getInt("type");
         tea = (Tea) parms.getSerializable("tea");
         if (type==1){
+            /*已有冲泡列表进入*/
             makeMethod = (MakeMethod) parms.getSerializable("method");
         }else {
+            /*新添加的冲泡方法*/
             makeMethod = new MakeMethod();
             makeMethod.setName(getText(R.string.drink_makemethod).toString());
             makeMethod.setTime(tea.getSeconds());

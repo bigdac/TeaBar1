@@ -310,7 +310,9 @@ public class MyIssueActivity extends BaseActivity implements CircleContract.View
             handler.removeCallbacksAndMessages(null);
         }
     }
-
+    /*
+    * 查看 发布内容
+    * */
     class ShowContentAsynctask extends BaseWeakAsyncTask<Map<String,Object>,Void,String,BaseActivity> {
 
         public ShowContentAsynctask(BaseActivity baseActivity) {

@@ -17,7 +17,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="中文"
+            android:text="@string/my_zw"
             android:layout_marginLeft="21dp"
             android:textSize="16sp"
             android:textColor="@color/login_black"
@@ -53,7 +53,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="English"
+            android:text="@string/my_yw"
             android:layout_marginLeft="21dp"
             android:textSize="16sp"
             android:textColor="@color/login_black"

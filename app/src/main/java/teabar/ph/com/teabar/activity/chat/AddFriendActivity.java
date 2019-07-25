@@ -2,7 +2,6 @@ package teabar.ph.com.teabar.activity.chat;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,9 +11,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -34,7 +30,6 @@ import butterknife.OnClick;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.callback.GetUserInfoCallback;
 import cn.jpush.im.android.api.model.UserInfo;
-import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.Mode.InfoModel;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.adpter.FriendAddAdapter;
@@ -133,6 +128,7 @@ public class AddFriendActivity extends BaseActivity {
                 break;
 
             case R.id.bt_friend_search:
+                /*搜索好友*/
                 hintKbTwo();
                 String searchUserName = et_add_id.getText().toString().trim();
                 if (!TextUtils.isEmpty(searchUserName)) {
@@ -156,7 +152,7 @@ public class AddFriendActivity extends BaseActivity {
             }
         }
     }
-
+    /*掉极光IM添加好友*/
     public void addFriend (String searchUserName){
         JMessageClient.getUserInfo(searchUserName, new GetUserInfoCallback() {
             @Override

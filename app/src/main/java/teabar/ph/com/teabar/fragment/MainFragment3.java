@@ -169,6 +169,7 @@ public class MainFragment3 extends BaseFragment  {
         Calendar mCalendar=Calendar.getInstance();
         mCalendar.setTimeInMillis(time);
         int  mHour=mCalendar.get(Calendar.HOUR_OF_DAY);
+        /*判断时间*/
         if (mHour>3&&mHour<12){
             tv_main_bz1.setText(getText(R.string.main_home_zs).toString());
         }else if (mHour>12&&mHour<18){

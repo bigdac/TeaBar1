@@ -6,16 +6,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -27,21 +20,16 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.adpter.EvaluateAdapter;
 import teabar.ph.com.teabar.adpter.MyplanAdapter;
 import teabar.ph.com.teabar.adpter.TeaAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.pojo.Plan;
 import teabar.ph.com.teabar.pojo.Tea;
-import teabar.ph.com.teabar.pojo.examOptions;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
-import teabar.ph.com.teabar.util.chat.adpter.TextWatcherAdapter;
-import teabar.ph.com.teabar.view.FlowTagView;
-
+/*弃用*/
 public class SearchFinishActivity extends BaseActivity {
     MyApplication application;
 

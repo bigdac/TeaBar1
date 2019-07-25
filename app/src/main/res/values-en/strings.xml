@@ -6,6 +6,8 @@
     <string name="dialog_positive">确定</string>
     <string name="dialog_negative">取消</string>
     <string name="facebook_app_id">630899240681105</string>
+    <string name="my_zw">Traditional Chinese</string>
+    <string name="my_yw">English</string>
 
     <string name="login_tv_login">LOG IN</string>
     <string name="login_tv_regist">CREATE ACCOUNT</string>

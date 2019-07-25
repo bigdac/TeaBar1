@@ -7,7 +7,8 @@
     <string name="dialog_positive">確定</string>
     <string name="dialog_negative">取消</string>
     <string name="facebook_app_id">630899240681105</string>
-
+    <string name="my_zw">繁體中文</string>
+    <string name="my_yw">英文</string>
     <!--login-->
     <string name="login_tv_login">登錄</string>
     <string name="login_tv_regist">創建帳號</string>

@@ -1,14 +1,8 @@
 package teabar.ph.com.teabar.fragment;
 
 import android.content.Context;
-import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -28,7 +22,7 @@ import teabar.ph.com.teabar.base.BaseFragment;
 import teabar.ph.com.teabar.pojo.Tea;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
-
+/*舍弃 例子*/
 public class MailFragment extends BaseFragment {
     RecyclerView rv_mail;
     List<Tea> list = new ArrayList<>();

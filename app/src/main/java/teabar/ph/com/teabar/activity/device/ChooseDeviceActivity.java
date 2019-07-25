@@ -36,8 +36,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.share.model.ShareHashtag;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
@@ -56,13 +54,10 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.adpter.ChooseDeviceAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.base.MyApplication;
-import teabar.ph.com.teabar.fragment.EqumentFragment2;
-import teabar.ph.com.teabar.fragment.MainFragment3;
 import teabar.ph.com.teabar.pojo.Equpment;
 import teabar.ph.com.teabar.pojo.Tea;
 import teabar.ph.com.teabar.service.MQService;
@@ -214,6 +209,7 @@ public class ChooseDeviceActivity extends BaseActivity {
             int size = height*256 +low;
             Log.e(TAG, "onReceive: -->"+nowStage );
             if (!TextUtils.isEmpty(errorCode)) {
+                /*判断有错误直接停止*/
                 if (errorCode.contains("1")) {
                     if (dialog1 != null && dialog1.isShowing()) {
                         dialog1.dismiss();
@@ -226,7 +222,7 @@ public class ChooseDeviceActivity extends BaseActivity {
             }
 
             if (IsMakeing==1 || nowStage==0xb8){
-
+                /*正在制作或者状态为0xb8才发送*/
                 Message message = new Message();
                 message.arg1 = size;
                 message.arg2 = nowStage;
@@ -270,6 +266,7 @@ public class ChooseDeviceActivity extends BaseActivity {
                         li_make_finish.setVisibility(View.VISIBLE);
                         bt_view_stop.setVisibility(View.GONE);
                     }
+                    /*看协议查看机器状态*/
                     if (nowStage!=-1){
                         if (nowStage != 0xb3 && nowStage != 0xb4 && nowStage != 0xb5) {
                             if (!"100".equals(tv_number.getText().toString().trim())){
@@ -307,6 +304,7 @@ public class ChooseDeviceActivity extends BaseActivity {
         }
     };
 
+    /*发送查询指令*/
     @SuppressLint("StaticFieldLeak")
     class  FirstAsynctask extends AsyncTask<Void,Void,Void>{
 
@@ -331,6 +329,10 @@ public class ChooseDeviceActivity extends BaseActivity {
             return null;
         }
     }
+
+    /*
+    * 冲泡的dialog
+    * */
 
     WaveProgress waterView;
     Dialog dialog1;
@@ -376,6 +378,7 @@ public class ChooseDeviceActivity extends BaseActivity {
             iv_dialog_move.startAnimation(operatingAnim);
         }
         tv_make_title.setText(R.string.equ_xq_jpz);
+        /* 每种茶有特定 的颜色冲后台获得发送个设备*/
         int r =0;
         int g = 0;
         int b =0;
@@ -404,6 +407,7 @@ public class ChooseDeviceActivity extends BaseActivity {
         }else {
             time1 = time;
         }
+        /*等待三秒进入倒计时浸泡*/
        countDownTimer1 = new CountDownTimer(3000,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -417,7 +421,9 @@ public class ChooseDeviceActivity extends BaseActivity {
                 tv_brew_zb.setVisibility(View.INVISIBLE);
             }
         }.start()  ;
-
+        /*
+        * 倒计时浸泡
+        * */
         countDownTimer = new CountDownTimer(time1*1000,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -476,6 +482,8 @@ public class ChooseDeviceActivity extends BaseActivity {
                 }
             }
         });
+        /*facebook 分享
+        * */
         bt_view_fx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -511,6 +519,10 @@ public class ChooseDeviceActivity extends BaseActivity {
         dialog1.show();
 
     }
+
+    /*
+    * 冲泡时每隔3s查询机器冲泡水位
+    * */
     int choosePosition;
     SearchThread searchThread;
     boolean  Running = true;
@@ -556,6 +568,7 @@ public class ChooseDeviceActivity extends BaseActivity {
                                 String wrongCode = chooseDeviceAdapter.getmData().get(choosePosition).getErrorCode();
                                 boolean errorcode = false;
                                 if (!TextUtils.isEmpty(wrongCode)) {
+                                    /*判断是否存在错误*/
                                     String[] aa = wrongCode.split(",");
                                     for (int i = 0; i < aa.length; i++) {
                                         if ("1".equals(aa[i])) {

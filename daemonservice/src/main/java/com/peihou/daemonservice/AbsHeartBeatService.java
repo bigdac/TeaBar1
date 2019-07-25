@@ -19,7 +19,7 @@ import java.util.TimerTask;
  *
  * @author sunfusheng on 2018/8/1.
  */
-public abstract class AbsHeartBeatService extends Service {
+public abstract class   AbsHeartBeatService extends Service {
     private static final String TAG = "HeartBeatService";
 
     private Timer timer = new Timer();

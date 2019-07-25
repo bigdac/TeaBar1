@@ -1,13 +1,12 @@
 package teabar.ph.com.teabar.activity.question;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.content.Context;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,7 +25,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.BaseFragment;
 import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
@@ -108,6 +106,7 @@ public class BaseQuestionActivity extends BaseActivity {
     }
     public void  rePlaceFragment (int type){
         if (type==5){
+            /* 第五个界面上传信息*/
             Map<String,Object> params = new HashMap<>();
             params.put("weight",weight);
             params.put("userId",userId);
@@ -132,11 +131,13 @@ public class BaseQuestionActivity extends BaseActivity {
        return application.IsEnglish();
     }
 
+    /*设置生日性别*/
     public void setMesssage(  String sex ,String birthday  ){
 
         this.sex = sex;
         this.birthday = birthday;
     }
+//    设置地址
     public void setAdress(String country,String province,String city,String area){
         this.city = null;
         this.province = null;
@@ -152,6 +153,7 @@ public class BaseQuestionActivity extends BaseActivity {
     public void setMesssage1(int  conceive ){
          this.conceive = conceive;
     }
+    /*设置身高体重*/
     public void setMesssage2(String height ,String weight){
         this.height = height;
         this.weight = weight;
@@ -159,12 +161,16 @@ public class BaseQuestionActivity extends BaseActivity {
     Tea tea1;
     Tea tea2;
     Tea tea3;
+    /*设置3种茶的种类*/
     public void setMesssage3(Tea tea1 ,Tea tea2, Tea tea3){
         this.tea1 = tea1;
         this.tea2 = tea2;
         this.tea3 = tea3;
     }
 
+    /*
+    * 跳转到推荐界面
+    * */
     public void toStarActivity(int choose){
         Intent intent = new Intent(this,RecommendActivity.class);
                     intent.putExtra("tea1",tea1);

@@ -9,9 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.IBinder;
@@ -27,17 +24,11 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.facebook.share.model.ShareHashtag;
-import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.widget.ShareDialog;
 import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 
@@ -51,19 +42,15 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.adpter.EqupmentXqAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.base.MyApplication;
-import teabar.ph.com.teabar.fragment.EqumentFragment;
-import teabar.ph.com.teabar.fragment.MainFragment2;
 import teabar.ph.com.teabar.pojo.Equpment;
 import teabar.ph.com.teabar.service.MQService;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
-import teabar.ph.com.teabar.view.WaveProgress;
 
 public class EquipmentDetailsActivity extends BaseActivity {
     MyApplication application;
@@ -404,7 +391,7 @@ public class EquipmentDetailsActivity extends BaseActivity {
     TextView tv_number;
     LinearLayout li_make_finish;
 
-
+    /*清洗设备*/
     private void customDialogwash( ) {
 
         dialog1  = new Dialog(this, R.style.MyDialog);

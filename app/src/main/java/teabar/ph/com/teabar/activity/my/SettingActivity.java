@@ -7,34 +7,27 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
 import com.ph.teabar.database.dao.DaoImp.FriendInforImpl;
 import com.ph.teabar.database.dao.DaoImp.UserEntryImpl;
-import com.ph.teabar.database.dao.UserEntryDao;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import me.jessyan.autosize.AutoSizeCompat;
-import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.ChangePassActivity;
 import teabar.ph.com.teabar.activity.FeedbackActivity;
 import teabar.ph.com.teabar.activity.MainActivity;
-import teabar.ph.com.teabar.activity.device.EqupmentLightActivity;
 import teabar.ph.com.teabar.activity.login.LoginActivity;
 import teabar.ph.com.teabar.activity.tkActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
-import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.language.LocalManageUtil;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 
@@ -228,7 +221,7 @@ public class SettingActivity extends BaseActivity {
         MainActivity.reStart(this);
     }
     /**
-     * 自定义对话
+     * 自定义对话清理缓存
      */
     Dialog dialog;
     private void customDialog1(  ) {

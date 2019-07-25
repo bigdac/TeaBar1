@@ -55,8 +55,6 @@ import butterknife.OnClick;
 import me.jessyan.autosize.AutoSizeCompat;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.BuyNowActivity;
-import teabar.ph.com.teabar.activity.MailActivity;
-import teabar.ph.com.teabar.activity.login.EncourageActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.base.MyApplication;
@@ -129,9 +127,9 @@ public class MakeActivity extends BaseActivity {
     }
     @Override
     public Resources getResources() {
-        //需要升级到 v1.1.2 及以上版本才能使用 AutoSizeCompat
+        //需要升级到 v1.1.2 及以上版本才能使用yi以宽度适配 AutoSizeCompat
 //        AutoSizeCompat.autoConvertDensityOfGlobal((super.getResources()));//如果没有自定义需求用这个方法
-        AutoSizeCompat.autoConvertDensity((super.getResources()), 360, true);//如果有自定义需求就用这个方法
+      AutoSizeCompat.autoConvertDensity((super.getResources()), 360, true);//如果有自定义需求就用这个方法
         return super.getResources();
     }
 
@@ -286,14 +284,16 @@ public class MakeActivity extends BaseActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.e("qqqqqZZZZ???", "11111");
-            int nowStage = intent.getIntExtra("nowStage",-1);
-            int height = intent.getIntExtra("height",0);
-            int low = intent.getIntExtra("low",0);
-            int size = height*256 +low;
+            /*以弃用在选择设备中进行*/
+            int nowStage = intent.getIntExtra("nowStage",-1);//状态
+            int height = intent.getIntExtra("height",0);//高水位
+            int low = intent.getIntExtra("low",0);//低水位
+            int size = height*256 +low;//计算后水位
             String errorCode = intent.getStringExtra("errorCode");
             Log.e(TAG, "onReceive: -->"+nowStage );
             if (IsMakeing==1){
                 if (!TextUtils.isEmpty(errorCode)) {
+//                    有错误直接停止
                     String[] aa = errorCode.split(",");
                     for (String anAa : aa) {
                         if ("1".equals(anAa)) {
@@ -315,7 +315,9 @@ public class MakeActivity extends BaseActivity {
 
         }
     }
-
+    /*
+    * 接收到冲泡信息更新流量ui 0xB5冲泡完成 以弃用在选择设备中进行
+    * */
     @SuppressLint("HandlerLeak")
     Handler handler = new Handler(){
         @Override
@@ -352,7 +354,9 @@ public class MakeActivity extends BaseActivity {
     TextView tv_number;
     LinearLayout li_make_finish;
      Button bt_view_stop,bt_view_sc,bt_view_fx;
-
+/*
+* 弃用 现在统一在选择设备中
+* */
     private void customDialog( ) {
         IsMakeing =0;
         dialog1  = new Dialog(this, R.style.MyDialog);
@@ -499,7 +503,7 @@ public class MakeActivity extends BaseActivity {
         dialog1.show();
 
     }
-
+    /*以弃用在选择设备中进行 每隔3s查询流量*/
     SearchThread searchThread;
     boolean  Running = true;
     class SearchThread extends  Thread{

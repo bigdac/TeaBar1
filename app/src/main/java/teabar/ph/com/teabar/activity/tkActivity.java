@@ -48,7 +48,7 @@ public class tkActivity extends BaseActivity {
         webView = (WebView) view.findViewById(R.id.webview);
         progressBar= (ProgressBar)view.findViewById(R.id.progressbar);//进度条
 //        webView.loadUrl("file:///android_asset/test.html");//加载asset文件夹下html
-        webView.loadUrl("http://47.98.131.11/directions.html");//加载url
+        webView.loadUrl("https://lify-wellness.myshopify.com/pages/privacy-policy");//加载url
 
         //使用webview显示html代码
 //        webView.loadDataWithBaseURL(null,"<html><head><title> 欢迎您 </title></head>" +

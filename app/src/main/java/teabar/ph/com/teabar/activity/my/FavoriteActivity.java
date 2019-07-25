@@ -2,18 +2,13 @@ package teabar.ph.com.teabar.activity.my;
 
 
 import android.content.Context;
-
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
 
 import com.google.gson.Gson;
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
@@ -23,17 +18,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.login.LoginActivity;
-import teabar.ph.com.teabar.activity.question.RecommendActivity;
 import teabar.ph.com.teabar.adpter.FavoriteAdpter;
-import teabar.ph.com.teabar.adpter.NearestAdpter;
-import teabar.ph.com.teabar.adpter.SocialAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.base.MyApplication;
@@ -82,6 +71,8 @@ public class FavoriteActivity extends BaseActivity {
         new getFavoriteTeaAsynctask(this).execute();
     }
     String returnMsg1,returnMsg2;
+    /*獲取喜爱茶的列表
+    * */
     class getFavoriteTeaAsynctask extends BaseWeakAsyncTask<Void,Void,String,BaseActivity> {
 
         public getFavoriteTeaAsynctask(BaseActivity baseActivity) {

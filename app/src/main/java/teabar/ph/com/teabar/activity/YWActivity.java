@@ -16,7 +16,7 @@ import teabar.ph.com.teabar.util.SystemBarUtil;
  * Created by yiw on 2017/1/9.
  */
 
-public class YWActivity extends AppCompatActivity {
+public class    YWActivity extends AppCompatActivity {
 
 
     @Override

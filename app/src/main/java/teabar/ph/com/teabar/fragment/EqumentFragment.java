@@ -1,6 +1,5 @@
 package teabar.ph.com.teabar.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
@@ -11,8 +10,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Color;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.speech.RecognizerIntent;
@@ -25,28 +22,22 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.share.model.ShareHashtag;
-import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.widget.ShareDialog;
 import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.device.EquipmentDetailsActivity;
 import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.activity.device.AddDeviceActivity;
+import teabar.ph.com.teabar.activity.device.EquipmentDetailsActivity;
 import teabar.ph.com.teabar.adpter.EqupmentAdapter;
 import teabar.ph.com.teabar.base.BaseFragment;
 import teabar.ph.com.teabar.pojo.Equpment;
@@ -56,6 +47,7 @@ import teabar.ph.com.teabar.util.Utils;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 import teabar.ph.com.teabar.view.WaveProgress;
 
+/*弃用请看EqumentFragment2*/
 public class EqumentFragment extends BaseFragment {
 //    @BindView(R.id.rv_equment)
 //    RecyclerView rv_equment;
