@@ -8,6 +8,7 @@
     <string name="facebook_app_id">630899240681105</string>
     <string name="my_zw">Traditional Chinese</string>
     <string name="my_yw">English</string>
+    <string name="my_all">All Posts</string>
 
     <string name="login_tv_login">LOG IN</string>
     <string name="login_tv_regist">CREATE ACCOUNT</string>
@@ -120,6 +121,7 @@
     <string name="equ_xq_time">Infusion Time</string>
     <string name="equ_xq_mr">Set as Default Device</string>
     <string name="equ_xq_lb">Device List</string>
+    <string name="equ_xq_cg">Copy Success</string>
     <!--light-->
     <string name="equ_light_light">Lighting Colour</string>
     <string name="equ_light_mode">Mode</string>

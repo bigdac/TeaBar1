@@ -9,6 +9,7 @@
     <string name="facebook_app_id">630899240681105</string>
     <string name="my_zw">繁體中文</string>
     <string name="my_yw">英文</string>
+    <string name="my_all">全部評論</string>
     <!--login-->
     <string name="login_tv_login">登錄</string>
     <string name="login_tv_regist">創建帳號</string>
@@ -44,6 +45,7 @@
     <string name="encourage_bt_in">進入</string>
 
     <!--equipment-->
+
     <string name="equ_xq_title">設備詳情</string>
     <string name="equ_xq_name">設備名稱</string>
     <string name="equ_xq_name1">修改設備名稱</string>
@@ -116,6 +118,8 @@
     <string name="equ_xq_time">浸泡時間</string>
     <string name="equ_xq_mr">設置為默認沖泡設備</string>
     <string name="equ_xq_lb">設備列表</string>
+    <string name="equ_xq_cg">复制成功</string>
+
     <!--light-->
     <string name="equ_light_light">光的顏色</string>
     <string name="equ_light_mode">模式</string>

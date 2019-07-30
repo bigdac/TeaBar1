@@ -3,6 +3,8 @@ package teabar.ph.com.teabar.activity.device;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,6 +25,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -31,6 +34,8 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -236,7 +241,7 @@ public class MakeActivity extends BaseActivity {
 
     }
 
-
+    /*获取web网址*/
     class GetwebAsyncTask extends BaseWeakAsyncTask<Void ,Void ,String,BaseActivity> {
 
         public GetwebAsyncTask(BaseActivity baseActivity) {
@@ -570,17 +575,8 @@ public class MakeActivity extends BaseActivity {
                 break;
 
             case R.id.iv_make_share:
-                if (ShareDialog.canShow(ShareLinkContent.class)) {
-                    ShareLinkContent linkContent = new ShareLinkContent.Builder()
-//                    "https://lify-wellness.myshopify.com/collections/all"
-                            .setContentUrl(Uri.parse(tea.getTeaPhoto()))
-                            .setShareHashtag(new ShareHashtag.Builder().setHashtag("#Lify").build())
-                            .setQuote(tea.getTeaNameEn())
-                            .build();
 
-                    shareDialog.show(linkContent);
-                }
-
+                popupmenuWindow();
                 break;
 
             case R.id.bt_make_buy:
@@ -595,8 +591,133 @@ public class MakeActivity extends BaseActivity {
                 break;
         }
     }
+    /*分享*/
+    int modeChoose = 1;
+    private PopupWindow popupWindow1;
+    public void popupmenuWindow() {
+        if (popupWindow1 != null && popupWindow1.isShowing()) {
+            return;
+        }
+
+        View view = View.inflate(this, R.layout.popview_myshare, null);
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+
+        RelativeLayout rl_mode_1 = (RelativeLayout) view.findViewById(R.id.rl_mode_1);
+        RelativeLayout rl_mode_2 = (RelativeLayout) view.findViewById(R.id.rl_mode_2);
+        RelativeLayout rl_mode_3 = (RelativeLayout) view.findViewById(R.id.rl_mode_3);
+        TextView tv_del = (TextView) view.findViewById(R.id.tv_del);
+        TextView tv_esure = (TextView) view.findViewById(R.id.tv_esure);
+        final ImageView iv_mode_1 = (ImageView) view.findViewById(R.id.iv_mode_1);
+        final ImageView iv_mode_2 = (ImageView) view.findViewById(R.id.iv_mode_2);
+        final ImageView iv_mode_3 = (ImageView) view.findViewById(R.id.iv_mode_3);
+
+        if (popupWindow1==null)
+            popupWindow1 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        //点击空白处时，隐藏掉pop窗口
+        popupWindow1.setFocusable(true);
+        popupWindow1.setOutsideTouchable(true);
+        //添加弹出、弹入的动画
+        popupWindow1.setAnimationStyle(R.style.Popupwindow);
+        popupWindow1.showAtLocation(view, Gravity.BOTTOM, 0,0);
+//        WindowManager.LayoutParams lp=getWindow().getAttributes();
+//            lp.alpha=0.3f;
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+//        getWindow().setAttributes(lp);
+        backgroundAlpha(0.5f);
+        //添加按键事件监听
+
+        View.OnClickListener listener = new View.OnClickListener() {
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.tv_del:
+                        popupWindow1.dismiss();
+
+                        break;
+                    case R.id.tv_esure:
+                        switch (modeChoose){
+                            case 1:
+                                //获取剪贴板管理器：
+                                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                // 创建普通字符型ClipData
+                                ClipData mClipData = ClipData.newRawUri("Lify Wellness",Uri.parse(tea.getTeaPhoto()));
+                                // 将ClipData内容放到系统剪贴板里。
+                                cm.setPrimaryClip(mClipData);
+                                toast(getText(R.string.equ_xq_cg).toString());
+                                break;
+                            case 2:
+
+                                break;
+                            case 3:
+                                if (ShareDialog.canShow(ShareLinkContent.class)) {
+                                    ShareLinkContent linkContent = new ShareLinkContent.Builder()
+//                    "https://lify-wellness.myshopify.com/collections/all"
+                                            .setContentUrl(Uri.parse(tea.getTeaPhoto()))
+                                            .setShareHashtag(new ShareHashtag.Builder().setHashtag("#Lify Wellness").build())
+                                            .setQuote(tea.getTeaNameEn())
+                                            .build();
+
+                                    shareDialog.show(linkContent);
+                                }
+                                break;
+                        }
+                        popupWindow1.dismiss();
+                        break;
+                    case R.id.rl_mode_1:
+                        /*copyLink分享*/
+                        iv_mode_1.setVisibility(View.VISIBLE);
+                        iv_mode_2.setVisibility(View.INVISIBLE);
+                        iv_mode_3.setVisibility(View.INVISIBLE);
+                        modeChoose = 1;
+
+                        break;
+                    case R.id.rl_mode_2:
+                        /*email分享*/
+                        iv_mode_1.setVisibility(View.INVISIBLE);
+                        iv_mode_2.setVisibility(View.VISIBLE);
+                        iv_mode_3.setVisibility(View.INVISIBLE);
+                        modeChoose =2;
 
 
+                        break;
+                    case R.id.rl_mode_3:
+
+                        /*facebook分享*/
+                        iv_mode_1.setVisibility(View.INVISIBLE);
+                        iv_mode_2.setVisibility(View.INVISIBLE);
+                        iv_mode_3.setVisibility(View.VISIBLE);
+                        modeChoose =3;
+
+                        break;
+
+
+
+
+                }
+            }
+        };
+
+        rl_mode_1.setOnClickListener(listener);
+        rl_mode_2.setOnClickListener(listener);
+        rl_mode_3.setOnClickListener(listener);
+        tv_del.setOnClickListener(listener);
+        tv_esure.setOnClickListener(listener);
+        popupWindow1.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams lp=getWindow().getAttributes();
+                lp.alpha=1.0f;
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                getWindow().setAttributes(lp);
+            }
+        });
+
+    }
+    private void backgroundAlpha(float f) {
+        WindowManager.LayoutParams lp =getWindow().getAttributes();
+        lp.alpha = f;
+        getWindow().setAttributes(lp);
+    }
     /**
      * 添加喜愛
      */
