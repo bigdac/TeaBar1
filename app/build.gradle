@@ -12,7 +12,7 @@ android {
         release {
             keyAlias 'key0'
             keyPassword '123456'
-            storeFile file('D:/android3/teabar/teabar.jks')
+            storeFile file('E:/tea/teabar/teabar.jks')
             storePassword '123456'
         }
     }
