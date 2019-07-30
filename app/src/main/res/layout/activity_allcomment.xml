@@ -34,7 +34,7 @@
         android:id="@+id/tv_power"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="全部评论"
+        android:text="@string/my_all"
         android:layout_below="@+id/iv_power_fh"
         android:layout_marginLeft="20dp"
         android:textSize="30sp"
