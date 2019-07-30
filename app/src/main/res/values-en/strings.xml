@@ -9,7 +9,6 @@
     <string name="my_zw">Traditional Chinese</string>
     <string name="my_yw">English</string>
     <string name="my_all">All Posts</string>
-
     <string name="login_tv_login">LOG IN</string>
     <string name="login_tv_regist">CREATE ACCOUNT</string>
     <string name="login_tv_regist2">Create Account</string>
@@ -122,6 +121,9 @@
     <string name="equ_xq_mr">Set as Default Device</string>
     <string name="equ_xq_lb">Device List</string>
     <string name="equ_xq_cg">Copy Success</string>
+    <string name="share">Please select a mail application</string>
+    <string name="shareTo">The information of tea</string>
+
     <!--light-->
     <string name="equ_light_light">Lighting Colour</string>
     <string name="equ_light_mode">Mode</string>

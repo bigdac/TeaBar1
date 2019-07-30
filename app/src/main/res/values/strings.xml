@@ -119,7 +119,8 @@
     <string name="equ_xq_mr">設置為默認沖泡設備</string>
     <string name="equ_xq_lb">設備列表</string>
     <string name="equ_xq_cg">复制成功</string>
-
+    <string name="share">請選擇一個郵件應用</string>
+    <string name="shareTo">茶的信息</string>
     <!--light-->
     <string name="equ_light_light">光的顏色</string>
     <string name="equ_light_mode">模式</string>

@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
@@ -21,6 +22,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -37,6 +39,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -51,6 +54,7 @@ import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -646,7 +650,27 @@ public class MakeActivity extends BaseActivity {
                                 toast(getText(R.string.equ_xq_cg).toString());
                                 break;
                             case 2:
-
+//                                Intent shareIntent = new Intent();
+//                                shareIntent.setAction(Intent.ACTION_SEND);
+//                                shareIntent.putExtra(Intent.EXTRA_TITLE, getString(R.string.share));
+//                                //设置邮件默认地址
+//                                String []emailReciver = new String[]{"pop1030123@163.com", "fulon@163.com"};
+//                                shareIntent.putExtra(android.content.Intent.EXTRA_EMAIL, emailReciver);
+////设置邮件默认标题
+//                                shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.share));
+////设置要默认发送的内容
+//                                shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "sss");
+//                                shareIntent.putExtra(Intent.EXTRA_TEXT, tea.getTeaPhoto());
+//                                shareIntent.setType("text/plain");
+//
+//                                //设置分享列表的标题，并且每次都显示分享列表
+//                                startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
+                                Intent email = new Intent(Intent.ACTION_SEND);
+                                email.setType("message/rfc822");
+                                email.putExtra(Intent.EXTRA_EMAIL, new String[] {""});
+                                email.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.shareTo));
+                                email.putExtra(Intent.EXTRA_TEXT   , tea.getTeaPhoto());
+                                startActivity(Intent.createChooser(email, getString(R.string.share)));
                                 break;
                             case 3:
                                 if (ShareDialog.canShow(ShareLinkContent.class)) {
@@ -712,6 +736,34 @@ public class MakeActivity extends BaseActivity {
             }
         });
 
+    }
+    /**
+     * 打开邮箱客户端
+     */
+    private void openEmail(String text) {
+        Uri uri = Uri.parse("mailto:" + "");
+        List<ResolveInfo> packageInfos = getPackageManager().queryIntentActivities(new Intent(Intent.ACTION_SENDTO, uri), 0);
+        List<String> tempPkgNameList = new ArrayList<>();
+        List<Intent> emailIntents = new ArrayList<>();
+        for (ResolveInfo info : packageInfos) {
+            String pkgName = info.activityInfo.packageName;
+            if (!tempPkgNameList.contains(pkgName)) {
+                tempPkgNameList.add(pkgName);
+                Intent intent = getPackageManager().getLaunchIntentForPackage(pkgName);
+                emailIntents.add(intent);
+            }
+        }
+        if (!emailIntents.isEmpty()) {
+            Intent chooserIntent = Intent.createChooser(emailIntents.remove(0), "选择邮箱");
+            if (chooserIntent != null) {
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, emailIntents.toArray(new Parcelable[]{}));
+                startActivity(chooserIntent);
+            } else {
+                Toast.makeText(MakeActivity.this, "没有找到可用的邮件客户端", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(MakeActivity.this, "没有找到可用的邮件客户端", Toast.LENGTH_SHORT).show();
+        }
     }
     private void backgroundAlpha(float f) {
         WindowManager.LayoutParams lp =getWindow().getAttributes();
