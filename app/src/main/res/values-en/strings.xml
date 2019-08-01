@@ -419,16 +419,16 @@
     <string name="toast_main_file">Device Pairing Failure</string>
 
     <!--alarm-->
-    <string name="alarm_equ_wrong">Device Failure Alert</string>
-    <string name="alarm_equ_water">Flowmeter Error</string>
-    <string name="alarm_equ_open">Device’s Slider is Open</string>
-    <string name="alarm_equ_lg">Empty Disc Drawer Now</string>
-    <string name="alarm_equ_50">Cleaning Cycle Recommended</string>
-    <string name="alarm_equ_hot">Boiler Overheated</string>
-    <string name="alarm_equ_low">Less than 70 degrees</string>
-    <string name="alarm_equ_nowater">Fill Water Tank With Potable Water</string>
-    <string name="alarm_equ_NTC">NTC Short Circuit</string>
-    <string name="alarm_qxsq">Apply for permission</string>
+    <string name="alarm_equ_wrong"> Device Failure Alert</string>
+    <string name="alarm_equ_water"> Flowmeter Error</string>
+    <string name="alarm_equ_open"> Device’s Slider is Open</string>
+    <string name="alarm_equ_lg"> Empty Disc Drawer Now</string>
+    <string name="alarm_equ_50"> Cleaning Cycle Recommended</string>
+    <string name="alarm_equ_hot"> Boiler Overheated</string>
+    <string name="alarm_equ_low"> Less than 70 degrees</string>
+    <string name="alarm_equ_nowater"> Fill Water Tank With Potable Water</string>
+    <string name="alarm_equ_NTC"> NTC Short Circuit</string>
+    <string name="alarm_qxsq"> Apply for permission</string>
     <string name="alarm_dkxfc">Please open the permission of suspension window</string>
     <string name="location">Location permissions</string>
 
