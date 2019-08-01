@@ -649,7 +649,7 @@ public class AddDeviceActivity extends BaseActivity implements EasyPermissions.P
                 if (mEsptouchTask != null) {
                     mEsptouchTask.interrupt();
                 }
-                toast(getText(R.string.toast_main_file).toString());
+
             }
         });
 
