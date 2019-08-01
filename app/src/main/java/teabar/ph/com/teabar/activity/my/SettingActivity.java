@@ -2,9 +2,13 @@ package teabar.ph.com.teabar.activity.my;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -17,6 +21,11 @@ import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
 import com.ph.teabar.database.dao.DaoImp.FriendInforImpl;
 import com.ph.teabar.database.dao.DaoImp.UserEntryImpl;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import me.jessyan.autosize.AutoSizeCompat;
@@ -28,6 +37,8 @@ import teabar.ph.com.teabar.activity.login.LoginActivity;
 import teabar.ph.com.teabar.activity.tkActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
+import teabar.ph.com.teabar.util.HttpUtils;
+import teabar.ph.com.teabar.util.Utils;
 import teabar.ph.com.teabar.util.language.LocalManageUtil;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 
@@ -40,6 +51,8 @@ public class SettingActivity extends BaseActivity {
     TextView tv_set_id;
     @BindView(R.id.rl_set_password)
     RelativeLayout rl_set_password;
+    @BindView(R.id.tv_now_verson)
+     TextView tv_now_verson;
     boolean isOpen = true;
     SharedPreferences preferences;
     EquipmentImpl equipmentDao;
@@ -84,6 +97,7 @@ public class SettingActivity extends BaseActivity {
         friendInforDao = new FriendInforImpl(getApplicationContext());
         userEntryDao = new UserEntryImpl(getApplicationContext());
         lang = LocalManageUtil.getSelectLanguage(this);
+        tv_now_verson.setText(Utils.getVerName(SettingActivity.this));
     }
 
     @Override
@@ -145,7 +159,10 @@ public class SettingActivity extends BaseActivity {
                 startActivity(LoginActivity.class);
                 break;
             case R.id.rl_set_update:
-                toast(getText(R.string.toast_update_zx).toString());
+                Map<String,Object>  params = new HashMap<>();
+                params.put("appType",2);
+                new upDateAppAsyncTask().execute(params);
+
                 break;
 
             case R.id.rl_set_tk:
@@ -160,6 +177,54 @@ public class SettingActivity extends BaseActivity {
                 customDialog2();
                 break;
 
+        }
+    }
+    String appVersion = "";
+    class upDateAppAsyncTask extends AsyncTask<Map<String,Object>,Void,String>{
+
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+            String code ="";
+            Map <String,Object> params = maps[0];
+
+            String result = HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/app/getAPPVersion",params);
+            if (!TextUtils.isEmpty(result)){
+                try {
+                    JSONObject jsonObject  = new JSONObject(result);
+                    code = jsonObject.getString("state");
+                    JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                    appVersion = jsonObject1.getString("appVersion");
+
+                } catch ( Exception e) {
+                    e.printStackTrace();
+                }
+
+
+            }else {
+                code = "4000";
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            switch (s){
+                case "4000":
+                    toast(getText(R.string.toast_all_cs).toString());
+
+                    break;
+                case "200":
+                    String name = Utils.getVerName(SettingActivity.this);
+                    if (name.equals(appVersion)){
+                        toast(getText(R.string.toast_update_zx).toString());
+                    }else {
+                        customDialog3();
+
+                    }
+
+                    break;
+            }
         }
     }
 
@@ -257,6 +322,52 @@ public class SettingActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 toast(getText(R.string.toast_set_cg).toString());
+                dialog.dismiss();
+
+            }
+        });
+        dialog.show();
+
+    }
+    /*
+    * 升级
+    * */
+
+    private void customDialog3(  ) {
+        dialog  = new Dialog(this, R.style.MyDialog);
+        View view = View.inflate(this, R.layout.dialog_del, null);
+        TextView tv_dialog_qx = (TextView) view.findViewById(R.id.tv_dia_qx);
+        TextView tv_dialog_qd = (TextView) view.findViewById(R.id.tv_dia_qd);
+        TextView tv_dia_title = view.findViewById(R.id.tv_dia_title);
+        TextView et_dia_name = view.findViewById(R.id.et_dia_name);
+        tv_dia_title.setText(this.getText(R.string.set_upapp).toString());
+        et_dia_name.setText(this.getText(R.string.set_upapp1).toString());
+        dialog.setContentView(view);
+        //使得点击对话框外部不消失对话框
+        dialog.setCanceledOnTouchOutside(false);
+        //设置对话框的大小
+        view.setMinimumHeight((int) (ScreenSizeUtils.getInstance(this).getScreenHeight() * 0.25f));
+        Window dialogWindow = dialog.getWindow();
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.width = (int) (ScreenSizeUtils.getInstance(this).getScreenWidth() * 0.75f);
+        lp.height = (int) (ScreenSizeUtils.getInstance(this).getScreenWidth() * 0.45f);
+        lp.gravity = Gravity.CENTER;
+        dialogWindow.setAttributes(lp);
+        tv_dialog_qx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                dialog.dismiss();
+            }
+
+        });
+        tv_dialog_qd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse("https://www.pgyer.com/9obk");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
                 dialog.dismiss();
 
             }

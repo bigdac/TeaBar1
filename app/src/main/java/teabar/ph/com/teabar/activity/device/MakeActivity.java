@@ -596,7 +596,7 @@ public class MakeActivity extends BaseActivity {
         }
     }
     /*分享*/
-    int modeChoose = 1;
+
     private PopupWindow popupWindow1;
     public void popupmenuWindow() {
         if (popupWindow1 != null && popupWindow1.isShowing()) {
@@ -610,11 +610,7 @@ public class MakeActivity extends BaseActivity {
         RelativeLayout rl_mode_1 = (RelativeLayout) view.findViewById(R.id.rl_mode_1);
         RelativeLayout rl_mode_2 = (RelativeLayout) view.findViewById(R.id.rl_mode_2);
         RelativeLayout rl_mode_3 = (RelativeLayout) view.findViewById(R.id.rl_mode_3);
-        TextView tv_del = (TextView) view.findViewById(R.id.tv_del);
-        TextView tv_esure = (TextView) view.findViewById(R.id.tv_esure);
-        final ImageView iv_mode_1 = (ImageView) view.findViewById(R.id.iv_mode_1);
-        final ImageView iv_mode_2 = (ImageView) view.findViewById(R.id.iv_mode_2);
-        final ImageView iv_mode_3 = (ImageView) view.findViewById(R.id.iv_mode_3);
+
 
         if (popupWindow1==null)
             popupWindow1 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
@@ -634,23 +630,21 @@ public class MakeActivity extends BaseActivity {
         View.OnClickListener listener = new View.OnClickListener() {
             public void onClick(View v) {
                 switch (v.getId()) {
-                    case R.id.tv_del:
-                        popupWindow1.dismiss();
 
+                    case R.id.rl_mode_1:
+                        /*copyLink分享*/
+                        //获取剪贴板管理器：
+                        ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                        // 创建普通字符型ClipData
+                        ClipData mClipData = ClipData.newRawUri("Lify Wellness",Uri.parse(tea.getTeaPhoto()));
+                        // 将ClipData内容放到系统剪贴板里。
+                        cm.setPrimaryClip(mClipData);
+                        toast(getText(R.string.equ_xq_cg).toString());
+                        popupWindow1.dismiss();
                         break;
-                    case R.id.tv_esure:
-                        switch (modeChoose){
-                            case 1:
-                                //获取剪贴板管理器：
-                                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                                // 创建普通字符型ClipData
-                                ClipData mClipData = ClipData.newRawUri("Lify Wellness",Uri.parse(tea.getTeaPhoto()));
-                                // 将ClipData内容放到系统剪贴板里。
-                                cm.setPrimaryClip(mClipData);
-                                toast(getText(R.string.equ_xq_cg).toString());
-                                break;
-                            case 2:
-//                                Intent shareIntent = new Intent();
+                    case R.id.rl_mode_2:
+                        /*email分享*/
+                        //                                Intent shareIntent = new Intent();
 //                                shareIntent.setAction(Intent.ACTION_SEND);
 //                                shareIntent.putExtra(Intent.EXTRA_TITLE, getString(R.string.share));
 //                                //设置邮件默认地址
@@ -665,53 +659,29 @@ public class MakeActivity extends BaseActivity {
 //
 //                                //设置分享列表的标题，并且每次都显示分享列表
 //                                startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
-                                Intent email = new Intent(Intent.ACTION_SEND);
-                                email.setType("message/rfc822");
-                                email.putExtra(Intent.EXTRA_EMAIL, new String[] {""});
-                                email.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.shareTo));
-                                email.putExtra(Intent.EXTRA_TEXT   , tea.getTeaPhoto());
-                                startActivity(Intent.createChooser(email, getString(R.string.share)));
-                                break;
-                            case 3:
-                                if (ShareDialog.canShow(ShareLinkContent.class)) {
-                                    ShareLinkContent linkContent = new ShareLinkContent.Builder()
-//                    "https://lify-wellness.myshopify.com/collections/all"
-                                            .setContentUrl(Uri.parse(tea.getTeaPhoto()))
-                                            .setShareHashtag(new ShareHashtag.Builder().setHashtag("#Lify Wellness").build())
-                                            .setQuote(tea.getTeaNameEn())
-                                            .build();
-
-                                    shareDialog.show(linkContent);
-                                }
-                                break;
-                        }
+                        Intent email = new Intent(Intent.ACTION_SEND);
+                        email.setType("message/rfc822");
+                        email.putExtra(Intent.EXTRA_EMAIL, new String[] {""});
+                        email.putExtra(Intent.EXTRA_SUBJECT,    tea.getTeaNameEn());
+                        email.putExtra(Intent.EXTRA_TEXT   , tea.getTeaPhoto());
+                        startActivity(Intent.createChooser(email, getString(R.string.share)));
                         popupWindow1.dismiss();
-                        break;
-                    case R.id.rl_mode_1:
-                        /*copyLink分享*/
-                        iv_mode_1.setVisibility(View.VISIBLE);
-                        iv_mode_2.setVisibility(View.INVISIBLE);
-                        iv_mode_3.setVisibility(View.INVISIBLE);
-                        modeChoose = 1;
-
-                        break;
-                    case R.id.rl_mode_2:
-                        /*email分享*/
-                        iv_mode_1.setVisibility(View.INVISIBLE);
-                        iv_mode_2.setVisibility(View.VISIBLE);
-                        iv_mode_3.setVisibility(View.INVISIBLE);
-                        modeChoose =2;
-
 
                         break;
                     case R.id.rl_mode_3:
 
                         /*facebook分享*/
-                        iv_mode_1.setVisibility(View.INVISIBLE);
-                        iv_mode_2.setVisibility(View.INVISIBLE);
-                        iv_mode_3.setVisibility(View.VISIBLE);
-                        modeChoose =3;
+                        if (ShareDialog.canShow(ShareLinkContent.class)) {
+                            ShareLinkContent linkContent = new ShareLinkContent.Builder()
+//                    "https://lify-wellness.myshopify.com/collections/all"
+                                    .setContentUrl(Uri.parse(tea.getTeaPhoto()))
+                                    .setShareHashtag(new ShareHashtag.Builder().setHashtag("#Lify Wellness").build())
+                                    .setQuote(tea.getTeaNameEn())
+                                    .build();
 
+                            shareDialog.show(linkContent);
+                        }
+                        popupWindow1.dismiss();
                         break;
 
 
@@ -724,8 +694,7 @@ public class MakeActivity extends BaseActivity {
         rl_mode_1.setOnClickListener(listener);
         rl_mode_2.setOnClickListener(listener);
         rl_mode_3.setOnClickListener(listener);
-        tv_del.setOnClickListener(listener);
-        tv_esure.setOnClickListener(listener);
+
         popupWindow1.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {

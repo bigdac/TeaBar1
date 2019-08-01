@@ -12,7 +12,7 @@ android {
         release {
             keyAlias 'key0'
             keyPassword '123456'
-            storeFile file('E:/tea/teabar/teabar.jks')
+            storeFile file('D:/android3/teabar/teabar.jks')
             storePassword '123456'
         }
     }
@@ -25,8 +25,8 @@ android {
         applicationId "teabar.ph.com.teabar"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 8
-        versionName "1.2.6"
+        versionCode 9
+        versionName "1.2.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         ndk {

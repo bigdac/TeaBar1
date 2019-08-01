@@ -245,6 +245,8 @@
     <string name="set_clean">Erase storage</string>
     <string name="set_now">Current version:</string>
     <string name="set_hk">Confirm Erase Storage Now？</string>
+    <string name="set_upapp">Version Updating</string>
+    <string name="set_upapp1">Confirm Version Updating ?</string>
     <!--drink-->
     <string name="drink_unit">Cup</string>
     <string name="drink_units">Unit: No.of brews</string>

@@ -1,6 +1,7 @@
 package teabar.ph.com.teabar.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -20,8 +21,10 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,10 +34,13 @@ import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
 import com.ph.teabar.database.dao.DaoImp.UserEntryImpl;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import cn.jpush.im.android.api.ContactManager;
@@ -65,7 +71,10 @@ import teabar.ph.com.teabar.fragment.SocialFragment;
 import teabar.ph.com.teabar.pojo.Equpment;
 import teabar.ph.com.teabar.pojo.UserEntry;
 import teabar.ph.com.teabar.service.MQService;
+import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.SharePreferenceManager;
+import teabar.ph.com.teabar.util.Utils;
+import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 import teabar.ph.com.teabar.view.ChangeDialog;
 import teabar.ph.com.teabar.view.NoSrcollViewPage;
 
@@ -151,6 +160,9 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
         userEntryDao = new UserEntryImpl(getApplicationContext());
         LoginJM();
         requestOverlayPermission();
+        Map<String,Object>  params = new HashMap<>();
+        params.put("appType",2);
+        new upDateAppAsyncTask().execute(params);
     }
 
     public void LoginJM(){
@@ -341,6 +353,100 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
         }
     }
 
+    String appVersion = "";
+    class upDateAppAsyncTask extends AsyncTask<Map<String,Object>,Void,String>{
+
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+            String code ="";
+            Map <String,Object> params = maps[0];
+
+            String result = HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/app/getAPPVersion",params);
+            if (!TextUtils.isEmpty(result)){
+                try {
+                    JSONObject jsonObject  = new JSONObject(result);
+                    code = jsonObject.getString("state");
+                    JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                    appVersion = jsonObject1.getString("appVersion");
+
+                } catch ( Exception e) {
+                    e.printStackTrace();
+                }
+
+
+            }else {
+                code = "4000";
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            switch (s){
+                case "4000":
+                    toast(getText(R.string.toast_all_cs).toString());
+
+                    break;
+                case "200":
+                    String name = Utils.getVerName(MainActivity.this);
+                    if (name.equals(appVersion)){
+
+                    }else {
+                        customDialog3();
+                    }
+
+                    break;
+            }
+        }
+    }
+
+    /*
+     * 升级
+     * */
+    Dialog dialog1;
+    private void customDialog3(  ) {
+        dialog1  = new Dialog(this, R.style.MyDialog);
+        View view = View.inflate(this, R.layout.dialog_del, null);
+        TextView tv_dialog_qx = (TextView) view.findViewById(R.id.tv_dia_qx);
+        TextView tv_dialog_qd = (TextView) view.findViewById(R.id.tv_dia_qd);
+        TextView tv_dia_title = view.findViewById(R.id.tv_dia_title);
+        TextView et_dia_name = view.findViewById(R.id.et_dia_name);
+        tv_dia_title.setText(this.getText(R.string.set_upapp).toString());
+        et_dia_name.setText(this.getText(R.string.set_upapp1).toString());
+        dialog1.setContentView(view);
+        //使得点击对话框外部不消失对话框
+        dialog1.setCanceledOnTouchOutside(false);
+        //设置对话框的大小
+        view.setMinimumHeight((int) (ScreenSizeUtils.getInstance(this).getScreenHeight() * 0.25f));
+        Window dialogWindow = dialog1.getWindow();
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.width = (int) (ScreenSizeUtils.getInstance(this).getScreenWidth() * 0.75f);
+        lp.height = (int) (ScreenSizeUtils.getInstance(this).getScreenWidth() * 0.45f);
+        lp.gravity = Gravity.CENTER;
+        dialogWindow.setAttributes(lp);
+        tv_dialog_qx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                dialog1.dismiss();
+            }
+
+        });
+        tv_dialog_qd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse("https://www.pgyer.com/9obk");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+                dialog1.dismiss();
+
+            }
+        });
+        dialog1.show();
+
+    }
     @Override
     public void doBusiness(Context mContext) {
 
