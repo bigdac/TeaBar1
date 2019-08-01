@@ -812,7 +812,7 @@ public class MakeActivity extends BaseActivity {
      *  添加喜愛
      *
      */
-    String returnMsg1,returnMsg2;
+    String returnMsg1="",returnMsg2="";
     class CollectTeaAsyncTask extends AsyncTask<Map<String,Object>,Void,String> {
 
         @Override
