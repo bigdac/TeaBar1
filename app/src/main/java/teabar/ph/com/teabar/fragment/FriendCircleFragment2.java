@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -28,7 +27,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.malinskiy.superrecyclerview.OnMoreListener;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
-import com.ph.teabar.database.dao.DaoImp.UserEntryImpl;
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 
 import org.json.JSONArray;
@@ -41,7 +39,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.BindView;
 import me.jessyan.autosize.utils.ScreenUtils;
 import pub.devrel.easypermissions.EasyPermissions;
 import teabar.ph.com.teabar.R;
@@ -62,11 +59,10 @@ import teabar.ph.com.teabar.mvp.presenter.CirclePresenter;
 import teabar.ph.com.teabar.util.CommonUtils;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
-import teabar.ph.com.teabar.view.WeatherLayoutManager;
 import teabar.ph.com.teabar.widgets.CommentListView;
 import teabar.ph.com.teabar.widgets.DivItemDecoration;
 
-
+//社交評論列表
 public class FriendCircleFragment2 extends BaseFragment  implements CircleContract.View, EasyPermissions.PermissionCallbacks{
     protected static final String TAG = MainActivity.class.getSimpleName();
     private CircleAdapter2 circleAdapter;

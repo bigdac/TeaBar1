@@ -2,6 +2,7 @@ package teabar.ph.com.teabar.activity;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,20 +14,21 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import butterknife.OnClick;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.base.BaseActivity;
-import teabar.ph.com.teabar.base.BaseFragment;
 
 public class MailActivity extends BaseActivity {
     WebView webView;
     private ProgressBar progressBar;
 
+    private ArrayList<String> list=new ArrayList<>();
     @Override
     public void initParms(Bundle parms) {
-
+        list=parms.getStringArrayList("shopIds");
     }
 
     @Override
@@ -38,8 +40,22 @@ public class MailActivity extends BaseActivity {
     public void initView(View view) {
         webView = (WebView) view.findViewById(R.id.webview);
         progressBar= (ProgressBar)view.findViewById(R.id.progressbar);//进度条
+        SharedPreferences   preferences = getSharedPreferences("my",MODE_PRIVATE);
+        String shopUrl=preferences.getString("shopUrl","");
+        StringBuffer buffer=new StringBuffer();
+        int size=list.size();
+        for (int i = 0; i < size; i++) {
+            if (i==0){
+                buffer.append(list.get(i)).append(":").append("1");
+            }else if (i==size-1){
+                buffer.append(",").append(list.get(i)).append(":").append("1");
+            }
+        }
+        shopUrl=shopUrl+buffer.toString();
+        Log.i("ShopUrl","-->"+shopUrl);
+
 //        webView.loadUrl("file:///android_asset/test.html");//加载asset文件夹下html
-        webView.loadUrl("https://lify-wellness.myshopify.com/collections/all");//加载url
+        webView.loadUrl(shopUrl);//加载url
 
         //使用webview显示html代码
 //        webView.loadDataWithBaseURL(null,"<html><head><title> 欢迎您 </title></head>" +

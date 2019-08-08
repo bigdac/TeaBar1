@@ -53,6 +53,7 @@ import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 import teabar.ph.com.teabar.view.FlowTagView;
 import teabar.ph.com.teabar.view.PlanProgressBar;
 
+//問卷調查頁面
 public class QusetionActivity extends BaseActivity {
     MyApplication application;
     @BindView(R.id.tv_question_title)

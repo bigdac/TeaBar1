@@ -171,7 +171,7 @@ public class RegisterActivity extends BaseActivity {
                         Map<String,Object> params=new HashMap<>();
                         params.put("userName",nick);
                         params.put("verification",code);
-                        String MD5password = Utils.md5(password);
+                        String MD5password = Utils.shaEncrypt(password);
                         params.put("password",MD5password);
                         if (user.contains("@")){
                          params.put("email",user);

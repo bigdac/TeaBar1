@@ -95,14 +95,39 @@
         android:lineSpacingMultiplier="1.2"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
-
         />
+    <TextView
+        android:id="@+id/tv_toast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tea_kouwei_kw"
+        android:layout_below="@+id/tv_make_mes"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="25dp"
+        android:textColor="#454545"
+        android:textSize="16sp"
+        />
+    <TextView
+        android:id="@+id/tv_toast_mes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="一种起源于古代东方的茶，具有丰富的风味和社会效益。由于生姜的有效成分，这种草药茶是对正常消化功能的理想支持，并改善正常的生理活动。"
+        android:textColor="#777777"
+        android:textSize="14sp"
+        android:layout_below="@+id/tv_toast"
+        android:lineSpacingMultiplier="1.2"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        />
+
+
     <TextView
         android:id="@+id/tv_plmes_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="dddd"
-        android:layout_below="@+id/tv_make_mes"
+        android:layout_below="@+id/tv_toast_mes"
         android:layout_marginRight="15dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="25dp"

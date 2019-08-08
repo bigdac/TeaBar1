@@ -41,6 +41,9 @@ import teabar.ph.com.teabar.pojo.examOptions;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
 
+/**
+ * 问卷调查页面
+ */
 public class BaseQuestionActivity extends BaseActivity {
     @BindView(R.id.li_question)
     LinearLayout li_question;
@@ -197,7 +200,7 @@ public class BaseQuestionActivity extends BaseActivity {
 
     String returnMsg1,returnMsg2;
     String examTitle;
-    List<examOptions> list = new ArrayList();
+    List<examOptions> list = new ArrayList();//问卷问题集合列表
     /*  获取問題*/
     class getTeaListAsynTask extends BaseWeakAsyncTask<Void,Void,String,BaseActivity> {
 

@@ -75,6 +75,7 @@ import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 import teabar.ph.com.teabar.view.WaveProgress;
 
+//沖泡頁面
 public class MakeActivity extends BaseActivity {
 
     @BindView(R.id.tv_make_name)
@@ -100,6 +101,10 @@ public class MakeActivity extends BaseActivity {
     ImageView iv_make_choose;
     @BindView(R.id.iv_make_love)
     ImageView iv_make_love;
+    @BindView(R.id.tv_toast)
+    TextView tv_toast;
+    @BindView(R.id.tv_toast_mes)
+    TextView tv_toast_mes;
 
     @BindView(R.id.tv_mes_title)
     TextView tv_mes_title;
@@ -107,16 +112,16 @@ public class MakeActivity extends BaseActivity {
     TextView tv_plmes_title;
     private boolean MQBound;
     MyApplication application;
-    EquipmentImpl equipmentDao;
-    List<Equpment> equpments;
-    String firstMac;
-    Equpment Firstequpment;
-    public static boolean isRunning = false;
+    EquipmentImpl equipmentDao;//數據庫設備表管理者
+    List<Equpment> equpments;//用戶所有的設備
+    String firstMac;//第一個設備的mac地址
+    Equpment Firstequpment;//第一個設備
+    public static boolean isRunning = false;//該頁面是否可見
     Tea tea;
-    long teaId= -1;
-    String userId;
-    SharedPreferences preferences;
-    QMUITipDialog tipDialog;
+    long teaId= -1;//茶id
+    String userId;//用戶id
+    SharedPreferences preferences;//用戶個人信息
+    QMUITipDialog tipDialog;//加載數據對話框
     String id ;
     long FirstId;
     MessageReceiver receiver;
@@ -125,7 +130,6 @@ public class MakeActivity extends BaseActivity {
     ShareDialog shareDialog;
     @Override
     public void initParms(Bundle parms) {
-
         teaId = parms.getLong("teaId");
     }
 
@@ -164,8 +168,8 @@ public class MakeActivity extends BaseActivity {
 //            iv_make_choose.setVisibility(View.INVISIBLE);
         }else {
             if ( teaId==-1){
-                bt_make_make.setVisibility(View.INVISIBLE);
-                iv_make_choose.setVisibility(View.INVISIBLE);
+//                bt_make_make.setVisibility(View.INVISIBLE);
+//                iv_make_choose.setVisibility(View.INVISIBLE);
             }
             for (int i = 0;i<equpments.size();i++){
                 if (equpments.get(i).getIsFirst()){
@@ -178,10 +182,10 @@ public class MakeActivity extends BaseActivity {
         }
             if (teaId!=-1){
                 showProgressDialog();
-                new getTeaAsyncTask(this).execute();
+                new getTeaAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 id = teaId+"";
             }
-        IntentFilter intentFilter = new IntentFilter("MakeActivity");
+        IntentFilter intentFilter = new IntentFilter("MakeActivity");//在該頁面中，動態註冊廣播，以便隨時監聽設備最新狀態
         receiver = new MessageReceiver();
         registerReceiver(receiver, intentFilter);
         //绑定services
@@ -211,7 +215,6 @@ public class MakeActivity extends BaseActivity {
     }
     //显示dialog
     public void showProgressDialog() {
-
         tipDialog = new QMUITipDialog.Builder(this)
                 .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
                 .setTipWord(getText(R.string.search_qsh).toString())
@@ -413,7 +416,6 @@ public class MakeActivity extends BaseActivity {
 //        waterView.setValue(100f );
 
             if (tea!=null) {
-
                 MQservice.sendMakeMess(tea.getWaterYield(), tea.getSeconds(), tea.getTemperature(), equpments.get(0).getMacAdress(), r, g, b);
             }
 
@@ -542,7 +544,7 @@ public class MakeActivity extends BaseActivity {
     @OnClick({R.id.iv_equ_fh,R.id.iv_make_choose,R.id.bt_make_make,R.id.iv_make_love ,R.id.iv_make_share ,R.id.bt_make_buy})
     public void onClick(View view){
         switch (view.getId()){
-            case R.id.iv_equ_fh:
+            case R.id.iv_equ_fh://返回鍵
                 finish();
                 break;
 
@@ -565,7 +567,7 @@ public class MakeActivity extends BaseActivity {
                     toast(getText(R.string.toast_equ_add).toString());
                 }
                 break;
-            case R.id.iv_make_love:
+            case R.id.iv_make_love://添加喜愛
                 if (tea!=null){
                     if (tea.getIsCollection()==1){
                          customDialog1(false);
@@ -578,7 +580,7 @@ public class MakeActivity extends BaseActivity {
 
                 break;
 
-            case R.id.iv_make_share:
+            case R.id.iv_make_share://分享
 
                 popupmenuWindow();
                 break;
@@ -926,9 +928,15 @@ public class MakeActivity extends BaseActivity {
                         tv_mes_title.setText(getText(R.string.tea_kouwei_yc).toString());
                         tv_make_mes.setText(syno);
                     }
-
-                    tv_make_name.setText(tea.getTeaNameEn());
-                    tv_make_style.setText(tea.getProductNameEn());
+                    if (MyApplication.initLanguage==1 || application.IsEnglish()==1){
+                        tv_make_name.setText(tea.getTeaNameEn());
+                        tv_make_style.setText(tea.getProductNameEn());
+                        tv_toast_mes.setText(tea.getTasteEn());
+                    }else {
+                        tv_make_name.setText(tea.getTeaNameCn());
+                        tv_make_style.setText(tea.getProductNameCn());
+                        tv_toast_mes.setText(tea.getTasteCn());
+                    }
                     tv_plmes_title.setText(getText(R.string.equ_xq_pl).toString());
                     tv_make_plmes.setText (tea.getIngredientEn());
                     tv_make_temp.setText(tea.getTemperature()+"℃");

@@ -34,7 +34,7 @@ import teabar.ph.com.teabar.pojo.Tea;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
 
-
+//沖泡列表頁面 展示已添加的沖泡方法
 public class MethodActivity extends BaseActivity {
 
 
@@ -43,12 +43,12 @@ public class MethodActivity extends BaseActivity {
     @BindView(R.id.rv_method)
     RecyclerView rv_method;
     MyApplication application;
-    MethodAdapter methodAdapter;
-    List<MakeMethod> mList = new ArrayList<>();
+    MethodAdapter methodAdapter;//沖泡方法列表適配器
+    List<MakeMethod> mList = new ArrayList<>();//沖泡方法列表集合
     QMUITipDialog tipDialog;
-    SharedPreferences preferences;
-    String userId;
-    Tea tea;
+    SharedPreferences preferences;//個人信息
+    String userId;//用戶id
+    Tea tea;//茶對象
     @Override
     public void initParms(Bundle parms) {
         tea = (Tea) parms.getSerializable("tea");
@@ -81,7 +81,7 @@ public class MethodActivity extends BaseActivity {
         userId = preferences.getString("userId","")+"";
         Map<String,Object> params1 = new HashMap<>();
         params1.put("userId",userId);
-        new FindMethordAsynTask(this).execute(params1);
+        new FindMethordAsynTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,params1);
         methodAdapter = new MethodAdapter(this,mList);
         rv_method.setLayoutManager(new LinearLayoutManager(this));
         rv_method.setAdapter(methodAdapter);
@@ -133,10 +133,11 @@ public class MethodActivity extends BaseActivity {
             showProgressDialog();
             Map<String,Object> params1 = new HashMap<>();
             params1.put("userId",userId);
-            new FindMethordAsynTask(this).execute(params1);
+            new FindMethordAsynTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,params1);
         }
     }
 
+    //獲取服務端沖泡方法列表
     String returnMsg1,returnMsg2;
     class FindMethordAsynTask extends BaseWeakAsyncTask<Map<String,Object>,Void,String,BaseActivity> {
 

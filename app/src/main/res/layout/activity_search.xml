@@ -50,18 +50,20 @@
             android:scaleType="centerInside"
             android:layout_marginLeft="10dp"
             />
+
         <EditText
             android:id="@+id/et_search_search"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:background="@null"
-            android:layout_toRightOf="@+id/iv_search_pic"
-            android:layout_toLeftOf="@+id/iv_search_del"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="0dp"
             android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/iv_search_del"
+            android:layout_toRightOf="@+id/iv_search_pic"
+            android:background="@null"
             android:hint="@string/search_mess"
             android:textColor="@color/social_gray"
-            android:textSize="14sp"
-            />
+            android:textSize="14sp" />
         <TextView
             android:id="@+id/tv_search_search"
             android:layout_width="wrap_content"
@@ -136,16 +138,129 @@
         </teabar.ph.com.teabar.view.FlowTagView>
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_marginTop="15dp"
+        android:id="@+id/rl_fix"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/li_search_old"
+        android:layout_marginLeft="15dp"
+        >
+        <TextView
+            android:id="@+id/tv_fix"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/quick_search"
+            android:textSize="15sp"
+            android:textColor="#777777"
+            />
+        <TextView
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/tv_fix"
+            android:id="@+id/tv_gloomy"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/answer_button2"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:gravity="center"
+            android:text="@string/gloomy"
+            android:textColor="#999999"
+            />
+        <TextView
+            android:layout_alignTop="@+id/tv_gloomy"
+            android:layout_toRightOf="@+id/tv_gloomy"
+            android:id="@+id/tv_tried"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/answer_button2"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:gravity="center"
+            android:text="@string/tried"
+            android:textColor="#999999"
+            android:layout_marginLeft="15dp"
+            />
+        <TextView
+            android:layout_alignTop="@+id/tv_gloomy"
+            android:layout_toRightOf="@+id/tv_tried"
+            android:id="@+id/tv_stressed"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/answer_button2"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:gravity="center"
+            android:text="@string/stressed"
+            android:textColor="#999999"
+            android:layout_marginLeft="15dp"
+            />
+        <TextView
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/tv_gloomy"
+            android:id="@+id/tv_bloated"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/answer_button2"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:gravity="center"
+            android:text="@string/bloated"
+            android:textColor="#999999"
+            />
+        <TextView
+            android:layout_alignTop="@+id/tv_bloated"
+            android:id="@+id/tv_dry"
+            android:layout_toRightOf="@+id/tv_bloated"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/answer_button2"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:gravity="center"
+            android:text="@string/dry"
+            android:textColor="#999999"
+            android:layout_marginLeft="15dp"
+            />
+        <TextView
+            android:layout_alignTop="@+id/tv_bloated"
+            android:id="@+id/tv_clod"
+            android:layout_toRightOf="@+id/tv_dry"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/answer_button2"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:gravity="center"
+            android:text="@string/clod"
+            android:textColor="#999999"
+            android:layout_marginLeft="15dp"
+            />
+        <TextView
+            android:layout_below="@+id/tv_bloated"
+            android:id="@+id/tv_heavy"
+            android:layout_marginTop="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/answer_button2"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:gravity="center"
+            android:text="@string/heavy"
+            android:textColor="#999999"
+            />
+    </RelativeLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_main_tealist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:layout_below="@+id/li_search_old"
+        android:layout_below="@+id/rl_fix"
         android:overScrollMode="never"
         android:paddingLeft="5dp"
 
         />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_main_jh"
         android:layout_below="@+id/rv_main_tealist"

@@ -19,12 +19,12 @@ import java.util.List;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.BuyPlanActivity;
 import teabar.ph.com.teabar.pojo.Plan;
-import teabar.ph.com.teabar.pojo.Tea;
 import teabar.ph.com.teabar.view.PlanProgressBar;
 
+//計畫適配器
 public class MyplanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final int TYPE_TOP = 0;
-    private static final int TYPE_BUTTON = 1;
+    private static final int TYPE_TOP = 0;//健康知識標識
+    private static final int TYPE_BUTTON = 1;//個人計畫表示
     private List<Plan> mDatas = new ArrayList<>();
     private Context mContext;
     public MyplanAdapter(Context context, List<Plan> list) {
@@ -32,6 +32,11 @@ public class MyplanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         this.mDatas = list;
     }
 
+    /**
+     * 返回佈局類型
+     * @param position
+     * @return
+     */
     @Override
     public int getItemViewType(int position) {
 //        return super.getItemViewType(position);
@@ -44,7 +49,12 @@ public class MyplanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
 
-
+    /**
+     *
+     * @param viewGroup
+     * @param position 佈局類型 這裡佈局類型只有一種，統一為1
+     * @return
+     */
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
@@ -111,7 +121,6 @@ public class MyplanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 tv_tea_name = itemView.findViewById(R.id.tv_tea_name);
                 tv_plan_day = itemView.findViewById(R.id.tv_plan_day);
                 pl_progress = itemView.findViewById(R.id.pl_progress);
-
             }
         }
     class MyViewHolder2 extends RecyclerView.ViewHolder {
@@ -128,4 +137,5 @@ public class MyplanAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         }
     }
+
 }

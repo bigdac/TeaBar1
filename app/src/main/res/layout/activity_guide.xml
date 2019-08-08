@@ -9,4 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#00000000" />
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:id="@+id/linearout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:background="#00000000"
+        >
+    </LinearLayout>
 </RelativeLayout>

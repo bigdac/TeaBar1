@@ -47,7 +47,7 @@ import teabar.ph.com.teabar.mvp.presenter.CirclePresenter;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.widgets.DivItemDecoration;
-
+//我的發佈
 public class MyIssueActivity extends BaseActivity implements CircleContract.View {
 
 

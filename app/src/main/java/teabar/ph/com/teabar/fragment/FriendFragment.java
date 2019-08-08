@@ -17,7 +17,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,8 +28,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.BindView;
-import cn.jmessage.support.qiniu.android.dns.NetworkReceiver;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.event.ConversationRefreshEvent;
 import cn.jpush.im.android.api.event.MessageEvent;
@@ -50,7 +47,7 @@ import teabar.ph.com.teabar.util.SortConvList;
 import teabar.ph.com.teabar.util.SortTopConvList;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
-
+//新聞頁面
 public class FriendFragment extends BaseFragment {
 
 

@@ -42,11 +42,10 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         try {
-            mContextView = inflater.inflate(bindLayout(), container, false);
+            mContextView = View.inflate(getActivity(),bindLayout(),null);
             unbinder =  ButterKnife.bind(this,mContextView);
             initView(mContextView);
             doBusiness(getActivity());
-
         } catch (Exception e) {
             e.printStackTrace();
         }

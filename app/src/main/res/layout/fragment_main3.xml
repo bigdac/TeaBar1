@@ -289,15 +289,19 @@
 
                     <TextView
                         android:id="@+id/tv_weather_name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/tv_weather_project"
                         android:layout_marginLeft="15dp"
-                        android:layout_marginTop="7dp"
+                        android:layout_marginTop="12dp"
                         android:text="Black bean round meat tea"
                         android:textColor="@color/white"
                         android:textSize="12sp"
-
+                        android:layout_toLeftOf="@+id/bt_make"
+                        android:singleLine="true"
+                        android:layout_marginRight="10dp"
+                        android:layout_centerVertical="true"
+                        android:gravity="center_vertical"
                         />
 
                     <Button

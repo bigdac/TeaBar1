@@ -40,6 +40,7 @@ import teabar.ph.com.teabar.util.GlideCircleTransform;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.view.VerticalProgressBar;
 
+//我的页面
 public class MyselfFragment1 extends BaseFragment {
     VerticalProgressBar vp_progress;
     SharedPreferences preferences;
@@ -192,31 +193,33 @@ public class MyselfFragment1 extends BaseFragment {
     public void onClick(View view){
         switch (view.getId()){
             case R.id.rl_my_jh:
-                startActivity(new Intent(getActivity(),MyPlanActivity.class));
+                Intent intent=new Intent(getActivity(),MyPlanActivity.class);
+                intent.putExtra("userId",id);
+                startActivity(intent);//我的個人計畫
                 break;
             case R.id.rl_my_fb:
-                startActivity(new Intent(getActivity(),MyIssueActivity.class));
+                startActivity(new Intent(getActivity(),MyIssueActivity.class));//我的發佈
                 break;
             case R.id.rl_my_ask:
-                startActivity(new Intent(getActivity(),MyQuestionActivity.class));
+                startActivity(new Intent(getActivity(),MyQuestionActivity.class));//我的問卷記錄
                 break;
             case R.id.rl_my_sz:
-                startActivity(new Intent(getActivity(),SettingActivity.class));
+                startActivity(new Intent(getActivity(),SettingActivity.class));//我的設置
                 break;
 
             case R.id.vp_progress:
-                startActivity(new Intent(getActivity(),DrinkNumActivity.class));
+                startActivity(new Intent(getActivity(),DrinkNumActivity.class));//茶飲頁面
                 break;
 
-            case R.id.iv_may_bj:
+            case R.id.iv_may_bj://個人設置頁面
                 startActivityForResult(new Intent(getActivity(),PersonnalActivity.class),7300);
                 break;
 
             case R.id.rl_my_nearest:
-                startActivity(new Intent(getActivity(),NearestActivity.class));
+                startActivity(new Intent(getActivity(),NearestActivity.class));//最近的喝過的茶
                 break;
 
-            case R.id.rl_my_like:
+            case R.id.rl_my_like://我的最愛
                 startActivity(new Intent(getActivity(),FavoriteActivity.class));
                 break;
         }

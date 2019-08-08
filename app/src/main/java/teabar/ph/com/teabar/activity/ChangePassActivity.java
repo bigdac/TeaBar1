@@ -25,6 +25,7 @@ import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.Utils;
 
+//更改用户密码
 public class ChangePassActivity extends BaseActivity {
 
     MyApplication application;
@@ -96,8 +97,8 @@ public class ChangePassActivity extends BaseActivity {
                     showProgressDialog();
                     Map<String,Object> params=new HashMap<>();
                     params.put("id",id);
-                    params.put("oldPassword", Utils.md5(oldPassword));
-                    params.put("newPassword",Utils.md5(newPassword1));
+                    params.put("oldPassword", Utils.shaEncrypt(oldPassword));
+                    params.put("newPassword",Utils.shaEncrypt(newPassword1));
                     new ChangePassAsyncTask(ChangePassActivity.this).execute(params);
                 }else {
                     toast(getText(R.string.set_pass_notsame).toString());

@@ -69,7 +69,9 @@ import teabar.ph.com.teabar.util.SharePreferenceManager;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.Utils;
 
-
+/**
+ * 登录页面
+ */
 public class LoginActivity extends BaseActivity implements GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener, View.OnClickListener  {
     MyApplication application;
@@ -83,7 +85,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
     ImageView iv_login_repass;
     @BindView(R.id.tv_login_tk)
     TextView tv_login_tk;
-    SharedPreferences preferences;
+    SharedPreferences preferences;//用来保存个人登录信息
     boolean isHideFirst=true;
     String user;
     String password;
@@ -109,6 +111,10 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
         return R.layout.activity_login;
     }
 
+    /**
+     * 用autosize 来适配页面布局，根据页面高度来适配
+     * @return
+     */
     @Override
     public Resources getResources() {
         //需要升级到 v1.1.2 及以上版本才能使用 AutoSizeCompat
@@ -131,8 +137,8 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
         }else {
             tv_login_tk.setText(Html.fromHtml("Don't have an account?<u>Create One</u>"));
         }
-        userEntryDao = new UserEntryImpl(getApplicationContext());
-        equipmentDao = new EquipmentImpl(getApplicationContext());
+        userEntryDao = new UserEntryImpl(getApplicationContext());//初始化数据库用户表管理者
+        equipmentDao = new EquipmentImpl(getApplicationContext());//初始化数据库设备表管理者
         et_login_user.setText(preferences.getString("user", ""));
         et_login_pasw.setText(preferences.getString("password", ""));
         callbackManager = CallbackManager.Factory.create();
@@ -260,6 +266,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
         }
     };
 
+    //facebook第三方登录
     private void getFacebookUserImage(final String facebookUserId, final String name) {
         FacebookHelper.getFacebookUserPictureAsync(facebookUserId, new FacebookHelper.FacebookUserImageCallback() {
             @Override
@@ -333,8 +340,8 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                                     params.put("phone", user);
                                 }
                             }
-                             String MD5password = Utils.md5(password);
-                            params.put("password", MD5password);
+                             String sha256Password = Utils.shaEncrypt(password);
+                            params.put("password", sha256Password);
                             new LoginAsynTask().execute(params);
                         } else {
                             ToastUtil.showShort(this, getText(R.string.toast_all_cs).toString());
@@ -394,6 +401,11 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
+
+    /**
+     * 处理谷歌登录的流程
+     * @param result
+     */
     private void handleSignInResult(GoogleSignInResult result){
         Log.i("robin", "handleSignInResult:" + result.isSuccess());
         if(result.isSuccess()){
@@ -435,6 +447,11 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
         Log.i("robin","google登录-->onConnectionFailed,connectionResult=="+connectionResult);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        application.removeAllActivity();
+    }
 
     @Override
     protected void onStop() {
@@ -701,6 +718,9 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
     }
 
 
+    /**
+     * 获取设备列表
+     */
     class FindDeviceAsynTask extends AsyncTask<Map<String,Object>,Void,String> {
 
         @Override
@@ -760,11 +780,11 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
                     }
 //                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     if (type1==0) {
-                        if (type == 0) {
+                        if (type == 0) {//第一次登录跳转到问卷调查页面
                             Intent intent = new Intent(LoginActivity.this, MQService.class);
                             startService(intent);// 启动服务
                             startActivity(BaseQuestionActivity.class);
-                        } else {
+                        } else {//不是第一次登录跳转到主页面
                             Intent intent = new Intent(LoginActivity.this, MQService.class);
                             startService(intent);// 启动服务
                             startActivity(MainActivity.class);

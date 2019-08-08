@@ -63,14 +63,15 @@ import teabar.ph.com.teabar.util.Utils;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 import teabar.ph.com.teabar.view.WaveProgress;
 
+//主页面的设备项
 public class EqumentFragment2 extends BaseFragment {
 //    @BindView(R.id.rv_equment)
 //    RecyclerView rv_equment;
 protected static final int RESULT_SPEECH = 1;
-    List<Equpment> equpments;
-    EqupmentAdapter equpmentAdapter;
-    public static boolean isRunning = false;
-    MessageReceiver receiver;
+    List<Equpment> equpments;//設備列表
+    EqupmentAdapter equpmentAdapter;//設備列表適配器
+    public static boolean isRunning = false;//該頁面是否可見
+    MessageReceiver receiver;//廣播接收器 監聽設備的動態信息
 
     @BindView(R.id.tv_main_online)
     TextView tv_main_online;
@@ -86,7 +87,7 @@ protected static final int RESULT_SPEECH = 1;
     ImageView iv_main_online;
     @BindView(R.id.refreshLayout_xq)
     RefreshLayout refreshLayou;
-    EquipmentImpl equipmentDao;
+    EquipmentImpl equipmentDao;//數據庫設備表管理者
     Equpment FirEqupment;
     String firstMac;/*需要处理 */
 

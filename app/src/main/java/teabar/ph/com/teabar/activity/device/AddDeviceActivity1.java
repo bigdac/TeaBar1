@@ -75,7 +75,7 @@ import teabar.ph.com.teabar.util.IsChinese;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 
-
+//從推薦茶頁面 跳轉過來的添加設備頁面，供用戶展示配置設備的方式方法
 public class AddDeviceActivity1 extends BaseActivity implements  EasyPermissions.PermissionCallbacks{
     MyApplication application;
     Unbinder unbinder;

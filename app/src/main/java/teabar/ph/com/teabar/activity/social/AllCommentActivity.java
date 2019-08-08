@@ -1,7 +1,6 @@
 package teabar.ph.com.teabar.activity.social;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,12 +12,15 @@ import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import teabar.ph.com.teabar.R;
@@ -30,7 +32,7 @@ import teabar.ph.com.teabar.pojo.Comment;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.NetWorkUtil;
 import teabar.ph.com.teabar.util.ToastUtil;
-
+//所有設備評論
 public class AllCommentActivity extends BaseActivity {
     String id;
     @BindView(R.id.rv_allcomment)

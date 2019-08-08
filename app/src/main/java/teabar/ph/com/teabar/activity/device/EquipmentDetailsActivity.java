@@ -51,7 +51,7 @@ import teabar.ph.com.teabar.pojo.Equpment;
 import teabar.ph.com.teabar.service.MQService;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
-
+//設備詳情頁面
 public class EquipmentDetailsActivity extends BaseActivity {
     MyApplication application;
     @BindView(R.id.rv_equmentxq)
@@ -113,23 +113,23 @@ public class EquipmentDetailsActivity extends BaseActivity {
             public void onItemClick(View view, int position) {
                 switch (position){
                     case 0:
-                        customDialog();
+                        customDialog();//修改設備名稱
                         break;
-                    case 1:
+                    case 1://設備通知頁面
                         Intent intent2  = new Intent(EquipmentDetailsActivity.this,EqupmentInformActivity.class);
                         intent2.putExtra("mac",equpment.getMacAdress());
                         startActivity(intent2);
                         break;
-                    case 3:
+                    case 3://設備燈光頁面
                         Intent intent =new Intent(EquipmentDetailsActivity.this,EqupmentLightActivity.class);
                         intent.putExtra("equpment",equpment);
                         startActivity(intent);
                         resultCode=2000;
                         break;
-                    case 4:
+                    case 4://清洗設備
                         customDialogqs();
                         break;
-                    case 5:
+                    case 5://設置設備清洗週期
                         Intent intent1 =new Intent(EquipmentDetailsActivity.this,EqupmentWashActivity.class);
                         intent1.putExtra("equpment",equpment);
                         startActivity(intent1);

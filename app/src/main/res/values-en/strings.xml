@@ -225,6 +225,9 @@
     <string name="buyplan_about">About</string>
     <string name="buyplan_td">Feature</string>
     <string name="buyplan_yys">Program Collaborator</string>
+    <string name="buyplan_tea">Plan of Tea</string>
+    <string name="add">Add</string>
+    <string name="added">Added</string>
     <!--setting-->
     <string name="set_name">Account ID</string>
     <string name="set_pass">Change Password </string>
@@ -349,8 +352,8 @@
     <string name="tea_kouwei_xa">Add TO MY FAVORITE</string>
     <string name="tea_kouwei_buy">PURCHASE NOW</string>
     <string name="tea_kouwei_tg">SKIP</string>
-    <string name="tea_kouwei_yc">Benefits: </string>
-    <string name="tea_kouwei_kw">Flavour: </string>
+    <string name="tea_kouwei_yc">Benefits</string>
+    <string name="tea_kouwei_kw">Flavour</string>
     <!--adress-->
     <string name="adress_xz">Select Address</string>
     <string name="adress_hot">Hot countries/Regions</string>
@@ -457,4 +460,12 @@
     <string name="weather_week_51">F</string>
     <string name="weather_week_61">S</string>
     <string name="weather_week_71">S</string>
+    <string name="quick_search">Looking for a quick-fix</string>
+    <string name="gloomy">Gloomy</string>
+    <string name="tried">Tired</string>
+    <string name="stressed">Stressed</string>
+    <string name="bloated">Bloated</string>
+    <string name="clod">Cold</string>
+    <string name="dry">Dry</string>
+    <string name="heavy">Heavy headed</string>
 </resources>

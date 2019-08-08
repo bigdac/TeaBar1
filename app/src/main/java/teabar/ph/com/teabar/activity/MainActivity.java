@@ -78,20 +78,24 @@ import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 import teabar.ph.com.teabar.view.ChangeDialog;
 import teabar.ph.com.teabar.view.NoSrcollViewPage;
 
+/**
+ * 主页面
+ * 用来加载首页，设备页，社区，商城，我的这5个页面
+ */
 public class MainActivity extends BaseActivity implements FriendCircleFragment2.hidenShowView ,EqumentFragment2.EquipmentCtrl,MainFragment3.FirstEquipmentCtrl {
     @BindView(R.id.main_viewPage)
-    NoSrcollViewPage main_viewPage;
+    NoSrcollViewPage main_viewPage;//不可滑动的ViewPage
     @BindView(R.id.main_tabLayout)
     TabLayout main_tabLayout;
     List<String> mainMemu = new ArrayList<>();
-    List<BaseFragment> fragmentList = new ArrayList<>();
+    List<BaseFragment> fragmentList = new ArrayList<>();//用来管理fragment的列表集合
     MyApplication application;
-    MainFragment3 mainFragment ;
-    EqumentFragment2 equmentFragment ;
-    SocialFragment socialFragment ;
-    MailFragment1 mailFragment ;
-    MyselfFragment1 myselfFragment ;
-    MyselfFragment myselfFragment1 ;
+    MainFragment3 mainFragment ;//首页
+    EqumentFragment2 equmentFragment ;//设备页
+    SocialFragment socialFragment ;//社区页
+    MailFragment1 mailFragment ;//商城页
+    MyselfFragment1 myselfFragment ;//我的（个人设置页面 type1为0时的个人页面
+    MyselfFragment myselfFragment1 ;//我的(个人设置页面 type=1时的个人页面)
     private boolean MQBound;
     public static float scale = 0 ;
     MessageReceiver receiver;
@@ -102,7 +106,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
     UserEntryImpl userEntryDao;
     SharedPreferences preferences;
     String userId;
-    int type1;
+    int type1;//用户类型，根据类型来加载主页面的选项卡页面
     @Override
     public void initParms(Bundle parms) {
 
@@ -165,6 +169,9 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
         new upDateAppAsyncTask().execute(params);
     }
 
+    /**
+     * 极光登录操作
+     */
     public void LoginJM(){
         JMessageClient.login(userId+"", "123456", new BasicCallback() {
             @Override
@@ -217,6 +224,9 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
     }
     private static final int REQUEST_OVERLAY = 4444;
 
+    /**
+     * 請求開啟懸浮穿權限
+     */
     private void requestOverlayPermission() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (!Settings.canDrawOverlays(this)) {
@@ -226,7 +236,12 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
     }
 
 
+
     ChangeDialog dialog ;
+
+    /**
+     * 请求开启悬浮窗权限对话框
+     */
     private void changeDialog() {
         if (dialog != null && dialog.isShowing()) {
             return;
@@ -334,6 +349,9 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
         }
     };
 
+    /**
+     * 向页面中所有的设备发送查询命令，从而获得设备在线状态
+     */
     @SuppressLint("StaticFieldLeak")
     class  FirstAsynctask extends AsyncTask<Void,Void,Void>{
 
@@ -354,6 +372,11 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
     }
 
     String appVersion = "";
+
+    /**
+     * 更新App
+     * 从后台获取当前app的版本，如果获取的版本和用户使用的app版本一样就不更新，不一样就更新
+     */
     class upDateAppAsyncTask extends AsyncTask<Map<String,Object>,Void,String>{
 
         @Override
@@ -402,7 +425,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
     }
 
     /*
-     * 升级
+     * 更新APP
      * */
     Dialog dialog1;
     private void customDialog3(  ) {

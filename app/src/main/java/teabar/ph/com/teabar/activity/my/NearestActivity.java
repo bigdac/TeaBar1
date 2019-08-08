@@ -2,19 +2,13 @@ package teabar.ph.com.teabar.activity.my;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 
@@ -27,21 +21,15 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.jmessage.support.google.gson.Gson;
-import cn.jpush.im.android.api.ContactManager;
-import cn.jpush.im.android.api.JMessageClient;
-import cn.jpush.im.android.api.model.UserInfo;
-import cn.jpush.im.api.BasicCallback;
-import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.adpter.NearestAdpter;
-import teabar.ph.com.teabar.adpter.SocialAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.pojo.Tea;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
-
+//最近的喝過的茶
 
 public class NearestActivity extends BaseActivity {
 

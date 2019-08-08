@@ -15,14 +15,18 @@ import java.util.List;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.pojo.Tea;
 
+/**
+ * 茶列表適配器
+ *
+ */
 public class TeaListAdapter extends RecyclerView.Adapter<TeaListAdapter.MyViewHolder> {
 
     private List<String> mDatas = new ArrayList<>();
-    private List<Tea> teaList1 = new ArrayList<>();
-    private List<Tea> teaList2 = new ArrayList<>();
-    private List<Tea> teaList3 = new ArrayList<>();
+    private List<Tea> teaList1 = new ArrayList<>();//草本口味茶列表
+    private List<Tea> teaList2 = new ArrayList<>();//水果口味茶列表
+    private List<Tea> teaList3 = new ArrayList<>();//功能茶列表
     private Context mContext;
-    TeaAdapter teaAdapter1,teaAdapter2,teaAdapter3;
+    TeaAdapter teaAdapter1,teaAdapter2,teaAdapter3;//分別對應草本口味，水果口味，功能茶適配器
     public TeaListAdapter(Context context, List<String> list,List<Tea> tea1,List<Tea> tea2,List<Tea> tea3) {
         this.mContext = context;
         this.mDatas = list;
@@ -81,7 +85,6 @@ public class TeaListAdapter extends RecyclerView.Adapter<TeaListAdapter.MyViewHo
             tv_tea_name = itemView.findViewById(R.id.tv_tea_name);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext,LinearLayoutManager.HORIZONTAL,false);
              rv_tea_list1.setLayoutManager(linearLayoutManager);
-
         }
     }
 

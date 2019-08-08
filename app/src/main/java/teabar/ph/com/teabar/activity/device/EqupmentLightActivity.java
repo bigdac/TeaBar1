@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,18 +26,15 @@ import com.ph.teabar.database.dao.DaoImp.EquipmentImpl;
 import butterknife.BindView;
 import butterknife.OnClick;
 import me.jessyan.autosize.AutoSizeCompat;
-import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
-import teabar.ph.com.teabar.fragment.EqumentFragment2;
-import teabar.ph.com.teabar.fragment.MainFragment3;
 import teabar.ph.com.teabar.pojo.Equpment;
 import teabar.ph.com.teabar.service.MQService;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 
+//設置設備外圈燈光顏色
 public class EqupmentLightActivity extends BaseActivity {
     MyApplication application;
 

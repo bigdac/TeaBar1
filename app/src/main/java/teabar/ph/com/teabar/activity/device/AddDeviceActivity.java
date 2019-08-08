@@ -75,7 +75,7 @@ import teabar.ph.com.teabar.util.IsChinese;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 
-
+//添加設備頁面
 public class AddDeviceActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks{
     MyApplication application;
     Unbinder unbinder;
@@ -175,6 +175,7 @@ public class AddDeviceActivity extends BaseActivity implements EasyPermissions.P
     public void onPermissionsGranted(int requestCode, List<String> perms) {
 
     }
+    //8.0以後，要想獲取到當前手機WiFi名稱，必須打開手機的定位系統
     private static final int RC_CAMERA_AND_LOCATION = 0;
     @AfterPermissionGranted(RC_CAMERA_AND_LOCATION)
     private void permissionGrantedSuccess() {
@@ -204,9 +205,11 @@ public class AddDeviceActivity extends BaseActivity implements EasyPermissions.P
         }
     }
 
+
     private boolean isSDKAtLeastP() {
         return Build.VERSION.SDK_INT >= 28;
     }
+    //註冊WiFi網絡變化廣播
     private void registerBroadcastReceiver() {
         IntentFilter filter = new IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         if (isSDKAtLeastP()) {
@@ -244,6 +247,7 @@ public class AddDeviceActivity extends BaseActivity implements EasyPermissions.P
     };
     String bSsid;
 
+    //當WiFi網絡變化時，去掉不滿足配置的WiFi，停止配置
     private void onWifiChanged(WifiInfo info) {
 
         if (info == null) {

@@ -1,39 +1,21 @@
 package teabar.ph.com.teabar.activity.social;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.gson.Gson;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.adpter.NewFeedAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.pojo.News;
-import teabar.ph.com.teabar.util.HttpUtils;
-import teabar.ph.com.teabar.util.NetWorkUtil;
-
+//消息反饋詳情頁面
 public class NewFeedxqActivity extends BaseActivity {
     @BindView(R.id.iv_newfeed_pic)
     ImageView iv_newfeed_pic;

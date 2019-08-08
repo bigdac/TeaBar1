@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,10 +20,12 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.device.MakeActivity;
+import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.pojo.Tea;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
@@ -135,8 +136,12 @@ public class FavoriteAdpter extends RecyclerView.Adapter< FavoriteAdpter.MyViewH
                     try {
                         JSONObject jsonObject = new JSONObject(result);
                         code = jsonObject.getString("state");
-                        returnMsg1=jsonObject.getString("message1");
 
+                        if (MyApplication.initLanguage==1 || Locale.getDefault().equals(Locale.ENGLISH)){
+                            returnMsg1=jsonObject.getString("message3");
+                        }else {
+                            returnMsg1=jsonObject.getString("message1");
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

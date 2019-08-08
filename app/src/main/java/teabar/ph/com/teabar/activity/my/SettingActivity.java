@@ -42,6 +42,7 @@ import teabar.ph.com.teabar.util.Utils;
 import teabar.ph.com.teabar.util.language.LocalManageUtil;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 
+//APP節本功能設置頁面
 public class SettingActivity extends BaseActivity {
 
     MyApplication application;

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@mipmap/plan_back"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    >
+
+    <TextView
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="STAY FIT"
+        android:textColor="#333333"
+        android:textSize="16sp"
+        />
+    <TextView
+        android:id="@+id/tv_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_title"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="15dp"
+        android:layout_toLeftOf="@+id/tv_add"
+        android:layout_marginTop="5dp"
+        android:text="ffffff"
+        android:textSize="14sp"
+        android:textColor="#777777"
+        />
+    <TextView
+        android:id="@+id/tv_add"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:background="@drawable/answer_button2"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:gravity="center"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"
+        android:text="@string/add"
+        android:textColor="#777777"
+        />
+
+
+</RelativeLayout>

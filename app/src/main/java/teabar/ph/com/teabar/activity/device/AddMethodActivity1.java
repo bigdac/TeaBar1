@@ -64,22 +64,22 @@ import teabar.ph.com.teabar.view.MyView;
 import teabar.ph.com.teabar.view.MyView1;
 import teabar.ph.com.teabar.view.WaveProgress;
 
-
+//沖泡方法頁面
 public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBarChangeListener,CustomAdapt {
 
 
     @BindView(R.id.iv_power_fh)
     ImageView iv_power_fh;
     @BindView(R.id.arcprogressBar)
-    MyView arcProgressbar;
+    MyView arcProgressbar;//自定義的可滑動的溫度上半圓控件
     @BindView(R.id.arcprogressBar1)
-    MyView1 arcProgressbar1;
+    MyView1 arcProgressbar1;//自定義的可滑動的浸泡時間下班圓控件
     @BindView(R.id.tv_add_temp)
     TextView tv_add_temp;
     @BindView(R.id.tv_add_time)
     TextView tv_add_time;
     @BindView(R.id.beautySeekBar4)
-    MySeekBar beautySeekBar;
+    MySeekBar beautySeekBar;//可上下拖動的SeekBar
     @BindView(R.id.tv_power)
     TextView tv_power;
     @BindView(R.id.li_main_title)
@@ -105,7 +105,7 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
     SharedPreferences preferences;
     Equpment Firstequpment;
     public static boolean isRunning = false;
-    int type =-1;
+    int type =-1;//該變量 1表示修改茶的沖泡方法  0表示添加茶的沖泡方法
     String userId;
     Tea tea;
     long id = 0;
@@ -167,14 +167,14 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
 
             }
         }
-        if (makeMethod!=null){
+        if (makeMethod!=null){//已有茶的冲泡方法的控件初始化
             tv_power.setText(makeMethod.getName());
             arcProgressbar.setCurProgress(makeMethod.getTemp());
             arcProgressbar1.setCurProgress(makeMethod.getTime()-5);
             beautySeekBar.setProgress(makeMethod.getCapacity());
             tv_add_temp.setText(makeMethod.getTemp()+"℃");
             tv_add_time.setText(makeMethod.getTime()+"S");
-        }else {
+        }else {//默认茶的冲泡方法的控件初始化
             arcProgressbar.setCurProgress(75);
             tv_add_temp.setText("75℃");
             arcProgressbar1.setCurProgress(30);
@@ -201,9 +201,9 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
         //绑定services
         IntentFilter intentFilter = new IntentFilter("AddMethodActivity1");
         receiver = new MessageReceiver();
-        registerReceiver(receiver, intentFilter);
+        registerReceiver(receiver, intentFilter);//动态注册广播监听设备的最新状态
         MQintent = new Intent(this, MQService.class);
-        MQBound =  bindService(MQintent, MQconnection, Context.BIND_AUTO_CREATE);
+        MQBound =  bindService(MQintent, MQconnection, Context.BIND_AUTO_CREATE);//绑定MQService，调用其中的方法
         shareDialog = new ShareDialog(this);
         // this part is optional
 //        shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
@@ -267,7 +267,7 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
     @OnClick({ R.id.iv_power_fh ,R.id.btn_make,R.id.tv_add_save,R.id.tv_method_change,R.id.li_main_title,R.id.btn_back})
     public void onClick(View view){
         switch (view.getId()){
-            case R.id.btn_back:
+            case R.id.btn_back://恢復默認沖泡方法
                 if (makeMethod!=null){
                     arcProgressbar.setCurProgress(makeMethod.getTemp());
                     arcProgressbar1.setCurProgress(makeMethod.getTime()-5);
@@ -321,7 +321,7 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
                 StringBuffer stringBuffer1  = new StringBuffer(tv_add_time.getText().toString());
                 stringBuffer1.deleteCharAt(stringBuffer1.length()-1);
                 String time= stringBuffer1.toString();
-                if (type==0){
+                if (type==0){//添加沖泡方法
 
                 Map<String,Object> params = new HashMap<>();
                 params.put("userId",userId);
@@ -329,8 +329,8 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
                 params.put("temperature",temp);
                 params.put("waterYield",beautySeekBar.getProgress());
                 params.put("seconds",time);
-                new AddMethordAsynTask(this).execute(params);
-                }else if (type==1){
+                new AddMethordAsynTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,params);
+                }else if (type==1){//修改沖泡方法
                     Map<String,Object> params = new HashMap<>();
                     params.put("id",makeMethod.getId());
                     params.put("userId",userId);
@@ -338,14 +338,14 @@ public class AddMethodActivity1 extends BaseActivity implements SeekBar.OnSeekBa
                     params.put("temperature",temp);
                     params.put("waterYield",beautySeekBar.getProgress());
                     params.put("seconds",time);
-                    new UpdataMethordAsynTask(this).execute(params);
+                    new UpdataMethordAsynTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,params);
                  }
                 break;
             case R.id.tv_method_change:
                 customDialog1();
                 break;
             case R.id.li_main_title:
-                if ( Firstequpment!=null) {
+                if ( Firstequpment!=null) {//发送设备休眠命令
                     if (Firstequpment.getOnLine()) {
                         if (!Utils.isFastClick()) {
 

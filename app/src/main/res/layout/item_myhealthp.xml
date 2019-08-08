@@ -33,17 +33,16 @@
             />
 
         <TextView
-        android:id="@+id/tv_health_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/iv_plan_pic"
-        android:textColor="#333333"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="23dp"
+            android:id="@+id/tv_health_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_plan_pic"
+            android:layout_marginLeft="23dp"
+            android:layout_marginTop="20dp"
             android:includeFontPadding="false"
-        android:textSize="20sp"
-        android:text="健康计划"
-        />
+            android:text="健康计划"
+            android:textColor="#333333"
+            android:textSize="20sp" />
         <TextView
             android:id="@+id/tv_health_mes"
             android:layout_width="wrap_content"

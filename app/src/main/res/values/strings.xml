@@ -85,7 +85,7 @@
     <string name="equ_xq_buy1">去購買</string>
     <string name="equ_xq_method">沖泡方法</string>
     <string name="equ_xq_yc">益處</string>
-    <string name="equ_xq_pl">配料:</string>
+    <string name="equ_xq_pl">配料</string>
     <string name="equ_xq_kw">口味</string>
     <string name="equ_add_xq">配對教程</string>
     <string name="equ_add_wifi">WiFi名稱</string>
@@ -226,6 +226,9 @@
     <string name="buyplan_about">關於</string>
     <string name="buyplan_td">特點</string>
     <string name="buyplan_yys">營養師認證</string>
+    <string name="buyplan_tea">計畫茶</string>
+    <string name="add">添加</string>
+    <string name="added">已添加</string>
     <!--setting-->
     <string name="set_name">賬號</string>
     <string name="set_pass">更改密碼</string>
@@ -350,8 +353,8 @@
     <string name="tea_kouwei_xa">一鍵加入喜愛</string>
     <string name="tea_kouwei_buy">加入購物車結算</string>
     <string name="tea_kouwei_tg">跳過</string>
-    <string name="tea_kouwei_yc">益處：</string>
-    <string name="tea_kouwei_kw">口味：</string>
+    <string name="tea_kouwei_yc">益處</string>
+    <string name="tea_kouwei_kw">口味</string>
     <!--adress-->
     <string name="adress_xz">選擇地址</string>
     <string name="adress_hot">熱門國家/地區</string>
@@ -458,4 +461,12 @@
     <string name="weather_week_51">周五</string>
     <string name="weather_week_61">周六</string>
     <string name="weather_week_71">周日</string>
+    <string name="quick_search">根據你的狀態來搜索</string>
+    <string name="gloomy">愁悶</string>
+    <string name="tried">疲憊</string>
+    <string name="stressed">減壓</string>
+    <string name="bloated">肚脹</string>
+    <string name="clod">冷</string>
+    <string name="dry">乾燥</string>
+    <string name="heavy">頭重</string>
 </resources>

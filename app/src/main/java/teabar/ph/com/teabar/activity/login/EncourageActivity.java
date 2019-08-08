@@ -2,9 +2,9 @@ package teabar.ph.com.teabar.activity.login;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,7 +17,6 @@ import java.util.Calendar;
 import butterknife.BindView;
 import butterknife.OnClick;
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.login.LoginActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.base.MyApplication;
@@ -187,6 +186,7 @@ public class EncourageActivity extends BaseActivity {
                     message1 = jsonObject .getString("message1");
                     JSONObject data = jsonObject.getJSONObject("data");
                     shopUrl  = data.getString("shopUrl");
+                    Log.i("ShopUrl","-->"+shopUrl);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

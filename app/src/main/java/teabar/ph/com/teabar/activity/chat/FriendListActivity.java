@@ -13,11 +13,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.ph.teabar.database.dao.DaoImp.FriendInforImpl;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.jpush.im.android.api.ContactManager;
@@ -25,7 +27,6 @@ import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.callback.GetUserInfoListCallback;
 import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
-import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.adpter.FriendListAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
@@ -33,7 +34,7 @@ import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.pojo.FriendInfor;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 
-
+//好友列表
 public class FriendListActivity extends BaseActivity {
 
 

@@ -136,8 +136,8 @@ public class ForgetActivity extends BaseActivity {
                     }else {
                             Map<String, Object> params = new HashMap<>();
                             params.put("verification", code);
-                            String MD5password = Utils.md5(password);
-                            params.put("password", MD5password);
+                            String sha256Password = Utils.shaEncrypt(password);
+                            params.put("password", sha256Password);
                             if (user.contains("@")) {
 
                                 params.put("email", user);

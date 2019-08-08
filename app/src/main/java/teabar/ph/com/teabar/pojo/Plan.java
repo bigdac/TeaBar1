@@ -1,6 +1,7 @@
 package teabar.ph.com.teabar.pojo;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Plan implements Serializable {
     long id ;
@@ -20,6 +21,7 @@ public class Plan implements Serializable {
     String aboutEn;
     String dietitianDescribeCn;
     String dietitianDescribeEn;
+    List<Tea> teaList;
 
     public String getDescribeCn() {
         return describeCn;
@@ -155,5 +157,13 @@ public class Plan implements Serializable {
 
     public void setDietitianPhoto(String dietitianPhoto) {
         this.dietitianPhoto = dietitianPhoto;
+    }
+
+    public List<Tea> getTeaList() {
+        return teaList;
+    }
+
+    public void setTeaList(List<Tea> teaList) {
+        this.teaList = teaList;
     }
 }

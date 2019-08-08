@@ -3,11 +3,7 @@ package teabar.ph.com.teabar.fragment;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.JsResult;
@@ -18,23 +14,9 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.lzy.imagepicker.view.GridSpacingItemDecoration;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.MainActivity;
-import teabar.ph.com.teabar.adpter.MailAdapter;
 import teabar.ph.com.teabar.base.BaseFragment;
-import teabar.ph.com.teabar.pojo.Tea;
-import teabar.ph.com.teabar.util.HttpUtils;
-import teabar.ph.com.teabar.util.ToastUtil;
-
+//商城頁面
 public class MailFragment1 extends BaseFragment {
     WebView webView;
     private ProgressBar progressBar;
@@ -48,7 +30,7 @@ public class MailFragment1 extends BaseFragment {
         webView = (WebView) view.findViewById(R.id.webview);
         progressBar= (ProgressBar)view.findViewById(R.id.progressbar);//进度条
 //        webView.loadUrl("file:///android_asset/test.html");//加载asset文件夹下html
-        webView.loadUrl("https://lify-wellness.myshopify.com/collections/all");//加载url
+        webView.loadUrl("http://lifywellness.com/collections");//加载url
 
         //使用webview显示html代码
 //        webView.loadDataWithBaseURL(null,"<html><head><title> 欢迎您 </title></head>" +

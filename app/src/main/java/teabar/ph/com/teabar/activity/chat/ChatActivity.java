@@ -3,11 +3,8 @@ package teabar.ph.com.teabar.activity.chat;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,12 +17,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lzy.imagepicker.bean.ImageItem;
-import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
-
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -39,7 +32,6 @@ import cn.jpush.im.android.api.content.ImageContent;
 import cn.jpush.im.android.api.content.TextContent;
 import cn.jpush.im.android.api.enums.ContentType;
 import cn.jpush.im.android.api.enums.ConversationType;
-import cn.jpush.im.android.api.enums.MessageDirect;
 import cn.jpush.im.android.api.event.MessageEvent;
 import cn.jpush.im.android.api.event.MessageReceiptStatusChangeEvent;
 import cn.jpush.im.android.api.event.MessageRetractEvent;
@@ -49,11 +41,8 @@ import cn.jpush.im.android.api.model.GroupInfo;
 import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.android.api.options.MessageSendingOptions;
-
-import cn.jpush.im.api.BasicCallback;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.base.BaseActivity;
-import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.chat.EmoticonsKeyboardUtils;
 import teabar.ph.com.teabar.util.chat.XhsEmoticonsKeyBoard;
@@ -62,8 +51,6 @@ import teabar.ph.com.teabar.util.chat.data.EmoticonEntity;
 import teabar.ph.com.teabar.util.chat.interfaces.EmoticonClickListener;
 import teabar.ph.com.teabar.util.chat.view.ChatView;
 import teabar.ph.com.teabar.util.chat.view.DropDownListView;
-import teabar.ph.com.teabar.util.chat.view.TipItem;
-import teabar.ph.com.teabar.util.chat.view.TipView;
 import teabar.ph.com.teabar.util.chat.widget.EmoticonsEditText;
 import teabar.ph.com.teabar.util.chat.widget.FuncLayout;
 
@@ -71,7 +58,7 @@ import teabar.ph.com.teabar.util.chat.widget.FuncLayout;
 /**
  * Created by ${chenyn} on 2017/3/26.
  */
-
+//與好友聊天頁面
 public class ChatActivity extends BaseActivity implements FuncLayout.OnFuncKeyBoardListener, View.OnClickListener {
     @BindView(R.id.lv_chat)
     DropDownListView lvChat;

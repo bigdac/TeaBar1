@@ -30,7 +30,7 @@ import teabar.ph.com.teabar.pojo.Tea;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
 
-
+//我的最愛頁面
 public class FavoriteActivity extends BaseActivity {
 
 

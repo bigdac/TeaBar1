@@ -3,6 +3,7 @@ package teabar.ph.com.teabar.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,7 +15,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -23,12 +23,12 @@ import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.adpter.EvaluateAdapter;
 import teabar.ph.com.teabar.adpter.MyplanAdapter;
@@ -66,6 +66,25 @@ public class SearchActivity extends BaseActivity {
     @BindView(R.id.rv_main_jh)
     RecyclerView rv_main_jh;
 
+    //7個快速搜索標籤
+    @BindView(R.id.tv_gloomy)
+    TextView tv_gloomy;
+    @BindView(R.id.tv_tried)
+    TextView tv_tried;
+    @BindView(R.id.tv_stressed)
+    TextView tv_stressed;
+    @BindView(R.id.tv_bloated)
+    TextView tv_bloated;
+    @BindView(R.id.tv_dry)
+    TextView tv_dry;
+    @BindView(R.id.tv_clod)
+    TextView tv_clod;
+    @BindView(R.id.tv_heavy)
+    TextView tv_heavy;
+
+    TextView searchTags[]=new TextView[7];//存儲7個快速嫂索標籤
+
+
     //标签类相关
     private EvaluateAdapter adapter_his;
     List<String> list=new ArrayList<>();
@@ -93,6 +112,13 @@ public class SearchActivity extends BaseActivity {
             application = (MyApplication) getApplication();
         }
         application.addActivity(this);
+        searchTags[0]=tv_gloomy;
+        searchTags[1]=tv_tried;
+        searchTags[2]=tv_stressed;
+        searchTags[3]=tv_bloated;
+        searchTags[4]=tv_dry;
+        searchTags[5]=tv_clod;
+        searchTags[6]=tv_heavy;
         preferences =  getSharedPreferences("my",Context.MODE_PRIVATE);
         userId = preferences.getString("userId","");
         et_search_search.addTextChangedListener(new TextWatcherAdapter() {
@@ -145,44 +171,62 @@ public class SearchActivity extends BaseActivity {
     public void widgetClick(View v) {
 
     }
+    int quickSearck=-1;//快速搜索標籤
+    private void setQuickSearck(){
+        for (int i = 0; i < 7; i++) {
+            if (quickSearck==i){
+                searchTags[i].setBackground(getResources().getDrawable(R.drawable.answer_buttonlv));
+                searchTags[i].setTextColor(getResources().getColor(R.color.nomal_green));
+                name = searchTags[i].getText().toString().trim();
+                showProgressDialog();
+                teaList.clear();
+                planList.clear();
+                new getSearchResultAsynTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }else {
+                searchTags[i].setBackground(getDrawable(R.drawable.answer_button2));
+                searchTags[i].setTextColor(Color.parseColor("#999999"));
+            }
+        }
+    }
+
+    private
     String returnMsg1;
     /*  获取問題*/
     class getSearchResultAsynTask extends AsyncTask<Void,Void,String> {
 
         @Override
         protected String doInBackground(Void... voids) {
-
             String code = "";
-            String result =   HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/app/searchTea?userId="+userId+"&search="+name);
-            Log.e("back", "--->" + result);
-            if (!ToastUtil.isEmpty(result)) {
-                if (!"4000".equals(result)){
-                    try {
-                        JSONObject jsonObject = new JSONObject(result);
-                        code = jsonObject.getString("state");
-                        returnMsg1=jsonObject.getString("message1");
-                        JSONObject jsonObject1 =  jsonObject.getJSONObject("data");
-                        if ("200".equals(code)) {
-
-                            JSONArray jsonArray  = jsonObject1.getJSONArray("tea");
-                            Gson gson = new Gson();
-                            for (int i = 0;i<jsonArray.length();i++){
-                                Tea tea = gson.fromJson(jsonArray.get(i).toString(),Tea.class);
-                                teaList.add(tea);
-                            }
-                            JSONArray jsonArray1  = jsonObject1.getJSONArray("plan");
-                            for (int i = 0;i<jsonArray1.length();i++){
-                                Plan plan = gson.fromJson(jsonArray1.get(i).toString(),Plan.class);
-                                planList.add(plan);
+            try {
+                String result =HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/app/searchTea?userId="+userId+"&search="+ URLEncoder.encode(name,"utf-8"));
+                Log.e("back", "--->" + result);
+                if (!ToastUtil.isEmpty(result)) {
+                    if (!"4000".equals(result)){
+                            JSONObject jsonObject = new JSONObject(result);
+                            code = jsonObject.getString("state");
+                            returnMsg1=jsonObject.getString("message1");
+                            JSONObject jsonObject1 =  jsonObject.getJSONObject("data");
+                            if ("200".equals(code)) {
+                                JSONArray jsonArray  = jsonObject1.getJSONArray("tea");
+                                Gson gson = new Gson();
+                                for (int i = 0;i<jsonArray.length();i++){
+                                    Tea tea = gson.fromJson(jsonArray.get(i).toString(),Tea.class);
+                                    teaList.add(tea);
+                                }
+                                JSONArray jsonArray1  = jsonObject1.getJSONArray("plan");
+                                for (int i = 0;i<jsonArray1.length();i++){
+                                    Plan plan = gson.fromJson(jsonArray1.get(i).toString(),Plan.class);
+                                    planList.add(plan);
+                                }
                             }
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    }else {
+                        code="4000";
                     }
-                }else {
-                    code="4000";
-                }
+                }catch (Exception e) {
+                e.printStackTrace();
             }
+
             return code;
         }
         @Override
@@ -225,22 +269,103 @@ public class SearchActivity extends BaseActivity {
         tipDialog = new QMUITipDialog.Builder(this)
                 .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
                 .setTipWord(getText(R.string.search_qsh).toString())
-
                 .create();
         tipDialog.show();
+    }
+    private boolean isDialogShow(){
+        if (tipDialog!=null && tipDialog.isShowing()){
+            return true;
+        }
+        return false;
     }
 
     @Override
     protected void onStart() {
         super.onStart();
     }
-    @OnClick({R.id.iv_power_fh,R.id.tv_search_search,R.id.iv_history_del})
+    @OnClick({R.id.iv_power_fh,R.id.tv_search_search,R.id.iv_history_del,R.id.tv_gloomy,R.id.tv_tried,R.id.tv_stressed,R.id.tv_bloated,R.id.tv_dry,R.id.tv_clod,R.id.tv_heavy})
     public void onClick(View view){
         switch (view.getId()){
             case R.id.iv_power_fh:
                 finish();
                 break;
-
+            case R.id.tv_gloomy:
+                if (isDialogShow()){
+                    ToastUtil.showShort(this,R.string.search_qsh);
+                    break;
+                }
+                if (quickSearck==0){
+                    break;
+                }
+                quickSearck=0;
+                setQuickSearck();
+                break;
+            case R.id.tv_tried:
+                if (isDialogShow()){
+                    ToastUtil.showShort(this,R.string.search_qsh);
+                    break;
+                }
+                if (quickSearck==1){
+                    break;
+                }
+                quickSearck=1;
+                setQuickSearck();
+                break;
+            case R.id.tv_stressed:
+                if (isDialogShow()){
+                    ToastUtil.showShort(this,R.string.search_qsh);
+                    break;
+                }
+                if (quickSearck==2){
+                    break;
+                }
+                quickSearck=2;
+                setQuickSearck();
+                break;
+            case R.id.tv_bloated:
+                if (isDialogShow()){
+                    ToastUtil.showShort(this,R.string.search_qsh);
+                    break;
+                }
+                if (quickSearck==3){
+                    break;
+                }
+                quickSearck=3;
+                setQuickSearck();
+                break;
+            case R.id.tv_dry:
+                if (isDialogShow()){
+                    ToastUtil.showShort(this,R.string.search_qsh);
+                    break;
+                }
+                if (quickSearck==4){
+                    break;
+                }
+                quickSearck=4;
+                setQuickSearck();
+                break;
+            case R.id.tv_clod:
+                if (isDialogShow()){
+                    ToastUtil.showShort(this,R.string.search_qsh);
+                    break;
+                }
+                if (quickSearck==5){
+                    break;
+                }
+                quickSearck=5;
+                setQuickSearck();
+                break;
+            case R.id.tv_heavy:
+                if (isDialogShow()){
+                    ToastUtil.showShort(this,R.string.search_qsh);
+                    break;
+                }
+                if (quickSearck==6){
+                    break;
+                }
+                quickSearck=6;
+                setQuickSearck();
+                break;
             case R.id.tv_search_search:
                 if (!TextUtils.isEmpty(et_search_search.getText()))
 //                setHistory(et_search_search.getText().toString().trim());

@@ -8,6 +8,7 @@ import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,7 +32,7 @@ import teabar.ph.com.teabar.pojo.Numbers;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.view.BarChartManager;
 
-
+//茶飲量詳情頁面 展示用戶 day,week,month的茶飲進度
 public class DrinkNumActivity extends BaseActivity {
 
 
@@ -143,7 +144,7 @@ public class DrinkNumActivity extends BaseActivity {
         barChartManager = new BarChartManager(mBarChart,this);
         barChartManager1 = new BarChartManager(mBarChart1,this);
         setValueDay();
-        new getNumAsyncTask().execute();
+        new getNumAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         barChartManager.setYAxis(10,0,10);
         barChartManager1.setYAxis(10,0,10);
         barChartManager.setHightLimitLine(setNum,"",Color.parseColor("#777777"));
@@ -168,6 +169,7 @@ public class DrinkNumActivity extends BaseActivity {
             String code = "";
             String result = HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/app/getUserDrink?userId="+userId);
 
+            Log.i("getNumAsyncTask","--->"+result);
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 code = jsonObject.getString("state");
@@ -193,14 +195,12 @@ public class DrinkNumActivity extends BaseActivity {
                 }
                 for (int i=0;i<jsonArraymonth.length();i++){
                     JSONObject jsonObject2  = jsonArraymonth.getJSONObject(i);
-                    String time = jsonObject2.getString("date");
-                    String num = jsonObject2.getString("num");
-                    if (!TextUtils.isEmpty(time)){
-                        yValueMonth.set(Integer.valueOf(time),Integer.valueOf(num));
+                    int time = jsonObject2.getInt("date");
+                    int num = jsonObject2.getInt("num");
+                    if (time>1){
+                        yValueMonth.set(time-1,num);
                     }
                 }
-
-
             } catch ( Exception e) {
                 e.printStackTrace();
             }

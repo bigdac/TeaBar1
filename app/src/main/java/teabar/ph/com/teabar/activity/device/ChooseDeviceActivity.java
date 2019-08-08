@@ -68,6 +68,7 @@ import teabar.ph.com.teabar.util.Utils;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 import teabar.ph.com.teabar.view.WaveProgress;
 
+//選擇一個設備來進行沖泡
 public class ChooseDeviceActivity extends BaseActivity {
     @BindView(R.id.rv_alldevice)
     RecyclerView rv_alldevice;
@@ -561,7 +562,7 @@ public class ChooseDeviceActivity extends BaseActivity {
     @OnClick({ R.id.bt_equ_choose,R.id.iv_choose_fh})
     public  void onClick(View view){
         switch (view.getId()){
-            case R.id.bt_equ_choose:
+            case R.id.bt_equ_choose://選擇一個在綫的設備進行沖泡
                     if (chooseDeviceAdapter.getItemCount()>0) {
                         if (!Utils.isFastClick()) {
                             if (chooseDeviceAdapter.getmData().get(choosePosition).getOnLine()) {
@@ -597,6 +598,8 @@ public class ChooseDeviceActivity extends BaseActivity {
                         } else {
                             ToastUtil.showShort(this, getText(R.string.toast_equ_fast).toString());
                         }
+                    }else {
+                        ToastUtil.showShort(this,getText(R.string.toast_equ_add).toString());
                     }
                 break;
 

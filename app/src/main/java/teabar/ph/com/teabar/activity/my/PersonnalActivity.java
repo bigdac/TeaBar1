@@ -15,7 +15,6 @@ import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -35,11 +34,9 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -51,7 +48,6 @@ import com.yancy.gallerypick.inter.IHandlerCallBack;
 import com.yancy.gallerypick.inter.ImageLoader;
 import com.yancy.gallerypick.widget.GalleryImageView;
 
-
 import org.json.JSONObject;
 
 import java.io.File;
@@ -60,13 +56,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.PersonSetActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
@@ -74,10 +66,9 @@ import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.util.BitmapCompressUtils;
 import teabar.ph.com.teabar.util.HttpUtils;
-import teabar.ph.com.teabar.util.ToastUtil;
 
 /*
-* 個人信息頭像設置
+* 個人信息設置頁面 頭像，用戶名，ID
 * */
 public class PersonnalActivity extends BaseActivity  {
 

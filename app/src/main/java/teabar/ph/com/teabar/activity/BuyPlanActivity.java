@@ -1,27 +1,32 @@
 package teabar.ph.com.teabar.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
-import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.adpter.MyplanAdapter;
+import teabar.ph.com.teabar.adpter.TeaAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.pojo.Plan;
+import teabar.ph.com.teabar.pojo.Tea;
 import teabar.ph.com.teabar.util.GlideCircleTransform;
 
+//购买计划页面
 public class BuyPlanActivity extends BaseActivity {
 
     MyApplication application;
@@ -48,11 +53,18 @@ public class BuyPlanActivity extends BaseActivity {
             TextView tv_buy_week;
     Plan plan;
     String title,week;
+    @BindView(R.id.rl_plan_tea)
+    RecyclerView rl_plan_tea;
+    TeaAdapter teaAdapter;
+    List<Tea> teaList;
+
+    ArrayList<String> shopIds=new ArrayList<>();
     @Override
     public void initParms(Bundle parms) {
         plan = (Plan) parms.getSerializable("plan");
         title = parms.getString("title");
         week = parms.getString("week");
+        teaList= (List<Tea>) parms.getSerializable("teaList");
     }
 
     @Override
@@ -67,10 +79,10 @@ public class BuyPlanActivity extends BaseActivity {
             application = (MyApplication) getApplication();
         }
 
-
         application.addActivity(this);
 
         if (plan!=null){
+
             Glide.with(this).load(plan.getPlanPhoto()).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.color.white).into( iv_buy_head);
             tv_buy_des.setText(plan.getDescribeEn());
             tv_buy_about.setText(plan.getAboutEn());
@@ -80,6 +92,15 @@ public class BuyPlanActivity extends BaseActivity {
             tv_buy_planname.setText(title);
             tv_buy_week.setText(week);
             Glide.with(this).load(plan.getDietitianPhoto()).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.my_pic).transform(new GlideCircleTransform(this)).into(iv_buy_pic);
+
+            LinearLayoutManager layoutManager=new LinearLayoutManager(this);
+            teaList=plan.getTeaList();
+            for (Tea tea:teaList){
+                shopIds.add(tea.getShopId());
+            }
+            teaAdapter = new TeaAdapter(this,teaList);
+            rl_plan_tea.setLayoutManager(layoutManager);
+            rl_plan_tea.setAdapter(teaAdapter);
         }
     }
 
@@ -100,7 +121,9 @@ public class BuyPlanActivity extends BaseActivity {
                 break;
 
             case R.id.bt_plan_buy:
-                startActivity(MailActivity.class);
+                Intent intent=new Intent(this,MailActivity.class);
+                intent.putStringArrayListExtra("shopIds",shopIds);
+                startActivity(intent);
                 break;
         }
     }

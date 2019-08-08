@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -17,8 +15,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,12 +31,10 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import me.jessyan.autosize.AutoSizeCompat;
-import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.BuyNowActivity;
 import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.activity.device.AddDeviceActivity1;
-import teabar.ph.com.teabar.activity.device.MakeActivity;
 import teabar.ph.com.teabar.adpter.RecommendAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
@@ -50,6 +44,7 @@ import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 
+//推薦茶頁面
 public class RecommendActivity extends BaseActivity {
 
     @BindView(R.id.rv_recommend)

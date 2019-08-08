@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,7 +22,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
@@ -31,10 +29,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,9 +50,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -71,10 +64,8 @@ import teabar.ph.com.teabar.activity.device.ChooseDeviceActivity;
 import teabar.ph.com.teabar.activity.device.EquipmentDetailsActivity;
 import teabar.ph.com.teabar.activity.device.EqupmentLightActivity;
 import teabar.ph.com.teabar.activity.device.MakeActivity;
-import teabar.ph.com.teabar.fragment.EqumentFragment;
 import teabar.ph.com.teabar.fragment.EqumentFragment2;
 import teabar.ph.com.teabar.pojo.Equpment;
-import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.TenTwoUtil;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.language.LocalManageUtil;
@@ -400,12 +391,12 @@ public class MQService extends AbsHeartBeatService {
     }
 
     /**
-     * 发送开关机命令
-     *1、type:0、1、2、3 。
-     * 0: 待机
-     * 1: 休眠
+     * 发送设备休眠
      *
-     * @param
+     * @param type
+     * 0xC0：休眠（APP按键时发送）
+     * 0xC1：预热或停止冲泡（APP按键时发送）
+     * 0xC2：冲泡
      */
     public void sendOpenEqu(int type ,String mac) {
 

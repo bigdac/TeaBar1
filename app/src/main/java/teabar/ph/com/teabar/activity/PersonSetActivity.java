@@ -3,7 +3,6 @@ package teabar.ph.com.teabar.activity;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -48,35 +47,22 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.activity.question.BaseQuestionActivity;
-import teabar.ph.com.teabar.activity.question.RecommendActivity;
-import teabar.ph.com.teabar.activity.social.AddSocialActivity;
 import teabar.ph.com.teabar.adpter.AddressAdapter;
 import teabar.ph.com.teabar.adpter.BasicExamAdapter;
 import teabar.ph.com.teabar.adpter.PersonAskAdapter;
-import teabar.ph.com.teabar.adpter.PlanAdapter;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
 import teabar.ph.com.teabar.base.MyApplication;
-import teabar.ph.com.teabar.bean.CircleItem;
-import teabar.ph.com.teabar.bean.CommentItem;
-import teabar.ph.com.teabar.bean.PhotoInfo;
-import teabar.ph.com.teabar.bean.User;
-import teabar.ph.com.teabar.fragment.questionFragment.Question3Fragment;
-import teabar.ph.com.teabar.fragment.questionFragment.Question6Fragment;
 import teabar.ph.com.teabar.pojo.Adress;
-import teabar.ph.com.teabar.pojo.Tea;
 import teabar.ph.com.teabar.pojo.examOptions;
 import teabar.ph.com.teabar.util.DisplayUtil;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.Utils;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
-import teabar.ph.com.teabar.view.CompanyEdittext;
 import teabar.ph.com.teabar.view.FlowTagView;
-
+//個人信息節本設置頁面 名稱，性別，是否結婚，生日，昇高，體重，地址，健康目標
 public class PersonSetActivity extends BaseActivity {
 
 

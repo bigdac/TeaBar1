@@ -3,7 +3,6 @@ package teabar.ph.com.teabar.activity.social;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -43,6 +42,7 @@ import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.view.GlideImageLoader;
 import teabar.ph.com.teabar.view.SelectDialog;
 
+//添加用戶社交輿論
 public class AddSocialActivity extends BaseActivity implements ImagePickerAdapter.OnRecyclerViewItemClickListener{
     @BindView(R.id.tv_main_1)
     TextView tv_main_1;

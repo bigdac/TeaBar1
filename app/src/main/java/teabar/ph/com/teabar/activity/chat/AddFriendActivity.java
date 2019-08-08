@@ -39,7 +39,7 @@ import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.pojo.Friend;
 import teabar.ph.com.teabar.util.HttpUtils;
 
-
+//添加好友頁面
 public class AddFriendActivity extends BaseActivity {
 
 //    @BindView(R.id.tv_main_1)

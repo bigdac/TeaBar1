@@ -10,8 +10,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jaygoo.widget.OnRangeChangedListener;
@@ -19,7 +17,6 @@ import com.jaygoo.widget.RangeSeekBar;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import me.jessyan.autosize.utils.ScreenUtils;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
@@ -27,6 +24,7 @@ import teabar.ph.com.teabar.pojo.Equpment;
 import teabar.ph.com.teabar.service.MQService;
 import teabar.ph.com.teabar.util.ToastUtil;
 
+//設置設備清洗週期頁面
 public class EqupmentWashActivity extends BaseActivity {
     MyApplication application;
 

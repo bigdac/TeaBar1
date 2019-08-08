@@ -59,6 +59,7 @@ public abstract class BaseActivity extends FragmentActivity implements
         MyApplication application = (MyApplication) getApplication();
         isDebug = application.isDebug;
         APP_NAME = application.APP_NAME;
+
 //        CrashHandler crashHandler = CrashHandler.getInstance();
 //        crashHandler.init(getApplicationContext());
         PgyCrashManager.register();

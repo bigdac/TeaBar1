@@ -8,13 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.Objects;
 
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.login.LoginActivity;
 
+/**
+ * 引导页控制器和布局
+ */
 public class GuideFragment extends Fragment {
     View view;
 
@@ -22,7 +24,7 @@ public class GuideFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_guild, container, false);
         ImageView imageView =  view.findViewById(R.id.iv_guide_pic);
         ImageView iv_guide_text = view.findViewById(R.id.iv_guide_text);
-        // 步骤2:获取某一值
+        // 步骤2:获取某一值  根据不同的type 来加载不同的图片资源
         if(type==0){
           imageView .setImageResource( R.mipmap.guide1);
           iv_guide_text.setImageResource(R.mipmap.w1);
@@ -31,7 +33,7 @@ public class GuideFragment extends Fragment {
             imageView .setImageResource( R.mipmap.guide2);
             iv_guide_text.setImageResource(R.mipmap.h1);
         }
-        else if(type==2) {
+        else if(type==2) {//最后一个引导页面显示 开始体验按钮，点击跳转到登录页面页面
             imageView .setImageResource( R.mipmap.guide3);
             view.findViewById(R.id.tv_guild_button).setVisibility(View.VISIBLE);
             iv_guide_text.setImageResource(R.mipmap.l1);

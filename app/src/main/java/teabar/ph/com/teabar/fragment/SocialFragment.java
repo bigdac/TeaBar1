@@ -25,12 +25,12 @@ import teabar.ph.com.teabar.activity.social.SocialInformActivity;
 import teabar.ph.com.teabar.base.BaseFragment;
 
 
-
+//社交頁面
 public class SocialFragment extends BaseFragment {
 
     TextView tv_login_regist,tv_login_login;
-    FriendCircleFragment2 friendCircleFragment;
-    FriendFragment friendFragment;
+    FriendCircleFragment2 friendCircleFragment;//朋友圈社交評論頁面
+    FriendFragment friendFragment;//好友消息頁面
     RelativeLayout rl_social_inform;
     ImageView iv_social_friend;
     @BindView(R.id.tv_social_mes)
@@ -83,7 +83,7 @@ public class SocialFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(),SocialInformActivity.class));
             }
         });
-        tv_login_regist.setOnClickListener(new View.OnClickListener() {
+        tv_login_regist.setOnClickListener(new View.OnClickListener() {//點擊消息控件，隱藏添加評論控件，評論樊噲控件
             @Override
             public void onClick(View v) {
                 tv_login_regist.setTextSize(TypedValue.COMPLEX_UNIT_SP,30);
@@ -103,7 +103,7 @@ public class SocialFragment extends BaseFragment {
 
             }
         });
-        tv_login_login.setOnClickListener(new View.OnClickListener() {
+        tv_login_login.setOnClickListener(new View.OnClickListener() {//點擊社交控件，隱藏通知控件，群組控件
             @Override
             public void onClick(View v) {
                 tv_login_login.setTextSize(TypedValue.COMPLEX_UNIT_SP,30);

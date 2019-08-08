@@ -43,7 +43,7 @@ import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.MainActivity;
 import teabar.ph.com.teabar.activity.SearchActivity;
 import teabar.ph.com.teabar.activity.device.MakeActivity;
-import teabar.ph.com.teabar.activity.question.ChooseWhichActivity;
+import teabar.ph.com.teabar.activity.question.QusetionActivity;
 import teabar.ph.com.teabar.adpter.MyplanAdapter;
 import teabar.ph.com.teabar.adpter.TeaListAdapter;
 import teabar.ph.com.teabar.base.BaseFragment;
@@ -58,23 +58,21 @@ import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.Utils;
 import teabar.ph.com.teabar.util.zxing.android.CaptureActivity;
 
-
+//首頁
 public class MainFragment3 extends BaseFragment  {
-
-
 
     private RecyclerView rv_main_tealist;
     private ScrollView scrollView;
     RecyclerView rv_main_jh;
-    TeaListAdapter teaListAdapter ;
-    MyplanAdapter myplanAdapter ;
-    List<Plan> planList = new ArrayList<>();
-    List<Tea> list1 = new ArrayList<>();
-    List<Tea> list2 = new ArrayList<>();
-    List<Tea> list3 = new ArrayList<>();
-    List<String> list = new ArrayList<>();
-    private static final int REQUEST_CODE_SCAN = 0x0000;
-    public static boolean isRunning = false;
+    TeaListAdapter teaListAdapter ;//茶的列表适配器
+    MyplanAdapter myplanAdapter ;//健康計畫的適配器
+    List<Plan> planList = new ArrayList<>();//健康計畫的列表
+    List<Tea> list1 = new ArrayList<>();//草本口味的茶的列表
+    List<Tea> list2 = new ArrayList<>();//水果口味的茶的列表
+    List<Tea> list3 = new ArrayList<>();//功能茶的列表
+    List<String> list = new ArrayList<>();//"草本口味"，"水果口味"，"功能茶"文字的列表
+    private static final int REQUEST_CODE_SCAN = 0x0000;//二維碼掃描請求碼
+    public static boolean isRunning = false;//該頁面是否可見
     private boolean MQBound;
     @BindView(R.id.li_main_title)
     RelativeLayout li_main_title ;
@@ -115,7 +113,7 @@ public class MainFragment3 extends BaseFragment  {
     String firstMac;
     EquipmentImpl equipmentDao;
     SharedPreferences preferences;
-    Equpment firstEqu;
+    Equpment firstEqu;//用戶第一個設備
     String userId;
     int language;
     int type1;
@@ -132,7 +130,7 @@ public class MainFragment3 extends BaseFragment  {
             getTipsAsynTask.execute();
         }
         if(list1.size()==0){
-            getTeaListAsynTask = new  getTeaListAsynTask(this) ;
+            getTeaListAsynTask = new  getTeaListAsynTask(this) ;//獲取茶列表
             getTeaListAsynTask .execute();
         }
         language= ((MainActivity)getActivity()).getLanguage();
@@ -149,7 +147,7 @@ public class MainFragment3 extends BaseFragment  {
         scrollView =view. findViewById(R.id.scrollView);
         rv_main_jh = view.findViewById(R.id.rv_main_jh);
         rv_main_tealist = view.findViewById(R.id.rv_main_tealist);
-        if (type1==1){
+        if (type1==1 && rl_main_question!=null){
             rl_main_question.setVisibility(View.GONE);
         }
         //刷新默认设备
@@ -159,9 +157,9 @@ public class MainFragment3 extends BaseFragment  {
 
         initView1();
         searchWeatherAsynTask = new searchWeatherAsynTask(this) ;
-        searchWeatherAsynTask.execute();
+        searchWeatherAsynTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         getAnswerNumAsynTask = new getAnswerNumAsynTask(this) ;
-        getAnswerNumAsynTask.execute();
+        getAnswerNumAsynTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         //绑定services
         MQintent = new Intent(getActivity(), MQService.class);
         MQBound = getActivity().bindService(MQintent, MQconnection, Context.BIND_AUTO_CREATE);
@@ -203,13 +201,16 @@ public class MainFragment3 extends BaseFragment  {
     public void onClick(View view){
         switch (view.getId()){
             case R.id.bt_main_dt:
-                startActivity(new Intent(getActivity(),ChooseWhichActivity.class));
+//                startActivity(new Intent(getActivity(),ChooseWhichActivity.class));
+                startActivity(new Intent(getActivity(),QusetionActivity.class));
                 break;
             case R.id.iv_main_search:
                 startActivity(new Intent(getActivity(),SearchActivity.class));
                 break;
             case R.id.iv_main_sm:
                 //动态权限申请
+
+
                 if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, 1);
                 } else {
@@ -619,7 +620,7 @@ public class MainFragment3 extends BaseFragment  {
 
                     if (tv_weather_wd!=null&&tv_weather_sd!=null&&tv_weather_tq!=null&&tv_weather_day!=null) {
                         FindWeatherAsynTask = new FindWeatherAsynTask(MainFragment3.this) ;
-                        FindWeatherAsynTask .execute();
+                        FindWeatherAsynTask .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                         Weather weather = weathers.get(0);
                         tv_weather_wd.setText(weather.getTem() + "℃");
                         tv_weather_sd.setText(weather.getHumidity() + "％");
@@ -699,10 +700,16 @@ public class MainFragment3 extends BaseFragment  {
         }
     }
 
+    //根据天气选择不同的来区分的三种茶 具体看FindWeatherAsynTask这个任务的功能来获取这三种茶
     Tea tea1 = new Tea();
     Tea tea2 = new Tea();
     Tea tea3 = new Tea();
 
+    /**
+     * 獲取星期幾
+     * @param time
+     * @return
+     */
     public  String getWeek(long time) {
 
         Calendar cd = Calendar.getInstance();
@@ -786,6 +793,75 @@ public class MainFragment3 extends BaseFragment  {
                             Tea tea = gson.fromJson(jsonObject2.toString(),Tea.class);
                             above.add(tea);
                         }
+                        if("200".equals(code)){
+                            for (int i =0;i<weathers.size();i++){
+                                Tea teas;
+                                if (i==0){
+                                    if (Humidity.size()>0&&above.size()>0&&below.size()>0) {
+                                        if (Integer.valueOf(weathers.get(0).getHumidity()) > 70) {
+                                            int num2 = (int) (Math.random() * Humidity.size());
+                                            teas = Humidity.get(num2);
+                                            tea1 = teas;
+                                        } else {
+                                            if (Integer.valueOf(weathers.get(0).getTem()) > 21) {
+                                                int num2 = (int) (Math.random() * above.size());
+
+                                                teas = above.get(num2);
+                                                tea1 = teas;
+                                            } else {
+                                                int num2 = (int) (Math.random() * below.size());
+                                                teas = below.get(num2);
+                                                tea1 = teas;
+                                            }
+                                        }
+
+                                    }
+                                }
+                                if (i==1){
+                                    if (Humidity.size()>0&&above.size()>0&&below.size()>0) {
+                                        if (Integer.valueOf(weathers.get(1).getHumidity()) > 70) {
+                                            int num2 = (int) (Math.random() * Humidity.size());
+                                            teas = Humidity.get(num2);
+                                            tea2 = teas;
+                                        } else {
+                                            if (Integer.valueOf(weathers.get(1).getTem()) > 21) {
+                                                int num2 = (int) (Math.random() * above.size());
+                                                teas = above.get(num2);
+                                                tea2 = teas;
+                                            } else {
+                                                int num2 = (int) (Math.random() * below.size());
+                                                teas = below.get(num2);
+                                                tea2 = teas;
+                                            }
+                                        }
+
+                                    }
+                                }
+
+                                if (i==2){
+                                    if (Humidity.size()>0&&above.size()>0&&below.size()>0) {
+                                        if (Integer.valueOf(weathers.get(2).getHumidity()) > 70) {
+                                            int num2 = (int) (Math.random() * Humidity.size());
+                                            teas = Humidity.get(num2);
+                                            tea3 = teas;
+                                        } else {
+                                            if (Integer.valueOf(weathers.get(2).getTem()) > 21) {
+                                                int num2 = (int) (Math.random() * above.size());
+                                                teas = above.get(num2);
+                                                tea3 = teas;
+                                            } else {
+                                                int num2 = (int) (Math.random() * below.size());
+                                                teas = below.get(num2);
+                                                tea3 = teas;
+                                            }
+                                        }
+
+                                    }
+                                }
+
+                            }
+                        }
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -807,72 +883,7 @@ public class MainFragment3 extends BaseFragment  {
             switch (s) {
 
                 case "200":
-                    for (int i =0;i<weathers.size();i++){
-                        Tea teas;
-                        if (i==0){
-                            if (Humidity.size()>0&&above.size()>0&&below.size()>0) {
-                                if (Integer.valueOf(weathers.get(0).getHumidity()) > 70) {
-                                    int num2 = (int) (Math.random() * Humidity.size());
-                                    teas = Humidity.get(num2);
-                                    tea1 = teas;
-                                } else {
-                                    if (Integer.valueOf(weathers.get(0).getTem()) > 21) {
-                                        int num2 = (int) (Math.random() * above.size());
 
-                                        teas = above.get(num2);
-                                        tea1 = teas;
-                                    } else {
-                                        int num2 = (int) (Math.random() * below.size());
-                                        teas = below.get(num2);
-                                        tea1 = teas;
-                                    }
-                                }
-
-                            }
-                        }
-                        if (i==1){
-                            if (Humidity.size()>0&&above.size()>0&&below.size()>0) {
-                                if (Integer.valueOf(weathers.get(1).getHumidity()) > 70) {
-                                    int num2 = (int) (Math.random() * Humidity.size());
-                                    teas = Humidity.get(num2);
-                                    tea2 = teas;
-                                } else {
-                                    if (Integer.valueOf(weathers.get(1).getTem()) > 21) {
-                                        int num2 = (int) (Math.random() * above.size());
-                                        teas = above.get(num2);
-                                        tea2 = teas;
-                                    } else {
-                                        int num2 = (int) (Math.random() * below.size());
-                                        teas = below.get(num2);
-                                        tea2 = teas;
-                                    }
-                                }
-
-                            }
-                        }
-
-                        if (i==2){
-                            if (Humidity.size()>0&&above.size()>0&&below.size()>0) {
-                                if (Integer.valueOf(weathers.get(2).getHumidity()) > 70) {
-                                    int num2 = (int) (Math.random() * Humidity.size());
-                                    teas = Humidity.get(num2);
-                                    tea3 = teas;
-                                } else {
-                                    if (Integer.valueOf(weathers.get(2).getTem()) > 21) {
-                                        int num2 = (int) (Math.random() * above.size());
-                                        teas = above.get(num2);
-                                        tea3 = teas;
-                                    } else {
-                                        int num2 = (int) (Math.random() * below.size());
-                                        teas = below.get(num2);
-                                        tea3 = teas;
-                                    }
-                                }
-
-                            }
-                        }
-
-                    }
                     if (tv_weather_project!=null&&tv_weather_name!=null) {
                         tv_weather_project.setText(tea1.getProductNameEn());
                         tv_weather_name.setText(tea1.getTeaNameEn());
@@ -1054,7 +1065,7 @@ public class MainFragment3 extends BaseFragment  {
         protected String doInBackground(BaseFragment baseFragment ,Void... voids) {
             String code = "";
             String result =   HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/app/getPlan" );
-            Log.e("back", "--->" + result);
+            Log.e("getAllPlanAsynTask", "--->" + result);
             if (!ToastUtil.isEmpty(result)) {
                 if (!"4000".equals(result)){
                     try {
@@ -1070,7 +1081,6 @@ public class MainFragment3 extends BaseFragment  {
                                 Plan plan = gson.fromJson(jsonArray.get(i).toString(),Plan.class);
                                 planList.add(plan);
                             }
-
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
