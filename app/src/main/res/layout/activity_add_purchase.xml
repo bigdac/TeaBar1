@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/iv_plan_fh"
-            android:text="Add Purchased Programs"
+            android:text="@string/add_my_plan"
             android:textColor="#333333"
             android:textSize="22sp"
             android:layout_marginLeft="15dp"
@@ -33,6 +33,11 @@
             android:layout_marginTop="27dp"
             android:id="@+id/rl_fits"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:overScrollMode="never"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

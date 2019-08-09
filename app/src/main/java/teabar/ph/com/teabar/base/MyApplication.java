@@ -45,7 +45,6 @@ public class MyApplication extends Application {
     public static List<UserInfo> unRead = new ArrayList<>();
     public static List<Message> ids = new ArrayList<>();
     public static int IsEnglish;
-    public static int initLanguage=0;//用户第一次使用app时，初始化的语言，1为英文，0为其他
     public static Context getContext(){
         return mContext;
 

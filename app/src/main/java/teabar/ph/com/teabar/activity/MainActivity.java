@@ -82,7 +82,7 @@ import teabar.ph.com.teabar.view.NoSrcollViewPage;
  * 主页面
  * 用来加载首页，设备页，社区，商城，我的这5个页面
  */
-public class MainActivity extends BaseActivity implements FriendCircleFragment2.hidenShowView ,EqumentFragment2.EquipmentCtrl,MainFragment3.FirstEquipmentCtrl {
+public class MainActivity extends BaseActivity implements FriendCircleFragment2.hidenShowView, EqumentFragment2.EquipmentCtrl, MainFragment3.FirstEquipmentCtrl {
     @BindView(R.id.main_viewPage)
     NoSrcollViewPage main_viewPage;//不可滑动的ViewPage
     @BindView(R.id.main_tabLayout)
@@ -90,14 +90,14 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
     List<String> mainMemu = new ArrayList<>();
     List<BaseFragment> fragmentList = new ArrayList<>();//用来管理fragment的列表集合
     MyApplication application;
-    MainFragment3 mainFragment ;//首页
-    EqumentFragment2 equmentFragment ;//设备页
-    SocialFragment socialFragment ;//社区页
-    MailFragment1 mailFragment ;//商城页
-    MyselfFragment1 myselfFragment ;//我的（个人设置页面 type1为0时的个人页面
-    MyselfFragment myselfFragment1 ;//我的(个人设置页面 type=1时的个人页面)
+    MainFragment3 mainFragment;//首页
+    EqumentFragment2 equmentFragment;//设备页
+    SocialFragment socialFragment;//社区页
+    MailFragment1 mailFragment;//商城页
+    MyselfFragment1 myselfFragment;//我的（个人设置页面 type1为0时的个人页面
+    MyselfFragment myselfFragment1;//我的(个人设置页面 type=1时的个人页面)
     private boolean MQBound;
-    public static float scale = 0 ;
+    public static float scale = 0;
     MessageReceiver receiver;
     EquipmentImpl equipmentDao;
     List<Equpment> equpments;
@@ -107,10 +107,12 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
     SharedPreferences preferences;
     String userId;
     int type1;//用户类型，根据类型来加载主页面的选项卡页面
+
     @Override
     public void initParms(Bundle parms) {
 
     }
+
     @Override
     public Resources getResources() {
         //需要升级到 v1.1.2 及以上版本才能使用 AutoSizeCompat
@@ -119,61 +121,64 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
         return super.getResources();
 
     }
+
     @Override
     public int bindLayout() {
 //        setSteepStatusBar(true);
 
         return R.layout.activity_main;
     }
+
     public static void reStart(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
+
     @Override
     public void initView(View view) {
-        isRunning =true;
+        isRunning = true;
         scale = getApplicationContext().getResources().getDisplayMetrics().density;
         if (application == null) {
             application = (MyApplication) getApplication();
         }
         application.addActivity(this);
         preferences = getSharedPreferences("my", MODE_PRIVATE);
-        userId = preferences.getString("userId","") ;
-        type1 = preferences.getInt("type1",0);
-        mainFragment=new MainFragment3();
-        equmentFragment=new EqumentFragment2();
-        socialFragment=new SocialFragment();
+        userId = preferences.getString("userId", "");
+        type1 = preferences.getInt("type1", 0);
+        mainFragment = new MainFragment3();
+        equmentFragment = new EqumentFragment2();
+        socialFragment = new SocialFragment();
         mailFragment = new MailFragment1();
         myselfFragment = new MyselfFragment1();
         myselfFragment1 = new MyselfFragment();
-        equipmentDao = new EquipmentImpl( getApplicationContext());
-        equpments= equipmentDao.findAll();
-        for (int i = 0;i<equpments.size();i++){
-            if (equpments.get(i).getIsFirst()){
-                FirstEqument = equpments.get(i) ;
+        equipmentDao = new EquipmentImpl(getApplicationContext());
+        equpments = equipmentDao.findAll();
+        for (int i = 0; i < equpments.size(); i++) {
+            if (equpments.get(i).getIsFirst()) {
+                FirstEqument = equpments.get(i);
             }
         }
         initView();
         //绑定services
         MQintent = new Intent(this, MQService.class);
-        MQBound =  bindService(MQintent, MQconnection, Context.BIND_AUTO_CREATE);
+        MQBound = bindService(MQintent, MQconnection, Context.BIND_AUTO_CREATE);
         IntentFilter intentFilter = new IntentFilter("MainActivity");
-        receiver = new  MessageReceiver();
+        receiver = new MessageReceiver();
         registerReceiver(receiver, intentFilter);
         userEntryDao = new UserEntryImpl(getApplicationContext());
         LoginJM();
         requestOverlayPermission();
-        Map<String,Object>  params = new HashMap<>();
-        params.put("appType",2);
+        Map<String, Object> params = new HashMap<>();
+        params.put("appType", 2);
         new upDateAppAsyncTask().execute(params);
     }
 
     /**
      * 极光登录操作
      */
-    public void LoginJM(){
-        JMessageClient.login(userId+"", "123456", new BasicCallback() {
+    public void LoginJM() {
+        JMessageClient.login(userId + "", "123456", new BasicCallback() {
             @Override
             public void gotResult(int responseCode, String responseMessage) {
 
@@ -192,7 +197,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
 
                     UserEntry user = userEntryDao.findById(1);
                     if (null == user) {
-                        user = new UserEntry(1,userId,username, appKey);
+                        user = new UserEntry(1, userId, username, appKey);
                         userEntryDao.insert(user);
                     }
                     findFriend();
@@ -202,16 +207,16 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
         });
 
 
-
     }
-    public void findFriend(){
+
+    public void findFriend() {
         ContactManager.getFriendList(new GetUserInfoListCallback() {
             @Override
             public void gotResult(int responseCode, String responseMessage, List<UserInfo> userInfoList) {
                 if (0 == responseCode) {
                     //获取好友列表成功
                     SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString("friendNum",userInfoList.size()+"");
+                    editor.putString("friendNum", userInfoList.size() + "");
                     editor.commit();
 
 
@@ -222,6 +227,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
             }
         });
     }
+
     private static final int REQUEST_OVERLAY = 4444;
 
     /**
@@ -236,8 +242,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
     }
 
 
-
-    ChangeDialog dialog ;
+    ChangeDialog dialog;
 
     /**
      * 请求开启悬浮窗权限对话框
@@ -284,26 +289,28 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
         lp.alpha = f;
         getWindow().setAttributes(lp);
     }
+
     @Override
     protected void onStart() {
         super.onStart();
-        if (MQService.reset==1){
+        if (MQService.reset == 1) {
             FirstEqument = null;
-            MQService.reset=0;
+            MQService.reset = 0;
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (FirstEqument!=null&&MQservice!=null){
-            if (FirstEqument.getMStage()!=0xb6&&FirstEqument.getMStage()!=0xb7){
+        if (FirstEqument != null && MQservice != null) {
+            if (FirstEqument.getMStage() != 0xb6 && FirstEqument.getMStage() != 0xb7) {
                 MQservice.sendFindEqu(FirstEqument.getMacAdress());
             }
         }
     }
 
     Equpment msg1;
+
     class MessageReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -311,26 +318,27 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
             String msg = intent.getStringExtra("msg");
             msg1 = (Equpment) intent.getSerializableExtra("msg1");
             FirstEqument = msg1;
-            int reset =  intent.getIntExtra("reset",0);
-            if (reset==1){
+            int reset = intent.getIntExtra("reset", 0);
+            if (reset == 1) {
                 FirstEqument = null;
             }
-             if (MainFragment3.isRunning){
-                 mainFragment.RefrashFirstEqu1();
-             }
-            if (EqumentFragment2.isRunning){
+            if (MainFragment3.isRunning) {
+                mainFragment.RefrashFirstEqu1();
+            }
+            if (EqumentFragment2.isRunning) {
                 equmentFragment.RefrashFirstEqu1();
             }
 
         }
     }
 
-    public Equpment getFirstEqu(){
-        if (FirstEqument!=null){
-            return  FirstEqument;
+    public Equpment getFirstEqu() {
+        if (FirstEqument != null) {
+            return FirstEqument;
         }
-         return null;
+        return null;
     }
+
     Intent MQintent;
     MQService MQservice;
     boolean boundservice;
@@ -353,20 +361,11 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
      * 向页面中所有的设备发送查询命令，从而获得设备在线状态
      */
     @SuppressLint("StaticFieldLeak")
-    class  FirstAsynctask extends AsyncTask<Void,Void,Void>{
+    class FirstAsynctask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... voids) {
-                 MQservice.loadAlltopic();
-            for (Equpment equpment:equpments){
-                try {
-                    Thread.sleep(500);
-                    if (!TextUtils.isEmpty(equpment.getMacAdress()))
-                    MQservice.sendFindEqu(equpment.getMacAdress());
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+            MQservice.getBasicData();
             return null;
         }
     }
@@ -377,27 +376,27 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
      * 更新App
      * 从后台获取当前app的版本，如果获取的版本和用户使用的app版本一样就不更新，不一样就更新
      */
-    class upDateAppAsyncTask extends AsyncTask<Map<String,Object>,Void,String>{
+    class upDateAppAsyncTask extends AsyncTask<Map<String, Object>, Void, String> {
 
         @Override
         protected String doInBackground(Map<String, Object>... maps) {
-            String code ="";
-            Map <String,Object> params = maps[0];
+            String code = "";
+            Map<String, Object> params = maps[0];
 
-            String result = HttpUtils.postOkHpptRequest(HttpUtils.ipAddress+"/app/getAPPVersion",params);
-            if (!TextUtils.isEmpty(result)){
+            String result = HttpUtils.postOkHpptRequest(HttpUtils.ipAddress + "/app/getAPPVersion", params);
+            if (!TextUtils.isEmpty(result)) {
                 try {
-                    JSONObject jsonObject  = new JSONObject(result);
+                    JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("state");
                     JSONObject jsonObject1 = jsonObject.getJSONObject("data");
                     appVersion = jsonObject1.getString("appVersion");
 
-                } catch ( Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
 
-            }else {
+            } else {
                 code = "4000";
             }
             return code;
@@ -406,16 +405,16 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            switch (s){
+            switch (s) {
                 case "4000":
                     toast(getText(R.string.toast_all_cs).toString());
 
                     break;
                 case "200":
                     String name = Utils.getVerName(MainActivity.this);
-                    if (name.equals(appVersion)){
+                    if (name.equals(appVersion)) {
 
-                    }else {
+                    } else {
                         customDialog3();
                     }
 
@@ -428,8 +427,9 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
      * 更新APP
      * */
     Dialog dialog1;
-    private void customDialog3(  ) {
-        dialog1  = new Dialog(this, R.style.MyDialog);
+
+    private void customDialog3() {
+        dialog1 = new Dialog(this, R.style.MyDialog);
         View view = View.inflate(this, R.layout.dialog_del, null);
         TextView tv_dialog_qx = (TextView) view.findViewById(R.id.tv_dia_qx);
         TextView tv_dialog_qd = (TextView) view.findViewById(R.id.tv_dia_qd);
@@ -470,6 +470,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
         dialog1.show();
 
     }
+
     @Override
     public void doBusiness(Context mContext) {
 
@@ -479,9 +480,10 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
     public void widgetClick(View v) {
 
     }
+
     private void initView() {
 
-        if (type1==0) {
+        if (type1 == 0) {
             mainMemu.add("茶饮");
             mainMemu.add("设备");
             mainMemu.add("社区");
@@ -492,7 +494,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
             fragmentList.add(socialFragment);
             fragmentList.add(mailFragment);
             fragmentList.add(myselfFragment);
-        }else {
+        } else {
             mainMemu.add("茶饮");
             mainMemu.add("设备");
             mainMemu.add("商城");
@@ -502,7 +504,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
             fragmentList.add(mailFragment);
             fragmentList.add(myselfFragment1);
         }
-        ClickViewPageAdapter tabAdapter = new ClickViewPageAdapter(getSupportFragmentManager(), fragmentList, this,type1);
+        ClickViewPageAdapter tabAdapter = new ClickViewPageAdapter(getSupportFragmentManager(), fragmentList, this, type1);
         main_viewPage.setAdapter(tabAdapter);
         main_tabLayout.setupWithViewPager(main_viewPage);
         for (int i = 0; i < mainMemu.size(); i++) {
@@ -521,74 +523,74 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 ((ImageView) tab.getCustomView().findViewById(R.id.tab_iv)).setSelected(true);
-                if (type1==0){
-                switch (tab.getPosition()) {
-                    case 0:
-                        ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.nomal_green));
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                if (type1 == 0) {
+                    switch (tab.getPosition()) {
+                        case 0:
+                            ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.nomal_green));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 //                            getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
-                        }
-                        break;
-                    case 1:
-                        ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.nomal_green));
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                            }
+                            break;
+                        case 1:
+                            ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.nomal_green));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 //                            getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
-                        }
-                        break;
-                    case 2:
-                        ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.nomal_green));
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                            }
+                            break;
+                        case 2:
+                            ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.nomal_green));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 //                            getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
-                        }
-                        break;
-                    case 3:
-                        ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.nomal_green));
-                      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                            }
+                            break;
+                        case 3:
+                            ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.nomal_green));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                          getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 //                             getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
-                           }
-                        break;
-                    case 4:
-                        ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.nomal_green));
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                            }
+                            break;
+                        case 4:
+                            ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.nomal_green));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                            getWindow().setStatusBarColor(getResources().getColor(R.color.main_tit1));
 
 //                            getWindow().addFlags(
 //                                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                        }
+                            }
 
-                        break;
-                }
-                }else {
+                            break;
+                    }
+                } else {
                     switch (tab.getPosition()) {
                         case 0:
-                            ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.nomal_green));
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                            ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.nomal_green));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 //                                getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
                             }
                             break;
                         case 1:
                             ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.nomal_green));
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 //                                getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
                             }
                             break;
 
                         case 2:
-                            ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.nomal_green));
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                            ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.nomal_green));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                          getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 //                                getWindow().setStatusBarColor(getResources().getColor(R.color.main_title));
                             }
                             break;
                         case 3:
-                            ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor( getResources().getColor(R.color.nomal_green));
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                            ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.nomal_green));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                                getWindow().setStatusBarColor(getResources().getColor(R.color.main_tit1));
 
 //                            getWindow().addFlags(
@@ -604,7 +606,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
             public void onTabUnselected(TabLayout.Tab tab) {
                 //没有选择时候调用
                 ((ImageView) tab.getCustomView().findViewById(R.id.tab_iv)).setSelected(false);
-                if (type1==0) {
+                if (type1 == 0) {
                     switch (tab.getPosition()) {
                         case 0:
                             ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.social_gray));
@@ -622,22 +624,22 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
                             ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.social_gray));
                             break;
                     }
-                }else {
+                } else {
 
-                        switch (tab.getPosition()) {
-                            case 0:
-                                ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.social_gray));
-                                break;
-                            case 1:
-                                ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.social_gray));
-                                break;
-                            case 2:
-                                ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.social_gray));
-                                break;
-                            case 3:
-                                ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.social_gray));
-                                break;
-                         }
+                    switch (tab.getPosition()) {
+                        case 0:
+                            ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.social_gray));
+                            break;
+                        case 1:
+                            ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.social_gray));
+                            break;
+                        case 2:
+                            ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.social_gray));
+                            break;
+                        case 3:
+                            ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(getResources().getColor(R.color.social_gray));
+                            break;
+                    }
 
                 }
             }
@@ -652,29 +654,31 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
     @Override
     public void hiden(boolean b) {
 
-        if (b){
+        if (b) {
             main_tabLayout.setVisibility(View.GONE);
-        }else {
+        } else {
             main_tabLayout.setVisibility(View.VISIBLE);
         }
 
     }
 
-    public int getLanguage(){
+    public int getLanguage() {
         return application.IsEnglish();
     }
+
     /**
      * 收到消息
      */
     public void onEvent(MessageEvent event) {
         Message msg = event.getMessage();
         if (msg.getTargetType() == ConversationType.single) {
-        if (FriendFragment.isRunning){
-            EventBus.getDefault().post(event);
-        }
+            if (FriendFragment.isRunning) {
+                EventBus.getDefault().post(event);
+            }
         }
 
     }
+
     /**
      * 接收离线消息
      *
@@ -683,7 +687,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
     public void onEvent(OfflineMessageEvent event) {
         Conversation conv = event.getConversation();
         if (!conv.getTargetId().equals("feedback_Android")) {
-            if (FriendFragment.isRunning){
+            if (FriendFragment.isRunning) {
                 EventBus.getDefault().post(event);
             }
         }
@@ -691,16 +695,17 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
 
 
     String userNickname;
+
     //接收到好友事件
     public void onEvent(final ContactNotifyEvent event) {
         socialFragment.RefrashView();
-          if (event.getType() == ContactNotifyEvent.Type.contact_deleted) {
-              try {
-                  Thread.sleep(2000);
-                  socialFragment.Refrashfriend();
-              } catch (InterruptedException e) {
-                  e.printStackTrace();
-              }
+        if (event.getType() == ContactNotifyEvent.Type.contact_deleted) {
+            try {
+                Thread.sleep(2000);
+                socialFragment.Refrashfriend();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
         }
     }
@@ -710,7 +715,7 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
         if (MQBound) {
             unbindService(MQconnection);
         }
-        if (receiver!=null)
+        if (receiver != null)
             unregisterReceiver(receiver);
         isRunning = false;
         super.onDestroy();
@@ -719,20 +724,20 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode==1000) {
+        if (resultCode == 1000) {
             socialFragment.Refrashfriend();
         }
-        if (resultCode==2000){
-            equipmentDao = new EquipmentImpl( getApplicationContext());
-            equpments= equipmentDao.findAll();
-            if (equpments.size()>0){
-            for (int i = 0;i<equpments.size();i++){
-                if (equpments.get(i).getIsFirst()){
-                    FirstEqument = equpments.get(i) ;
+        if (resultCode == 2000) {
+            equipmentDao = new EquipmentImpl(getApplicationContext());
+            equpments = equipmentDao.findAll();
+            if (equpments.size() > 0) {
+                for (int i = 0; i < equpments.size(); i++) {
+                    if (equpments.get(i).getIsFirst()) {
+                        FirstEqument = equpments.get(i);
+                    }
                 }
-             }
-            }else {
-                FirstEqument=null;
+            } else {
+                FirstEqument = null;
             }
             mainFragment.RefrashFirstEqu1();
             equmentFragment.RefrashFirstEqu1();
@@ -741,43 +746,44 @@ public class MainActivity extends BaseActivity implements FriendCircleFragment2.
 
     }
 
-    public Equpment getFirstEqument(){
+    public Equpment getFirstEqument() {
         return FirstEqument;
     }
 
-    public void setFirstEqument(Equpment firstEqument){
-        this.FirstEqument= null;
+    public void setFirstEqument(Equpment firstEqument) {
+        this.FirstEqument = null;
         this.FirstEqument = firstEqument;
     }
 
     @Override
-    public void open(int type,String mac) {
-            MQservice.sendOpenEqu(type,mac);
-            equmentFragment.Synchronization(type);//设备同步    0Xc1:正在预热 0Xc0：休眠（关闭预热发一条
-        Log.e(TAG, "open: --------------->"+type+">>>>>>"+mac );
+    public void open(int type, String mac) {
+        MQservice.sendOpenEqu(type, mac);
+        equmentFragment.Synchronization(type);//设备同步    0Xc1:正在预热 0Xc0：休眠（关闭预热发一条
+        Log.e(TAG, "open: --------------->" + type + ">>>>>>" + mac);
     }
+
     @Override
-    public void open1(int type,String mac) {
-        MQservice.sendOpenEqu(type,mac);
+    public void open1(int type, String mac) {
+        MQservice.sendOpenEqu(type, mac);
         mainFragment.Synchronization(type);//设备同步
-        Log.e(TAG, "open: --------------->"+type+">>>>>>"+mac );
+        Log.e(TAG, "open: --------------->" + type + ">>>>>>" + mac);
     }
 
 
     //记录用户首次点击返回键的时间
-    private long firstTime=0;
+    private long firstTime = 0;
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        switch (keyCode){
+        switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
-                long secondTime=System.currentTimeMillis();
-                if(secondTime-firstTime>2000){
-                    Toast.makeText( this,getText(R.string.toast_main_exit),Toast.LENGTH_SHORT).show();
-                    firstTime=secondTime;
+                long secondTime = System.currentTimeMillis();
+                if (secondTime - firstTime > 2000) {
+                    Toast.makeText(this, getText(R.string.toast_main_exit), Toast.LENGTH_SHORT).show();
+                    firstTime = secondTime;
                     return true;
-                }else{
-                     application.removeAllActivity();
+                } else {
+                    application.removeAllActivity();
                 }
                 break;
         }

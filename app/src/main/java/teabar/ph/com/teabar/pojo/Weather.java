@@ -7,6 +7,17 @@ public class Weather {
     String humidity;
     String tem;
 
+    public Weather() {
+    }
+
+    public Weather(String week, String wea, String humidity, String tem) {
+        this.week = week;
+        this.wea = wea;
+
+        this.humidity = humidity;
+        this.tem = tem;
+    }
+
     public String getWeek() {
         return week;
     }

@@ -101,7 +101,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_below="@+id/rl_mode_2"
-        android:layout_marginBottom="40dp"
+
      >
         <ImageView
             android:id="@+id/iv_mode3"
@@ -130,4 +130,38 @@
             android:background="#e1e1e1" />
 
     </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_mode_4"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/rl_mode_3"
+        android:layout_marginBottom="40dp"
+        >
+        <ImageView
+            android:id="@+id/iv_mode4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/whatsapp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="36dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/iv_mode4"
+            android:text="whatsapp"
+            android:textColor="@color/login_black"
+            android:textSize="12sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
+            android:background="#e1e1e1" />
+
+    </RelativeLayout>
+
 </RelativeLayout>

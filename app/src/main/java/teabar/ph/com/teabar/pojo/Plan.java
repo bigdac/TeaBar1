@@ -22,6 +22,61 @@ public class Plan implements Serializable {
     String dietitianDescribeCn;
     String dietitianDescribeEn;
     List<Tea> teaList;
+    String amTime;
+    String pmTime;
+    int flag;
+    int amFlag;
+    int pmFlag;
+
+    int sum;
+
+    public int getSum() {
+        return sum;
+    }
+
+    public void setSum(int sum) {
+        this.sum = sum;
+    }
+
+    public int getAmFlag() {
+        return amFlag;
+    }
+
+    public void setAmFlag(int amFlag) {
+        this.amFlag = amFlag;
+    }
+
+    public int getPmFlag() {
+        return pmFlag;
+    }
+
+    public void setPmFlag(int pmFlag) {
+        this.pmFlag = pmFlag;
+    }
+
+    public int getFlag() {
+        return flag;
+    }
+
+    public void setFlag(int flag) {
+        this.flag = flag;
+    }
+
+    public String getAmTime() {
+        return amTime;
+    }
+
+    public void setAmTime(String amTime) {
+        this.amTime = amTime;
+    }
+
+    public String getPmTime() {
+        return pmTime;
+    }
+
+    public void setPmTime(String pmTime) {
+        this.pmTime = pmTime;
+    }
 
     public String getDescribeCn() {
         return describeCn;

@@ -61,7 +61,6 @@ import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.pojo.Equpment;
 import teabar.ph.com.teabar.pojo.UserEntry;
-import teabar.ph.com.teabar.service.MQService;
 import teabar.ph.com.teabar.util.FacebookHelper;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.NetWorkUtil;
@@ -781,17 +780,17 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.Conne
 //                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     if (type1==0) {
                         if (type == 0) {//第一次登录跳转到问卷调查页面
-                            Intent intent = new Intent(LoginActivity.this, MQService.class);
-                            startService(intent);// 启动服务
+//                            Intent intent = new Intent(LoginActivity.this, MQService.class);
+//                            startService(intent);// 启动服务
                             startActivity(BaseQuestionActivity.class);
                         } else {//不是第一次登录跳转到主页面
-                            Intent intent = new Intent(LoginActivity.this, MQService.class);
-                            startService(intent);// 启动服务
+//                            Intent intent = new Intent(LoginActivity.this, MQService.class);
+//                            startService(intent);// 启动服务
                             startActivity(MainActivity.class);
                         }
                     }else {
-                        Intent intent = new Intent(LoginActivity.this, MQService.class);
-                        startService(intent);// 启动服务
+//                        Intent intent = new Intent(LoginActivity.this, MQService.class);
+//                        startService(intent);// 启动服务
                         startActivity(MainActivity.class);
                     }
 //                        toast( returnMsg1);

@@ -2,8 +2,11 @@ package teabar.ph.com.teabar.activity.my;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -68,8 +71,17 @@ public class FavoriteActivity extends BaseActivity {
         favoriteAdpter = new FavoriteAdpter(this,list,userId);
         rv_nearest.setLayoutManager(new LinearLayoutManager(this));
         rv_nearest.setAdapter(favoriteAdpter);
-        new getFavoriteTeaAsynctask(this).execute();
+        new getFavoriteTeaAsynctask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==200){
+            new getFavoriteTeaAsynctask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+    }
+
     String returnMsg1,returnMsg2;
     /*獲取喜爱茶的列表
     * */
@@ -123,7 +135,6 @@ public class FavoriteActivity extends BaseActivity {
                     break;
                 case "4000":
                     ToastUtil.showShort(FavoriteActivity.this, getText(R.string.toast_all_cs).toString());
-
                     break;
                 default:
                     if (application.IsEnglish()==0){

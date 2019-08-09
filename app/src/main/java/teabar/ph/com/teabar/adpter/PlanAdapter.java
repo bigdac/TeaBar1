@@ -7,15 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
 import java.util.List;
-import java.util.Locale;
 
 import teabar.ph.com.teabar.R;
-import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.pojo.Plan;
 import teabar.ph.com.teabar.view.PlanProgressBar;
 
@@ -42,14 +41,24 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.MyviewHolder> 
     public void onBindViewHolder(@NonNull final MyviewHolder myviewHolder, int position) {
         Plan plan=mData.get(position);
         if (plan!=null){
-            if (MyApplication.initLanguage==1 || Locale.getDefault().equals(Locale.ENGLISH)){
-                myviewHolder.tv_plan_name.setText(plan.getPlanNameEn());
-                myviewHolder.tv_plan_title.setText(plan.getDescribeEn());
-            }else {
-                myviewHolder.tv_plan_name.setText(plan.getPlanNameCn());
-                myviewHolder.tv_plan_title.setText(plan.getDescribeCn());
-            }
+            myviewHolder.tv_plan_name.setText(plan.getPlanNameEn());
+            myviewHolder.tv_plan_title.setText(plan.getDescribeEn());
+            int sum=plan.getSum();
+            int planTime=plan.getPlanTime();
+            int progress=(sum/planTime)*100;
+            String ss="Week  "+sum+"/"+planTime;
+            myviewHolder.tv_plan_day.setText(ss);
+            myviewHolder.pl_progress.setProgress(progress);
+
             Glide.with(context).load(plan.getPlanPhoto()).placeholder(R.mipmap.test).into(myviewHolder.iv_plan_pic);
+            myviewHolder.layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (itemClicklistener!=null){
+                        itemClicklistener.onItemClickListener(plan, position);
+                    }
+                }
+            });
         }
 //        if (position==0){
 //            myviewHolder.pl_progress.setProgress(100);
@@ -73,6 +82,7 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.MyviewHolder> 
         ImageView iv_plan_pic;
         TextView tv_plan_name,tv_plan_title,tv_plan_day;
         PlanProgressBar pl_progress;
+        LinearLayout layout;
 
         public MyviewHolder(View itemView){
             super(itemView);
@@ -81,7 +91,15 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.MyviewHolder> 
             tv_plan_title = itemView.findViewById(R.id.tv_plan_title);
             tv_plan_day = itemView.findViewById(R.id.tv_plan_day);
             pl_progress = itemView.findViewById(R.id.pl_progress);
-
+            layout=itemView.findViewById(R.id.list_item);
         }
+    }
+    public OnItemClicklistener itemClicklistener;
+    public interface OnItemClicklistener{
+        void onItemClickListener(Plan plan,int position);
+    }
+
+    public void setItemClicklistener(OnItemClicklistener itemClicklistener) {
+        this.itemClicklistener = itemClicklistener;
     }
 }

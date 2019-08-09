@@ -13,22 +13,24 @@
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="STAY FIT"
+        android:text=""
         android:textColor="#333333"
         android:textSize="16sp"
         />
     <TextView
         android:id="@+id/tv_desc"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_below="@+id/tv_title"
         android:layout_marginRight="30dp"
         android:layout_marginLeft="15dp"
         android:layout_toLeftOf="@+id/tv_add"
         android:layout_marginTop="5dp"
-        android:text="ffffff"
+        android:text=""
         android:textSize="14sp"
         android:textColor="#777777"
+        android:lines="2"
+        android:ellipsize="end"
         />
     <TextView
         android:id="@+id/tv_add"

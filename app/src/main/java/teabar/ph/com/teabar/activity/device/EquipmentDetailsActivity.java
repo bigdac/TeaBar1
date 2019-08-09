@@ -166,7 +166,6 @@ public class EquipmentDetailsActivity extends BaseActivity {
                     dialog1.dismiss();
                 }
             }
-
         }
     }
     Intent MQintent;
@@ -179,7 +178,10 @@ public class EquipmentDetailsActivity extends BaseActivity {
             MQService.LocalBinder binder = (MQService.LocalBinder) service;
             MQservice = binder.getService();
             boundservice = true;
-
+            if (equpment.getOnLine()==false && MQservice!=null){
+                String deviceMac=equpment.getMacAdress();
+                MQservice.sendFindEqu(deviceMac);
+            }
         }
 
         @Override

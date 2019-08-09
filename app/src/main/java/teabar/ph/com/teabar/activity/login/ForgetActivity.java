@@ -30,6 +30,7 @@ import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.Utils;
 
+//忘记密码页面 流程：现判断该账号是否注册过，如果没有注册过，就提示用户该账号不存在，如果存在，就获取验证码，然后重新提交新的设置密码
 public class ForgetActivity extends BaseActivity {
     MyApplication application;
 
@@ -106,8 +107,8 @@ public class ForgetActivity extends BaseActivity {
                             }
                             params1.put("phone",user);
                         }
-                        showProgressDialog();
-                        new HasCountAsyncTask().execute(params1);
+
+                        new HasCountAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,params1);
                     }
 
                     break;
@@ -304,6 +305,12 @@ public class ForgetActivity extends BaseActivity {
     class HasCountAsyncTask extends AsyncTask<Map<String,Object>,Void,String> {
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showProgressDialog();
+        }
+
+        @Override
         protected String doInBackground(Map<String, Object>... maps) {
             String code = "";
             Map<String, Object> prarms = maps[0];
@@ -338,16 +345,22 @@ public class ForgetActivity extends BaseActivity {
                     }else {
                         params1.put("phone",user);
                     }
-                    new  GetCheckCodeAsyncTask().execute(params1);
+                    new  GetCheckCodeAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,params1);
+                    break;
+                case "400":
+                    if (tipDialog!=null &&tipDialog.isShowing()){
+                        tipDialog.dismiss();
+                    }
+                    toast(getString(R.string.forget));
                     break;
                 case "4000":
-                    if (tipDialog.isShowing()){
+                    if (tipDialog!=null &&tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
                     toast( getText(R.string.toast_all_cs).toString());
                     break;
                 default:
-                    if (tipDialog.isShowing()){
+                    if (tipDialog!=null &&tipDialog.isShowing()){
                         tipDialog.dismiss();
                     }
 //                    toast( returnMsg1);

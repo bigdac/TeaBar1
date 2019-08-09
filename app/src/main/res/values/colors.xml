@@ -53,4 +53,5 @@
     <color name="card2">#81fbe6</color>
     <color name="main_title">#33000000</color>
     <color name="main_tit1">#4BE6C0</color>
+    <color name="color_gray">#777777</color>
 </resources>

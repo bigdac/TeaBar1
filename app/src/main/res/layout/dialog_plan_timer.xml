@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="250dp"
+    android:background="@drawable/plan_timer"
+    android:layout_centerInParent="true"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:gravity="center"
+    >
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/tv_am"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="8:00"
+        android:textColor="@color/color_gray"
+        android:textSize="16sp"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="15dp"
+        />
+    <TextView
+        android:id="@+id/tv_am_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_am"
+        android:layout_alignLeft="@+id/tv_am"
+        android:text="Set Remeinder"
+        android:textColor="@color/color_gray"
+        android:gravity="center_vertical"
+        android:layout_marginTop="12dp"
+        />
+
+        <ImageView
+            android:id="@+id/img_am"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="25dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/plan_close" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_marginTop="45dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_pm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="17:00"
+            android:textColor="@color/color_gray"
+            android:textSize="16sp"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            />
+        <TextView
+            android:id="@+id/tv_pm_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_pm"
+            android:layout_alignLeft="@+id/tv_pm"
+            android:text="Set Remeinder"
+            android:textColor="@color/color_gray"
+            android:gravity="center_vertical"
+            android:layout_marginTop="12dp"
+            />
+        <ImageView
+            android:id="@+id/img_pm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/plan_close"
+            android:scaleType="centerInside"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="25dp"
+            android:layout_centerVertical="true"
+            />
+    </RelativeLayout>
+
+</LinearLayout>

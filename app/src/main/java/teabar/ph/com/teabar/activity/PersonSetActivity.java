@@ -134,7 +134,7 @@ public class PersonSetActivity extends BaseActivity {
         addressAdapter = new AddressAdapter(this,list,language);
         basicExamAdapter = new BasicExamAdapter(this,R.layout.item_basicexam);
         fv_message.setAdapter(basicExamAdapter);
-        new  getCountryAsynTask(PersonSetActivity.this).execute();
+        new  getCountryAsynTask(PersonSetActivity.this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         Map<String ,Object> param = new HashMap<>();
         param.put("userId",userId);
         new FindMessAsynctask(PersonSetActivity.this).execute(param);
@@ -267,12 +267,12 @@ public class PersonSetActivity extends BaseActivity {
                 param.put("area",area1);
                 param.put("conceive",conceive);
                 param.put("userName",et_person_name.getText().toString().trim());
-                new SaveMessAsynctask(PersonSetActivity.this).execute(param);
+                new SaveMessAsynctask(PersonSetActivity.this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,param);
                 String answer = Utils.listToString(stringList);
                 Map<String ,Object> params = new HashMap<>();
                 params.put("userId",userId);
                 params.put("answer",answer);
-                new  setBasicTeaAsynctask().execute(params);
+                new  setBasicTeaAsynctask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,params);
                 break;
 
             case R.id.et_person_tall:

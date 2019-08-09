@@ -12,7 +12,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.content.pm.ResolveInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
@@ -22,7 +23,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -39,7 +40,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -54,7 +54,6 @@ import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -181,7 +180,6 @@ public class MakeActivity extends BaseActivity {
             }
         }
             if (teaId!=-1){
-                showProgressDialog();
                 new getTeaAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 id = teaId+"";
             }
@@ -541,17 +539,28 @@ public class MakeActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (operate==1){
+            setResult(200);
+        }
+        finish();
+    }
+
     @OnClick({R.id.iv_equ_fh,R.id.iv_make_choose,R.id.bt_make_make,R.id.iv_make_love ,R.id.iv_make_share ,R.id.bt_make_buy})
     public void onClick(View view){
         switch (view.getId()){
             case R.id.iv_equ_fh://返回鍵
+                if (operate==1){
+                    setResult(200);
+                }
                 finish();
                 break;
 
             case R.id.iv_make_choose:
                 Intent intent = new Intent(this,MethodActivity.class);
                 intent.putExtra("tea",tea);
-                startActivity(intent);
+                startActivityForResult(intent,200);
                 break;
 
             case R.id.bt_make_make:
@@ -612,6 +621,7 @@ public class MakeActivity extends BaseActivity {
         RelativeLayout rl_mode_1 = (RelativeLayout) view.findViewById(R.id.rl_mode_1);
         RelativeLayout rl_mode_2 = (RelativeLayout) view.findViewById(R.id.rl_mode_2);
         RelativeLayout rl_mode_3 = (RelativeLayout) view.findViewById(R.id.rl_mode_3);
+        RelativeLayout rl_mode_4 = (RelativeLayout) view.findViewById(R.id.rl_mode_4);
 
 
         if (popupWindow1==null)
@@ -638,7 +648,7 @@ public class MakeActivity extends BaseActivity {
                         //获取剪贴板管理器：
                         ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                         // 创建普通字符型ClipData
-                        ClipData mClipData = ClipData.newRawUri("Lify Wellness",Uri.parse(tea.getTeaPhoto()));
+                        ClipData mClipData = ClipData.newRawUri("Lify Wellness",Uri.parse("https://play.google.com/store/apps/details?id=teabar.ph.com.teabar"));
                         // 将ClipData内容放到系统剪贴板里。
                         cm.setPrimaryClip(mClipData);
                         toast(getText(R.string.equ_xq_cg).toString());
@@ -664,8 +674,8 @@ public class MakeActivity extends BaseActivity {
                         Intent email = new Intent(Intent.ACTION_SEND);
                         email.setType("message/rfc822");
                         email.putExtra(Intent.EXTRA_EMAIL, new String[] {""});
-                        email.putExtra(Intent.EXTRA_SUBJECT,    tea.getTeaNameEn());
-                        email.putExtra(Intent.EXTRA_TEXT   , tea.getTeaPhoto());
+                        email.putExtra(Intent.EXTRA_SUBJECT,    "Lify Wellness");
+                        email.putExtra(Intent.EXTRA_TEXT   , "https://play.google.com/store/apps/details?id=teabar.ph.com.teabar");
                         startActivity(Intent.createChooser(email, getString(R.string.share)));
                         popupWindow1.dismiss();
 
@@ -678,14 +688,21 @@ public class MakeActivity extends BaseActivity {
 //                    "https://lify-wellness.myshopify.com/collections/all"
                                     .setContentUrl(Uri.parse(tea.getTeaPhoto()))
                                     .setShareHashtag(new ShareHashtag.Builder().setHashtag("#Lify Wellness").build())
-                                    .setQuote(tea.getTeaNameEn())
+                                    .setQuote("https://play.google.com/store/apps/details?id=teabar.ph.com.teabar")
                                     .build();
 
                             shareDialog.show(linkContent);
                         }
                         popupWindow1.dismiss();
                         break;
-
+                    case R.id.rl_mode_4:
+                        if (isContainPackName(MakeActivity.this,"com.whatsapp")){
+                            shareAudioRecord(MakeActivity.this,new Intent(),"https://play.google.com/store/apps/details?id=teabar.ph.com.teabar");
+                        }else {
+                            ToastUtil.showShort(MakeActivity.this,MakeActivity.this.getString(R.string.no_find_whatsapp));
+                        }
+                        popupWindow1.dismiss();
+                        break;
 
 
 
@@ -696,6 +713,7 @@ public class MakeActivity extends BaseActivity {
         rl_mode_1.setOnClickListener(listener);
         rl_mode_2.setOnClickListener(listener);
         rl_mode_3.setOnClickListener(listener);
+        rl_mode_4.setOnClickListener(listener);
 
         popupWindow1.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
@@ -708,33 +726,38 @@ public class MakeActivity extends BaseActivity {
         });
 
     }
-    /**
-     * 打开邮箱客户端
-     */
-    private void openEmail(String text) {
-        Uri uri = Uri.parse("mailto:" + "");
-        List<ResolveInfo> packageInfos = getPackageManager().queryIntentActivities(new Intent(Intent.ACTION_SENDTO, uri), 0);
-        List<String> tempPkgNameList = new ArrayList<>();
-        List<Intent> emailIntents = new ArrayList<>();
-        for (ResolveInfo info : packageInfos) {
-            String pkgName = info.activityInfo.packageName;
-            if (!tempPkgNameList.contains(pkgName)) {
-                tempPkgNameList.add(pkgName);
-                Intent intent = getPackageManager().getLaunchIntentForPackage(pkgName);
-                emailIntents.add(intent);
-            }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==200){
+
         }
-        if (!emailIntents.isEmpty()) {
-            Intent chooserIntent = Intent.createChooser(emailIntents.remove(0), "选择邮箱");
-            if (chooserIntent != null) {
-                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, emailIntents.toArray(new Parcelable[]{}));
-                startActivity(chooserIntent);
-            } else {
-                Toast.makeText(MakeActivity.this, "没有找到可用的邮件客户端", Toast.LENGTH_SHORT).show();
+    }
+
+    public  boolean isContainPackName(final Context mContext , String packName) {
+        boolean isContainPack = false;
+        try {
+            PackageManager packageManager = mContext.getPackageManager();
+            PackageInfo info = packageManager.getPackageInfo(packName , PackageManager.GET_ACTIVITIES);
+            if(info != null){
+                isContainPack = true;
             }
-        } else {
-            Toast.makeText(MakeActivity.this, "没有找到可用的邮件客户端", Toast.LENGTH_SHORT).show();
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
+        return isContainPack;
+    }
+    //直接调用系统的分享，
+    public void shareAudioRecord(Context mContext , Intent sendIntent,String shareText) {
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT,shareText);//shareText 为需要分享的内容
+        sendIntent.setType("text/plain");
+        sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        sendIntent.setPackage("com.whatsapp");//packageName 为需要分享到的包名
+        startActivity(sendIntent);
+
+
     }
     private void backgroundAlpha(float f) {
         WindowManager.LayoutParams lp =getWindow().getAttributes();
@@ -789,15 +812,14 @@ public class MakeActivity extends BaseActivity {
                     Map<String,Object> params = new HashMap<>();
                     params.put("userId",userId );
                     params.put("teaId",id );
-                    new CollectTeaAsyncTask().execute(params);
+                    new CollectTeaAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,params);
                     iv_make_love.setImageResource(R.mipmap.make_yes1);
-
                 }else {
                     which = false;
                     Map<String,Object> params = new HashMap<>();
                     params.put("userId",userId );
                     params.put("teaId", id);
-                    new CollectTeaAsyncTask().execute(params);
+                    new CollectTeaAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,params);
                     iv_make_love.setImageResource(R.mipmap.make_no1);
 
                 }
@@ -810,6 +832,7 @@ public class MakeActivity extends BaseActivity {
 
     }
 
+    int operate;//0表示没有操作过喜爱 1表示有
     /**
      *  添加喜愛
      *
@@ -851,6 +874,7 @@ public class MakeActivity extends BaseActivity {
         protected void onPostExecute(String s) {
             switch (s) {
                 case "200":
+                    operate=1;
                     if (application.IsEnglish()==0){
                         toast(returnMsg1);
                     }else {
@@ -879,6 +903,12 @@ public class MakeActivity extends BaseActivity {
 
         public getTeaAsyncTask(BaseActivity baseActivity) {
             super(baseActivity);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showProgressDialog();
         }
 
         @Override
@@ -922,13 +952,11 @@ public class MakeActivity extends BaseActivity {
 //                    String str2 = "<font color='#101010'>"+getText(R.string.tea_kouwei_kw)+" "+"</font>"+tea.getTasteEn();
 //                    String str3 = "<font color='#101010'>"+getText(R.string.equ_xq_pl)+" "+"</font>"+tea.getIngredientEn();
                     if (TextUtils.isEmpty(syno)){
-                        tv_mes_title.setText(getText(R.string.tea_kouwei_kw).toString());
                         tv_make_mes.setText(tea.getTasteEn());
                     }else {
-                        tv_mes_title.setText(getText(R.string.tea_kouwei_yc).toString());
                         tv_make_mes.setText(syno);
                     }
-                    if (MyApplication.initLanguage==1 || application.IsEnglish()==1){
+                    if (application.IsEnglish()==1){
                         tv_make_name.setText(tea.getTeaNameEn());
                         tv_make_style.setText(tea.getProductNameEn());
                         tv_toast_mes.setText(tea.getTasteEn());
@@ -937,7 +965,6 @@ public class MakeActivity extends BaseActivity {
                         tv_make_style.setText(tea.getProductNameCn());
                         tv_toast_mes.setText(tea.getTasteCn());
                     }
-                    tv_plmes_title.setText(getText(R.string.equ_xq_pl).toString());
                     tv_make_plmes.setText (tea.getIngredientEn());
                     tv_make_temp.setText(tea.getTemperature()+"℃");
                     tv_make_sl.setText(tea.getWaterYield()+"ml");
@@ -946,7 +973,6 @@ public class MakeActivity extends BaseActivity {
                         iv_make_love.setImageResource(R.mipmap.make_yes1);
                     }
                     Glide.with(MakeActivity.this).load(tea.getTeaPhoto()).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.color.white).into(iv_make_pic);
-
                     break;
 
                 case "4000":
@@ -956,12 +982,7 @@ public class MakeActivity extends BaseActivity {
                     if (tipDialog!=null&&tipDialog.isShowing()) {
                         tipDialog.dismiss();
                     }
-                    if (application.IsEnglish()==0){
-                        toast(  returnMsg1);
-                    }else {
-                        toast(  returnMsg2);
-                    }
-
+                    toast(getString(R.string.no_find_tea));
                     break;
 
             }

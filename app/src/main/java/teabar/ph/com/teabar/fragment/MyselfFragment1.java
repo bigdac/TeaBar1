@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,7 +18,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -51,11 +54,14 @@ public class MyselfFragment1 extends BaseFragment {
     @BindView(R.id.iv_my_pic)
     ImageView iv_my_pic;
     @BindView(R.id.tv_my_friend)
-    TextView tv_my_friend;
+    TextView tv_my_friend;//好友數量
     @BindView(R.id.tv_my_brew)
     TextView tv_my_brew;
+    @BindView(R.id.tv_my_plan)
+    TextView tv_my_plan;//計畫數量
     String id;
     int setNum;
+    Map<String,Object>  params=new HashMap<>();
     @Override
     public int bindLayout() {
         return R.layout.fragment_myself;
@@ -80,12 +86,17 @@ public class MyselfFragment1 extends BaseFragment {
         if (setNum!=0){
             new getNumAsyncTask (this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
+        params.put("userId",id);
+
+        new GetPersonPlanAsync(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,params);
+
         String fNum = preferences.getString("friendNum","");
         if (!TextUtils.isEmpty(fNum)){
             tv_my_friend.setText(fNum);
         }
         findFriend();
     }
+
     int friendNum;
     @Override
     public void onStart() {
@@ -93,6 +104,49 @@ public class MyselfFragment1 extends BaseFragment {
         String photo = preferences.getString("photo","");
         if (!TextUtils.isEmpty(photo)){
             Glide.with(getActivity()).load(photo).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.my_pic).transform(new GlideCircleTransform(getActivity())).into(iv_my_pic);
+        }
+    }
+    int planSize=0;
+    //获取个人计划
+    class GetPersonPlanAsync extends BaseWeakAsyncTask<Map<String,Object>,Void,Integer,BaseFragment> {
+
+
+        public GetPersonPlanAsync(BaseFragment baseFragment) {
+            super(baseFragment);
+        }
+
+
+
+        @Override
+        protected Integer doInBackground(BaseFragment fragment, Map<String, Object>... maps) {
+            String url=HttpUtils.ipAddress+"/app/getUserPlan";
+            int code=0;
+            Map<String,Object> map=maps[0];
+            try {
+                String result=HttpUtils.postOkHpptRequest(url,map);
+                Log.i("GetPersonPlanAsync","-->"+result);
+                if (!TextUtils.isEmpty(result)){
+                    JSONObject jsonObject=new JSONObject(result);
+                    code=jsonObject.getInt("state");
+                    if (code==200){
+
+                        JSONArray data=jsonObject.getJSONArray("data");
+                        int size=data.length();
+                        planSize=size;
+
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(BaseFragment fragment1, Integer integer) {
+            if (integer==200){
+                tv_my_plan.setText(planSize+"");
+            }
         }
     }
     int num=0;

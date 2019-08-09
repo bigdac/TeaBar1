@@ -31,7 +31,6 @@ public class MyselfFragment extends BaseFragment {
     @Override
     public int bindLayout() {
         return R.layout.fragment_myself1;
-
     }
 
     @Override
@@ -45,8 +44,6 @@ public class MyselfFragment extends BaseFragment {
         }
         tv_my_name.setText(name);
         tv_id_2.setText(id+"");
-
-
     }
 
     @Override

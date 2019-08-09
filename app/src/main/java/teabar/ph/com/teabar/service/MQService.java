@@ -103,12 +103,13 @@ public class MQService extends AbsHeartBeatService {
     public void onCreate() {
         super.onCreate();
         Log.i("MQService", "-->onCreate");
-        equipmentDao = new EquipmentImpl(getApplicationContext());
+
         alermPreferences=getSharedPreferences("alerm",MODE_PRIVATE);
         preferences = getSharedPreferences("my", MODE_PRIVATE);
-        LocalManageUtil.setApplicationLanguage(this);
-        IsEnglish();
+//        LocalManageUtil.setApplicationLanguage(this);
+//        IsEnglish();
         init();
+        equipmentDao = new EquipmentImpl(getApplicationContext());
 //        new InitAsnyTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
     }
@@ -1320,7 +1321,63 @@ public class MQService extends AbsHeartBeatService {
             }
         }
     }
+    public void clearAllDevice(){
+        try {
+            List<Equpment> equpments=equipmentDao.findAll();
+            int size=0;
 
+            for(Equpment equpment:equpments){
+                size++;
+                String deviceMac=equpment.getMacAdress();
+                String topicName1 = "tea/" + deviceMac + "/status/transfer";
+                String topicName2 = "tea/" + deviceMac + "/operate/transfer";
+                String topicName3 = "tea/" + deviceMac + "/extra/transfer";
+                String topicName4 = "tea/" + deviceMac + "/reset/transfer";
+                String topicName5 = "tea/" + deviceMac + "/lwt";
+                unsubscribe(topicName1);
+                unsubscribe(topicName2);
+                unsubscribe(topicName3);
+                unsubscribe(topicName4);
+                unsubscribe(topicName5);
+            }
+            if (size==equpments.size()){
+                equipmentDao.deleteAll();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void getBasicData(){
+        try {
+            List<Equpment> equpments=equipmentDao.findAll();
+            int size=0;
+            for(Equpment equpment:equpments) {
+                size++;
+                String deviceMac = equpment.getMacAdress();
+                String topicName1 = "tea/" + deviceMac + "/status/transfer";
+                String topicName2 = "tea/" + deviceMac + "/operate/transfer";
+                String topicName3 = "tea/" + deviceMac + "/extra/transfer";
+                String topicName4 = "tea/" + deviceMac + "/reset/transfer";
+                String topicName5 = "tea/" + deviceMac + "/lwt";
+                subscribe(topicName1,1);
+                subscribe(topicName2,1);
+                subscribe(topicName3,1);
+                subscribe(topicName4,1);
+                subscribe(topicName5,1);
+            }
+            if (size==equpments.size()){
+                for(Equpment equpment:equpments) {
+                    String deviceMac = equpment.getMacAdress();
+                    Thread.sleep(500);
+                    sendFindEqu(deviceMac);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     class ConAsync extends AsyncTask<List<String>, Void, Void> {
 

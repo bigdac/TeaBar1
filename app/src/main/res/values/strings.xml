@@ -439,6 +439,7 @@
     <!--search-->
     <string name="search_mess">搜索你想要的</string>
     <string name="search_qsh">請稍後...</string>
+    <string name="no_find_tea">未找到該茶信息</string>
 
     <!--week-->
     <string name="weather_week">周</string>
@@ -469,4 +470,11 @@
     <string name="clod">冷</string>
     <string name="dry">乾燥</string>
     <string name="heavy">頭重</string>
+    <string name="plan_add">添加成功</string>
+    <string name="plan_added">該計劃已經添加</string>
+    <string name="forget">用戶不存在</string>
+    <string name="modify_success">修改成功</string>
+    <string name="modify_fail">修改失敗</string>
+    <string name="add_my_plan">"添加個人計劃</string>
+    <string name="no_find_whatsapp">該應用不存在，請下載后使用</string>
 </resources>

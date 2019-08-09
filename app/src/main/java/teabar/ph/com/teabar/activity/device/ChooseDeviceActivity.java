@@ -108,8 +108,7 @@ public class ChooseDeviceActivity extends BaseActivity {
         }
         application.addActivity(this);
         if (teaId!=-1){
-
-            new getTeaAsyncTask(this).execute();
+            new getTeaAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             id = teaId+"";
         }
         preferences = getSharedPreferences("my",MODE_PRIVATE);

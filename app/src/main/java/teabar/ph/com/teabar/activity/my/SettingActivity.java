@@ -1,13 +1,16 @@
 package teabar.ph.com.teabar.activity.my;
 
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -37,6 +40,7 @@ import teabar.ph.com.teabar.activity.login.LoginActivity;
 import teabar.ph.com.teabar.activity.tkActivity;
 import teabar.ph.com.teabar.base.BaseActivity;
 import teabar.ph.com.teabar.base.MyApplication;
+import teabar.ph.com.teabar.service.MQService;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.Utils;
 import teabar.ph.com.teabar.util.language.LocalManageUtil;
@@ -99,8 +103,24 @@ public class SettingActivity extends BaseActivity {
         userEntryDao = new UserEntryImpl(getApplicationContext());
         lang = LocalManageUtil.getSelectLanguage(this);
         tv_now_verson.setText(Utils.getVerName(SettingActivity.this));
+        Intent service=new Intent(this, MQService.class);
+        bind=bindService(service,connection,Context.BIND_AUTO_CREATE);
     }
 
+    MQService mqService;
+    boolean bind;
+    ServiceConnection connection=new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MQService.LocalBinder binder= (MQService.LocalBinder) service;
+            mqService=binder.getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
     @Override
     public Resources getResources() {
         //需要升级到 v1.1.2 及以上版本才能使用 AutoSizeCompat
@@ -151,9 +171,11 @@ public class SettingActivity extends BaseActivity {
                 break;
 
             case R.id.bt_set_exsit:
+                if (mqService!=null){
+                    mqService.clearAllDevice();
+                }
                 SharedPreferences.Editor editor=alermPreferences.edit();
                 editor.clear();
-                equipmentDao.deleteAll();
                 friendInforDao.deleteAll();
                 userEntryDao.deleteAll();
                 application.removeAllActivity();

@@ -202,17 +202,17 @@ public class HttpUtils {
         try {
             String CONTENT_TYPE = "application/json";
 
-            String JSON_DATA = "{\n" +
-                    "\"deviceId\":1129,\n" +
-                    "\"deviceTimeControlDtos\":\n" +
-                    "[\n" +
-                    "{\n" +
-                    "\"week\":2,\n" +
-                    "\"deviceTimeControlList\":[\n" +
-                    "         {\"temp\":2.0,\"openTime\":2,\"closeTime\":3},\n" +
-                    "         {\"temp\":2.0,\"openTime\":4,\"closeTime\":5}\n" +
-                    "     ]\n" +
-                    "}";
+//            String JSON_DATA = "{\n" +
+//                    "\"deviceId\":1129,\n" +
+//                    "\"deviceTimeControlDtos\":\n" +
+//                    "[\n" +
+//                    "{\n" +
+//                    "\"week\":2,\n" +
+//                    "\"deviceTimeControlList\":[\n" +
+//                    "         {\"temp\":2.0,\"openTime\":2,\"closeTime\":3},\n" +
+//                    "         {\"temp\":2.0,\"openTime\":4,\"closeTime\":5}\n" +
+//                    "     ]\n" +
+//                    "}";
             JSONObject jsonObject = new JSONObject();
             for (Map.Entry<String, Object> param : map.entrySet()) {
                 jsonObject.put(param.getKey(), param.getValue());

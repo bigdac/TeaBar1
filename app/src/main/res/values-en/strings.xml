@@ -83,7 +83,7 @@
     <string name="equ_xq_buy1">PURCHASE NOW</string>
     <string name="equ_xq_method">Brewing Formula</string>
     <string name="equ_xq_yc">Benefits</string>
-    <string name="equ_xq_pl">Ingredients:</string>
+    <string name="equ_xq_pl">Ingredients</string>
     <string name="equ_xq_kw">Flavour</string>
     <string name="equ_add_xq">Setup Guide</string>
     <string name="equ_add_wifi">Enter WiFi Name</string>
@@ -468,4 +468,12 @@
     <string name="clod">Cold</string>
     <string name="dry">Dry</string>
     <string name="heavy">Heavy headed</string>
+    <string name="plan_add">Add a success</string>
+    <string name="plan_added">The plan has been added</string>
+    <string name="forget">user does not exist</string>
+    <string name="modify_success">Modify the success</string>
+    <string name="modify_fail">Modify the fail</string>
+    <string name="add_my_plan">Add Purchased Programs</string>
+    <string name="no_find_tea">No information on the tea was found</string>
+    <string name="no_find_whatsapp">This application does not exist. Please download it and use it</string>
 </resources>

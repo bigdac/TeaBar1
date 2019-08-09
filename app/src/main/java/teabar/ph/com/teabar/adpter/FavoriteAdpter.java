@@ -1,7 +1,6 @@
 package teabar.ph.com.teabar.adpter;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -20,22 +19,21 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.activity.device.MakeActivity;
-import teabar.ph.com.teabar.base.MyApplication;
+import teabar.ph.com.teabar.activity.my.FavoriteActivity;
 import teabar.ph.com.teabar.pojo.Tea;
 import teabar.ph.com.teabar.util.HttpUtils;
 import teabar.ph.com.teabar.util.ToastUtil;
 import teabar.ph.com.teabar.util.view.ScreenSizeUtils;
 
 public class FavoriteAdpter extends RecyclerView.Adapter< FavoriteAdpter.MyViewHolder> {
-    Context context;
+    FavoriteActivity context;
     List<Tea> mData;
     String userId;
-    public FavoriteAdpter(Context context, List<Tea> list ,String usetId) {
+    public FavoriteAdpter(FavoriteActivity context, List<Tea> list ,String usetId) {
         this.context = context;
         this.mData = list;
         this.userId =usetId;
@@ -63,7 +61,7 @@ public class FavoriteAdpter extends RecyclerView.Adapter< FavoriteAdpter.MyViewH
             public void onClick(View view) {
                 Intent intent = new Intent(context,MakeActivity.class);
                 intent.putExtra("teaId",mData.get(i).getTeaId());
-                context.startActivity(intent);
+                context.startActivityForResult(intent,200);
             }
         });
     }
@@ -107,9 +105,8 @@ public class FavoriteAdpter extends RecyclerView.Adapter< FavoriteAdpter.MyViewH
                     Map<String,Object> params = new HashMap<>();
                     params.put("userId",userId );
                     params.put("teaId",mData.get(position).getTeaId() );
-                    new CollectTeaAsyncTask().execute(params);
+                    new CollectTeaAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,params);
                    dialog.dismiss();
-
             }
         });
         dialog.show();
@@ -136,12 +133,7 @@ public class FavoriteAdpter extends RecyclerView.Adapter< FavoriteAdpter.MyViewH
                     try {
                         JSONObject jsonObject = new JSONObject(result);
                         code = jsonObject.getString("state");
-
-                        if (MyApplication.initLanguage==1 || Locale.getDefault().equals(Locale.ENGLISH)){
-                            returnMsg1=jsonObject.getString("message3");
-                        }else {
-                            returnMsg1=jsonObject.getString("message1");
-                        }
+                        returnMsg1=jsonObject.getString("message3");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

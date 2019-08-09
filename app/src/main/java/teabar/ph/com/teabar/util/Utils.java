@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import teabar.ph.com.teabar.R;
+
 public class Utils{
 
     /**
@@ -63,29 +65,56 @@ public class Utils{
             int mWeek=0;
             switch (week) {
                 case (1):
-                    mWeek=7;
+                    mWeek= R.string.weather_week_1;
                     break;
                 case (2):
-                    mWeek=1;
+                    mWeek= R.string.weather_week_2;
                     break;
                 case 3:
-                    mWeek=2;
+                    mWeek= R.string.weather_week_3;
                     break;
                 case 4:
-                    mWeek=3;
+                    mWeek= R.string.weather_week_4;
                     break;
                 case 5:
-                    mWeek=4;
+                    mWeek= R.string.weather_week_5;
                     break;
                 case 6:
-                    mWeek=5;
+                    mWeek= R.string.weather_week_6;
                     break;
                 case 7:
-                    mWeek=6;
+                    mWeek= R.string.weather_week_7;
                     break;
             }
             return mWeek;
         }
+    public static int getWeek2(int week){
+        int mWeek=0;
+        switch (week) {
+            case (1):
+                mWeek= 7;
+                break;
+            case (2):
+                mWeek= 1;
+                break;
+            case 3:
+                mWeek= 2;
+                break;
+            case 4:
+                mWeek= 3;
+                break;
+            case 5:
+                mWeek= 4;
+                break;
+            case 6:
+                mWeek= 5;
+                break;
+            case 7:
+                mWeek= 6;
+                break;
+        }
+        return mWeek;
+    }
 
         /*list轉String*/
     public static String listToString(List<String> list){

@@ -21,6 +21,7 @@ import butterknife.OnClick;
 import teabar.ph.com.teabar.R;
 import teabar.ph.com.teabar.base.BaseActivity;
 
+//健康計畫購買頁面
 public class MailActivity extends BaseActivity {
     WebView webView;
     private ProgressBar progressBar;

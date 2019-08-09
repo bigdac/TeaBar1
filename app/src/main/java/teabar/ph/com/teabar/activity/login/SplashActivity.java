@@ -59,16 +59,8 @@ public class SplashActivity extends BaseActivity {
         if (application == null) {
             application = (MyApplication) getApplication();
         }
-        count++;
         preferences = getSharedPreferences("my", MODE_PRIVATE);
-        if (preferences.contains("count")){
-            count=preferences.getInt("count",0);
-        }
-        Log.e("SplashCount","-->"+count);
         application.addActivity(this);
-        if (count<=3){
-            setLang(Locale.ENGLISH);
-        }
         init();
 
     }
@@ -83,7 +75,6 @@ public class SplashActivity extends BaseActivity {
         config.locale = l;
         resources.updateConfiguration(config, dm);
         // 刷新activity才能马上奏效
-        MyApplication.initLanguage=1;
         startActivity(new Intent().setClass(SplashActivity.this,
                 SplashActivity.class));
         SplashActivity.this.finish();
@@ -98,13 +89,11 @@ public class SplashActivity extends BaseActivity {
         if (!mIsFirst) {
             hander.sendEmptyMessageDelayed(GO_HOME, DELAY);
         } else {
-            if (count==4){
                 hander.sendEmptyMessageDelayed(GO_GUIDE, DELAY);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putBoolean(START_KEY, false);
-                editor.putInt("count",4);
                 editor.commit();
-            }
+
         }
     }
 

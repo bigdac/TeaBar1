@@ -34,7 +34,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -48,6 +50,7 @@ import teabar.ph.com.teabar.adpter.MyplanAdapter;
 import teabar.ph.com.teabar.adpter.TeaListAdapter;
 import teabar.ph.com.teabar.base.BaseFragment;
 import teabar.ph.com.teabar.base.BaseWeakAsyncTask;
+import teabar.ph.com.teabar.base.MyApplication;
 import teabar.ph.com.teabar.pojo.Equpment;
 import teabar.ph.com.teabar.pojo.Plan;
 import teabar.ph.com.teabar.pojo.Tea;
@@ -110,6 +113,8 @@ public class MainFragment3 extends BaseFragment  {
     TextView tv_main_num;
     @BindView(R.id.bt_main_dt)
     Button bt_main_dt;
+    @BindView(R.id.tv_weather_place)
+    TextView tv_weather_place;
     String firstMac;
     EquipmentImpl equipmentDao;
     SharedPreferences preferences;
@@ -117,6 +122,9 @@ public class MainFragment3 extends BaseFragment  {
     String userId;
     int language;
     int type1;
+    Map<String,Object> map=new HashMap<>();
+    Calendar mCalendar=Calendar.getInstance();
+
     @Override
     public int bindLayout() {
         return R.layout.fragment_main3;
@@ -156,17 +164,19 @@ public class MainFragment3 extends BaseFragment  {
         //获取数据
 
         initView1();
-        searchWeatherAsynTask = new searchWeatherAsynTask(this) ;
-        searchWeatherAsynTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        map.put("userId",userId);
+        new GetWeaterAsynce(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,map);
         getAnswerNumAsynTask = new getAnswerNumAsynTask(this) ;
         getAnswerNumAsynTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         //绑定services
         MQintent = new Intent(getActivity(), MQService.class);
         MQBound = getActivity().bindService(MQintent, MQconnection, Context.BIND_AUTO_CREATE);
         long time=System.currentTimeMillis();
-        Calendar mCalendar=Calendar.getInstance();
         mCalendar.setTimeInMillis(time);
         int  mHour=mCalendar.get(Calendar.HOUR_OF_DAY);
+
+
+
         /*判断时间*/
         if (mHour>3&&mHour<12){
             tv_main_bz1.setText(getText(R.string.main_home_zs).toString());
@@ -516,9 +526,7 @@ public class MainFragment3 extends BaseFragment  {
         if (getAnswerNumAsynTask!=null&&getAnswerNumAsynTask.getStatus()==AsyncTask.Status.RUNNING){
             getAnswerNumAsynTask.cancel(true);
         }
-        if (searchWeatherAsynTask!=null&&searchWeatherAsynTask.getStatus()==AsyncTask.Status.RUNNING){
-            searchWeatherAsynTask.cancel(true);
-        }
+
   }
 
     @Override
@@ -542,105 +550,191 @@ public class MainFragment3 extends BaseFragment  {
         if (getAnswerNumAsynTask!=null&&getAnswerNumAsynTask.getStatus()==AsyncTask.Status.RUNNING){
             getAnswerNumAsynTask.cancel(true);
         }
-        if (searchWeatherAsynTask!=null&&searchWeatherAsynTask.getStatus()==AsyncTask.Status.RUNNING){
-            searchWeatherAsynTask.cancel(true);
-        }
+
     }
+    String city;
+    class GetWeaterAsynce extends BaseWeakAsyncTask<Map<String,Object>,Void,Integer,BaseFragment>{
 
-    //添加天气预报图
-
-    List<Weather> weathers = new ArrayList<>();
-    /*  获取天气预报*/
-    searchWeatherAsynTask  searchWeatherAsynTask ;
-    class searchWeatherAsynTask extends BaseWeakAsyncTask<Void,Void,String,BaseFragment> {
-
-        public searchWeatherAsynTask(BaseFragment baseFragment) {
+        public GetWeaterAsynce(BaseFragment baseFragment) {
             super(baseFragment);
         }
 
         @Override
-        protected String doInBackground(BaseFragment baseFragment ,Void... voids) {
-            String type= "en";
-            if (language==0){
-                type= "ZH_TW";
-            }
-            String code = "";
+        protected Integer doInBackground(BaseFragment baseFragment, Map<String, Object>... maps) {
+            Map<String,Object> params=maps[0];
+            String url=HttpUtils.ipAddress+"/app/getWeather";
+            int code=0;
+            try {
+                String result=HttpUtils.postOkHpptRequest(url,params);
+                if (!TextUtils.isEmpty(result)){
+                    JSONObject jsonObject=new JSONObject(result);
+                    code=jsonObject.getInt("state");
+                    if (code==200){
+                        int year=mCalendar.get(Calendar.YEAR);
+                        int month=mCalendar.get(Calendar.MONTH)+1;
+                        int day=mCalendar.get(Calendar.DAY_OF_MONTH);
+                        int week=Utils.getWeek2(mCalendar.get(Calendar.DAY_OF_WEEK));
 
-            String result =   HttpUtils.getOkHpptRequest("https://api.openweathermap.org/data/2.5/forecast?id=1819730&APPID=64f17a2291526f4669269007d621d3b6&lang="+type+"&units=metric&cnt=24" );
-            Log.e("back", "--->" + result);
-            if (!ToastUtil.isEmpty(result)) {
-                if (!"4000".equals(result)){
-                    try {
-                        JSONObject jsonObject = new JSONObject(result);
-                        code = jsonObject.getString("cod");
-                        JSONArray jsonArray = jsonObject.getJSONArray("list");
-                        for (int i =0;i<jsonArray.length();i++){
-                            if (i==0||i==9||i==17) {
-                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                                Weather weather = new Weather();
-                                long time = jsonObject1.getLong("dt");
-                                String weak =  getWeek(time);
-                                JSONObject jsonObject11 = jsonObject1.getJSONObject("main");
-                                int temp = jsonObject11.getInt("temp");
-                                String humidity = jsonObject11.getString("humidity");
-                                JSONArray jsonObject12 = jsonObject1.getJSONArray("weather");
-                                JSONObject Jweathers = jsonObject12.getJSONObject( 0);
-                                String wea = Jweathers.getString("description");
-                                JSONObject jsonObject13 = jsonObject1.getJSONObject("wind");
-                                String air = jsonObject13.getString("speed");
-                                weather.setTem(temp+"");
-                                weather.setAir_level(air);
-                                weather.setWea(wea);
-                                weather.setHumidity(humidity);
-                                weather.setWeek(weak);
-                                weathers.add(weather);
-                            }
+                        Log.i("weekkkkkkk","-->"+week);
+                        int nextWeek=week+1;
+                        int ht=week+2;
+                        if (nextWeek>7){
+                            nextWeek=1;
+                            ht=2;
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        String mDay=year+"-"+month+"-"+day+",";
+                        String tod=mDay+getString(Utils.getWeek(week));
+                        String tom=mDay+getString(Utils.getWeek(nextWeek));
+                        String mHt=mDay+getString(Utils.getWeek(ht));
+
+
+                        JSONObject data=jsonObject.getJSONObject("data1");
+                        String hum=data.getString("hum");
+                        String weatheren=data.getString("weatheren");
+                        String weather=data.getString("weather");
+                        String temperature=data.getString("temperature");
+                        JSONObject data2=jsonObject.getJSONObject("data1");
+                        String hum2=data2.getString("hum");
+                        String weatheren2=data2.getString("weatheren");
+                        String weather2=data2.getString("weather");
+                        String temperature2=data2.getString("temperature");
+                        JSONObject data3=jsonObject.getJSONObject("data1");
+                        String hum3=data3.getString("hum");
+                        String weatheren3=data3.getString("weatheren");
+                        String weather3=data3.getString("weather");
+                        String temperature3=data3.getString("temperature");
+
+                        weathers.clear();
+                        if (MyApplication.IsEnglish==1){
+                            weathers.add(new Weather(tod,weatheren,hum,temperature));
+                            weathers.add(new Weather(tom,weatheren2,hum2,temperature2));
+                            weathers.add(new Weather(mHt,weatheren3,hum3,temperature3));
+                            city=jsonObject.getString("cityen");
+                        }else {
+                            weathers.add(new Weather(tod,weather,hum,temperature));
+                            weathers.add(new Weather(tom,weather2,hum2,temperature2));
+                            weathers.add(new Weather(mHt,weather3,hum3,temperature3));
+                            city=jsonObject.getString("city");
+                        }
                     }
-                }else {
-                    code="4000";
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             return code;
         }
 
-
-
         @Override
-        protected void onPostExecute(BaseFragment baseFragment ,String s) {
+        protected void onPostExecute(BaseFragment baseFragment, Integer code) {
+            if (code==200){
+                if (weathers.size()==3){
+                    Weather weather = weathers.get(0);
+                    tv_weather_wd.setText(weather.getTem()+"℃");
+                    tv_weather_sd.setText(weather.getHumidity()+"%");
+                    tv_weather_tq.setText(weather.getWea());
+                    tv_weather_day.setText(weather.getWeek());
+                    if (!TextUtils.isEmpty(city))
+                        tv_weather_place.setText(city);
 
-            if(isCancelled()){
-                return;
-            }
-            switch (s) {
-
-                case "200":
-
-                    if (tv_weather_wd!=null&&tv_weather_sd!=null&&tv_weather_tq!=null&&tv_weather_day!=null) {
-                        FindWeatherAsynTask = new FindWeatherAsynTask(MainFragment3.this) ;
+                }
+                FindWeatherAsynTask = new FindWeatherAsynTask(MainFragment3.this) ;
                         FindWeatherAsynTask .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                        Weather weather = weathers.get(0);
-                        tv_weather_wd.setText(weather.getTem() + "℃");
-                        tv_weather_sd.setText(weather.getHumidity() + "％");
-                        tv_weather_tq.setText(weather.getWea());
-                        tv_weather_day.setText(weather.getWeek());
-                    }
-                    break;
-                case "4000":
-
-                    ToastUtil.showShort(getActivity(), "连接超时，请重试");
-
-                    break;
-                default:
-
-
-                    break;
-
             }
         }
     }
+    //添加天气预报图
+
+    List<Weather> weathers = new ArrayList<>();
+    /*  获取天气预报*/
+//    searchWeatherAsynTask  searchWeatherAsynTask ;
+//    class searchWeatherAsynTask extends BaseWeakAsyncTask<Void,Void,String,BaseFragment> {
+//
+//        public searchWeatherAsynTask(BaseFragment baseFragment) {
+//            super(baseFragment);
+//        }
+//
+//        @Override
+//        protected String doInBackground(BaseFragment baseFragment ,Void... voids) {
+//            String type= "en";
+//            if (language==0){
+//                type= "ZH_TW";
+//            }
+//            String code = "";
+//
+//            String result =   HttpUtils.getOkHpptRequest("https://api.openweathermap.org/data/2.5/forecast?id=1819730&APPID=64f17a2291526f4669269007d621d3b6&lang="+type+"&units=metric&cnt=24" );
+//            Log.e("back", "--->" + result);
+//            if (!ToastUtil.isEmpty(result)) {
+//                if (!"4000".equals(result)){
+//                    try {
+//                        JSONObject jsonObject = new JSONObject(result);
+//                        code = jsonObject.getString("cod");
+//                        JSONArray jsonArray = jsonObject.getJSONArray("list");
+//                        for (int i =0;i<jsonArray.length();i++){
+//                            if (i==0||i==9||i==17) {
+//                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+//                                Weather weather = new Weather();
+//                                long time = jsonObject1.getLong("dt");
+//                                String weak =  getWeek(time);
+//                                JSONObject jsonObject11 = jsonObject1.getJSONObject("main");
+//                                int temp = jsonObject11.getInt("temp");
+//                                String humidity = jsonObject11.getString("humidity");
+//                                JSONArray jsonObject12 = jsonObject1.getJSONArray("weather");
+//                                JSONObject Jweathers = jsonObject12.getJSONObject( 0);
+//                                String wea = Jweathers.getString("description");
+//                                JSONObject jsonObject13 = jsonObject1.getJSONObject("wind");
+//                                String air = jsonObject13.getString("speed");
+//                                weather.setTem(temp+"");
+//                                weather.setAir_level(air);
+//                                weather.setWea(wea);
+//                                weather.setHumidity(humidity);
+//                                weather.setWeek(weak);
+//                                weathers.add(weather);
+//                            }
+//                        }
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }else {
+//                    code="4000";
+//                }
+//            }
+//            return code;
+//        }
+//
+//
+//
+//        @Override
+//        protected void onPostExecute(BaseFragment baseFragment ,String s) {
+//
+//            if(isCancelled()){
+//                return;
+//            }
+//            switch (s) {
+//
+//                case "200":
+//
+//                    if (tv_weather_wd!=null&&tv_weather_sd!=null&&tv_weather_tq!=null&&tv_weather_day!=null) {
+//
+//                        Weather weather = weathers.get(0);
+//                        tv_weather_wd.setText(weather.getTem() + "℃");
+//                        tv_weather_sd.setText(weather.getHumidity() + "％");
+//                        tv_weather_tq.setText(weather.getWea());
+//                        tv_weather_day.setText(weather.getWeek());
+//                    }
+//                    break;
+//                case "4000":
+//
+//                    ToastUtil.showShort(getActivity(), "连接超时，请重试");
+//
+//                    break;
+//                default:
+//
+//
+//                    break;
+//
+//            }
+//        }
+//    }
         /*
         * 獲取答題人數
         * */
